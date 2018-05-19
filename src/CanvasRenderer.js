@@ -16,6 +16,10 @@ class CanvasRenderer {
   render(scene) {
     this.clear();
 
+    // When image is scaled, displays pixels as is without smoothing.
+    // Should be reset every time after clearing.
+    this.context.imageSmoothingEnabled = false;
+
     const meshes = scene.children;
 
     meshes.forEach((mesh) => {
