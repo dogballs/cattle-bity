@@ -16,23 +16,18 @@ class CanvasRenderer {
   render(scene) {
     this.clear();
 
-    const objects = scene.children;
+    const meshes = scene.children;
 
-    objects.forEach((object) => {
-      if (object.vectors.length === 0) {
-        return;
-      }
+    meshes.forEach((mesh) => {
+      const { material, position } = mesh;
 
-      const [firstVector, ...restVectors] = object.getPositionedVectors();
-
-      this.context.beginPath();
-      this.context.moveTo(firstVector.x, firstVector.y);
-
-      restVectors.forEach((vector) => {
-        this.context.lineTo(vector.x, vector.y);
-      });
-
-      this.context.fill();
+      this.context.drawImage(
+        material.texture.imageElement,
+        material.x, material.y,
+        material.width, material.height,
+        position.x, position.y,
+        mesh.width, mesh.height,
+      );
     });
   }
 }
