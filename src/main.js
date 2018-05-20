@@ -1,8 +1,9 @@
 import CanvasRenderer from './CanvasRenderer.js';
-import Scene from './Scene.js';
-import Mesh from './Mesh.js';
-import TextureLoader from './TextureLoader.js';
+import InputHandler from './InputHandler.js';
 import Material from './Material.js';
+import Mesh from './Mesh.js';
+import Scene from './Scene.js';
+import TextureLoader from './TextureLoader.js';
 
 const scene = new Scene();
 
@@ -19,11 +20,28 @@ textureLoader.load('images/sprite.png', (texture) => {
   material.texture = texture;
 });
 
-const animate = () => {
-  mesh.position.x += 1;
-  mesh.position.y += 1;
+const inputHandler = new InputHandler();
 
+inputHandler.addListener('up', () => {
+  mesh.position.y -= 20;
+});
+
+inputHandler.addListener('down', () => {
+  mesh.position.y += 20;
+});
+
+inputHandler.addListener('right', () => {
+  mesh.position.x += 20;
+});
+
+inputHandler.addListener('left', () => {
+  mesh.position.x -= 20;
+});
+
+const animate = () => {
   window.requestAnimationFrame(animate);
   renderer.render(scene);
 };
 animate();
+
+
