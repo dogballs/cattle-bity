@@ -20,17 +20,17 @@ class CanvasRenderer {
     // Should be reset every time after clearing.
     this.context.imageSmoothingEnabled = false;
 
-    const meshes = scene.children;
+    const actors = scene.children;
 
-    meshes.forEach((mesh) => {
-      const { material, position } = mesh;
+    actors.forEach((actor) => {
+      const { sprite, position } = actor;
 
       this.context.drawImage(
-        material.texture.imageElement,
-        material.x, material.y,
-        material.width, material.height,
+        sprite.texture.imageElement,
+        sprite.bounds.x, sprite.bounds.y,
+        sprite.bounds.w, sprite.bounds.h,
         position.x, position.y,
-        mesh.width, mesh.height,
+        actor.width, actor.height,
       );
     });
   }

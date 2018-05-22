@@ -1,41 +1,32 @@
 import CanvasRenderer from './CanvasRenderer.js';
 import InputHandler from './InputHandler.js';
-import Material from './Material.js';
-import Mesh from './Mesh.js';
 import Scene from './Scene.js';
-import TextureLoader from './TextureLoader.js';
-
-const scene = new Scene();
+import Tank from './Tank.js';
 
 const renderer = new CanvasRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const material = new Material(1, 2, 13, 13);
-const mesh = new Mesh(100, 100, material);
-scene.add(mesh);
-
-const textureLoader = new TextureLoader();
-textureLoader.load('images/sprite.png', (texture) => {
-  material.texture = texture;
-});
+const scene = new Scene();
+const tank = new Tank();
+scene.add(tank);
 
 const inputHandler = new InputHandler();
 
 inputHandler.addListener('up', () => {
-  mesh.position.y -= 20;
+  tank.moveUp();
 });
 
 inputHandler.addListener('down', () => {
-  mesh.position.y += 20;
+  tank.moveDown();
 });
 
 inputHandler.addListener('right', () => {
-  mesh.position.x += 20;
+  tank.moveRight();
 });
 
 inputHandler.addListener('left', () => {
-  mesh.position.x -= 20;
+  tank.moveLeft();
 });
 
 const animate = () => {

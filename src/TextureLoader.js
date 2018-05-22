@@ -2,15 +2,15 @@ import Texture from './Texture.js';
 
 class TextureLoader {
   load(url = '', onSuccess = () => {}) {
-    const imageElement = new window.Image();
+    const texture = new Texture();
 
-    imageElement.onload = () => {
-      const texture = new Texture(imageElement);
-
+    texture.imageElement.onload = () => {
       onSuccess(texture);
     };
 
-    imageElement.src = url;
+    texture.imageElement.src = url;
+
+    return texture;
   }
 }
 
