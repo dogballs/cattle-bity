@@ -7,7 +7,7 @@ class Tank extends Actor {
   constructor() {
     super(100, 100);
 
-    this.moveDistance = 20;
+    this.speed = 5;
 
     this.texture = new TextureLoader().load('images/sprite.png');
 
@@ -22,22 +22,22 @@ class Tank extends Actor {
   }
 
   moveUp() {
-    this.position.y -= this.moveDistance;
+    this.position.y -= this.speed;
     this.sprite = this.sprites.up;
   }
 
   moveDown() {
-    this.position.y += this.moveDistance;
+    this.position.y += this.speed;
     this.sprite = this.sprites.down;
   }
 
   moveRight() {
-    this.position.x += this.moveDistance;
+    this.position.x += this.speed;
     this.sprite = this.sprites.right;
   }
 
   moveLeft() {
-    this.position.x -= this.moveDistance;
+    this.position.x -= this.speed;
     this.sprite = this.sprites.left;
   }
 }
