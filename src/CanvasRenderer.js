@@ -25,13 +25,32 @@ class CanvasRenderer {
     actors.forEach((actor) => {
       const { sprite, position } = actor;
 
+      // TODO: this logic might not belong here
+      let width = actor.width;
+      let height = actor.height;
+      if (actor.direction === 'right' || actor.direction === 'left') {
+        width = actor.height;
+        height = actor.width;
+      }
+
       this.context.drawImage(
         sprite.texture.imageElement,
         sprite.bounds.x, sprite.bounds.y,
         sprite.bounds.w, sprite.bounds.h,
         position.x, position.y,
-        actor.width, actor.height,
+        width, height,
       );
+
+      // For debug, draws a frame around actor
+      /*
+      this.context.beginPath();
+      this.context.moveTo(position.x, position.y);
+      this.context.lineTo(position.x + width, position.y);
+      this.context.lineTo(position.x + width, position.y + height);
+      this.context.lineTo(position.x, position.y + height);
+      this.context.lineTo(position.x, position.y);
+      this.context.stroke();
+      */
     });
   }
 }

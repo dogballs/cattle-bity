@@ -15,13 +15,18 @@ const mapEventNameToKeyCodes = {
     37, // arrow left
     65, // a
   ],
+  fire: [
+    13, // enter
+    32, // space
+  ],
 };
 
 class InputHandler {
   constructor() {
     this.listeners = {};
 
-    this.pressedKeyCodes = [];
+    this.pressedMovementKeyCodes = [];
+    this.pressedActionKeyCode = null;
 
     this.animationFrameId = null;
 
@@ -34,7 +39,7 @@ class InputHandler {
     // If there is no any listeners yet, make sure to start listening to
     // window events as soon as we add first listener
     if (!this.hasListeners()) {
-      this.attachNativeListener();
+      this.attachNativeListeners();
     }
 
     this.listeners[eventName] = this.listeners[eventName] || [];
@@ -43,9 +48,8 @@ class InputHandler {
 
   removeListener(eventName, listenerToRemove) {
     const listeners = this.listeners[eventName] || [];
-    const nextListeners = this.listeners[eventName] = listeners.filter(
-      listener => listener !== listenerToRemove
-    );
+    const nextListeners = listeners
+      .filter(listener => listener !== listenerToRemove);
 
     if (nextListeners.length === 0) {
       delete this.listeners[eventName];
@@ -55,7 +59,7 @@ class InputHandler {
 
     // Stop listening to window events when there is no listeners left
     if (!this.hasListeners()) {
-      this.detachNativeListener();
+      this.detachNativeListeners();
     }
   }
 
@@ -63,7 +67,7 @@ class InputHandler {
     return Object.keys(this.listeners).length > 0;
   }
 
-  attachNativeListener() {
+  attachNativeListeners() {
     window.addEventListener('keydown', this.handleWindowKeyDown);
     window.addEventListener('keyup', this.handleWindowKeyUp);
     // Window keydown event has a built-in delay before the key will start
@@ -72,7 +76,7 @@ class InputHandler {
     this.startEventLoop();
   }
 
-  detachNativeListener() {
+  detachNativeListeners() {
     window.removeEventListener('keydown', this.handleWindowKeyDown);
     window.removeEventListener('keyup', this.handleWindowKeyUp);
     this.stopEventLoop();
@@ -81,19 +85,28 @@ class InputHandler {
   handleWindowKeyDown(ev) {
     const pressedKeyCode = ev.keyCode;
 
-    if (this.pressedKeyCodes.includes(pressedKeyCode)) {
+    const isFireKeyCode = mapEventNameToKeyCodes.fire.includes(pressedKeyCode);
+    if (isFireKeyCode) {
+      if (ev.repeat) {
+        return;
+      }
+      this.emit(pressedKeyCode);
       return;
     }
 
-    this.pressedKeyCodes.push(pressedKeyCode);
+    if (this.pressedMovementKeyCodes.includes(pressedKeyCode)) {
+      return;
+    }
+
+    this.pressedMovementKeyCodes.push(pressedKeyCode);
   }
 
   handleWindowKeyUp(ev) {
     const releasedKeyCode = ev.keyCode;
 
-    const index = this.pressedKeyCodes.indexOf(releasedKeyCode);
+    const index = this.pressedMovementKeyCodes.indexOf(releasedKeyCode);
     if (index > -1) {
-      this.pressedKeyCodes.splice(index, 1);
+      this.pressedMovementKeyCodes.splice(index, 1);
     }
   }
 
@@ -104,8 +117,8 @@ class InputHandler {
     // the last one pressed will have the priority. So when you release all
     // keys except the first one, it will still move in the direction of the
     // pressed key.
-    const pressedKeyCodes = this.pressedKeyCodes;
-    const lastPressedKeyCode = pressedKeyCodes[pressedKeyCodes.length - 1];
+    const { pressedMovementKeyCodes } = this;
+    const lastPressedKeyCode = pressedMovementKeyCodes[pressedMovementKeyCodes.length - 1];
     if (lastPressedKeyCode === undefined) {
       return;
     }
@@ -120,18 +133,19 @@ class InputHandler {
 
   emit(pressedKeyCode) {
     // Find name of the event by pressed key code
-    const eventName = Object.keys(mapEventNameToKeyCodes).find((eventName) => {
-      const keyCodes = mapEventNameToKeyCodes[eventName];
-      const isKeyCode = keyCodes.includes(pressedKeyCode);
-      return isKeyCode;
-    });
+    const pressedEventName = Object.keys(mapEventNameToKeyCodes)
+      .find((eventName) => {
+        const keyCodes = mapEventNameToKeyCodes[eventName];
+        const isKeyCode = keyCodes.includes(pressedKeyCode);
+        return isKeyCode;
+      });
 
-    if (eventName === undefined) {
+    if (pressedEventName === undefined) {
       return;
     }
 
     // Execute all listeners attached to event
-    const listeners = this.listeners[eventName];
+    const listeners = this.listeners[pressedEventName];
     listeners.forEach(listener => listener());
   }
 }
