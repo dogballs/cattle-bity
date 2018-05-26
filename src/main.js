@@ -1,4 +1,5 @@
 import CanvasRenderer from './CanvasRenderer.js';
+import EnemyTank from './EnemyTank.js';
 import InputHandler from './InputHandler.js';
 import Scene from './Scene.js';
 import Shell from './Shell.js';
@@ -10,8 +11,14 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const scene = new Scene();
+
 const tank = new Tank();
 scene.add(tank);
+
+const enemy = new EnemyTank();
+enemy.position.x = 500;
+enemy.position.y = 200;
+scene.add(enemy);
 
 
 const inputHandler = new InputHandler();

@@ -42,15 +42,14 @@ class CanvasRenderer {
       );
 
       // For debug, draws a frame around actor
-      /*
       this.context.beginPath();
       this.context.moveTo(position.x, position.y);
       this.context.lineTo(position.x + width, position.y);
       this.context.lineTo(position.x + width, position.y + height);
       this.context.lineTo(position.x, position.y + height);
       this.context.lineTo(position.x, position.y);
+      this.context.strokeStyle = '#fff';
       this.context.stroke();
-      */
     });
   }
 }
