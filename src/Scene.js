@@ -3,8 +3,12 @@ class Scene {
     this.children = [];
   }
 
-  add(child) {
-    this.children.push(child);
+  add(childToAdd) {
+    this.children.push(childToAdd);
+  }
+
+  remove(childToRemove) {
+    this.children = this.children.filter(child => child !== childToRemove);
   }
 }
 
