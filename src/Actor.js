@@ -13,6 +13,16 @@ class Actor {
     // Main sprite which will be rendered on the scene
     this.sprite = new Sprite();
   }
+
+  // Must-have for each actor
+  render() {
+    return {
+      width: this.width,
+      height: this.height,
+      position: this.position,
+      sprite: this.sprite,
+    };
+  }
 }
 
 export default Actor;

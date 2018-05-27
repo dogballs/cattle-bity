@@ -33,6 +33,25 @@ class Shell extends Actor {
       this.position.x -= this.speed;
     }
   }
+
+  render() {
+    let width = this.width;
+    let height = this.height;
+
+    // Shell has rectangular shape. If it is rotated, swap width and height
+    // for rendering.
+    if (this.direction === 'right' || this.direction === 'left') {
+      width = this.height;
+      height = this.width;
+    }
+
+    return {
+      width,
+      height,
+      position: this.position,
+      sprite: this.sprite,
+    };
+  }
 }
 
 export default Shell;

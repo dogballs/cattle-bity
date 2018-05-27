@@ -17,26 +17,30 @@ scene.add(tank);
 
 const enemy = new EnemyTank();
 enemy.position.x = 500;
-enemy.position.y = 200;
+enemy.position.y = 0;
+enemy.rotate('down');
 scene.add(enemy);
-
 
 const inputHandler = new InputHandler();
 
 inputHandler.addListener('up', () => {
-  tank.moveUp();
+  tank.rotate('up');
+  tank.move();
 });
 
 inputHandler.addListener('down', () => {
-  tank.moveDown();
+  tank.rotate('down');
+  tank.move();
 });
 
 inputHandler.addListener('right', () => {
-  tank.moveRight();
+  tank.rotate('right');
+  tank.move();
 });
 
 inputHandler.addListener('left', () => {
-  tank.moveLeft();
+  tank.rotate('left');
+  tank.move();
 });
 
 const shellFactory = new ShellFactory();
@@ -47,13 +51,17 @@ inputHandler.addListener('fire', () => {
 });
 
 const animate = () => {
+  const sceneWidth = renderer.domElement.width;
+  const sceneHeight = renderer.domElement.height;
+
+  // Animate shells
   const shells = scene.children.filter(child => child instanceof Shell);
   shells.forEach((shell) => {
     // TODO: simplify checking the bounds
     if (shell.position.x < 0
-      || shell.position.x > renderer.domElement.width
+      || shell.position.x > sceneWidth
       || shell.position.y < 0
-      || shell.position.y > renderer.domElement.height
+      || shell.position.y > sceneHeight
     ) {
       scene.remove(shell);
       return;
@@ -61,6 +69,14 @@ const animate = () => {
 
     shell.move();
   });
+
+  // Animate enemy tank to continuously go up and down
+  enemy.move();
+  if (enemy.position.y + enemy.height > sceneHeight) {
+    enemy.rotate('up');
+  } else if (enemy.position.y < 0) {
+    enemy.rotate('down');
+  }
 
   window.requestAnimationFrame(animate);
   renderer.render(scene);

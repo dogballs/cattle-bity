@@ -21,6 +21,8 @@ const mapEventNameToKeyCodes = {
   ],
 };
 
+// TODO: move tank logic out of here, keep only input handling
+
 class InputHandler {
   constructor() {
     this.listeners = {};

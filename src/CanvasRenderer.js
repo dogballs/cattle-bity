@@ -23,15 +23,7 @@ class CanvasRenderer {
     const actors = scene.children;
 
     actors.forEach((actor) => {
-      const { sprite, position } = actor;
-
-      // TODO: this logic might not belong here
-      let width = actor.width;
-      let height = actor.height;
-      if (actor.direction === 'right' || actor.direction === 'left') {
-        width = actor.height;
-        height = actor.width;
-      }
+      const { width, height, position, sprite } = actor.render();
 
       this.context.drawImage(
         sprite.texture.imageElement,
