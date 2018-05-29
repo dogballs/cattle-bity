@@ -2,9 +2,11 @@ import Sprite from './Sprite.js';
 import Vector from './Vector.js';
 
 // Actor is a child of the Scene. It is what gets rendered.
+let id = 1000;
 
 class Actor {
   constructor(width, height) {
+    this.id = id++;
     this.width = width;
     this.height = height;
 

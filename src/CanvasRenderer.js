@@ -9,6 +9,13 @@ class CanvasRenderer {
     this.domElement.height = height;
   }
 
+  getSize() {
+    return {
+      width: this.domElement.width,
+      height: this.domElement.height
+    }
+  }
+
   clear() {
     this.context.clearRect(0, 0, this.domElement.width, this.domElement.height);
   }
