@@ -29,17 +29,17 @@ class CanvasRenderer {
         sprite.texture.imageElement,
         sprite.bounds.x, sprite.bounds.y,
         sprite.bounds.w, sprite.bounds.h,
-        position.x, position.y,
+        position.x - width / 2, position.y - height / 2,
         width, height,
       );
 
       // For debug, draws a frame around actor
       this.context.beginPath();
-      this.context.moveTo(position.x, position.y);
-      this.context.lineTo(position.x + width, position.y);
-      this.context.lineTo(position.x + width, position.y + height);
-      this.context.lineTo(position.x, position.y + height);
-      this.context.lineTo(position.x, position.y);
+      this.context.moveTo(position.x - width / 2, position.y - height / 2);
+      this.context.lineTo(position.x + width / 2, position.y - height / 2);
+      this.context.lineTo(position.x + width / 2, position.y + height / 2);
+      this.context.lineTo(position.x - width / 2, position.y + height / 2);
+      this.context.lineTo(position.x - width / 2, position.y - height / 2);
       this.context.strokeStyle = '#fff';
       this.context.stroke();
     });

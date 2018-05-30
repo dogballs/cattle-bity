@@ -18,8 +18,6 @@ class Shell extends Actor {
       right: new Sprite(this.texture, { x: 346, y: 102, w: 4, h: 3 }),
       left: new Sprite(this.texture, { x: 330, y: 102, w: 4, h: 3 }),
     };
-
-    this.sprite = this.sprites[this.direction];
   }
 
   move() {
@@ -34,6 +32,10 @@ class Shell extends Actor {
     }
   }
 
+  rotate(direction) {
+    this.direction = direction;
+  }
+
   render() {
     let width = this.width;
     let height = this.height;
@@ -45,11 +47,13 @@ class Shell extends Actor {
       height = this.width;
     }
 
+    const sprite = this.sprites[this.direction];
+
     return {
       width,
       height,
       position: this.position,
-      sprite: this.sprite,
+      sprite: sprite,
     };
   }
 }

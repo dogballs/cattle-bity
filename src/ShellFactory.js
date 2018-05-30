@@ -12,20 +12,17 @@ class ShellFactory {
     // TODO: improve rotation logic (width and height swap)
 
     if (tank.direction === 'up') {
-      position.add(tank.width / 2 - shell.width / 2, -shell.height);
+      position.add(0, -tank.height / 2);
     } else if (tank.direction === 'down') {
-      position.add(tank.width / 2 - shell.width / 2, tank.height);
+      position.add(0, tank.height / 2);
     } else if (tank.direction === 'right') {
-      position.add(tank.width, tank.height / 2 - shell.width / 2);
+      position.add(tank.width / 2, 0);
     } else if (tank.direction === 'left') {
-      position.add(-shell.height, tank.height / 2 - shell.width / 2);
+      position.add(-tank.width / 2, 0);
     }
 
     shell.position = position;
-
-    // TODO: improve direction and sprite change
-    shell.direction = tank.direction;
-    shell.sprite = shell.sprites[shell.direction];
+    shell.rotate(tank.direction);
 
     return shell;
   }

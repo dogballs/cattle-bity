@@ -13,11 +13,13 @@ document.body.appendChild(renderer.domElement);
 const scene = new Scene();
 
 const tank = new Tank();
+tank.position.x = 50;
+tank.position.y = 50;
 scene.add(tank);
 
 const enemy = new EnemyTank();
 enemy.position.x = 500;
-enemy.position.y = 0;
+enemy.position.y = 50;
 enemy.rotate('down');
 scene.add(enemy);
 
