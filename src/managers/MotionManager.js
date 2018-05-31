@@ -1,7 +1,7 @@
-import TankMotion from './TankMotion.js';
-import EnemyMotion from './EnemyMotion.js';
-import Tank from './Tank.js';
-import EnemyTank from './EnemyTank.js';
+import TankMotion from '../models/tank/TankMotion.js';
+import EnemyMotion from '../models/enemy-tank/EnemyMotion.js';
+import Tank from '../models/tank/Tank.js';
+import EnemyTank from '../models/enemy-tank/EnemyTank.js';
 
 let instance;
 

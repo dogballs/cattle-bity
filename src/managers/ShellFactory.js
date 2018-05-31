@@ -1,4 +1,4 @@
-import Shell from './Shell.js';
+import Shell from '../models/shell/Shell.js';
 
 class ShellFactory {
   makeShell(tank) {

@@ -1,4 +1,4 @@
-import Rect from './Rect.js';
+import Rect from '../canvas/Rect.js';
 import Texture from './Texture.js';
 
 class Sprite {
