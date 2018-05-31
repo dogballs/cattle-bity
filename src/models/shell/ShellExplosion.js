@@ -1,7 +1,7 @@
-import Actor from './Actor.js';
-import Animation from './Animation.js';
-import Sprite from './Sprite.js';
-import TextureLoader from './TextureLoader.js';
+import Animation from '../../canvas/Animation.js';
+import Actor from '../base/Actor.js';
+import Sprite from '../../source-managers/Sprite.js';
+import TextureLoader from '../../source-managers/TextureLoader.js';
 
 class ShellExplosion extends Actor {
   constructor() {

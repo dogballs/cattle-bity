@@ -1,6 +1,6 @@
-import Actor from './Actor.js';
-import Sprite from './Sprite.js';
-import TextureLoader from './TextureLoader.js';
+import Actor from '../base/Actor.js';
+import Sprite from '../../source-managers/Sprite.js';
+import TextureLoader from '../../source-managers/TextureLoader.js';
 
 class Shell extends Actor {
   constructor() {

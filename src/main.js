@@ -1,12 +1,12 @@
-import CanvasRenderer from './CanvasRenderer.js';
-import EnemyTank from './EnemyTank.js';
-import InputHandler from './InputHandler.js';
-import Scene from './Scene.js';
-import Shell from './Shell.js';
-import ShellExplosion from './ShellExplosion.js';
-import ShellFactory from './ShellFactory.js';
-import Tank from './Tank.js';
-import MotionManager from './MotionManager.js';
+import CanvasRenderer from './canvas/CanvasRenderer.js';
+import EnemyTank from './models/enemy-tank/EnemyTank.js';
+import InputHandler from './handlers/InputHandler.js';
+import Scene from './canvas/Scene.js';
+import Shell from './models/shell/Shell.js';
+import ShellExplosion from './models/shell/ShellExplosion.js';
+import ShellFactory from './managers/ShellFactory.js';
+import Tank from './models/tank/Tank.js';
+import MotionManager from './managers/MotionManager.js';
 
 const renderer = new CanvasRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
