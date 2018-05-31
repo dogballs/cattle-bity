@@ -3,6 +3,7 @@ import EnemyTank from './EnemyTank.js';
 import InputHandler from './InputHandler.js';
 import Scene from './Scene.js';
 import Shell from './Shell.js';
+import ShellExplosion from './ShellExplosion.js';
 import ShellFactory from './ShellFactory.js';
 import Tank from './Tank.js';
 
@@ -80,7 +81,28 @@ const animate = () => {
     enemy.rotate('down');
   }
 
+  // Animate explosions
+  const shellExplosions = scene.children.filter(child => child instanceof ShellExplosion);
+  shellExplosions.forEach((shellExplosion) => {
+    // Remove explosion from the scene when animation has finished
+    if (shellExplosion.isComplete()) {
+      scene.remove(shellExplosion);
+      return;
+    }
+
+    // Update explosion animation
+    shellExplosion.update();
+  });
+
   window.requestAnimationFrame(animate);
   renderer.render(scene);
 };
 animate();
+
+// Create sample explosions over a period of time
+setInterval(() => {
+  const shellExplosion = new ShellExplosion();
+  shellExplosion.position.x = 800;
+  shellExplosion.position.y = 200;
+  scene.add(shellExplosion);
+}, 1000);
