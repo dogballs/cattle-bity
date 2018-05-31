@@ -6,12 +6,14 @@ import Shell from './Shell.js';
 import ShellExplosion from './ShellExplosion.js';
 import ShellFactory from './ShellFactory.js';
 import Tank from './Tank.js';
+import MotionManager from './MotionManager.js';
 
 const renderer = new CanvasRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const scene = new Scene();
+const manager = new MotionManager(renderer, scene);
 
 const tank = new Tank();
 tank.position.x = 50;
@@ -20,7 +22,7 @@ scene.add(tank);
 
 const enemy = new EnemyTank();
 enemy.position.x = 500;
-enemy.position.y = 50;
+enemy.position.y = 250;
 enemy.rotate('down');
 scene.add(enemy);
 

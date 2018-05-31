@@ -70,8 +70,8 @@ class InputHandler {
   }
 
   attachNativeListeners() {
-    window.addEventListener('keydown', this.handleWindowKeyDown);
-    window.addEventListener('keyup', this.handleWindowKeyUp);
+    document.addEventListener('keydown', this.handleWindowKeyDown);
+    document.addEventListener('keyup', this.handleWindowKeyUp);
     // Window keydown event has a built-in delay before the key will start
     // repeating the events. To avoid that create a custom loop without any
     // delays to continuously track the pressed key.
@@ -79,8 +79,8 @@ class InputHandler {
   }
 
   detachNativeListeners() {
-    window.removeEventListener('keydown', this.handleWindowKeyDown);
-    window.removeEventListener('keyup', this.handleWindowKeyUp);
+    document.removeEventListener('keydown', this.handleWindowKeyDown);
+    document.removeEventListener('keyup', this.handleWindowKeyUp);
     this.stopEventLoop();
   }
 
@@ -124,7 +124,6 @@ class InputHandler {
     if (lastPressedKeyCode === undefined) {
       return;
     }
-
     this.emit(lastPressedKeyCode);
   }
 

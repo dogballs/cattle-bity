@@ -1,7 +1,8 @@
-import Actor from './Actor.js';
 import Animation from './Animation.js';
 import Sprite from './Sprite.js';
 import TextureLoader from './TextureLoader.js';
+import Actor from './Actor.js';
+import MotionManager from './MotionManager.js';
 
 class Tank extends Actor {
   constructor() {
@@ -10,6 +11,8 @@ class Tank extends Actor {
     this.speed = 5;
 
     this.direction = 'up';
+
+    this.motionManager = new MotionManager();
 
     this.texture = new TextureLoader().load('images/sprite.png');
 
@@ -34,15 +37,7 @@ class Tank extends Actor {
   }
 
   move() {
-    if (this.direction === 'up') {
-      this.position.y -= this.speed;
-    } else if (this.direction === 'down') {
-      this.position.y += this.speed;
-    } else if (this.direction === 'right') {
-      this.position.x += this.speed;
-    } else if (this.direction === 'left') {
-      this.position.x -= this.speed;
-    }
+    this.motionManager.moveActor(this, this.direction);
 
     // Any time tank is moved, animate it's movement by showing next
     // animation frame

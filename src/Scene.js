@@ -10,6 +10,10 @@ class Scene {
   remove(childToRemove) {
     this.children = this.children.filter(child => child !== childToRemove);
   }
+
+  getChildren() {
+    return this.children;
+  }
 }
 
 export default Scene;
