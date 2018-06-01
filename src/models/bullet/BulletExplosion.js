@@ -3,7 +3,7 @@ import Actor from '../base/Actor.js';
 import Sprite from '../../source-managers/Sprite.js';
 import TextureLoader from '../../source-managers/TextureLoader.js';
 
-class ShellExplosion extends Actor {
+class BulletExplosion extends Actor {
   constructor() {
     super(55, 55);
 
@@ -47,4 +47,4 @@ class ShellExplosion extends Actor {
   }
 }
 
-export default ShellExplosion;
+export default BulletExplosion;

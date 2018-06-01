@@ -2,7 +2,7 @@ import Actor from '../base/Actor.js';
 import Sprite from '../../source-managers/Sprite.js';
 import TextureLoader from '../../source-managers/TextureLoader.js';
 
-class Shell extends Actor {
+class Bullet extends Actor {
   constructor() {
     super(15, 20);
 
@@ -40,7 +40,7 @@ class Shell extends Actor {
     let width = this.width;
     let height = this.height;
 
-    // Shell has rectangular shape. If it is rotated, swap width and height
+    // Bullet has rectangular shape. If it is rotated, swap width and height
     // for rendering.
     if (this.direction === 'right' || this.direction === 'left') {
       width = this.height;
@@ -58,4 +58,4 @@ class Shell extends Actor {
   }
 }
 
-export default Shell;
+export default Bullet;

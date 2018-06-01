@@ -1,10 +1,10 @@
+import Bullet from './models/bullet/Bullet.js';
+import BulletExplosion from './models/bullet/BulletExplosion.js';
+import BulletFactory from './managers/BulletFactory.js';
 import CanvasRenderer from './canvas/CanvasRenderer.js';
 import EnemyTank from './models/enemy-tank/EnemyTank.js';
 import InputHandler from './handlers/InputHandler.js';
 import Scene from './canvas/Scene.js';
-import Shell from './models/shell/Shell.js';
-import ShellExplosion from './models/shell/ShellExplosion.js';
-import ShellFactory from './managers/ShellFactory.js';
 import Tank from './models/tank/Tank.js';
 import MotionManager from './managers/MotionManager.js';
 
@@ -48,31 +48,31 @@ inputHandler.addListener('left', () => {
   tank.move();
 });
 
-const shellFactory = new ShellFactory();
+const bulletFactory = new BulletFactory();
 
 inputHandler.addListener('fire', () => {
-  const shell = shellFactory.makeShell(tank);
-  scene.add(shell);
+  const bullet = bulletFactory.makeBullet(tank);
+  scene.add(bullet);
 });
 
 const animate = () => {
   const sceneWidth = renderer.domElement.width;
   const sceneHeight = renderer.domElement.height;
 
-  // Animate shells
-  const shells = scene.children.filter(child => child instanceof Shell);
-  shells.forEach((shell) => {
+  // Animate bullets
+  const bullets = scene.children.filter(child => child instanceof Bullet);
+  bullets.forEach((bullet) => {
     // TODO: simplify checking the bounds
-    if (shell.position.x < 0
-      || shell.position.x > sceneWidth
-      || shell.position.y < 0
-      || shell.position.y > sceneHeight
+    if (bullet.position.x < 0
+      || bullet.position.x > sceneWidth
+      || bullet.position.y < 0
+      || bullet.position.y > sceneHeight
     ) {
-      scene.remove(shell);
+      scene.remove(bullet);
       return;
     }
 
-    shell.move();
+    bullet.move();
   });
 
   // Animate enemy tank to continuously go up and down
@@ -84,16 +84,16 @@ const animate = () => {
   }
 
   // Animate explosions
-  const shellExplosions = scene.children.filter(child => child instanceof ShellExplosion);
-  shellExplosions.forEach((shellExplosion) => {
+  const bulletExplosions = scene.children.filter(child => child instanceof BulletExplosion);
+  bulletExplosions.forEach((bulletExplosion) => {
     // Remove explosion from the scene when animation has finished
-    if (shellExplosion.isComplete()) {
-      scene.remove(shellExplosion);
+    if (bulletExplosion.isComplete()) {
+      scene.remove(bulletExplosion);
       return;
     }
 
     // Update explosion animation
-    shellExplosion.update();
+    bulletExplosion.update();
   });
 
   window.requestAnimationFrame(animate);
@@ -103,8 +103,8 @@ animate();
 
 // Create sample explosions over a period of time
 setInterval(() => {
-  const shellExplosion = new ShellExplosion();
-  shellExplosion.position.x = 800;
-  shellExplosion.position.y = 200;
-  scene.add(shellExplosion);
+  const bulletExplosion = new BulletExplosion();
+  bulletExplosion.position.x = 800;
+  bulletExplosion.position.y = 200;
+  scene.add(bulletExplosion);
 }, 1000);
