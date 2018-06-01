@@ -1,13 +1,13 @@
 import Animation from '../../canvas/Animation.js';
 import Actor from '../base/Actor.js';
 import Sprite from '../../source-managers/Sprite.js';
-import TextureLoader from '../../source-managers/TextureLoader.js';
+import Texture from '../../source-managers/Texture.js';
 
 class BulletExplosion extends Actor {
   constructor() {
     super(55, 55);
 
-    this.texture = new TextureLoader().load('images/sprite.png');
+    this.texture = new Texture('images/sprite.png');
 
     this.animation = new Animation([
       new Sprite(this.texture, { x: 259, y: 130, w: 11, h: 11 }),

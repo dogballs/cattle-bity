@@ -1,7 +1,7 @@
 import Actor from '../base/Actor.js';
 import Animation from '../../canvas/Animation.js';
 import Sprite from '../../source-managers/Sprite.js';
-import TextureLoader from '../../source-managers/TextureLoader.js';
+import Texture from '../../source-managers/Texture.js';
 import MotionManager from '../../managers/MotionManager.js';
 
 // TODO: create base class for tank with common behavior for both enemy and
@@ -15,9 +15,9 @@ class EnemyTank extends Actor {
 
     this.direction = 'up';
 
-    this.motionManager = new MotionManager();    
+    this.motionManager = new MotionManager();
 
-    this.texture = new TextureLoader().load('images/sprite.png');
+    this.texture = new Texture('images/sprite.png');
 
     this.animations = {
       up: new Animation([

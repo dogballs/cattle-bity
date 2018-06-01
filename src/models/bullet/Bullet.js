@@ -1,6 +1,6 @@
 import Actor from '../base/Actor.js';
 import Sprite from '../../source-managers/Sprite.js';
-import TextureLoader from '../../source-managers/TextureLoader.js';
+import Texture from '../../source-managers/Texture.js';
 
 class Bullet extends Actor {
   constructor() {
@@ -8,7 +8,7 @@ class Bullet extends Actor {
 
     this.speed = 15;
 
-    this.texture = new TextureLoader().load('images/sprite.png');
+    this.texture = new Texture('images/sprite.png');
 
     this.direction = 'up';
 

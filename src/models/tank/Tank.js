@@ -1,7 +1,7 @@
 import Animation from '../../canvas/Animation.js';
 import Actor from '../base/Actor.js';
 import Sprite from '../../source-managers/Sprite.js';
-import TextureLoader from '../../source-managers/TextureLoader.js';
+import Texture from '../../source-managers/Texture.js';
 import MotionManager from '../../managers/MotionManager.js';
 
 class Tank extends Actor {
@@ -14,7 +14,7 @@ class Tank extends Actor {
 
     this.motionManager = new MotionManager();
 
-    this.texture = new TextureLoader().load('images/sprite.png');
+    this.texture = new Texture('images/sprite.png');
 
     this.animations = {
       up: new Animation([

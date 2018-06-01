@@ -2,8 +2,9 @@
 // In case with sprites - one texture may be reused a number of times.
 
 class Texture {
-  constructor(imageElement = new Image()) {
-    this.imageElement = imageElement;
+  constructor(src = '') {
+    this.imageElement = new window.Image();
+    this.imageElement.src = src;
   }
 }
 
