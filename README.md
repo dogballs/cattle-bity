@@ -12,6 +12,10 @@ Borrowed from [AngularJS Git Commit Message Conventions](https://gist.github.com
 
 ```
 <type>(<scope>): <subject>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
 ```
 
 Any line of the commit message cannot be longer 100 characters! This allows the message to be easier to read on github as well as in various git tools.
@@ -35,3 +39,31 @@ Scope could be anything specifying place of the commit change. For example rende
 * use imperative, present tense: “change” not “changed” nor “changes”
 * don't capitalize first letter
 * no dot (.) at the end
+
+### Message footer
+
+#### Referencing issues
+
+Closed bugs should be listed on a separate line in the footer prefixed with "Closes" keyword like this:
+```
+Closes #234
+```
+
+or in case of multiple issues:
+```
+Closes #123, #245, #992
+```
+
+Examples
+--------
+
+```
+fix(render): couple of unit tests for IE9
+
+Older IEs serialize html uppercased, but IE9 does not...
+Would be better to expect case insensitive, unfortunately jasmine does
+not allow to user regexps for throw expectations.
+
+Closes #392
+Breaks foo.bar api, foo.baz should be used instead
+```
