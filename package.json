@@ -1,7 +1,6 @@
 {
   "scripts": {
-    "lint": "eslint src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint src"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
