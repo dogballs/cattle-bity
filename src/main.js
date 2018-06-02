@@ -10,7 +10,8 @@ import MotionManager from './managers/MotionManager.js';
 
 const renderer = new CanvasRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+let renderElement = document.getElementById('canvas');
+renderElement.appendChild(renderer.domElement);
 
 const scene = new Scene();
 const manager = new MotionManager(renderer, scene);
