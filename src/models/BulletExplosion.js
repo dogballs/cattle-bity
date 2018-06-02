@@ -1,7 +1,7 @@
-import Animation from '../../core/Animation.js';
-import DisplayObject from '../../core/DisplayObject.js';
-import Sprite from '../../core/Sprite.js';
-import Texture from '../../core/Texture.js';
+import Animation from './../core/Animation.js';
+import DisplayObject from './../core/DisplayObject.js';
+import Sprite from './../core/Sprite.js';
+import Texture from './../core/Texture.js';
 
 class BulletExplosion extends DisplayObject {
   constructor() {
@@ -24,12 +24,14 @@ class BulletExplosion extends DisplayObject {
     ];
   }
 
-  update() {
-    this.animation.animate();
-  }
+  onComplete() {}
 
-  isComplete() {
-    return this.animation.isComplete();
+  update() {
+    if (this.animation.isComplete()) {
+      this.onComplete();
+    } else {
+      this.animation.animate();
+    }
   }
 
   render() {
