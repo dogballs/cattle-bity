@@ -6,7 +6,7 @@ import MotionManager from '../../managers/MotionManager.js';
 
 class Tank extends DisplayObject {
   constructor() {
-    super(100, 100);
+    super(95, 95);
 
     this.speed = 5;
 
