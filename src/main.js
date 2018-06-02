@@ -13,7 +13,7 @@ import MapBuilder from './managers/MapBuilder.js';
 import map from '../maps/1/description.js';
 
 const renderer = new Renderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(800, 800);
 let renderElement = document.getElementById('canvas');
 renderElement.appendChild(renderer.domElement);
 
