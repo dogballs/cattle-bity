@@ -1,4 +1,4 @@
-import Bullet from '../models/bullet/Bullet.js';
+import Bullet from '../models/Bullet.js';
 
 class BulletFactory {
   makeBullet(tank) {

@@ -1,6 +1,6 @@
-import DisplayObject from '../../core/DisplayObject.js';
-import Sprite from '../../core/Sprite.js';
-import Texture from '../../core/Texture.js';
+import DisplayObject from './../core/DisplayObject.js';
+import Sprite from './../core/Sprite.js';
+import Texture from './../core/Texture.js';
 
 class Bullet extends DisplayObject {
   constructor() {

@@ -1,10 +1,11 @@
-import Bullet from './models/bullet/Bullet.js';
-import BulletExplosion from './models/bullet/BulletExplosion.js';
+import Bullet from './models/Bullet.js';
+import BulletExplosion from './models/BulletExplosion.js';
 import BulletFactory from './managers/BulletFactory.js';
 import Renderer from './core/Renderer.js';
 import EnemyTank from './models/enemy-tank/EnemyTank.js';
 import InputHandler from './handlers/InputHandler.js';
 import Scene from './core/Scene.js';
+import Spawn from './models/Spawn.js';
 import Tank from './models/tank/Tank.js';
 import MotionManager from './managers/MotionManager.js';
 
@@ -85,27 +86,40 @@ const animate = () => {
   }
 
   // Animate explosions
-  const bulletExplosions = scene.children.filter(child => child instanceof BulletExplosion);
-  bulletExplosions.forEach((bulletExplosion) => {
-    // Remove explosion from the scene when animation has finished
-    if (bulletExplosion.isComplete()) {
-      scene.remove(bulletExplosion);
-      return;
-    }
+  const bulletExplosions = scene.children.filter(child =>
+    child instanceof BulletExplosion
+  );
+  bulletExplosions.forEach(bulletExplosion => bulletExplosion.update());
 
-    // Update explosion animation
-    bulletExplosion.update();
-  });
+  // Animate spawns
+  const spawns = scene.children.filter(child =>
+    child instanceof Spawn
+  );
+  spawns.forEach(spawn => spawn.update());
 
   window.requestAnimationFrame(animate);
   renderer.render(scene);
 };
 animate();
 
-// Create sample explosions over a period of time
+// Create sample explosions
 setInterval(() => {
   const bulletExplosion = new BulletExplosion();
   bulletExplosion.position.x = 800;
-  bulletExplosion.position.y = 200;
+  bulletExplosion.position.y = 50;
+  bulletExplosion.onComplete = () => {
+    scene.remove(bulletExplosion);
+  };
   scene.add(bulletExplosion);
 }, 1000);
+
+// Crate sample spawns
+setInterval(() => {
+  const spawn = new Spawn();
+  spawn.position.x = 900;
+  spawn.position.y = 50;
+  spawn.onComplete = () => {
+    scene.remove(spawn);
+  };
+  scene.add(spawn);
+}, 1500);
