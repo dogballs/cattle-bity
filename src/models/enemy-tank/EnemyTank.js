@@ -21,20 +21,36 @@ class EnemyTank extends DisplayObject {
 
     this.animations = {
       up: new Animation([
-        new Sprite(this.texture, { x: 129, y: 2, w: 13, h: 13 }),
-        new Sprite(this.texture, { x: 145, y: 2, w: 13, h: 13 }),
+        new Sprite(this.texture, {
+          x: 129, y: 2, w: 13, h: 13,
+        }),
+        new Sprite(this.texture, {
+          x: 145, y: 2, w: 13, h: 13,
+        }),
       ]),
       down: new Animation([
-        new Sprite(this.texture, { x: 193, y: 1, w: 13, h: 13 }),
-        new Sprite(this.texture, { x: 209, y: 1, w: 13, h: 13 }),
+        new Sprite(this.texture, {
+          x: 193, y: 1, w: 13, h: 13,
+        }),
+        new Sprite(this.texture, {
+          x: 209, y: 1, w: 13, h: 13,
+        }),
       ]),
       right: new Animation([
-        new Sprite(this.texture, { x: 162, y: 1, w: 13, h: 13 }),
-        new Sprite(this.texture, { x: 178, y: 1, w: 13, h: 13 }),
+        new Sprite(this.texture, {
+          x: 162, y: 1, w: 13, h: 13,
+        }),
+        new Sprite(this.texture, {
+          x: 178, y: 1, w: 13, h: 13,
+        }),
       ]),
       left: new Animation([
-        new Sprite(this.texture, { x: 225, y: 1, w: 13, h: 13 }),
-        new Sprite(this.texture, { x: 241, y: 1, w: 13, h: 13 }),
+        new Sprite(this.texture, {
+          x: 225, y: 1, w: 13, h: 13,
+        }),
+        new Sprite(this.texture, {
+          x: 241, y: 1, w: 13, h: 13,
+        }),
       ]),
     };
   }

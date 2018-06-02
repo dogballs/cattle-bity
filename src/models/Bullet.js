@@ -13,10 +13,18 @@ class Bullet extends DisplayObject {
     this.direction = 'up';
 
     this.sprites = {
-      up: new Sprite(this.texture, { x: 323, y: 102, w: 3, h: 4 }),
-      down: new Sprite(this.texture, { x: 339, y: 102, w: 3, h: 4 }),
-      right: new Sprite(this.texture, { x: 346, y: 102, w: 4, h: 3 }),
-      left: new Sprite(this.texture, { x: 330, y: 102, w: 4, h: 3 }),
+      up: new Sprite(this.texture, {
+        x: 323, y: 102, w: 3, h: 4,
+      }),
+      down: new Sprite(this.texture, {
+        x: 339, y: 102, w: 3, h: 4,
+      }),
+      right: new Sprite(this.texture, {
+        x: 346, y: 102, w: 4, h: 3,
+      }),
+      left: new Sprite(this.texture, {
+        x: 330, y: 102, w: 4, h: 3,
+      }),
     };
   }
 
@@ -37,8 +45,7 @@ class Bullet extends DisplayObject {
   }
 
   render() {
-    let width = this.width;
-    let height = this.height;
+    let { width, height } = this;
 
     // Bullet has rectangular shape. If it is rotated, swap width and height
     // for rendering.
@@ -53,7 +60,7 @@ class Bullet extends DisplayObject {
       width,
       height,
       position: this.position,
-      sprite: sprite,
+      sprite,
     };
   }
 }

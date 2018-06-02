@@ -12,8 +12,8 @@ class Renderer {
   getSize() {
     return {
       width: this.domElement.width,
-      height: this.domElement.height
-    }
+      height: this.domElement.height,
+    };
   }
 
   clear() {
@@ -30,23 +30,27 @@ class Renderer {
     const renderObjects = scene.children;
 
     renderObjects.forEach((renderObject) => {
-      const { width, height, position, sprite } = renderObject.render();
+      const {
+        width, height,
+        position,
+        sprite,
+      } = renderObject.render();
 
       this.context.drawImage(
         sprite.texture.imageElement,
         sprite.bounds.x, sprite.bounds.y,
         sprite.bounds.w, sprite.bounds.h,
-        position.x - width / 2, position.y - height / 2,
-        width, height,
+        position.x - (width / 2), position.y - (height / 2),
+        width, height
       );
 
       // For debug, draws a frame around rendered object
       this.context.beginPath();
-      this.context.moveTo(position.x - width / 2, position.y - height / 2);
-      this.context.lineTo(position.x + width / 2, position.y - height / 2);
-      this.context.lineTo(position.x + width / 2, position.y + height / 2);
-      this.context.lineTo(position.x - width / 2, position.y + height / 2);
-      this.context.lineTo(position.x - width / 2, position.y - height / 2);
+      this.context.moveTo(position.x - (width / 2), position.y - (height / 2));
+      this.context.lineTo(position.x + (width / 2), position.y - (height / 2));
+      this.context.lineTo(position.x + (width / 2), position.y + (height / 2));
+      this.context.lineTo(position.x - (width / 2), position.y + (height / 2));
+      this.context.lineTo(position.x - (width / 2), position.y - (height / 2));
       this.context.strokeStyle = '#fff';
       this.context.stroke();
     });
