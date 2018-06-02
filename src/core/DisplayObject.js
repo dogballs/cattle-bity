@@ -1,10 +1,12 @@
-import Sprite from '../../source-managers/Sprite.js';
-import Vector from '../../canvas/Vector.js';
+import Sprite from './Sprite.js';
+import Vector from './Vector.js';
 
-// Actor is a child of the Scene. It is what gets rendered.
 let id = 1000;
 
-class Actor {
+/**
+ * Superclass for all things that can be drawn on screen.
+ */
+class DisplayObject {
   constructor(width, height) {
     this.id = id++;
     this.width = width;
@@ -16,7 +18,7 @@ class Actor {
     this.sprite = new Sprite();
   }
 
-  // Must-have for each actor
+  // Must-have for each render object
   render() {
     return {
       width: this.width,
@@ -27,4 +29,4 @@ class Actor {
   }
 }
 
-export default Actor;
+export default DisplayObject;

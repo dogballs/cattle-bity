@@ -1,14 +1,14 @@
 import Bullet from './models/bullet/Bullet.js';
 import BulletExplosion from './models/bullet/BulletExplosion.js';
 import BulletFactory from './managers/BulletFactory.js';
-import CanvasRenderer from './canvas/CanvasRenderer.js';
+import Renderer from './core/Renderer.js';
 import EnemyTank from './models/enemy-tank/EnemyTank.js';
 import InputHandler from './handlers/InputHandler.js';
-import Scene from './canvas/Scene.js';
+import Scene from './core/Scene.js';
 import Tank from './models/tank/Tank.js';
 import MotionManager from './managers/MotionManager.js';
 
-const renderer = new CanvasRenderer();
+const renderer = new Renderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 let renderElement = document.getElementById('canvas');
 renderElement.appendChild(renderer.domElement);

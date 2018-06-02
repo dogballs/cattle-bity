@@ -1,4 +1,4 @@
-class CanvasRenderer {
+class Renderer {
   constructor() {
     this.domElement = document.createElement('canvas');
     this.context = this.domElement.getContext('2d');
@@ -27,10 +27,10 @@ class CanvasRenderer {
     // Should be reset every time after clearing.
     this.context.imageSmoothingEnabled = false;
 
-    const actors = scene.children;
+    const renderObjects = scene.children;
 
-    actors.forEach((actor) => {
-      const { width, height, position, sprite } = actor.render();
+    renderObjects.forEach((renderObject) => {
+      const { width, height, position, sprite } = renderObject.render();
 
       this.context.drawImage(
         sprite.texture.imageElement,
@@ -40,7 +40,7 @@ class CanvasRenderer {
         width, height,
       );
 
-      // For debug, draws a frame around actor
+      // For debug, draws a frame around rendered object
       this.context.beginPath();
       this.context.moveTo(position.x - width / 2, position.y - height / 2);
       this.context.lineTo(position.x + width / 2, position.y - height / 2);
@@ -53,4 +53,4 @@ class CanvasRenderer {
   }
 }
 
-export default CanvasRenderer;
+export default Renderer;
