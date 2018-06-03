@@ -1,3 +1,5 @@
+[![Build status](https://travis-ci.com/dogballs/battle-city.svg?branch=master)](https://travis-ci.com/dogballs/battle-city)
+
 ### Folder structure:
 
 - src

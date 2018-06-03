@@ -5,7 +5,9 @@ import Texture from './Texture.js';
  * The coordinates will be used by renderer to render the fragment.
  */
 class Sprite {
-  constructor(texture = new Texture(), bounds = { x: 0, y: 0, w: 0, h: 0 }) {
+  constructor(texture = new Texture(), bounds = {
+    x: 0, y: 0, w: 0, h: 0,
+  }) {
     this.texture = texture;
     this.bounds = bounds;
   }

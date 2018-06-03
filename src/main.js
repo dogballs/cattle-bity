@@ -8,16 +8,18 @@ import Scene from './core/Scene.js';
 import Spawn from './models/Spawn.js';
 import Tank from './models/tank/Tank.js';
 import MotionManager from './managers/MotionManager.js';
-import Block from './models/block/Block.js';
 import MapBuilder from './managers/MapBuilder.js';
 import map from '../maps/1/description.js';
 
 const renderer = new Renderer();
 renderer.setSize(800, 800);
-let renderElement = document.getElementById('canvas');
+const renderElement = document.getElementById('canvas');
 renderElement.appendChild(renderer.domElement);
 
 const scene = new Scene();
+// TODO: @aailyin fix please. If instance is not used, means that the class
+// just introduces side effects, which is not straigforward.
+// eslint-disable-next-line no-unused-vars
 const manager = new MotionManager(renderer, scene);
 const mapBuilder = new MapBuilder(scene);
 
@@ -56,10 +58,8 @@ inputHandler.addListener('left', () => {
   tank.move();
 });
 
-const bulletFactory = new BulletFactory();
-
 inputHandler.addListener('fire', () => {
-  const bullet = bulletFactory.makeBullet(tank);
+  const bullet = BulletFactory.makeBullet(tank);
   scene.add(bullet);
 });
 
@@ -92,15 +92,11 @@ const animate = () => {
   }
 
   // Animate explosions
-  const bulletExplosions = scene.children.filter(child =>
-    child instanceof BulletExplosion
-  );
+  const bulletExplosions = scene.children.filter(child => child instanceof BulletExplosion);
   bulletExplosions.forEach(bulletExplosion => bulletExplosion.update());
 
   // Animate spawns
-  const spawns = scene.children.filter(child =>
-    child instanceof Spawn
-  );
+  const spawns = scene.children.filter(child => child instanceof Spawn);
   spawns.forEach(spawn => spawn.update());
 
   window.requestAnimationFrame(animate);

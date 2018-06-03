@@ -8,7 +8,9 @@ let id = 1000;
  */
 class DisplayObject {
   constructor(width, height) {
-    this.id = id++;
+    this.id = id;
+    id += 1;
+
     this.width = width;
     this.height = height;
 

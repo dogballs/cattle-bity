@@ -10,9 +10,15 @@ class BulletExplosion extends DisplayObject {
     this.texture = new Texture('images/sprite.png');
 
     this.animation = new Animation([
-      new Sprite(this.texture, { x: 259, y: 130, w: 11, h: 11 }),
-      new Sprite(this.texture, { x: 273, y: 129, w: 15, h: 15 }),
-      new Sprite(this.texture, { x: 288, y: 128, w: 16, h: 16 }),
+      new Sprite(this.texture, {
+        x: 259, y: 130, w: 11, h: 11,
+      }),
+      new Sprite(this.texture, {
+        x: 273, y: 129, w: 15, h: 15,
+      }),
+      new Sprite(this.texture, {
+        x: 288, y: 128, w: 16, h: 16,
+      }),
     ], { delay: 100, loop: false });
 
     // Each sprite fragment has different size. Try to match it with
@@ -24,6 +30,8 @@ class BulletExplosion extends DisplayObject {
     ];
   }
 
+  // TODO: @mradionov rethink how to notify parent when animation is ended
+  // eslint-disable-next-line class-methods-use-this
   onComplete() {}
 
   update() {
@@ -36,13 +44,13 @@ class BulletExplosion extends DisplayObject {
 
   render() {
     const sprite = this.animation.getCurrentFrame();
-    const frameIndex = this.animation.frameIndex;
+    const { frameIndex } = this.animation;
 
     const { width, height } = this.dimensions[frameIndex];
 
     return {
-      width: width,
-      height: height,
+      width,
+      height,
       position: this.position,
       sprite,
     };

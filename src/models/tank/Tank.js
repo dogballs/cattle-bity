@@ -18,20 +18,36 @@ class Tank extends DisplayObject {
 
     this.animations = {
       up: new Animation([
-        new Sprite(this.texture, { x: 1, y: 2, w: 13, h: 13 }),
-        new Sprite(this.texture, { x: 17, y: 2, w: 13, h: 13 }),
+        new Sprite(this.texture, {
+          x: 1, y: 2, w: 13, h: 13,
+        }),
+        new Sprite(this.texture, {
+          x: 17, y: 2, w: 13, h: 13,
+        }),
       ]),
       down: new Animation([
-        new Sprite(this.texture, { x: 65, y: 1, w: 13, h: 13 }),
-        new Sprite(this.texture, { x: 81, y: 1, w: 13, h: 13 }),
+        new Sprite(this.texture, {
+          x: 65, y: 1, w: 13, h: 13,
+        }),
+        new Sprite(this.texture, {
+          x: 81, y: 1, w: 13, h: 13,
+        }),
       ]),
       right: new Animation([
-        new Sprite(this.texture, { x: 97, y: 1, w: 13, h: 13 }),
-        new Sprite(this.texture, { x: 113, y: 1, w: 13, h: 13 }),
+        new Sprite(this.texture, {
+          x: 97, y: 1, w: 13, h: 13,
+        }),
+        new Sprite(this.texture, {
+          x: 113, y: 1, w: 13, h: 13,
+        }),
       ]),
       left: new Animation([
-        new Sprite(this.texture, { x: 34, y: 1, w: 13, h: 13 }),
-        new Sprite(this.texture, { x: 50, y: 1, w: 13, h: 13 }),
+        new Sprite(this.texture, {
+          x: 34, y: 1, w: 13, h: 13,
+        }),
+        new Sprite(this.texture, {
+          x: 50, y: 1, w: 13, h: 13,
+        }),
       ]),
     };
   }

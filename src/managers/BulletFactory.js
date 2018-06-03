@@ -1,7 +1,7 @@
 import Bullet from '../models/Bullet.js';
 
 class BulletFactory {
-  makeBullet(tank) {
+  static makeBullet(tank) {
     const bullet = new Bullet();
 
     const position = tank.position.clone();

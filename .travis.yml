@@ -1,0 +1,6 @@
+language: node_js
+node_js:
+  # Latest stable version, Node 8 at the moment of creating config
+  - "lts/*"
+script:
+  - npm run lint
