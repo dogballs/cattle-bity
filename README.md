@@ -5,6 +5,10 @@
 - src
   - core - Game engine. Think of it as a library which can be reused in another projects. Should not have any code associated with game domain.
 
+### Implementation details
+
+- As we depend on one particular sprite, we want to follow the size of the images which are present on the sprite. Original images on the sprite are too small, so we are scaling it 1:4 in code. For now it is hardcoded which every display object.
+
 ### Resources
 
 Game related:

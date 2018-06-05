@@ -4,7 +4,7 @@ import Texture from './../core/Texture.js';
 
 class Bullet extends DisplayObject {
   constructor() {
-    super(15, 20);
+    super(12, 16);
 
     this.speed = 15;
 
