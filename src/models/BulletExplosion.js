@@ -19,7 +19,7 @@ class BulletExplosion extends DisplayObject {
       new Sprite(this.texture, {
         x: 288, y: 128, w: 16, h: 16,
       }),
-    ], { delay: 100, loop: false });
+    ], { delay: 50, loop: false });
 
     // Each sprite fragment has different size. Try to match it with
     // canvas size for different animation frames.

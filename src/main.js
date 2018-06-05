@@ -1,14 +1,17 @@
 import Bullet from './models/Bullet.js';
 import BulletExplosion from './models/BulletExplosion.js';
 import BulletFactory from './managers/BulletFactory.js';
-import Renderer from './core/Renderer.js';
+import CollisionDetector from './core/CollisionDetector.js';
 import EnemyTank from './models/enemy-tank/EnemyTank.js';
 import InputHandler from './handlers/InputHandler.js';
+import MapBuilder from './managers/MapBuilder.js';
+import MotionManager from './managers/MotionManager.js';
+import Renderer from './core/Renderer.js';
 import Scene from './core/Scene.js';
 import Spawn from './models/Spawn.js';
 import Tank from './models/tank/Tank.js';
-import MotionManager from './managers/MotionManager.js';
-import MapBuilder from './managers/MapBuilder.js';
+
+import collisionsConfig from './collisions/collisions.config.js';
 import map from './maps/1/description.js';
 
 const renderer = new Renderer();
@@ -99,26 +102,33 @@ const animate = () => {
   const spawns = scene.children.filter(child => child instanceof Spawn);
   spawns.forEach(spawn => spawn.update());
 
+  // Detect and handle collisions of all objects on the map
+  const collisions = CollisionDetector.intersectObjects(scene.children);
+  collisions.forEach((collision) => {
+    const collisionConfig = collisionsConfig.find((config) => {
+      const sourceMatches = collision.source instanceof config.sourceType;
+      const targetMatches = collision.target instanceof config.targetType;
+
+      return sourceMatches && targetMatches;
+    });
+
+    if (collisionConfig === undefined) {
+      return;
+    }
+
+    const collisionHandler = new collisionConfig.Instance(collision, scene);
+    collisionHandler.collide();
+  });
+
   window.requestAnimationFrame(animate);
   renderer.render(scene);
 };
 animate();
 
-// Create sample explosions
-setInterval(() => {
-  const bulletExplosion = new BulletExplosion();
-  bulletExplosion.position.x = 800;
-  bulletExplosion.position.y = 50;
-  bulletExplosion.onComplete = () => {
-    scene.remove(bulletExplosion);
-  };
-  scene.add(bulletExplosion);
-}, 1000);
-
 // Crate sample spawns
 setInterval(() => {
   const spawn = new Spawn();
-  spawn.position.x = 900;
+  spawn.position.x = 300;
   spawn.position.y = 50;
   spawn.onComplete = () => {
     scene.remove(spawn);
