@@ -5,7 +5,7 @@ import Texture from './../core/Texture.js';
 
 class Spawn extends DisplayObject {
   constructor() {
-    super(45, 45);
+    super(36, 36);
 
     this.texture = new Texture('images/sprite.png');
 
@@ -25,10 +25,10 @@ class Spawn extends DisplayObject {
     ], { delay: 65, loop: 3 });
 
     this.dimensions = [
-      { width: 45, height: 45 },
-      { width: 55, height: 55 },
-      { width: 65, height: 65 },
-      { width: 75, height: 75 },
+      { width: 36, height: 36 },
+      { width: 44, height: 55 },
+      { width: 52, height: 52 },
+      { width: 60, height: 60 },
     ];
   }
 

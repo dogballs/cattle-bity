@@ -5,7 +5,7 @@ import Texture from './../core/Texture.js';
 
 class BulletExplosion extends DisplayObject {
   constructor() {
-    super(55, 55);
+    super(44, 44);
 
     this.texture = new Texture('images/sprite.png');
 
@@ -24,9 +24,9 @@ class BulletExplosion extends DisplayObject {
     // Each sprite fragment has different size. Try to match it with
     // canvas size for different animation frames.
     this.dimensions = [
-      { width: 55, height: 55 },
-      { width: 75, height: 75 },
-      { width: 80, height: 80 },
+      { width: 44, height: 44 },
+      { width: 60, height: 60 },
+      { width: 64, height: 64 },
     ];
   }
 

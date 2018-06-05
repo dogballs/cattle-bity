@@ -9,7 +9,7 @@ import Spawn from './models/Spawn.js';
 import Tank from './models/tank/Tank.js';
 import MotionManager from './managers/MotionManager.js';
 import MapBuilder from './managers/MapBuilder.js';
-import map from '../maps/1/description.js';
+import map from './maps/1/description.js';
 
 const renderer = new Renderer();
 renderer.setSize(800, 800);

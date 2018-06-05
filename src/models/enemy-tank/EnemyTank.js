@@ -9,9 +9,9 @@ import MotionManager from '../../managers/MotionManager.js';
 
 class EnemyTank extends DisplayObject {
   constructor() {
-    super(95, 95);
+    super(52, 52);
 
-    this.speed = 5;
+    this.speed = 4;
 
     this.direction = 'up';
 
