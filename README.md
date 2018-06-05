@@ -12,7 +12,8 @@
 ### Resources
 
 Game related:
-- https://strategywiki.org/wiki/Battle_City/How_to_play
+- https://strategywiki.org/wiki/Battle_City
+- http://selmiak.bplaced.net/games/nes/index.php?lang=eng&game=Battle-City
 - https://www.youtube.com/watch?v=MPsA5PtfdL0
 - https://www.spriters-resource.com/nes/batcity/sheet/60016/
 
