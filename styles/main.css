@@ -1,26 +1,13 @@
-body {
-  background: #000;
-  margin: 0;
-}
-
-canvas {
-  width: 100%;
+html {
+  display: flex;
   height: 100%;
 }
 
-.game-space {
-  margin: 0 auto;
-  position: relative;
-  background-color: #ddd;
-  width: 900px;
-  height: 900px;
-}
-
-.canvas {
-  background-color: #000;
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  width: 800px;
-  height: 800px;
+body {
+  align-items: center;
+  background: #000;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  margin: 0;
 }
