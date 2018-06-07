@@ -1,11 +1,15 @@
 import Vector from './Vector.js';
 
 class BoundingBox {
-  constructor(x = 0, y = 0, width = 0, height = 0) {
-    // Top-left point of the box
-    this.min = new Vector(x, y);
-    // Bottom-right point of the box
-    this.max = this.min.clone().add(width, height);
+  /**
+   * Creates bounding box
+   * @param  {Vector} min Top-left point of the box
+   * @param  {Vector} max Bottom-right point of the box
+   * @return {BoundingBox}
+   */
+  constructor(min = new Vector(), max = new Vector()) {
+    this.min = min;
+    this.max = max;
   }
 
   intersectsBox(box) {

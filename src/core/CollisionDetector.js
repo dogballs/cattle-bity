@@ -1,4 +1,3 @@
-import BoundingBox from './BoundingBox.js';
 import Collision from './Collision.js';
 
 class CollisionDetector {
@@ -9,19 +8,8 @@ class CollisionDetector {
       objects.forEach((target) => {
         if (source === target) return;
 
-        const sourceBoundingBox = new BoundingBox(
-          source.position.x - (source.width / 2),
-          source.position.y - (source.height / 2),
-          source.width,
-          source.height
-        );
-
-        const targetBoundingBox = new BoundingBox(
-          target.position.x - (target.width / 2),
-          target.position.y - (target.height / 2),
-          target.width,
-          target.height
-        );
+        const sourceBoundingBox = source.getBoundingBox();
+        const targetBoundingBox = target.getBoundingBox();
 
         if (sourceBoundingBox.intersectsBox(targetBoundingBox)) {
           const collision = new Collision(source, target);

@@ -10,7 +10,7 @@ class TankMotion {
     // eslint-disable-next-line
     if (this.motionManager.isCollisionExists(actor.id, actor.position.x, nextY, actor.width, actor.height) ||
             (nextY - (actor.height / 2) <= 0)) {
-      return;
+      // return; // TODO: Fix to stop at SceneWall
     }
     actor.position.setY(nextY);
   }
@@ -23,7 +23,7 @@ class TankMotion {
     // eslint-disable-next-line
     if (this.motionManager.isCollisionExists(actor.id, actor.position.x, nextY, actor.width, actor.height) ||
             (nextY + (actor.height / 2) >= height)) {
-      return;
+      // return; // TODO: Fix to stop at SceneWall
     }
     actor.position.setY(nextY);
   }
@@ -36,7 +36,7 @@ class TankMotion {
     // eslint-disable-next-line
     if (this.motionManager.isCollisionExists(actor.id, nextX, actor.position.y, actor.width, actor.height) ||
             (nextX + (actor.width / 2) >= width)) {
-      return;
+      // return; // TODO: Fix to stop at SceneWall
     }
     actor.position.setX(nextX);
   }
@@ -48,7 +48,7 @@ class TankMotion {
     // eslint-disable-next-line
     if (this.motionManager.isCollisionExists(actor.id, nextX, actor.position.y, actor.width, actor.height) ||
             (actor.position.x - actor.speed - (actor.width / 2) <= 0)) {
-      return;
+      // return; // TODO: Fix to stop at SceneWall
     }
     actor.position.setX(nextX);
   }
