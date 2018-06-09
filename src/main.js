@@ -3,7 +3,7 @@ import BulletExplosion from './models/BulletExplosion.js';
 import BulletFactory from './managers/BulletFactory.js';
 import CollisionDetector from './core/CollisionDetector.js';
 import EnemyTank from './models/enemy-tank/EnemyTank.js';
-import InputHandler from './handlers/InputHandler.js';
+import KeyboardInput from './core/KeyboardInput.js';
 import MapBuilder from './managers/MapBuilder.js';
 import MotionManager from './managers/MotionManager.js';
 import Renderer from './core/Renderer.js';
@@ -51,38 +51,44 @@ scene.add(bottomSceneWall);
 scene.add(leftSceneWall);
 scene.add(rightSceneWall);
 
-const inputHandler = new InputHandler();
-
-inputHandler.addListener('up', () => {
-  tank.rotate('up');
-  tank.move();
-});
-
-inputHandler.addListener('down', () => {
-  tank.rotate('down');
-  tank.move();
-});
-
-inputHandler.addListener('right', () => {
-  tank.rotate('right');
-  tank.move();
-});
-
-inputHandler.addListener('left', () => {
-  tank.rotate('left');
-  tank.move();
-});
-
-inputHandler.addListener('fire', () => {
-  const bullet = BulletFactory.makeBullet(tank);
-  scene.add(bullet);
-});
+const input = new KeyboardInput();
+input.listen();
 
 const animate = () => {
   const sceneHeight = renderer.domElement.height;
 
+  // Handle keyboard input to control tank
+
+  if (input.isPressedLast(KeyboardInput.KEY_W)) {
+    tank.rotate('up');
+  }
+  if (input.isPressedLast(KeyboardInput.KEY_S)) {
+    tank.rotate('down');
+  }
+  if (input.isPressedLast(KeyboardInput.KEY_D)) {
+    tank.rotate('right');
+  }
+  if (input.isPressedLast(KeyboardInput.KEY_A)) {
+    tank.rotate('left');
+  }
+
+  const moveKeys = [
+    KeyboardInput.KEY_W,
+    KeyboardInput.KEY_A,
+    KeyboardInput.KEY_S,
+    KeyboardInput.KEY_D,
+  ];
+  if (input.isPressedAny(moveKeys)) {
+    tank.move();
+  }
+
+  if (input.isPressed(KeyboardInput.KEY_SPACE) && !scene.hasType(Bullet)) {
+    const bullet = BulletFactory.makeBullet(tank);
+    scene.add(bullet);
+  }
+
   // Animate bullets
-  const bullets = scene.children.filter(child => child instanceof Bullet);
+  const bullets = scene.filterType(Bullet);
   bullets.forEach(bullet => bullet.move());
 
   // Animate enemy tank to continuously go up and down
@@ -94,11 +100,11 @@ const animate = () => {
   }
 
   // Animate explosions
-  const bulletExplosions = scene.children.filter(child => child instanceof BulletExplosion);
+  const bulletExplosions = scene.filterType(BulletExplosion);
   bulletExplosions.forEach(bulletExplosion => bulletExplosion.update());
 
   // Animate spawns
-  const spawns = scene.children.filter(child => child instanceof Spawn);
+  const spawns = scene.filterType(Spawn);
   spawns.forEach(spawn => spawn.update());
 
   // Detect and handle collisions of all objects on the map
