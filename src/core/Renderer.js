@@ -57,7 +57,7 @@ class Renderer {
     }
 
     const translatedVectors = vectors
-      .map(vector => vector.clone().add(position.x, position.y));
+      .map(vector => vector.clone().add(position));
 
     const [firstVector, ...restVectors] = translatedVectors;
 

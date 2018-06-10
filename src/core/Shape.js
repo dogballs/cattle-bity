@@ -17,8 +17,8 @@ class Shape {
     const maxX = Math.max(...xs);
     const maxY = Math.max(...ys);
 
-    const min = this.position.clone().add(minX, minY);
-    const max = this.position.clone().add(maxX, maxY);
+    const min = new Vector(minX, minY).add(this.position);
+    const max = new Vector(maxX, maxY).add(this.position);
 
     return new BoundingBox(min, max);
   }

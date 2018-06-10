@@ -1,34 +1,56 @@
 import Block from '../models/block/Block.js';
 import Bullet from '../models/Bullet.js';
-import EnemyTank from '../models/enemy-tank/EnemyTank.js';
+import EnemyTank from '../models/EnemyTank.js';
 import SceneWall from '../models/SceneWall.js';
+import Tank from '../models/Tank.js';
 
 import CollideBlock from './CollideBlock.js';
 import CollideBullet from './CollideBullet.js';
+import CollideEnemyTankWithWall from './CollideEnemyTankWithWall.js';
+import CollideTankWithWall from './CollideTankWithWall.js';
 
 const config = [
   // Block
   {
-    sourceType: Block,
-    targetType: Bullet,
+    targetType: Block,
+    sourceType: Bullet,
     Instance: CollideBlock,
   },
 
   // Bullet
   {
-    sourceType: Bullet,
-    targetType: Block,
+    targetType: Bullet,
+    sourceType: Block,
     Instance: CollideBullet,
   },
   {
-    sourceType: Bullet,
+    targetType: Bullet,
+    sourceType: EnemyTank,
+    Instance: CollideBullet,
+  },
+  {
+    targetType: Bullet,
+    sourceType: SceneWall,
+    Instance: CollideBullet,
+  },
+
+  // Tank
+  {
+    targetType: Tank,
+    sourceType: Block,
+    Instance: CollideTankWithWall,
+  },
+  {
+    targetType: Tank,
+    sourceType: SceneWall,
+    Instance: CollideTankWithWall,
+  },
+
+  // EnemyTank
+  {
     targetType: EnemyTank,
-    Instance: CollideBullet,
-  },
-  {
-    sourceType: Bullet,
-    targetType: SceneWall,
-    Instance: CollideBullet,
+    sourceType: SceneWall,
+    Instance: CollideEnemyTankWithWall,
   },
 ];
 

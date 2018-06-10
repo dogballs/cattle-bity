@@ -2,16 +2,11 @@ import BoundingBox from './BoundingBox.js';
 import Sprite from './Sprite.js';
 import Vector from './Vector.js';
 
-let id = 1000;
-
 /**
  * Superclass for all things that can be drawn on screen.
  */
 class DisplayObject {
   constructor(width, height) {
-    this.id = id;
-    id += 1;
-
     this.width = width;
     this.height = height;
 
@@ -28,7 +23,7 @@ class DisplayObject {
       this.position.y - (this.height / 2)
     );
     // Bottom-right point of the object
-    const max = min.clone().add(this.width, this.height);
+    const max = min.clone().add(new Vector(this.width, this.height));
 
     return new BoundingBox(min, max);
   }

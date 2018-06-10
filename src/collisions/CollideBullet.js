@@ -9,7 +9,7 @@ class CollideBullet {
   }
 
   collide() {
-    const bullet = this.collision.source;
+    const bullet = this.collision.target;
 
     this.scene.remove(bullet);
 

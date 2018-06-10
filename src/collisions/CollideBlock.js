@@ -7,7 +7,7 @@ class CollideBlock {
   }
 
   collide() {
-    const block = this.collision.source;
+    const block = this.collision.target;
 
     this.scene.remove(block);
   }
