@@ -22,7 +22,7 @@ class Spawn extends DisplayObject {
       new Sprite(this.texture, {
         x: 304, y: 96, w: 15, h: 15,
       }),
-    ], { delay: 65, loop: 3 });
+    ], { delay: 40, loop: 3 });
 
     this.dimensions = [
       { width: 36, height: 36 },

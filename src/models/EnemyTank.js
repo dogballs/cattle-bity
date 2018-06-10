@@ -52,7 +52,7 @@ class EnemyTank extends DisplayObject {
     };
   }
 
-  move() {
+  update() {
     if (this.direction === 'up') {
       this.position.y -= this.speed;
     } else if (this.direction === 'down') {
@@ -63,8 +63,6 @@ class EnemyTank extends DisplayObject {
       this.position.x -= this.speed;
     }
 
-    // Any time tank is moved, animate it's movement by showing next
-    // animation frame.
     const animation = this.animations[this.direction];
     animation.animate();
   }
