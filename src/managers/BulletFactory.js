@@ -1,4 +1,5 @@
 import Bullet from '../models/Bullet.js';
+import Vector from '../core/Vector.js';
 
 class BulletFactory {
   static makeBullet(tank) {
@@ -12,13 +13,13 @@ class BulletFactory {
     // TODO: improve rotation logic (width and height swap)
 
     if (tank.direction === 'up') {
-      position.add(0, -tank.height / 2);
+      position.add(new Vector(0, -tank.height / 2));
     } else if (tank.direction === 'down') {
-      position.add(0, tank.height / 2);
+      position.add(new Vector(0, tank.height / 2));
     } else if (tank.direction === 'right') {
-      position.add(tank.width / 2, 0);
+      position.add(new Vector(tank.width / 2, 0));
     } else if (tank.direction === 'left') {
-      position.add(-tank.width / 2, 0);
+      position.add(new Vector(-tank.width / 2, 0));
     }
 
     bullet.position = position;

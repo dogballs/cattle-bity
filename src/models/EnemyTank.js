@@ -1,8 +1,7 @@
-import Animation from '../../core/Animation.js';
-import DisplayObject from '../../core/DisplayObject.js';
-import Sprite from '../../core/Sprite.js';
-import Texture from '../../core/Texture.js';
-import MotionManager from '../../managers/MotionManager.js';
+import Animation from '../core/Animation.js';
+import DisplayObject from '../core/DisplayObject.js';
+import Sprite from '../core/Sprite.js';
+import Texture from '../core/Texture.js';
 
 // TODO: create base class for tank with common behavior for both enemy and
 // player tanks to avoid repetition.
@@ -14,8 +13,6 @@ class EnemyTank extends DisplayObject {
     this.speed = 4;
 
     this.direction = 'up';
-
-    this.motionManager = new MotionManager();
 
     this.texture = new Texture('images/sprite.png');
 
@@ -56,7 +53,15 @@ class EnemyTank extends DisplayObject {
   }
 
   move() {
-    this.motionManager.moveActor(this, this.direction);
+    if (this.direction === 'up') {
+      this.position.y -= this.speed;
+    } else if (this.direction === 'down') {
+      this.position.y += this.speed;
+    } else if (this.direction === 'right') {
+      this.position.x += this.speed;
+    } else if (this.direction === 'left') {
+      this.position.x -= this.speed;
+    }
 
     // Any time tank is moved, animate it's movement by showing next
     // animation frame.

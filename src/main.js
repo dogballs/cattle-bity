@@ -2,15 +2,14 @@ import Bullet from './models/Bullet.js';
 import BulletExplosion from './models/BulletExplosion.js';
 import BulletFactory from './managers/BulletFactory.js';
 import CollisionDetector from './core/CollisionDetector.js';
-import EnemyTank from './models/enemy-tank/EnemyTank.js';
+import EnemyTank from './models/EnemyTank.js';
 import KeyboardInput from './core/KeyboardInput.js';
 import MapBuilder from './managers/MapBuilder.js';
-import MotionManager from './managers/MotionManager.js';
 import Renderer from './core/Renderer.js';
 import Scene from './core/Scene.js';
 import SceneWall from './models/SceneWall.js';
 import Spawn from './models/Spawn.js';
-import Tank from './models/tank/Tank.js';
+import Tank from './models/Tank.js';
 
 import collisionsConfig from './collisions/collisions.config.js';
 import map from './maps/1/description.js';
@@ -20,10 +19,6 @@ renderer.setSize(900, 900);
 document.body.appendChild(renderer.domElement);
 
 const scene = new Scene();
-// TODO: @aailyin fix please. If instance is not used, means that the class
-// just introduces side effects, which is not straigforward.
-// eslint-disable-next-line no-unused-vars
-const manager = new MotionManager(renderer, scene);
 const mapBuilder = new MapBuilder(scene);
 
 mapBuilder.buildMap(map);
@@ -55,8 +50,6 @@ const input = new KeyboardInput();
 input.listen();
 
 const animate = () => {
-  const sceneHeight = renderer.domElement.height;
-
   // Handle keyboard input to control tank
 
   if (input.isPressedLast(KeyboardInput.KEY_W)) {
@@ -93,11 +86,6 @@ const animate = () => {
 
   // Animate enemy tank to continuously go up and down
   enemy.move();
-  if (enemy.position.y + enemy.height > sceneHeight) {
-    enemy.rotate('up');
-  } else if (enemy.position.y < 0) {
-    enemy.rotate('down');
-  }
 
   // Animate explosions
   const bulletExplosions = scene.filterType(BulletExplosion);

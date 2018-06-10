@@ -4,15 +4,15 @@ class CollisionDetector {
   static intersectObjects(objects) {
     const collisions = [];
 
-    objects.forEach((source) => {
-      objects.forEach((target) => {
-        if (source === target) return;
+    objects.forEach((target) => {
+      objects.forEach((source) => {
+        if (target === source) return;
 
-        const sourceBoundingBox = source.getBoundingBox();
         const targetBoundingBox = target.getBoundingBox();
+        const sourceBoundingBox = source.getBoundingBox();
 
-        if (sourceBoundingBox.intersectsBox(targetBoundingBox)) {
-          const collision = new Collision(source, target);
+        if (targetBoundingBox.intersectsBox(sourceBoundingBox)) {
+          const collision = new Collision(target, source);
 
           collisions.push(collision);
         }
