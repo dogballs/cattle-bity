@@ -1,5 +1,4 @@
 import Bullet from './models/Bullet.js';
-import BulletExplosion from './models/BulletExplosion.js';
 import BulletFactory from './managers/BulletFactory.js';
 import CollisionDetector from './core/CollisionDetector.js';
 import EnemyTank from './models/EnemyTank.js';
@@ -18,21 +17,13 @@ const renderer = new Renderer();
 renderer.setSize(900, 900);
 document.body.appendChild(renderer.domElement);
 
+const input = new KeyboardInput();
+input.listen();
+
 const scene = new Scene();
 const mapBuilder = new MapBuilder(scene);
 
 mapBuilder.buildMap(map);
-
-const tank = new Tank();
-tank.position.x = 120;
-tank.position.y = 120;
-scene.add(tank);
-
-const enemy = new EnemyTank();
-enemy.position.x = 600;
-enemy.position.y = 250;
-enemy.rotate('down');
-scene.add(enemy);
 
 const topSceneWall = new SceneWall(900, 40);
 const bottomSceneWall = new SceneWall(900, 40);
@@ -46,56 +37,41 @@ scene.add(bottomSceneWall);
 scene.add(leftSceneWall);
 scene.add(rightSceneWall);
 
-const input = new KeyboardInput();
-input.listen();
-
-const animate = () => {
-  // Handle keyboard input to control tank
-
-  if (input.isPressedLast(KeyboardInput.KEY_W)) {
-    tank.rotate('up');
-  }
-  if (input.isPressedLast(KeyboardInput.KEY_S)) {
-    tank.rotate('down');
-  }
-  if (input.isPressedLast(KeyboardInput.KEY_D)) {
-    tank.rotate('right');
-  }
-  if (input.isPressedLast(KeyboardInput.KEY_A)) {
-    tank.rotate('left');
-  }
-
-  const moveKeys = [
-    KeyboardInput.KEY_W,
-    KeyboardInput.KEY_A,
-    KeyboardInput.KEY_S,
-    KeyboardInput.KEY_D,
-  ];
-  if (input.isPressedAny(moveKeys)) {
-    tank.move();
-  }
-
-  if (input.isPressed(KeyboardInput.KEY_SPACE) && !scene.hasType(Bullet)) {
+// TODO: create common factory/builder for all tanks
+const spawn = new Spawn();
+spawn.position.set(100, 100);
+spawn.onComplete = () => {
+  const tank = new Tank();
+  tank.position = spawn.position.clone();
+  tank.onFire = () => {
+    if (scene.hasType(Bullet)) return;
     const bullet = BulletFactory.makeBullet(tank);
     scene.add(bullet);
-  }
+  };
+  scene.add(tank);
+  scene.remove(spawn);
+};
+scene.add(spawn);
 
-  // Animate bullets
-  const bullets = scene.filterType(Bullet);
-  bullets.forEach(bullet => bullet.move());
+const enemySpawn = new Spawn();
+enemySpawn.position.set(600, 250);
+enemySpawn.onComplete = () => {
+  const enemy = new EnemyTank();
+  enemy.position = enemySpawn.position.clone();
+  scene.add(enemy);
+  scene.remove(enemySpawn);
+};
+scene.add(enemySpawn);
 
-  // Animate enemy tank to continuously go up and down
-  enemy.move();
 
-  // Animate explosions
-  const bulletExplosions = scene.filterType(BulletExplosion);
-  bulletExplosions.forEach(bulletExplosion => bulletExplosion.update());
+// Game loop
 
-  // Animate spawns
-  const spawns = scene.filterType(Spawn);
-  spawns.forEach(spawn => spawn.update());
+const animate = () => {
+  // Update all objects on the scene
+  // TODO: abstract out input from tank
+  scene.children.forEach(child => child.update({ input }));
 
-  // Detect and handle collisions of all objects on the map
+  // Detect and handle collisions of all objects on the scene
   const collisions = CollisionDetector.intersectObjects(scene.children);
   collisions.forEach((collision) => {
     const collisionConfig = collisionsConfig.find((config) => {
@@ -117,14 +93,3 @@ const animate = () => {
   renderer.render(scene);
 };
 animate();
-
-// Crate sample spawns
-setInterval(() => {
-  const spawn = new Spawn();
-  spawn.position.x = 300;
-  spawn.position.y = 150;
-  spawn.onComplete = () => {
-    scene.remove(spawn);
-  };
-  scene.add(spawn);
-}, 1500);

@@ -23,6 +23,12 @@ class Shape {
     return new BoundingBox(min, max);
   }
 
+  /**
+   * Called on each game loop iteration
+   */
+  // eslint-disable-next-line class-methods-use-this
+  update() {}
+
   render() {
     return {
       fillColor: this.fillColor,

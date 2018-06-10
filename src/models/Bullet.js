@@ -28,7 +28,7 @@ class Bullet extends DisplayObject {
     };
   }
 
-  move() {
+  update() {
     if (this.direction === 'up') {
       this.position.y -= this.speed;
     } else if (this.direction === 'down') {

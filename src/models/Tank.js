@@ -1,5 +1,6 @@
 import Animation from '../core/Animation.js';
 import DisplayObject from '../core/DisplayObject.js';
+import KeyboardInput from '../core/KeyboardInput.js';
 import Sprite from '../core/Sprite.js';
 import Texture from '../core/Texture.js';
 
@@ -49,22 +50,48 @@ class Tank extends DisplayObject {
     };
   }
 
-  move() {
-    if (this.direction === 'up') {
-      this.position.y -= this.speed;
-    } else if (this.direction === 'down') {
-      this.position.y += this.speed;
-    } else if (this.direction === 'right') {
-      this.position.x += this.speed;
-    } else if (this.direction === 'left') {
-      this.position.x -= this.speed;
+  update({ input }) {
+    if (input.isPressedLast(KeyboardInput.KEY_W)) {
+      this.rotate('up');
+    }
+    if (input.isPressedLast(KeyboardInput.KEY_S)) {
+      this.rotate('down');
+    }
+    if (input.isPressedLast(KeyboardInput.KEY_D)) {
+      this.rotate('right');
+    }
+    if (input.isPressedLast(KeyboardInput.KEY_A)) {
+      this.rotate('left');
     }
 
-    // Any time tank is moved, animate it's movement by showing next
-    // animation frame
-    const animation = this.animations[this.direction];
-    animation.animate();
+    const moveKeys = [
+      KeyboardInput.KEY_W,
+      KeyboardInput.KEY_A,
+      KeyboardInput.KEY_S,
+      KeyboardInput.KEY_D,
+    ];
+    if (input.isPressedAny(moveKeys)) {
+      if (this.direction === 'up') {
+        this.position.y -= this.speed;
+      } else if (this.direction === 'down') {
+        this.position.y += this.speed;
+      } else if (this.direction === 'right') {
+        this.position.x += this.speed;
+      } else if (this.direction === 'left') {
+        this.position.x -= this.speed;
+      }
+
+      const animation = this.animations[this.direction];
+      animation.animate();
+    }
+
+    if (input.isPressed(KeyboardInput.KEY_SPACE)) {
+      this.onFire();
+    }
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  onFire() {}
 
   rotate(direction) {
     this.direction = direction;
