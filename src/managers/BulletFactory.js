@@ -24,6 +24,8 @@ class BulletFactory {
 
     bullet.position = position;
     bullet.rotate(tank.direction);
+    bullet.speed = tank.bulletSpeed;
+    bullet.damage = tank.bulletDamage;
 
     return bullet;
   }

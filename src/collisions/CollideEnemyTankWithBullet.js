@@ -10,6 +10,13 @@ class CollideEnemyTankWithBullet {
 
   collide() {
     const tank = this.collision.target;
+    const bullet = this.collision.source;
+
+    const nextHealth = tank.health - bullet.damage;
+    if (nextHealth > 0) {
+      tank.health = nextHealth;
+      return;
+    }
 
     this.scene.remove(tank);
 
