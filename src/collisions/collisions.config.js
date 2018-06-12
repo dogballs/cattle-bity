@@ -6,6 +6,7 @@ import Tank from '../models/Tank.js';
 
 import CollideBlock from './CollideBlock.js';
 import CollideBullet from './CollideBullet.js';
+import CollideEnemyTankWithBullet from './CollideEnemyTankWithBullet.js';
 import CollideEnemyTankWithWall from './CollideEnemyTankWithWall.js';
 import CollideTankWithWall from './CollideTankWithWall.js';
 
@@ -51,6 +52,11 @@ const config = [
     targetType: EnemyTank,
     sourceType: SceneWall,
     Instance: CollideEnemyTankWithWall,
+  },
+  {
+    targetType: EnemyTank,
+    sourceType: Bullet,
+    Instance: CollideEnemyTankWithBullet,
   },
 ];
 
