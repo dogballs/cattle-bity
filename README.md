@@ -13,6 +13,8 @@
 
 Game related:
 - https://strategywiki.org/wiki/Battle_City
+- http://www.ign.com/faqs/2003/battle-city-walkthroughfaq-424615
+- https://gamefaqs.gamespot.com/gameboy/574770-battle-city/faqs/31154
 - http://selmiak.bplaced.net/games/nes/index.php?lang=eng&game=Battle-City
 - https://www.youtube.com/watch?v=MPsA5PtfdL0
 - https://www.spriters-resource.com/nes/batcity/sheet/60016/

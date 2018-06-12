@@ -8,7 +8,9 @@ class Tank extends DisplayObject {
   constructor() {
     super(52, 52);
 
-    this.speed = 4;
+    this.speed = 3;
+    this.bulletDamage = 1;
+    this.bulletSpeed = 10;
 
     this.direction = 'up';
 

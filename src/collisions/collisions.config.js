@@ -1,6 +1,8 @@
 import Block from '../models/block/Block.js';
 import Bullet from '../models/Bullet.js';
-import EnemyTank from '../models/EnemyTank.js';
+import BasicEnemyTank from '../models/BasicEnemyTank.js';
+import FastEnemyTank from '../models/FastEnemyTank.js';
+import PowerEnemyTank from '../models/PowerEnemyTank.js';
 import SceneWall from '../models/SceneWall.js';
 import Tank from '../models/Tank.js';
 
@@ -26,12 +28,22 @@ const config = [
   },
   {
     targetType: Bullet,
-    sourceType: EnemyTank,
+    sourceType: SceneWall,
     Instance: CollideBullet,
   },
   {
     targetType: Bullet,
-    sourceType: SceneWall,
+    sourceType: BasicEnemyTank,
+    Instance: CollideBullet,
+  },
+  {
+    targetType: Bullet,
+    sourceType: FastEnemyTank,
+    Instance: CollideBullet,
+  },
+  {
+    targetType: Bullet,
+    sourceType: PowerEnemyTank,
     Instance: CollideBullet,
   },
 
@@ -47,14 +59,36 @@ const config = [
     Instance: CollideTankWithWall,
   },
 
-  // EnemyTank
+  // Basic Enemy
   {
-    targetType: EnemyTank,
+    targetType: BasicEnemyTank,
     sourceType: SceneWall,
     Instance: CollideEnemyTankWithWall,
   },
   {
-    targetType: EnemyTank,
+    targetType: BasicEnemyTank,
+    sourceType: Bullet,
+    Instance: CollideEnemyTankWithBullet,
+  },
+  // Fast enemy
+  {
+    targetType: FastEnemyTank,
+    sourceType: SceneWall,
+    Instance: CollideEnemyTankWithWall,
+  },
+  {
+    targetType: FastEnemyTank,
+    sourceType: Bullet,
+    Instance: CollideEnemyTankWithBullet,
+  },
+  // Power enemy
+  {
+    targetType: PowerEnemyTank,
+    sourceType: SceneWall,
+    Instance: CollideEnemyTankWithWall,
+  },
+  {
+    targetType: PowerEnemyTank,
     sourceType: Bullet,
     Instance: CollideEnemyTankWithBullet,
   },

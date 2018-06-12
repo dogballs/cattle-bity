@@ -1,7 +1,9 @@
 import Bullet from './models/Bullet.js';
 import BulletFactory from './managers/BulletFactory.js';
 import CollisionDetector from './core/CollisionDetector.js';
-import EnemyTank from './models/EnemyTank.js';
+import BasicEnemyTank from './models/BasicEnemyTank.js';
+import FastEnemyTank from './models/FastEnemyTank.js';
+import PowerEnemyTank from './models/PowerEnemyTank.js';
 import KeyboardInput from './core/KeyboardInput.js';
 import MapBuilder from './managers/MapBuilder.js';
 import Renderer from './core/Renderer.js';
@@ -54,14 +56,34 @@ spawn.onComplete = () => {
 scene.add(spawn);
 
 const enemySpawn = new Spawn();
-enemySpawn.position.set(600, 250);
+enemySpawn.position.set(500, 250);
 enemySpawn.onComplete = () => {
-  const enemy = new EnemyTank();
+  const enemy = new BasicEnemyTank();
   enemy.position = enemySpawn.position.clone();
   scene.add(enemy);
   scene.remove(enemySpawn);
 };
 scene.add(enemySpawn);
+
+const fastEnemySpawn = new Spawn();
+fastEnemySpawn.position.set(580, 250);
+fastEnemySpawn.onComplete = () => {
+  const enemy = new FastEnemyTank();
+  enemy.position = fastEnemySpawn.position.clone();
+  scene.add(enemy);
+  scene.remove(fastEnemySpawn);
+};
+scene.add(fastEnemySpawn);
+
+const powerEnemySpawn = new Spawn();
+powerEnemySpawn.position.set(660, 250);
+powerEnemySpawn.onComplete = () => {
+  const enemy = new PowerEnemyTank();
+  enemy.position = powerEnemySpawn.position.clone();
+  scene.add(enemy);
+  scene.remove(powerEnemySpawn);
+};
+scene.add(powerEnemySpawn);
 
 
 // Game loop
