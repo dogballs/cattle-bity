@@ -30,6 +30,10 @@ class Renderer {
       sprite,
     } = displayObject.render();
 
+    if (sprite === null) {
+      return;
+    }
+
     this.context.drawImage(
       sprite.texture.imageElement,
       sprite.bounds.x, sprite.bounds.y,
