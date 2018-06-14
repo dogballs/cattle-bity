@@ -1,12 +1,13 @@
 import Animation from '../core/Animation.js';
-import DisplayObject from '../core/DisplayObject.js';
 import Sprite from '../core/Sprite.js';
 import Texture from '../core/Texture.js';
+
+import EnemyTank from './EnemyTank.js';
 
 // TODO: create base class for tank with common behavior for both enemy and
 // player tanks to avoid repetition.
 
-class BasicEnemyTank extends DisplayObject {
+class BasicEnemyTank extends EnemyTank {
   constructor() {
     super(52, 60);
 

@@ -1,16 +1,19 @@
 import Bullet from './models/Bullet.js';
 import BulletFactory from './managers/BulletFactory.js';
 import CollisionDetector from './core/CollisionDetector.js';
-import BasicEnemyTank from './models/BasicEnemyTank.js';
-import FastEnemyTank from './models/FastEnemyTank.js';
-import PowerEnemyTank from './models/PowerEnemyTank.js';
 import KeyboardInput from './core/KeyboardInput.js';
 import MapBuilder from './managers/MapBuilder.js';
 import Renderer from './core/Renderer.js';
 import Scene from './core/Scene.js';
 import SceneWall from './models/SceneWall.js';
 import Spawn from './models/Spawn.js';
+
+import BasicEnemyTank from './models/BasicEnemyTank.js';
+import FastEnemyTank from './models/FastEnemyTank.js';
+import PowerEnemyTank from './models/PowerEnemyTank.js';
 import Tank from './models/Tank.js';
+
+import GrenadePowerup from './models/GrenadePowerup.js';
 
 import collisionsConfig from './collisions/collisions.config.js';
 import map from './maps/1/description.js';
@@ -85,6 +88,9 @@ powerEnemySpawn.onComplete = () => {
 };
 scene.add(powerEnemySpawn);
 
+const grenadePowerup = new GrenadePowerup();
+grenadePowerup.position.set(100, 800);
+scene.add(grenadePowerup);
 
 // Game loop
 

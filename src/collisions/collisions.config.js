@@ -1,15 +1,19 @@
 import Block from '../models/block/Block.js';
 import Bullet from '../models/Bullet.js';
+import SceneWall from '../models/SceneWall.js';
+
 import BasicEnemyTank from '../models/BasicEnemyTank.js';
 import FastEnemyTank from '../models/FastEnemyTank.js';
 import PowerEnemyTank from '../models/PowerEnemyTank.js';
-import SceneWall from '../models/SceneWall.js';
 import Tank from '../models/Tank.js';
+
+import GrenadePowerup from '../models/GrenadePowerup.js';
 
 import CollideBlock from './CollideBlock.js';
 import CollideBullet from './CollideBullet.js';
 import CollideEnemyTankWithBullet from './CollideEnemyTankWithBullet.js';
 import CollideEnemyTankWithWall from './CollideEnemyTankWithWall.js';
+import CollideGrenadePowerupWithTank from './CollideGrenadePowerupWithTank.js';
 import CollideTankWithWall from './CollideTankWithWall.js';
 
 const config = [
@@ -70,6 +74,7 @@ const config = [
     sourceType: Bullet,
     Instance: CollideEnemyTankWithBullet,
   },
+
   // Fast enemy
   {
     targetType: FastEnemyTank,
@@ -81,6 +86,7 @@ const config = [
     sourceType: Bullet,
     Instance: CollideEnemyTankWithBullet,
   },
+
   // Power enemy
   {
     targetType: PowerEnemyTank,
@@ -91,6 +97,13 @@ const config = [
     targetType: PowerEnemyTank,
     sourceType: Bullet,
     Instance: CollideEnemyTankWithBullet,
+  },
+
+  // Powerups
+  {
+    targetType: GrenadePowerup,
+    sourceType: Tank,
+    Instance: CollideGrenadePowerupWithTank,
   },
 ];
 
