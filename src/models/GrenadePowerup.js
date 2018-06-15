@@ -12,7 +12,7 @@ class GrenadePowerup extends DisplayObject {
     // Null as a second frame adds a blink effect
     this.animation = new Animation([
       new Sprite(this.texture, {
-        x: 256, y: 112, w: 16, h: 15,
+        x: 320, y: 112, w: 16, h: 15,
       }),
       null,
     ], { delay: 130 });
