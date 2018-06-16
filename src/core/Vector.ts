@@ -2,26 +2,45 @@ class Vector {
   public x: number;
   public y: number;
 
-  constructor(x = 0, y = 0) {
+  constructor(x: number = 0, y: number = 0) {
     this.x = x;
     this.y = y;
   }
 
-  public add(v) {
+   public set(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+
+    return this;
+  }
+
+  public setX(x: number) {
+    this.x = x;
+
+    return this;
+  }
+
+  public setY(y: number) {
+    this.y = y;
+
+    return this;
+  }
+
+  public add(v: Vector) {
     this.x += v.x;
     this.y += v.y;
 
     return this;
   }
 
-  public sub(v) {
+  public sub(v: Vector) {
     this.x -= v.x;
     this.y -= v.y;
 
     return this;
   }
 
-  public divideScalar(s) {
+  public divideScalar(s: number) {
     this.x /= s;
     this.y /= s;
 
@@ -30,25 +49,6 @@ class Vector {
 
   public clone() {
     return new Vector(this.x, this.y);
-  }
-
-  public set(x, y) {
-    this.x = x;
-    this.y = y;
-
-    return this;
-  }
-
-  public setX(x) {
-    this.x = x;
-
-    return this;
-  }
-
-  public setY(y) {
-    this.y = y;
-
-    return this;
   }
 }
 

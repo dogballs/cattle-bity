@@ -8,6 +8,7 @@ import MapBuilder from './managers/MapBuilder';
 
 import Bullet from './models/Bullet';
 import SceneWall from './models/SceneWall';
+import Shield from './models/Shield';
 import Spawn from './models/Spawn';
 
 import BasicEnemyTank from './models/BasicEnemyTank';
@@ -95,6 +96,10 @@ scene.add(powerEnemySpawn);
 const grenadePowerup = new GrenadePowerup();
 grenadePowerup.position.set(100, 800);
 scene.add(grenadePowerup);
+
+const shield = new Shield();
+shield.position.set(200, 800);
+scene.add(shield);
 
 // Game loop
 

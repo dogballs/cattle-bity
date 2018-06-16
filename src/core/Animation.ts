@@ -1,12 +1,17 @@
+import Sprite from './Sprite';
+
 class Animation {
   private delay: number;
-  private frames: object[];
+  private frames: Sprite[];
   private frameIndex: number;
   private lastAnimatedAt: number;
   private loop: boolean | number;
   private loopIndex: number;
 
-  constructor(frames = [], { delay = 0, loop = true } = {}) {
+  constructor(
+    frames: Sprite[] = [],
+    { delay = 0, loop = true }: { delay?: number, loop?: number | boolean } = {},
+  ) {
     this.frames = frames;
     this.frameIndex = 0;
 

@@ -8,11 +8,11 @@ class Scene {
     this.children = [];
   }
 
-  public add(childToAdd) {
+  public add(childToAdd: DisplayObject | Shape) {
     this.children.push(childToAdd);
   }
 
-  public remove(childToRemove) {
+  public remove(childToRemove: DisplayObject | Shape) {
     this.children = this.children.filter((child) => child !== childToRemove);
   }
 

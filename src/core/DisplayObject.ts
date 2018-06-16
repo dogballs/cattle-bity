@@ -11,7 +11,7 @@ class DisplayObject {
   public sprite: Sprite;
   public width: number;
 
-  constructor(width, height) {
+  constructor(width: number = 0, height: number = 0) {
     this.width = width;
     this.height = height;
 
