@@ -1,4 +1,4 @@
-import DisplayObject from '../core/DisplayObject.js';
+import DisplayObject from '../core/DisplayObject';
 
 class EnemyTank extends DisplayObject {}
 

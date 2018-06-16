@@ -1,6 +1,15 @@
 [![Build status](https://travis-ci.com/dogballs/battle-city.svg?branch=master)](https://travis-ci.com/dogballs/battle-city)
 
-### Folder structure:
+### Getting started
+
+```bash
+npm install
+npm start # Webpack watcher
+npm build # Webpack build
+npm lint # Run linters
+```
+
+### Folder structure
 
 - src
   - core - Game engine. Think of it as a library which can be reused in another projects. Should not have any code associated with game domain.

@@ -1,22 +1,24 @@
-import Bullet from './models/Bullet.js';
-import BulletFactory from './managers/BulletFactory.js';
-import CollisionDetector from './core/CollisionDetector.js';
-import KeyboardInput from './core/KeyboardInput.js';
-import MapBuilder from './managers/MapBuilder.js';
-import Renderer from './core/Renderer.js';
-import Scene from './core/Scene.js';
-import SceneWall from './models/SceneWall.js';
-import Spawn from './models/Spawn.js';
+import CollisionDetector from './core/CollisionDetector';
+import KeyboardInput from './core/KeyboardInput';
+import Renderer from './core/Renderer';
+import Scene from './core/Scene';
 
-import BasicEnemyTank from './models/BasicEnemyTank.js';
-import FastEnemyTank from './models/FastEnemyTank.js';
-import PowerEnemyTank from './models/PowerEnemyTank.js';
-import Tank from './models/Tank.js';
+import BulletFactory from './managers/BulletFactory';
+import MapBuilder from './managers/MapBuilder';
 
-import GrenadePowerup from './models/GrenadePowerup.js';
+import Bullet from './models/Bullet';
+import SceneWall from './models/SceneWall';
+import Spawn from './models/Spawn';
 
-import collisionsConfig from './collisions/collisions.config.js';
-import map from './maps/1/description.js';
+import BasicEnemyTank from './models/BasicEnemyTank';
+import FastEnemyTank from './models/FastEnemyTank';
+import PowerEnemyTank from './models/PowerEnemyTank';
+import Tank from './models/Tank';
+
+import GrenadePowerup from './models/GrenadePowerup';
+
+import collisionsConfig from './collisions/collisions.config';
+import map from './maps/1/description';
 
 const renderer = new Renderer();
 renderer.setSize(900, 900);
@@ -49,7 +51,9 @@ spawn.onComplete = () => {
   const tank = new Tank();
   tank.position = spawn.position.clone();
   tank.onFire = () => {
-    if (scene.hasType(Bullet)) return;
+    if (scene.hasType(Bullet)) {
+      return;
+    }
     const bullet = BulletFactory.makeBullet(tank);
     scene.add(bullet);
   };
@@ -97,7 +101,7 @@ scene.add(grenadePowerup);
 const animate = () => {
   // Update all objects on the scene
   // TODO: abstract out input from tank
-  scene.children.forEach(child => child.update({ input }));
+  scene.children.forEach((child) => child.update({ input }));
 
   // Detect and handle collisions of all objects on the scene
   const collisions = CollisionDetector.intersectObjects(scene.children);

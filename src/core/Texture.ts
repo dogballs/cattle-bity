@@ -4,8 +4,10 @@
  * Should be used to create Sprites.
  */
 class Texture {
+  public imageElement: HTMLImageElement;
+
   constructor(src = '') {
-    this.imageElement = new window.Image();
+    this.imageElement = new Image();
     this.imageElement.src = src;
   }
 }

@@ -1,4 +1,4 @@
-import TankExplosion from '../models/TankExplosion.js';
+import TankExplosion from '../models/TankExplosion';
 
 class CollideEnemyTankWithBullet {
   constructor(collision, scene) {

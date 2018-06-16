@@ -1,5 +1,5 @@
-import Shape from '../core/Shape.js';
-import Vector from '../core/Vector.js';
+import Shape from '../core/Shape';
+import Vector from '../core/Vector';
 
 class SceneWall extends Shape {
   constructor(width = 0, height = 0) {

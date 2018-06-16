@@ -1,8 +1,8 @@
-import Animation from '../core/Animation.js';
-import Sprite from '../core/Sprite.js';
-import Texture from '../core/Texture.js';
+import Animation from '../core/Animation';
+import Sprite from '../core/Sprite';
+import Texture from '../core/Texture';
 
-import EnemyTank from './EnemyTank.js';
+import EnemyTank from './EnemyTank';
 
 // TODO: create base class for tank with common behavior for both enemy and
 // player tanks to avoid repetition.

@@ -1,48 +1,51 @@
 class Vector {
+  public x: number;
+  public y: number;
+
   constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
   }
 
-  add(v) {
+  public add(v) {
     this.x += v.x;
     this.y += v.y;
 
     return this;
   }
 
-  sub(v) {
+  public sub(v) {
     this.x -= v.x;
     this.y -= v.y;
 
     return this;
   }
 
-  divideScalar(s) {
+  public divideScalar(s) {
     this.x /= s;
     this.y /= s;
 
     return this;
   }
 
-  clone() {
+  public clone() {
     return new Vector(this.x, this.y);
   }
 
-  set(x, y) {
+  public set(x, y) {
     this.x = x;
     this.y = y;
 
     return this;
   }
 
-  setX(x) {
+  public setX(x) {
     this.x = x;
 
     return this;
   }
 
-  setY(y) {
+  public setY(y) {
     this.y = y;
 
     return this;
