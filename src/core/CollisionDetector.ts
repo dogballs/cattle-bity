@@ -1,12 +1,14 @@
-import Collision from './Collision.js';
+import Collision from './Collision';
 
 class CollisionDetector {
-  static intersectObjects(objects) {
+  public static intersectObjects(objects) {
     const collisions = [];
 
     objects.forEach((target) => {
       objects.forEach((source) => {
-        if (target === source) return;
+        if (target === source) {
+          return;
+        }
 
         const targetBoundingBox = target.getBoundingBox();
         const sourceBoundingBox = source.getBoundingBox();

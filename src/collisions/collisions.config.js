@@ -1,20 +1,20 @@
-import Block from '../models/block/Block.js';
-import Bullet from '../models/Bullet.js';
-import SceneWall from '../models/SceneWall.js';
+import Block from '../models/block/Block';
+import Bullet from '../models/Bullet';
+import SceneWall from '../models/SceneWall';
 
-import BasicEnemyTank from '../models/BasicEnemyTank.js';
-import FastEnemyTank from '../models/FastEnemyTank.js';
-import PowerEnemyTank from '../models/PowerEnemyTank.js';
-import Tank from '../models/Tank.js';
+import BasicEnemyTank from '../models/BasicEnemyTank';
+import FastEnemyTank from '../models/FastEnemyTank';
+import PowerEnemyTank from '../models/PowerEnemyTank';
+import Tank from '../models/Tank';
 
-import GrenadePowerup from '../models/GrenadePowerup.js';
+import GrenadePowerup from '../models/GrenadePowerup';
 
-import CollideBlock from './CollideBlock.js';
-import CollideBullet from './CollideBullet.js';
-import CollideEnemyTankWithBullet from './CollideEnemyTankWithBullet.js';
-import CollideEnemyTankWithWall from './CollideEnemyTankWithWall.js';
-import CollideGrenadePowerupWithTank from './CollideGrenadePowerupWithTank.js';
-import CollideTankWithWall from './CollideTankWithWall.js';
+import CollideBlock from './CollideBlock';
+import CollideBullet from './CollideBullet';
+import CollideEnemyTankWithBullet from './CollideEnemyTankWithBullet';
+import CollideEnemyTankWithWall from './CollideEnemyTankWithWall';
+import CollideGrenadePowerupWithTank from './CollideGrenadePowerupWithTank';
+import CollideTankWithWall from './CollideTankWithWall';
 
 const config = [
   // Block

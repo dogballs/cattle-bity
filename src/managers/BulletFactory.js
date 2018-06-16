@@ -1,5 +1,5 @@
-import Bullet from '../models/Bullet.js';
-import Vector from '../core/Vector.js';
+import Bullet from '../models/Bullet';
+import Vector from '../core/Vector';
 
 class BulletFactory {
   static makeBullet(tank) {

@@ -1,6 +1,9 @@
-import Vector from './Vector.js';
+import Vector from './Vector';
 
 class BoundingBox {
+  public min: Vector;
+  public max: Vector;
+
   /**
    * Creates a rectangular box which captures entire object bounds
    * @param  {Vector} min Top-left point of the box
@@ -12,7 +15,7 @@ class BoundingBox {
     this.max = max;
   }
 
-  getCenter() {
+  public getCenter() {
     return this.min.clone().add(this.max).divideScalar(2);
   }
 
@@ -21,7 +24,7 @@ class BoundingBox {
    * @param  {BoundingBox} box
    * @return {Boolean}
    */
-  intersectsBox(box) {
+  public intersectsBox(box) {
     const isOutside = (
       this.max.x <= box.min.x ||
       this.min.x >= box.max.x ||

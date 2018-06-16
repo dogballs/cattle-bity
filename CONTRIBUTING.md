@@ -3,7 +3,7 @@ Code style
 
 For project formatting style we are following EditorConfig. Make sure to install EditorConfig plugin in your editor.
 
-For JavaScript code style we are using ESLint with Airbnb base config. Make sure to install ESLint plugin in your editor or use CLI command `npm run lint` to verify that your code conforms the style guide. ESLint checks are also integrated with Travis CI which are run for every pull request.
+For TypeScript code style we are using TSLint with default config config. Make sure to install TSLint plugin in your editor or use CLI command `npm run lint` to verify that your code conforms the style guide. TSLint checks are also integrated with Travis CI which are run for every pull request.
 
 Commit message guidelines
 -------------------------

@@ -1,4 +1,11 @@
 class Animation {
+  private delay: number;
+  private frames: object[];
+  private frameIndex: number;
+  private lastAnimatedAt: number;
+  private loop: boolean | number;
+  private loopIndex: number;
+
   constructor(frames = [], { delay = 0, loop = true } = {}) {
     this.frames = frames;
     this.frameIndex = 0;
@@ -10,11 +17,34 @@ class Animation {
     this.loopIndex = 1;
   }
 
-  getCurrentFrame() {
+  public getCurrentFrame() {
     return this.frames[this.frameIndex];
   }
 
-  animate() {
+  public isComplete() {
+    // Looped animation can not end
+    if (this.loop === true) {
+      return false;
+    }
+
+    // If loop is limited by number of times and it hasn't looped all times yet
+    // animation is not complete.
+    if (typeof this.loop === 'number' && this.loopIndex !== this.loop) {
+      return false;
+    }
+
+    if (!this.isLastFrame()) {
+      return false;
+    }
+
+    // Make sure last frame is displayed on the screen for required amount
+    // of time. Only after that set animation as complete.
+    const isComplete = this.isCurrentFrameAnimated();
+
+    return isComplete;
+  }
+
+  public animate() {
     // If looping is disabled and last frame animation is complete - nothing else
     // to animate
     if (this.loop === false
@@ -52,37 +82,14 @@ class Animation {
     this.lastAnimatedAt = performance.now();
   }
 
-  isCurrentFrameAnimated() {
+  private isCurrentFrameAnimated() {
     const now = performance.now();
     const isAnimated = this.lastAnimatedAt + this.delay < now;
     return isAnimated;
   }
 
-  isLastFrame() {
+  private isLastFrame() {
     return this.frameIndex === this.frames.length - 1;
-  }
-
-  isComplete() {
-    // Looped animation can not end
-    if (this.loop === true) {
-      return false;
-    }
-
-    // If loop is limited by number of times and it hasn't looped all times yet
-    // animation is not complete.
-    if (typeof this.loop === 'number' && this.loopIndex !== this.loop) {
-      return false;
-    }
-
-    if (!this.isLastFrame()) {
-      return false;
-    }
-
-    // Make sure last frame is displayed on the screen for required amount
-    // of time. Only after that set animation as complete.
-    const isComplete = this.isCurrentFrameAnimated();
-
-    return isComplete;
   }
 }
 

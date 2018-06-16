@@ -1,8 +1,8 @@
-import Animation from '../core/Animation.js';
-import DisplayObject from '../core/DisplayObject.js';
-import KeyboardInput from '../core/KeyboardInput.js';
-import Sprite from '../core/Sprite.js';
-import Texture from '../core/Texture.js';
+import Animation from '../core/Animation';
+import DisplayObject from '../core/DisplayObject';
+import KeyboardInput from '../core/KeyboardInput';
+import Sprite from '../core/Sprite';
+import Texture from '../core/Texture';
 
 class Tank extends DisplayObject {
   constructor() {

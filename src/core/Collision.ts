@@ -1,4 +1,7 @@
 class Collision {
+  public target: object;
+  public source: object;
+
   /**
    * Collision holds info about intersection of to objects
    * @param  {DisplayObject/Shape} target - target should react on collision

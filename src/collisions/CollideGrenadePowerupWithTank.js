@@ -1,5 +1,5 @@
-import EnemyTank from '../models/EnemyTank.js';
-import TankExplosion from '../models/TankExplosion.js';
+import EnemyTank from '../models/EnemyTank';
+import TankExplosion from '../models/TankExplosion';
 
 class CollideGrenadePowerupWithTank {
   constructor(collision, scene) {

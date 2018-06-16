@@ -1,4 +1,4 @@
-import BulletExplosion from '../models/BulletExplosion.js';
+import BulletExplosion from '../models/BulletExplosion';
 
 class CollideBullet {
   constructor(collision, scene) {

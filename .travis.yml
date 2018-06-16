@@ -2,5 +2,27 @@ language: node_js
 node_js:
   # Latest stable version, Node 8 at the moment of creating config
   - "lts/*"
+
+# Blocklist
+branches:
+  except:
+    # Will be deployed to, no need to build it
+    - gh-pages
+
 script:
+  # Generates the dist folder with built app
+  - npm run build
+  # Run linter checks
   - npm run lint
+
+# Deploys built application to gh-pages
+# https://docs.travis-ci.com/user/deployment/pages/
+deploy:
+  provider: pages
+  # Prevent travis from cleaning out the branch before the deploy occurs
+  skip-cleanup: true
+  # Set in travis-ci.org dashboard
+  github-token: $GITHUB_TOKEN
+   # Build only from master
+  on:
+    branch: master

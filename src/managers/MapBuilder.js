@@ -1,4 +1,4 @@
-import Block from '../models/block/Block.js';
+import Block from '../models/block/Block';
 
 class MapBuilder {
   constructor(scene) {

@@ -1,11 +1,16 @@
-import BoundingBox from './BoundingBox.js';
-import Sprite from './Sprite.js';
-import Vector from './Vector.js';
+import BoundingBox from './BoundingBox';
+import Sprite from './Sprite';
+import Vector from './Vector';
 
 /**
  * Superclass for all things that can be drawn on screen.
  */
 class DisplayObject {
+  public height: number;
+  public position: Vector;
+  public sprite: Sprite;
+  public width: number;
+
   constructor(width, height) {
     this.width = width;
     this.height = height;
@@ -16,11 +21,11 @@ class DisplayObject {
     this.sprite = new Sprite();
   }
 
-  getBoundingBox() {
+  public getBoundingBox() {
     // Top-left point of the object
     const min = new Vector(
       this.position.x - (this.width / 2),
-      this.position.y - (this.height / 2)
+      this.position.y - (this.height / 2),
     );
     // Bottom-right point of the object
     const max = min.clone().add(new Vector(this.width, this.height));
@@ -32,15 +37,17 @@ class DisplayObject {
    * Called on each game loop iteration
    */
   // eslint-disable-next-line class-methods-use-this
-  update() {}
+  public update(options: object) {
+    return undefined;
+  }
 
   // Must-have for each render object
-  render() {
+  public render() {
     return {
-      width: this.width,
       height: this.height,
       position: this.position,
       sprite: this.sprite,
+      width: this.width,
     };
   }
 }

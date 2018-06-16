@@ -1,6 +1,6 @@
-import DisplayObject from '../../core/DisplayObject.js';
-import Sprite from '../../core/Sprite.js';
-import Texture from '../../core/Texture.js';
+import DisplayObject from '../../core/DisplayObject';
+import Sprite from '../../core/Sprite';
+import Texture from '../../core/Texture';
 
 class Block extends DisplayObject {
   constructor(width, height, x, y) {

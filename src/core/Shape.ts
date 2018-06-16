@@ -1,16 +1,20 @@
-import BoundingBox from './BoundingBox.js';
-import Vector from './Vector.js';
+import BoundingBox from './BoundingBox';
+import Vector from './Vector';
 
 class Shape {
+  public fillColor: string;
+  public position: Vector;
+  public vectors: Vector[];
+
   constructor() {
     this.fillColor = '#000';
     this.position = new Vector(0, 0);
     this.vectors = [];
   }
 
-  getBoundingBox() {
-    const xs = this.vectors.map(v => v.x);
-    const ys = this.vectors.map(v => v.y);
+  public getBoundingBox() {
+    const xs = this.vectors.map((v) => v.x);
+    const ys = this.vectors.map((v) => v.y);
 
     const minX = Math.min(...xs);
     const minY = Math.min(...ys);
@@ -27,9 +31,11 @@ class Shape {
    * Called on each game loop iteration
    */
   // eslint-disable-next-line class-methods-use-this
-  update() {}
+  public update(options: object) {
+    return undefined;
+  }
 
-  render() {
+  public render() {
     return {
       fillColor: this.fillColor,
       position: this.position,
