@@ -37,7 +37,9 @@ class DisplayObject {
    * Called on each game loop iteration
    */
   // eslint-disable-next-line class-methods-use-this
-  public update(options: object): void;
+  public update(options: object) {
+    return undefined;
+  }
 
   // Must-have for each render object
   public render() {

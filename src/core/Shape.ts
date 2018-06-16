@@ -31,7 +31,9 @@ class Shape {
    * Called on each game loop iteration
    */
   // eslint-disable-next-line class-methods-use-this
-  public update(options: object): void;
+  public update(options: object) {
+    return undefined;
+  }
 
   public render() {
     return {
