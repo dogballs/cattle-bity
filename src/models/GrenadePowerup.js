@@ -1,9 +1,9 @@
 import Animation from '../core/Animation';
-import DisplayObject from '../core/DisplayObject';
+import RenderableSprite from '../core/RenderableSprite';
 import Sprite from '../core/Sprite';
 import Texture from '../core/Texture';
 
-class GrenadePowerup extends DisplayObject {
+class GrenadePowerup extends RenderableSprite {
   constructor() {
     super(64, 60);
 
@@ -28,7 +28,6 @@ class GrenadePowerup extends DisplayObject {
     return {
       width: this.width,
       height: this.height,
-      position: this.position,
       sprite,
     };
   }

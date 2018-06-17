@@ -91,7 +91,6 @@ class BasicEnemyTank extends EnemyTank {
     return {
       width,
       height,
-      position: this.position,
       sprite,
     };
   }

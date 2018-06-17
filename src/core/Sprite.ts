@@ -8,10 +8,10 @@ import Texture from './Texture';
 class Sprite {
   public static Rect = Rect;
 
-  public bounds: object;
+  public bounds: Rect;
   public texture: Texture;
 
-  constructor(texture = new Texture(), bounds = new Rect()) {
+  constructor(texture: Texture = new Texture(), bounds: Rect = new Rect()) {
     this.texture = texture;
     this.bounds = bounds;
   }

@@ -1,7 +1,7 @@
-import Shape from '../core/Shape';
+import RenderableShape from '../core/RenderableShape';
 import Vector from '../core/Vector';
 
-class SceneWall extends Shape {
+class SceneWall extends RenderableShape {
   constructor(width = 0, height = 0) {
     super();
 
@@ -13,10 +13,11 @@ class SceneWall extends Shape {
     ];
   }
 
+  update() {}
+
   render() {
     return {
       fillColor: '#7e7e7e',
-      position: this.position,
       vectors: this.vectors,
     };
   }

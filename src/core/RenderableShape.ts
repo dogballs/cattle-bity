@@ -1,18 +1,17 @@
 import BoundingBox from './BoundingBox';
+import RenderableNode from './RenderableNode';
 import Vector from './Vector';
 
-class Shape {
+interface IRenderableShapeRenderResult {
+  fillColor: string;
+  vectors: Vector[];
+}
+
+abstract class RenderableShape extends RenderableNode {
   public fillColor: string;
-  public position: Vector;
   public vectors: Vector[];
 
-  constructor() {
-    this.fillColor = '#000';
-    this.position = new Vector(0, 0);
-    this.vectors = [];
-  }
-
-  public getBoundingBox() {
+  public getBoundingBox(): BoundingBox {
     const xs = this.vectors.map((v) => v.x);
     const ys = this.vectors.map((v) => v.y);
 
@@ -27,21 +26,7 @@ class Shape {
     return new BoundingBox(min, max);
   }
 
-  /**
-   * Called on each game loop iteration
-   */
-  // eslint-disable-next-line class-methods-use-this
-  public update(options: object) {
-    return undefined;
-  }
-
-  public render() {
-    return {
-      fillColor: this.fillColor,
-      position: this.position,
-      vectors: this.vectors,
-    };
-  }
+  public abstract render(): IRenderableShapeRenderResult;
 }
 
-export default Shape;
+export default RenderableShape;

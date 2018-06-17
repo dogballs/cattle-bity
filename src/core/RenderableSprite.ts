@@ -1,27 +1,29 @@
 import BoundingBox from './BoundingBox';
+import RenderableNode from './RenderableNode';
 import Sprite from './Sprite';
 import Vector from './Vector';
 
-/**
- * Superclass for all things that can be drawn on screen.
- */
-class DisplayObject {
+interface IRenderableSpriteRenderResult {
+  height: number;
+  sprite: Sprite;
+  width: number;
+}
+
+abstract class RenderableSprite extends RenderableNode {
   public height: number;
-  public position: Vector;
   public sprite: Sprite;
   public width: number;
 
   constructor(width: number = 0, height: number = 0) {
+    super();
+
     this.width = width;
     this.height = height;
 
-    this.position = new Vector(0, 0);
-
-    // Main sprite which will be rendered on the scene
     this.sprite = new Sprite();
   }
 
-  public getBoundingBox() {
+  public getBoundingBox(): BoundingBox {
     // Top-left point of the object
     const min = new Vector(
       this.position.x - (this.width / 2),
@@ -33,23 +35,7 @@ class DisplayObject {
     return new BoundingBox(min, max);
   }
 
-  /**
-   * Called on each game loop iteration
-   */
-  // eslint-disable-next-line class-methods-use-this
-  public update(options: object) {
-    return undefined;
-  }
-
-  // Must-have for each render object
-  public render() {
-    return {
-      height: this.height,
-      position: this.position,
-      sprite: this.sprite,
-      width: this.width,
-    };
-  }
+  public abstract render(): IRenderableSpriteRenderResult;
 }
 
-export default DisplayObject;
+export default RenderableSprite;

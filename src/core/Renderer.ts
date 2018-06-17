@@ -1,5 +1,6 @@
-import DisplayObject from './DisplayObject';
-import Shape from './Shape';
+import Node from './Node';
+import RenderableShape from './RenderableShape';
+import RenderableSprite from './RenderableSprite';
 
 class Renderer {
   public domElement: HTMLCanvasElement;
@@ -10,49 +11,41 @@ class Renderer {
     this.context = this.domElement.getContext('2d');
   }
 
-  public setSize(width, height) {
+  public setSize(width: number, height: number) {
     this.domElement.width = width;
     this.domElement.height = height;
-  }
-
-  public getSize() {
-    return {
-      height: this.domElement.height,
-      width: this.domElement.width,
-    };
   }
 
   public clear() {
     this.context.clearRect(0, 0, this.domElement.width, this.domElement.height);
   }
 
-  public render(scene) {
+  public render(rootNode: Node) {
     this.clear();
 
-    // When image is scaled, displays pixels as is without smoothing.
+    // When image is scaled, display pixels as is without smoothing.
     // Should be reset every time after clearing.
     this.context.imageSmoothingEnabled = false;
 
-    const renderObjects = scene.children;
+    this.renderNode(rootNode);
+  }
 
-    renderObjects.forEach((renderObject) => {
-      // TODO: @mradionov Remove conditional rendering by introducing materials:
-      // - SpriteMaterial
-      // - ShapeMaterial
-      if (renderObject instanceof DisplayObject) {
-        this.renderDisplayObject(renderObject);
-      } else if (renderObject instanceof Shape) {
-        this.renderShape(renderObject);
-      }
+  private renderNode(node: Node) {
+    if (node instanceof RenderableSprite) {
+      this.renderSprite(node);
+    } else if (node instanceof RenderableShape) {
+      this.renderShape(node);
+    }
+
+    node.children.forEach((childNode) => {
+      this.renderNode(childNode);
     });
   }
 
-  private renderDisplayObject(displayObject) {
-    const {
-      width, height,
-      position,
-      sprite,
-    } = displayObject.render();
+  private renderSprite(renderableSprite: RenderableSprite) {
+    const { width, height, sprite } = renderableSprite.render();
+
+    const position = renderableSprite.getWorldPosition();
 
     if (sprite === null) {
       return;
@@ -77,8 +70,9 @@ class Renderer {
     this.context.stroke();
   }
 
-  private renderShape(shape) {
-    const { fillColor, position, vectors } = shape.render();
+  private renderShape(renderableShape: RenderableShape) {
+    const { fillColor, vectors } = renderableShape.render();
+    const position = renderableShape.getWorldPosition();
 
     if (vectors.length === 0) {
       return;

@@ -1,9 +1,9 @@
 import Animation from '../core/Animation';
-import DisplayObject from '../core/DisplayObject';
+import RenderableSprite from '../core/RenderableSprite';
 import Sprite from '../core/Sprite';
 import Texture from '../core/Texture';
 
-class Shield extends DisplayObject {
+class Shield extends RenderableSprite {
   private animation: Animation;
   private texture: Texture;
 
@@ -27,7 +27,6 @@ class Shield extends DisplayObject {
 
     return {
       height: this.height,
-      position: this.position,
       sprite,
       width: this.width,
     };

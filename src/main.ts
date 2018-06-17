@@ -50,9 +50,12 @@ const spawn = new Spawn();
 spawn.position.set(100, 100);
 spawn.onComplete = () => {
   const tank = new Tank();
+  const shield = new Shield();
+  tank.add(shield);
+
   tank.position = spawn.position.clone();
   tank.onFire = () => {
-    if (scene.hasType(Bullet)) {
+    if (scene.hasChildrenOfType(Bullet)) {
       return;
     }
     const bullet = BulletFactory.makeBullet(tank);
@@ -97,16 +100,14 @@ const grenadePowerup = new GrenadePowerup();
 grenadePowerup.position.set(100, 800);
 scene.add(grenadePowerup);
 
-const shield = new Shield();
-shield.position.set(200, 800);
-scene.add(shield);
-
 // Game loop
 
 const animate = () => {
   // Update all objects on the scene
   // TODO: abstract out input from tank
-  scene.children.forEach((child) => child.update({ input }));
+  scene.traverse((child) => {
+    child.update({ input });
+  });
 
   // Detect and handle collisions of all objects on the scene
   const collisions = CollisionDetector.intersectObjects(scene.children);

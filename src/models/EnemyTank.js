@@ -1,5 +1,5 @@
-import DisplayObject from '../core/DisplayObject';
+import RenderableSprite from '../core/RenderableSprite';
 
-class EnemyTank extends DisplayObject {}
+class EnemyTank extends RenderableSprite {}
 
 export default EnemyTank;
