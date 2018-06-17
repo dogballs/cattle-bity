@@ -3,6 +3,10 @@ node_js:
   # Latest stable version, Node 8 at the moment of creating config
   - "lts/*"
 
+cache:
+  directories:
+    - node_modules
+
 # Blocklist
 branches:
   except:
