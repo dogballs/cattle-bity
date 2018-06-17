@@ -1,32 +1,20 @@
-import DisplayObject from './DisplayObject';
-import Shape from './Shape';
+import BoundingBox from './BoundingBox';
+import RenderableNode from './RenderableNode';
 
-class Scene {
-  public children: Array<DisplayObject | Shape>;
+class Scene extends RenderableNode {
 
-  constructor() {
-    this.children = [];
+  public getBoundingBox() {
+    return new BoundingBox();
   }
 
-  public add(childToAdd) {
-    this.children.push(childToAdd);
+  public update(dependencies: object) {
+    return undefined;
   }
 
-  public remove(childToRemove) {
-    this.children = this.children.filter((child) => child !== childToRemove);
+  public render() {
+    return undefined;
   }
 
-  public hasType(type) {
-    return this.children.some((child) => child instanceof type);
-  }
-
-  public filterType(type) {
-    return this.children.filter((child) => child instanceof type);
-  }
-
-  public getChildren() {
-    return this.children;
-  }
 }
 
 export default Scene;

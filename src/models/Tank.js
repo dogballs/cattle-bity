@@ -1,10 +1,10 @@
 import Animation from '../core/Animation';
-import DisplayObject from '../core/DisplayObject';
+import RenderableSprite from '../core/RenderableSprite';
 import KeyboardInput from '../core/KeyboardInput';
 import Sprite from '../core/Sprite';
 import Texture from '../core/Texture';
 
-class Tank extends DisplayObject {
+class Tank extends RenderableSprite {
   constructor() {
     super(52, 52);
 
@@ -106,7 +106,6 @@ class Tank extends DisplayObject {
     return {
       width: this.width,
       height: this.height,
-      position: this.position,
       sprite,
     };
   }

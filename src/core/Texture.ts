@@ -6,7 +6,7 @@
 class Texture {
   public imageElement: HTMLImageElement;
 
-  constructor(src = '') {
+  constructor(src: string = '') {
     this.imageElement = new Image();
     this.imageElement.src = src;
   }

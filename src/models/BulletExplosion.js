@@ -1,9 +1,9 @@
 import Animation from './../core/Animation';
-import DisplayObject from './../core/DisplayObject';
+import RenderableSprite from './../core/RenderableSprite';
 import Sprite from './../core/Sprite';
 import Texture from './../core/Texture';
 
-class BulletExplosion extends DisplayObject {
+class BulletExplosion extends RenderableSprite {
   constructor() {
     super(44, 44);
 
@@ -51,7 +51,6 @@ class BulletExplosion extends DisplayObject {
     return {
       width,
       height,
-      position: this.position,
       sprite,
     };
   }

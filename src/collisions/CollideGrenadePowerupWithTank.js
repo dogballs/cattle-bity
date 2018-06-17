@@ -14,7 +14,7 @@ class CollideGrenadePowerupWithTank {
 
     this.scene.remove(powerup);
 
-    const enemyTanks = this.scene.filterType(EnemyTank);
+    const enemyTanks = this.scene.getChildrenOfType(EnemyTank);
     enemyTanks.forEach((enemyTank) => {
       const tankExplosion = new TankExplosion();
       this.scene.remove(enemyTank);

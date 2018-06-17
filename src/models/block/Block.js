@@ -1,8 +1,8 @@
-import DisplayObject from '../../core/DisplayObject';
+import RenderableSprite from '../../core/RenderableSprite';
 import Sprite from '../../core/Sprite';
 import Texture from '../../core/Texture';
 
-class Block extends DisplayObject {
+class Block extends RenderableSprite {
   constructor(width, height, x, y) {
     super(width, height);
 
@@ -14,6 +14,16 @@ class Block extends DisplayObject {
     });
 
     // TODO: think about necessary properties for different block types
+  }
+
+  update() {}
+
+  render() {
+    return {
+      height: this.height,
+      sprite: this.sprite,
+      width: this.width,
+    };
   }
 }
 

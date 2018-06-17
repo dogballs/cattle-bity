@@ -1,8 +1,8 @@
-import DisplayObject from './../core/DisplayObject';
+import RenderableSprite from './../core/RenderableSprite';
 import Sprite from './../core/Sprite';
 import Texture from './../core/Texture';
 
-class Bullet extends DisplayObject {
+class Bullet extends RenderableSprite {
   constructor() {
     super(12, 16);
 
@@ -59,7 +59,6 @@ class Bullet extends DisplayObject {
     return {
       width,
       height,
-      position: this.position,
       sprite,
     };
   }

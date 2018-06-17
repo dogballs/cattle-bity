@@ -1,3 +1,4 @@
+import Rect from './Rect';
 import Texture from './Texture';
 
 /**
@@ -5,12 +6,12 @@ import Texture from './Texture';
  * The coordinates will be used by renderer to render the fragment.
  */
 class Sprite {
-  public bounds: object;
+  public static Rect = Rect;
+
+  public bounds: Rect;
   public texture: Texture;
 
-  constructor(texture = new Texture(), bounds = {
-    h: 0, w: 0, x: 0, y: 0,
-  }) {
+  constructor(texture: Texture = new Texture(), bounds: Rect = new Rect()) {
     this.texture = texture;
     this.bounds = bounds;
   }

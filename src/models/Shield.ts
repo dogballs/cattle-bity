@@ -3,34 +3,34 @@ import RenderableSprite from '../core/RenderableSprite';
 import Sprite from '../core/Sprite';
 import Texture from '../core/Texture';
 
-class GrenadePowerup extends RenderableSprite {
+class Shield extends RenderableSprite {
+  private animation: Animation;
+  private texture: Texture;
+
   constructor() {
-    super(64, 60);
+    super(64, 64);
 
     this.texture = new Texture('images/sprite.png');
 
-    // Null as a second frame adds a blink effect
     this.animation = new Animation([
-      new Sprite(this.texture, {
-        x: 320, y: 112, w: 16, h: 15,
-      }),
-      null,
-    ], { delay: 130 });
+      new Sprite(this.texture, new Sprite.Rect(256, 144, 16, 16)),
+      new Sprite(this.texture, new Sprite.Rect(272, 144, 16, 16)),
+    ], { delay: 50 });
   }
 
-  update() {
+  public update() {
     this.animation.animate();
   }
 
-  render() {
+  public render() {
     const sprite = this.animation.getCurrentFrame();
 
     return {
-      width: this.width,
       height: this.height,
       sprite,
+      width: this.width,
     };
   }
 }
 
-export default GrenadePowerup;
+export default Shield;

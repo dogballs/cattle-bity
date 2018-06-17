@@ -1,9 +1,9 @@
 import Animation from './../core/Animation';
-import DisplayObject from './../core/DisplayObject';
+import RenderableSprite from './../core/RenderableSprite';
 import Sprite from './../core/Sprite';
 import Texture from './../core/Texture';
 
-class Spawn extends DisplayObject {
+class Spawn extends RenderableSprite {
   constructor() {
     super(36, 36);
 
@@ -53,7 +53,6 @@ class Spawn extends DisplayObject {
     return {
       width,
       height,
-      position: this.position,
       sprite,
     };
   }
