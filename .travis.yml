@@ -20,9 +20,12 @@ script:
   - npm run lint
 
 # Deploys built application to gh-pages
+# Git-ignored files won't be deployed.
 # https://docs.travis-ci.com/user/deployment/pages/
 deploy:
   provider: pages
+  # Directory to push to GitHub Pages, relative to the current directory
+  local_dir: dist
   # Prevent travis from cleaning out the branch before the deploy occurs
   skip_cleanup: true
   # Set in travis-ci.org dashboard

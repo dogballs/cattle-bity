@@ -7,6 +7,7 @@
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.0.0",
+    "copy-webpack-plugin": "^4.5.1",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2",
     "webpack": "^4.12.0",
