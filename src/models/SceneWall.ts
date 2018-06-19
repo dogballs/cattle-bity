@@ -13,9 +13,11 @@ class SceneWall extends RenderableShape {
     ];
   }
 
-  update() {}
+  public update() {
+    return undefined;
+  }
 
-  render() {
+  public render() {
     return {
       fillColor: '#7e7e7e',
       vectors: this.vectors,

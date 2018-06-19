@@ -1,29 +1,25 @@
 import Animation from './../core/Animation';
 import RenderableSprite from './../core/RenderableSprite';
-import Sprite from './../core/Sprite';
-import Texture from './../core/Texture';
+
+import SpriteFactory from '../sprite/SpriteFactory';
 
 class Spawn extends RenderableSprite {
+  private animation: Animation;
+  private dimensions: object;
+
   constructor() {
     super(36, 36);
 
-    this.texture = new Texture('images/sprite.png');
+    this.animation = new Animation(SpriteFactory.asList([
+      'spawn.1',
+      'spawn.2',
+      'spawn.3',
+      'spawn.4',
+    ]), { delay: 40, loop: 3 });
 
-    this.animation = new Animation([
-      new Sprite(this.texture, {
-        x: 259, y: 99, w: 9, h: 9,
-      }),
-      new Sprite(this.texture, {
-        x: 274, y: 98, w: 11, h: 11,
-      }),
-      new Sprite(this.texture, {
-        x: 289, y: 97, w: 13, h: 13,
-      }),
-      new Sprite(this.texture, {
-        x: 304, y: 96, w: 15, h: 15,
-      }),
-    ], { delay: 40, loop: 3 });
-
+    // Each sprite fragment has different size. Try to match it with
+    // canvas size for different animation frames.
+    // TODO: refactor dimensions by centering sprite in box
     this.dimensions = [
       { width: 36, height: 36 },
       { width: 44, height: 55 },
@@ -34,9 +30,11 @@ class Spawn extends RenderableSprite {
 
   // TODO: @mradionov rethink how to notify parent when animation is ended
   // eslint-disable-next-line class-methods-use-this
-  onComplete() {}
+  public onComplete() {
+    return undefined;
+  }
 
-  update() {
+  public update() {
     if (this.animation.isComplete()) {
       this.onComplete();
     } else {
@@ -44,16 +42,16 @@ class Spawn extends RenderableSprite {
     }
   }
 
-  render() {
+  public render() {
     const sprite = this.animation.getCurrentFrame();
     const { frameIndex } = this.animation;
 
     const { width, height } = this.dimensions[frameIndex];
 
     return {
-      width,
       height,
       sprite,
+      width,
     };
   }
 }

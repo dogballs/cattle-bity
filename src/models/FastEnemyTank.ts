@@ -1,6 +1,6 @@
 import Animation from '../core/Animation';
-import Sprite from '../core/Sprite';
-import Texture from '../core/Texture';
+
+import SpriteFactory from '../sprite/SpriteFactory';
 
 import EnemyTank from './EnemyTank';
 
@@ -8,6 +8,13 @@ import EnemyTank from './EnemyTank';
 // player tanks to avoid repetition.
 
 class BasicEnemyTank extends EnemyTank {
+  public bulletDamage: number;
+  public bulletSpeed: number;
+  public health: number;
+  private animations: object;
+  private direction: string;
+  private speed: number;
+
   constructor() {
     super(52, 60);
 
@@ -18,45 +25,27 @@ class BasicEnemyTank extends EnemyTank {
 
     this.direction = 'up';
 
-    this.texture = new Texture('images/sprite.png');
-
     this.animations = {
-      up: new Animation([
-        new Sprite(this.texture, {
-          x: 129, y: 80, w: 13, h: 15,
-        }),
-        new Sprite(this.texture, {
-          x: 145, y: 80, w: 13, h: 15,
-        }),
-      ], { delay: 20 }),
-      down: new Animation([
-        new Sprite(this.texture, {
-          x: 193, y: 81, w: 13, h: 15,
-        }),
-        new Sprite(this.texture, {
-          x: 209, y: 81, w: 13, h: 15,
-        }),
-      ], { delay: 20 }),
-      left: new Animation([
-        new Sprite(this.texture, {
-          x: 160, y: 82, w: 15, h: 13,
-        }),
-        new Sprite(this.texture, {
-          x: 176, y: 82, w: 15, h: 13,
-        }),
-      ], { delay: 20 }),
-      right: new Animation([
-        new Sprite(this.texture, {
-          x: 225, y: 81, w: 15, h: 13,
-        }),
-        new Sprite(this.texture, {
-          x: 241, y: 81, w: 15, h: 13,
-        }),
-      ], { delay: 20 }),
+      down: new Animation(SpriteFactory.asList([
+        'tankEnemyFast.down.1',
+        'tankEnemyFast.down.2',
+      ]), { delay: 20 }),
+      left: new Animation(SpriteFactory.asList([
+        'tankEnemyFast.left.1',
+        'tankEnemyFast.left.1',
+      ]), { delay: 20 }),
+      right: new Animation(SpriteFactory.asList([
+        'tankEnemyFast.right.1',
+        'tankEnemyFast.right.1',
+      ]), { delay: 20 }),
+      up: new Animation(SpriteFactory.asList([
+        'tankEnemyFast.up.1',
+        'tankEnemyFast.up.1',
+      ]), { delay: 20 }),
     };
   }
 
-  update() {
+  public update() {
     if (this.direction === 'up') {
       this.position.y -= this.speed;
     } else if (this.direction === 'down') {
@@ -71,11 +60,11 @@ class BasicEnemyTank extends EnemyTank {
     animation.animate();
   }
 
-  rotate(direction) {
+  public rotate(direction) {
     this.direction = direction;
   }
 
-  render() {
+  public render() {
     let { width, height } = this;
 
     // Bullet has rectangular shape. If it is rotated, swap width and height
@@ -89,9 +78,9 @@ class BasicEnemyTank extends EnemyTank {
     const sprite = animation.getCurrentFrame();
 
     return {
-      width,
       height,
       sprite,
+      width,
     };
   }
 }

@@ -1,28 +1,24 @@
 import Animation from './../core/Animation';
 import RenderableSprite from './../core/RenderableSprite';
-import Sprite from './../core/Sprite';
-import Texture from './../core/Texture';
+
+import SpriteFactory from '../sprite/SpriteFactory';
 
 class BulletExplosion extends RenderableSprite {
+  private animation: Animation;
+  private dimensions: object;
+
   constructor() {
     super(44, 44);
 
-    this.texture = new Texture('images/sprite.png');
-
-    this.animation = new Animation([
-      new Sprite(this.texture, {
-        x: 259, y: 130, w: 11, h: 11,
-      }),
-      new Sprite(this.texture, {
-        x: 273, y: 129, w: 15, h: 15,
-      }),
-      new Sprite(this.texture, {
-        x: 288, y: 128, w: 16, h: 16,
-      }),
-    ], { delay: 50, loop: false });
+    this.animation = new Animation(SpriteFactory.asList([
+      'explosionBullet.1',
+      'explosionBullet.2',
+      'explosionBullet.3',
+    ]), { delay: 50, loop: false });
 
     // Each sprite fragment has different size. Try to match it with
     // canvas size for different animation frames.
+    // TODO: refactor dimensions by centering sprite in box
     this.dimensions = [
       { width: 44, height: 44 },
       { width: 60, height: 60 },
@@ -32,9 +28,11 @@ class BulletExplosion extends RenderableSprite {
 
   // TODO: @mradionov rethink how to notify parent when animation is ended
   // eslint-disable-next-line class-methods-use-this
-  onComplete() {}
+  public onComplete() {
+    return undefined;
+  }
 
-  update() {
+  public update() {
     if (this.animation.isComplete()) {
       this.onComplete();
     } else {
@@ -42,16 +40,16 @@ class BulletExplosion extends RenderableSprite {
     }
   }
 
-  render() {
+  public render() {
     const sprite = this.animation.getCurrentFrame();
     const { frameIndex } = this.animation;
 
     const { width, height } = this.dimensions[frameIndex];
 
     return {
-      width,
       height,
       sprite,
+      width,
     };
   }
 }

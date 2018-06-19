@@ -1,10 +1,16 @@
 import Animation from '../core/Animation';
-import RenderableSprite from '../core/RenderableSprite';
 import KeyboardInput from '../core/KeyboardInput';
-import Sprite from '../core/Sprite';
-import Texture from '../core/Texture';
+import RenderableSprite from '../core/RenderableSprite';
+
+import SpriteFactory from '../sprite/SpriteFactory';
 
 class Tank extends RenderableSprite {
+  public bulletDamage: number;
+  public bulletSpeed: number;
+  private animations: object;
+  private direction: string;
+  private speed: number;
+
   constructor() {
     super(52, 52);
 
@@ -14,45 +20,27 @@ class Tank extends RenderableSprite {
 
     this.direction = 'up';
 
-    this.texture = new Texture('images/sprite.png');
-
     this.animations = {
-      up: new Animation([
-        new Sprite(this.texture, {
-          x: 1, y: 2, w: 13, h: 13,
-        }),
-        new Sprite(this.texture, {
-          x: 17, y: 2, w: 13, h: 13,
-        }),
-      ]),
-      down: new Animation([
-        new Sprite(this.texture, {
-          x: 65, y: 1, w: 13, h: 13,
-        }),
-        new Sprite(this.texture, {
-          x: 81, y: 1, w: 13, h: 13,
-        }),
-      ]),
-      right: new Animation([
-        new Sprite(this.texture, {
-          x: 97, y: 1, w: 13, h: 13,
-        }),
-        new Sprite(this.texture, {
-          x: 113, y: 1, w: 13, h: 13,
-        }),
-      ]),
-      left: new Animation([
-        new Sprite(this.texture, {
-          x: 34, y: 1, w: 13, h: 13,
-        }),
-        new Sprite(this.texture, {
-          x: 50, y: 1, w: 13, h: 13,
-        }),
-      ]),
+      down: new Animation(SpriteFactory.asList([
+        'tankPlayer.down.1',
+        'tankPlayer.down.2',
+      ])),
+      left: new Animation(SpriteFactory.asList([
+        'tankPlayer.left.1',
+        'tankPlayer.left.2',
+      ])),
+      right: new Animation(SpriteFactory.asList([
+        'tankPlayer.right.1',
+        'tankPlayer.right.2',
+      ])),
+      up: new Animation(SpriteFactory.asList([
+        'tankPlayer.up.1',
+        'tankPlayer.up.2',
+      ])),
     };
   }
 
-  update({ input }) {
+  public update({ input }) {
     if (input.isPressedLast(KeyboardInput.KEY_W)) {
       this.rotate('up');
     }
@@ -93,20 +81,22 @@ class Tank extends RenderableSprite {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  onFire() {}
+  public onFire() {
+    return undefined;
+  }
 
-  rotate(direction) {
+  public rotate(direction) {
     this.direction = direction;
   }
 
-  render() {
+  public render() {
     const animation = this.animations[this.direction];
     const sprite = animation.getCurrentFrame();
 
     return {
-      width: this.width,
       height: this.height,
       sprite,
+      width: this.width,
     };
   }
 }
