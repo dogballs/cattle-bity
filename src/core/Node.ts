@@ -11,7 +11,8 @@ class Node {
     this.parent = null;
   }
 
-  public add(childToAdd: this) {
+  // TODO: figure out input type for a child
+  public add(childToAdd) {
     childToAdd.parent = this;
 
     this.children.push(childToAdd);

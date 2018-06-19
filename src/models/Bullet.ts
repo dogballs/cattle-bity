@@ -1,34 +1,28 @@
 import RenderableSprite from './../core/RenderableSprite';
-import Sprite from './../core/Sprite';
-import Texture from './../core/Texture';
+
+import SpriteFactory, { IMapNameToSprite } from '../sprite/SpriteFactory';
 
 class Bullet extends RenderableSprite {
+  private direction: string;
+  private speed: number;
+  private spriteMap: IMapNameToSprite;
+
   constructor() {
     super(12, 16);
 
     this.speed = 15;
 
-    this.texture = new Texture('images/sprite.png');
-
     this.direction = 'up';
 
-    this.sprites = {
-      up: new Sprite(this.texture, {
-        x: 323, y: 102, w: 3, h: 4,
-      }),
-      down: new Sprite(this.texture, {
-        x: 339, y: 102, w: 3, h: 4,
-      }),
-      right: new Sprite(this.texture, {
-        x: 346, y: 102, w: 4, h: 3,
-      }),
-      left: new Sprite(this.texture, {
-        x: 330, y: 102, w: 4, h: 3,
-      }),
-    };
+    this.spriteMap = SpriteFactory.asMap({
+      down: 'bullet.down',
+      left: 'bullet.left',
+      right: 'bullet.right',
+      up: 'bullet.up',
+    });
   }
 
-  update() {
+  public update() {
     if (this.direction === 'up') {
       this.position.y -= this.speed;
     } else if (this.direction === 'down') {
@@ -40,11 +34,11 @@ class Bullet extends RenderableSprite {
     }
   }
 
-  rotate(direction) {
+  public rotate(direction) {
     this.direction = direction;
   }
 
-  render() {
+  public render() {
     let { width, height } = this;
 
     // Bullet has rectangular shape. If it is rotated, swap width and height
@@ -54,12 +48,12 @@ class Bullet extends RenderableSprite {
       height = this.width;
     }
 
-    const sprite = this.sprites[this.direction];
+    const sprite = this.spriteMap[this.direction];
 
     return {
-      width,
       height,
       sprite,
+      width,
     };
   }
 }

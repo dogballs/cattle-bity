@@ -1,9 +1,9 @@
 import Sprite from './Sprite';
 
 class Animation {
+  public frameIndex: number;
   private delay: number;
   private frames: Sprite[];
-  private frameIndex: number;
   private lastAnimatedAt: number;
   private loop: boolean | number;
   private loopIndex: number;

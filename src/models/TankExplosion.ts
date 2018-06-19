@@ -1,25 +1,23 @@
 import Animation from './../core/Animation';
 import RenderableSprite from './../core/RenderableSprite';
-import Sprite from './../core/Sprite';
-import Texture from './../core/Texture';
+
+import SpriteFactory from '../sprite/SpriteFactory';
 
 class TankExplosion extends RenderableSprite {
+  private animation: Animation;
+  private dimensions: object;
+
   constructor() {
     super(124, 108);
 
-    this.texture = new Texture('images/sprite.png');
-
-    this.animation = new Animation([
-      new Sprite(this.texture, {
-        x: 304, y: 129, w: 31, h: 29,
-      }),
-      new Sprite(this.texture, {
-        x: 334, y: 128, w: 34, h: 32,
-      }),
-    ], { delay: 100, loop: false });
+    this.animation = new Animation(SpriteFactory.asList([
+      'explosionTank.1',
+      'explosionTank.2',
+    ]), { delay: 100, loop: false });
 
     // Each sprite fragment has different size. Try to match it with
     // canvas size for different animation frames.
+    // TODO: refactor dimensions by centering sprite in box
     this.dimensions = [
       { width: 124, height: 108 },
       { width: 136, height: 128 },
@@ -28,9 +26,11 @@ class TankExplosion extends RenderableSprite {
 
   // TODO: @mradionov rethink how to notify parent when animation is ended
   // eslint-disable-next-line class-methods-use-this
-  onComplete() {}
+  public onComplete() {
+    return undefined;
+  }
 
-  update() {
+  public update() {
     if (this.animation.isComplete()) {
       this.onComplete();
     } else {
@@ -38,16 +38,16 @@ class TankExplosion extends RenderableSprite {
     }
   }
 
-  render() {
+  public render() {
     const sprite = this.animation.getCurrentFrame();
     const { frameIndex } = this.animation;
 
     const { width, height } = this.dimensions[frameIndex];
 
     return {
-      width,
       height,
       sprite,
+      width,
     };
   }
 }
