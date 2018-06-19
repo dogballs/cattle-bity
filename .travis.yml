@@ -24,9 +24,9 @@ script:
 deploy:
   provider: pages
   # Prevent travis from cleaning out the branch before the deploy occurs
-  skip-cleanup: true
+  skip_cleanup: true
   # Set in travis-ci.org dashboard
-  github-token: $GITHUB_TOKEN
+  github_token: $GITHUB_TOKEN
    # Build only from master
   on:
     branch: master
