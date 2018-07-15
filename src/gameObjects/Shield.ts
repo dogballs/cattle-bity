@@ -1,9 +1,10 @@
 import Animation from '../core/Animation';
-import RenderableSprite from '../core/RenderableSprite';
+import GameObject from '../core/GameObject';
+import SpriteMaterial from '../core/SpriteMaterial';
 
 import SpriteFactory from '../sprite/SpriteFactory';
 
-class Shield extends RenderableSprite {
+class Shield extends GameObject {
   private animation: Animation;
 
   constructor() {
@@ -13,20 +14,15 @@ class Shield extends RenderableSprite {
       'shield.1',
       'shield.2',
     ]), { delay: 50 });
+
+    this.material = new SpriteMaterial();
   }
 
   public update() {
     this.animation.animate();
-  }
 
-  public render() {
     const sprite = this.animation.getCurrentFrame();
-
-    return {
-      height: this.height,
-      sprite,
-      width: this.width,
-    };
+    this.material.sprite = sprite;
   }
 }
 

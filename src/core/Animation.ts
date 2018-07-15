@@ -1,8 +1,8 @@
 import Sprite from './Sprite';
 
 class Animation {
-  public frameIndex: number;
   private delay: number;
+  private frameIndex: number;
   private frames: Sprite[];
   private lastAnimatedAt: number;
   private loop: boolean | number;
@@ -24,6 +24,10 @@ class Animation {
 
   public getCurrentFrame() {
     return this.frames[this.frameIndex];
+  }
+
+  public getCurrentFrameIndex() {
+    return this.frameIndex;
   }
 
   public isComplete() {

@@ -1,6 +1,8 @@
+import BasicMaterial from './BasicMaterial';
+import GameObject from './GameObject';
 import Node from './Node';
-import RenderableShape from './RenderableShape';
-import RenderableSprite from './RenderableSprite';
+import SpriteMaterial from './SpriteMaterial';
+import Vector from './Vector';
 
 class Renderer {
   public domElement: HTMLCanvasElement;
@@ -20,78 +22,81 @@ class Renderer {
     this.context.clearRect(0, 0, this.domElement.width, this.domElement.height);
   }
 
-  public render(rootNode: Node) {
+  public render(root: GameObject) {
     this.clear();
 
     // When image is scaled, display pixels as is without smoothing.
     // Should be reset every time after clearing.
     this.context.imageSmoothingEnabled = false;
 
-    this.renderNode(rootNode);
+    this.renderGameObject(root);
   }
 
-  private renderNode(node: Node) {
-    if (node instanceof RenderableSprite) {
-      this.renderSprite(node);
-    } else if (node instanceof RenderableShape) {
-      this.renderShape(node);
+  private renderGameObject(gameObject: GameObject) {
+    const material = gameObject.material;
+
+    if (material instanceof BasicMaterial) {
+      this.renderGameObjectWithBasicMaterial(gameObject);
+    } else if (material instanceof SpriteMaterial) {
+      this.renderGameObjectWithSpriteMaterial(gameObject);
     }
 
-    node.children.forEach((childNode) => {
-      this.renderNode(childNode);
+    gameObject.children.forEach((child) => {
+      this.renderGameObject(child);
     });
   }
 
-  private renderSprite(renderableSprite: RenderableSprite) {
-    const { width, height, sprite } = renderableSprite.render();
+  private renderGameObjectWithBasicMaterial(gameObject: GameObject) {
+    const { min, max } = gameObject.getWorldBoundingBox();
 
-    const position = renderableSprite.getWorldPosition();
+    this.context.beginPath();
+    this.context.moveTo(min.x, min.y);
+    this.context.lineTo(max.x, min.y);
+    this.context.lineTo(max.x, max.y);
+    this.context.lineTo(min.x, max.y);
+    this.context.lineTo(min.x, min.y);
 
+    const { color } = gameObject.material;
+
+    this.context.fillStyle = color;
+    this.context.fill();
+  }
+
+  private renderGameObjectWithSpriteMaterial(gameObject: GameObject) {
+    const { min, max } = gameObject.getWorldBoundingBox();
+    const { width, height } = gameObject.getComputedDimensions();
+
+    const material = gameObject.material;
+
+    const sprite = material.sprite;
     if (sprite === null) {
       return;
     }
 
     this.context.drawImage(
       sprite.texture.imageElement,
-      sprite.bounds.x, sprite.bounds.y,
-      sprite.bounds.w, sprite.bounds.h,
-      position.x - (width / 2), position.y - (height / 2),
-      width, height,
+      sprite.rect.x, sprite.rect.y,
+      sprite.rect.w, sprite.rect.h,
+      min.x, min.y,
+      max.x - min.x, max.y - min.y,
     );
 
-    // For debug, draws a frame around rendered object
-    this.context.beginPath();
-    this.context.moveTo(position.x - (width / 2), position.y - (height / 2));
-    this.context.lineTo(position.x + (width / 2), position.y - (height / 2));
-    this.context.lineTo(position.x + (width / 2), position.y + (height / 2));
-    this.context.lineTo(position.x - (width / 2), position.y + (height / 2));
-    this.context.lineTo(position.x - (width / 2), position.y - (height / 2));
-    this.context.strokeStyle = '#fff';
-    this.context.stroke();
+    this.renderGameObjectDebugFrame(gameObject);
   }
 
-  private renderShape(renderableShape: RenderableShape) {
-    const { fillColor, vectors } = renderableShape.render();
-    const position = renderableShape.getWorldPosition();
-
-    if (vectors.length === 0) {
-      return;
-    }
-
-    const translatedVectors = vectors
-      .map((vector) => vector.clone().add(position));
-
-    const [firstVector, ...restVectors] = translatedVectors;
+  private renderGameObjectDebugFrame(gameObject: GameObject) {
+    const { min, max } = gameObject.getWorldBoundingBox();
+    const { width, height } = gameObject.getComputedDimensions();
 
     this.context.beginPath();
-    this.context.moveTo(firstVector.x, firstVector.y);
+    this.context.moveTo(min.x, min.y);
+    this.context.lineTo(max.x, min.y);
+    this.context.lineTo(max.x, max.y);
+    this.context.lineTo(min.x, max.y);
+    this.context.lineTo(min.x, min.y);
 
-    restVectors.forEach((vector) => {
-      this.context.lineTo(vector.x, vector.y);
-    });
-
-    this.context.fillStyle = fillColor;
-    this.context.fill();
+    this.context.strokeStyle = '#fff';
+    this.context.stroke();
   }
 }
 

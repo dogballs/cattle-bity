@@ -1,11 +1,13 @@
 import Animation from './../core/Animation';
-import RenderableSprite from './../core/RenderableSprite';
+import Dimensions from './../core/Dimensions';
+import GameObject from './../core/GameObject';
+import SpriteMaterial from './../core/SpriteMaterial';
 
 import SpriteFactory from '../sprite/SpriteFactory';
 
-class Spawn extends RenderableSprite {
+class Spawn extends GameObject {
   private animation: Animation;
-  private dimensions: object;
+  private dims: Dimensions[];
 
   constructor() {
     super(36, 36);
@@ -19,13 +21,15 @@ class Spawn extends RenderableSprite {
 
     // Each sprite fragment has different size. Try to match it with
     // canvas size for different animation frames.
-    // TODO: refactor dimensions by centering sprite in box
-    this.dimensions = [
-      { width: 36, height: 36 },
-      { width: 44, height: 55 },
-      { width: 52, height: 52 },
-      { width: 60, height: 60 },
+    // TODO: refactor dims by centering sprite in box
+    this.dims = [
+      new Dimensions(36, 36),
+      new Dimensions(44, 44),
+      new Dimensions(52, 52),
+      new Dimensions(60, 60),
     ];
+
+    this.material = new SpriteMaterial();
   }
 
   // TODO: @mradionov rethink how to notify parent when animation is ended
@@ -37,22 +41,16 @@ class Spawn extends RenderableSprite {
   public update() {
     if (this.animation.isComplete()) {
       this.onComplete();
-    } else {
-      this.animation.animate();
+      return;
     }
-  }
 
-  public render() {
+    this.animation.animate();
+
     const sprite = this.animation.getCurrentFrame();
-    const { frameIndex } = this.animation;
+    const frameIndex = this.animation.getCurrentFrameIndex();
 
-    const { width, height } = this.dimensions[frameIndex];
-
-    return {
-      height,
-      sprite,
-      width,
-    };
+    this.dimensions = this.dims[frameIndex];
+    this.material.sprite = sprite;
   }
 }
 

@@ -1,16 +1,16 @@
-import RenderableNode from './RenderableNode';
+import GameObject from './GameObject';
 
 class Collision {
-  public target: RenderableNode;
-  public source: RenderableNode;
+  public target: GameObject;
+  public source: GameObject;
 
   /**
    * Collision holds info about intersection of two objects
-   * @param  {RenderableNode} target - target should react on collision
-   * @param  {RenderableNode} source - collision comes from source
+   * @param  {GameObject} target - target should react on collision
+   * @param  {GameObject} source - collision comes from source
    * @return {Collision}
    */
-  constructor(target: RenderableNode, source: RenderableNode) {
+  constructor(target: GameObject, source: GameObject) {
     this.target = target;
     this.source = source;
   }

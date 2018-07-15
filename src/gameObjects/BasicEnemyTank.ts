@@ -1,4 +1,6 @@
 import Animation from '../core/Animation';
+import GameObject from '../core/GameObject';
+import SpriteMaterial from '../core/SpriteMaterial';
 
 import SpriteFactory from '../sprite/SpriteFactory';
 
@@ -12,7 +14,6 @@ class BasicEnemyTank extends EnemyTank {
   public bulletSpeed: number;
   public health: number;
   private animations: object;
-  private direction: string;
   private speed: number;
 
   constructor() {
@@ -23,65 +24,44 @@ class BasicEnemyTank extends EnemyTank {
     this.bulletDamage = 1;
     this.bulletSpeed = 10;
 
-    this.direction = 'up';
-
     this.animations = {
-      down: new Animation(SpriteFactory.asList([
-        'tankEnemyBasic.down.1',
-        'tankEnemyBasic.down.2',
-      ]), { delay: 20 }),
-      left: new Animation(SpriteFactory.asList([
-        'tankEnemyBasic.left.1',
-        'tankEnemyBasic.left.2',
-      ]), { delay: 20 }),
-      right: new Animation(SpriteFactory.asList([
-        'tankEnemyBasic.right.1',
-        'tankEnemyBasic.right.2',
-      ]), { delay: 20 }),
-      up: new Animation(SpriteFactory.asList([
+      [GameObject.Rotation.Up]: new Animation(SpriteFactory.asList([
         'tankEnemyBasic.up.1',
         'tankEnemyBasic.up.2',
       ]), { delay: 20 }),
+      [GameObject.Rotation.Down]: new Animation(SpriteFactory.asList([
+        'tankEnemyBasic.down.1',
+        'tankEnemyBasic.down.2',
+      ]), { delay: 20 }),
+      [GameObject.Rotation.Left]: new Animation(SpriteFactory.asList([
+        'tankEnemyBasic.left.1',
+        'tankEnemyBasic.left.2',
+      ]), { delay: 20 }),
+      [GameObject.Rotation.Right]: new Animation(SpriteFactory.asList([
+        'tankEnemyBasic.right.1',
+        'tankEnemyBasic.right.2',
+      ]), { delay: 20 }),
     };
+
+    this.material = new SpriteMaterial();
   }
 
   public update() {
-    if (this.direction === 'up') {
+    if (this.rotation === GameObject.Rotation.Up) {
       this.position.y -= this.speed;
-    } else if (this.direction === 'down') {
+    } else if (this.rotation === GameObject.Rotation.Down) {
       this.position.y += this.speed;
-    } else if (this.direction === 'right') {
-      this.position.x += this.speed;
-    } else if (this.direction === 'left') {
+    } else if (this.rotation === GameObject.Rotation.Left) {
       this.position.x -= this.speed;
+    } else if (this.rotation === GameObject.Rotation.Right) {
+      this.position.x += this.speed;
     }
 
-    const animation = this.animations[this.direction];
+    const animation = this.animations[this.rotation];
     animation.animate();
-  }
 
-  public rotate(direction) {
-    this.direction = direction;
-  }
-
-  public render() {
-    let { width, height } = this;
-
-    // Bullet has rectangular shape. If it is rotated, swap width and height
-    // for rendering.
-    if (this.direction === 'right' || this.direction === 'left') {
-      width = this.height;
-      height = this.width;
-    }
-
-    const animation = this.animations[this.direction];
     const sprite = animation.getCurrentFrame();
-
-    return {
-      height,
-      sprite,
-      width,
-    };
+    this.material.sprite = sprite;
   }
 }
 

@@ -1,11 +1,13 @@
 import Animation from './../core/Animation';
-import RenderableSprite from './../core/RenderableSprite';
+import Dimensions from './../core/Dimensions';
+import GameObject from './../core/GameObject';
+import SpriteMaterial from './../core/SpriteMaterial';
 
 import SpriteFactory from '../sprite/SpriteFactory';
 
-class TankExplosion extends RenderableSprite {
+class TankExplosion extends GameObject {
   private animation: Animation;
-  private dimensions: object;
+  private dims: Dimensions[];
 
   constructor() {
     super(124, 108);
@@ -17,11 +19,13 @@ class TankExplosion extends RenderableSprite {
 
     // Each sprite fragment has different size. Try to match it with
     // canvas size for different animation frames.
-    // TODO: refactor dimensions by centering sprite in box
-    this.dimensions = [
-      { width: 124, height: 108 },
-      { width: 136, height: 128 },
+    // TODO: refactor dims by centering sprite in box
+    this.dims = [
+      new Dimensions(124, 108),
+      new Dimensions(136, 128),
     ];
+
+    this.material = new SpriteMaterial();
   }
 
   // TODO: @mradionov rethink how to notify parent when animation is ended
@@ -33,22 +37,16 @@ class TankExplosion extends RenderableSprite {
   public update() {
     if (this.animation.isComplete()) {
       this.onComplete();
-    } else {
-      this.animation.animate();
+      return;
     }
-  }
 
-  public render() {
+    this.animation.animate();
+
+    const frameIndex = this.animation.getCurrentFrameIndex();
+    this.dimensions = this.dims[frameIndex];
+
     const sprite = this.animation.getCurrentFrame();
-    const { frameIndex } = this.animation;
-
-    const { width, height } = this.dimensions[frameIndex];
-
-    return {
-      height,
-      sprite,
-      width,
-    };
+    this.material.sprite = sprite;
   }
 }
 
