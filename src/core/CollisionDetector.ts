@@ -1,4 +1,5 @@
 import Collision from './Collision';
+import GameObject from './GameObject';
 
 class CollisionDetector {
   public static intersectObjects(objects) {
@@ -10,8 +11,8 @@ class CollisionDetector {
           return;
         }
 
-        const targetBoundingBox = target.getBoundingBox();
-        const sourceBoundingBox = source.getBoundingBox();
+        const targetBoundingBox = target.getWorldBoundingBox();
+        const sourceBoundingBox = source.getWorldBoundingBox();
 
         if (targetBoundingBox.intersectsBox(sourceBoundingBox)) {
           const collision = new Collision(target, source);

@@ -1,7 +1,13 @@
-import EnemyTank from '../models/EnemyTank';
-import TankExplosion from '../models/TankExplosion';
+import Collision from '../core/Collision';
+import GameObject from '../core/GameObject';
+
+import EnemyTank from '../gameObjects/EnemyTank';
+import TankExplosion from '../gameObjects/TankExplosion';
 
 class CollideGrenadePowerupWithTank {
+  private collision: Collision;
+  private scene: GameObject;
+
   constructor(collision, scene) {
     this.collision = collision;
 
@@ -9,7 +15,7 @@ class CollideGrenadePowerupWithTank {
     this.scene = scene;
   }
 
-  collide() {
+  public collide() {
     const powerup = this.collision.target;
 
     this.scene.remove(powerup);

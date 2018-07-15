@@ -12,10 +12,12 @@ class Node {
   }
 
   // TODO: figure out input type for a child
-  public add(childToAdd) {
-    childToAdd.parent = this;
+  public add(...childrenToAdd) {
+    childrenToAdd.forEach((childToAdd) => {
+      childToAdd.parent = this;
 
-    this.children.push(childToAdd);
+      this.children.push(childToAdd);
+    });
   }
 
   public remove(childToRemove: this) {

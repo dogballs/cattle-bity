@@ -1,9 +1,10 @@
 import Animation from '../core/Animation';
-import RenderableSprite from '../core/RenderableSprite';
+import GameObject from '../core/GameObject';
+import SpriteMaterial from '../core/SpriteMaterial';
 
 import SpriteFactory from '../sprite/SpriteFactory';
 
-class GrenadePowerup extends RenderableSprite {
+class GrenadePowerup extends GameObject {
   private animation: Animation;
 
   constructor() {
@@ -14,20 +15,15 @@ class GrenadePowerup extends RenderableSprite {
       SpriteFactory.asOne('powerupGrenade'),
       null,
     ], { delay: 130 });
+
+    this.material = new SpriteMaterial();
   }
 
   public update() {
     this.animation.animate();
-  }
 
-  public render() {
     const sprite = this.animation.getCurrentFrame();
-
-    return {
-      height: this.height,
-      sprite,
-      width: this.width,
-    };
+    this.material.sprite = sprite;
   }
 }
 

@@ -58,6 +58,15 @@ const config = {
   'tankPlayer.right.2': ['images/sprite.png', 113, 1, 13, 13],
   'tankPlayer.up.1': ['images/sprite.png', 1, 2, 13, 13],
   'tankPlayer.up.2': ['images/sprite.png', 17, 2, 13, 13],
+
+  'wall.brick.1': ['images/sprite.png', 256, 0, 4, 4],
+  'wall.brick.2': ['images/sprite.png', 260, 0, 4, 4],
+  'wall.brick.3': ['images/sprite.png', 264, 0, 4, 4],
+  'wall.brick.4': ['images/sprite.png', 268, 0, 4, 4],
+  'wall.brick.5': ['images/sprite.png', 256, 4, 4, 4],
+  'wall.brick.6': ['images/sprite.png', 260, 4, 4, 4],
+  'wall.brick.7': ['images/sprite.png', 264, 4, 4, 4],
+  'wall.brick.8': ['images/sprite.png', 268, 4, 4, 4],
 };
 
 export default config;

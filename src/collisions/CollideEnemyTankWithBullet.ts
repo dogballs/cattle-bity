@@ -1,6 +1,14 @@
-import TankExplosion from '../models/TankExplosion';
+import Collision from '../core/Collision';
+import GameObject from '../core/GameObject';
+
+import Bullet from '../gameObjects/Bullet';
+import EnemyTank from '../gameObjects/EnemyTank';
+import TankExplosion from '../gameObjects/TankExplosion';
 
 class CollideEnemyTankWithBullet {
+  private collision: Collision;
+  private scene: GameObject;
+
   constructor(collision, scene) {
     this.collision = collision;
 
@@ -8,9 +16,9 @@ class CollideEnemyTankWithBullet {
     this.scene = scene;
   }
 
-  collide() {
-    const tank = this.collision.target;
-    const bullet = this.collision.source;
+  public collide() {
+    const tank = this.collision.target as EnemyTank;
+    const bullet = this.collision.source as Bullet;
 
     const nextHealth = tank.health - bullet.damage;
     if (nextHealth > 0) {

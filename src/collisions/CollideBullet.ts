@@ -1,6 +1,12 @@
-import BulletExplosion from '../models/BulletExplosion';
+import Collision from '../core/Collision';
+import GameObject from '../core/GameObject';
+
+import BulletExplosion from '../gameObjects/BulletExplosion';
 
 class CollideBullet {
+  private collision: Collision;
+  private scene: GameObject;
+
   constructor(collision, scene) {
     this.collision = collision;
 
@@ -8,7 +14,7 @@ class CollideBullet {
     this.scene = scene;
   }
 
-  collide() {
+  public collide() {
     const bullet = this.collision.target;
 
     this.scene.remove(bullet);
