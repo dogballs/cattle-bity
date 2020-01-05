@@ -1,9 +1,7 @@
-import GameObject from './../core/GameObject';
+import { GameObject } from './../core';
 
-class BrickWallDestroyer extends GameObject {
+export class BrickWallDestroyer extends GameObject {
   constructor() {
     super(64, 16);
   }
 }
-
-export default BrickWallDestroyer;

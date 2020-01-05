@@ -1,9 +1,8 @@
-import Collision from '../core/Collision';
-import GameObject from '../core/GameObject';
+import { Collision, GameObject } from '../core';
 
-import BulletExplosion from '../gameObjects/BulletExplosion';
+import { BulletExplosion } from '../gameObjects';
 
-class CollideBullet {
+export class CollideBullet {
   private collision: Collision;
   private scene: GameObject;
 
@@ -27,5 +26,3 @@ class CollideBullet {
     this.scene.add(bulletExplosion);
   }
 }
-
-export default CollideBullet;

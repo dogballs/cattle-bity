@@ -1,22 +1,25 @@
-import CollisionDetector from './core/CollisionDetector';
-import GameObject from './core/GameObject';
-import KeyboardInput from './core/KeyboardInput';
-import Renderer from './core/Renderer';
+import {
+  CollisionDetector,
+  GameLoop,
+  GameObject,
+  KeyboardInput,
+  Renderer,
+} from './core';
 
 import BrickWallFactory from './BrickWallFactory';
 import BulletFactory from './BulletFactory';
 
-import Bullet from './gameObjects/Bullet';
-import SceneWall from './gameObjects/SceneWall';
-import Shield from './gameObjects/Shield';
-import Spawn from './gameObjects/Spawn';
-
-import BasicEnemyTank from './gameObjects/BasicEnemyTank';
-import FastEnemyTank from './gameObjects/FastEnemyTank';
-import PowerEnemyTank from './gameObjects/PowerEnemyTank';
-import Tank from './gameObjects/Tank';
-
-import GrenadePowerup from './gameObjects/GrenadePowerup';
+import {
+  BasicEnemyTank,
+  Bullet,
+  FastEnemyTank,
+  GrenadePowerup,
+  PowerEnemyTank,
+  SceneWall,
+  Shield,
+  Spawn,
+  Tank,
+} from './gameObjects';
 
 import collisionsConfig from './collisions/collisions.config';
 
@@ -89,7 +92,7 @@ scene.add(fastEnemySpawn);
 
 const powerEnemySpawn = new Spawn();
 powerEnemySpawn.position.set(660, 250);
-powerEnemySpawn.onComplete = () => {
+powerEnemySpawn.onComplete = (): void => {
   const enemy = new PowerEnemyTank();
   enemy.position = powerEnemySpawn.position.clone();
   scene.add(enemy);
@@ -101,43 +104,36 @@ const grenadePowerup = new GrenadePowerup();
 grenadePowerup.position.set(100, 800);
 scene.add(grenadePowerup);
 
-// Game loop
+const gameLoop = new GameLoop({
+  onFrame: (): void => {
+    input.update();
 
-let lastFrameTime = 0;
-const frameDelay = 0;
-const animate = (time: number = 0) => {
-  // Throttle animation
-  if (time < lastFrameTime + frameDelay) {
-    window.requestAnimationFrame(animate);
-    return;
-  }
-  lastFrameTime = time;
-
-  // Update all objects on the scene
-  // TODO: abstract out input from tank
-  scene.traverse((child) => {
-    child.update({ input });
-  });
-
-  // Detect and handle collisions of all objects on the scene
-  const collisions = CollisionDetector.intersectObjects(scene.children);
-  collisions.forEach((collision) => {
-    const collisionConfig = collisionsConfig.find((config) => {
-      const sourceMatches = collision.source instanceof config.sourceType;
-      const targetMatches = collision.target instanceof config.targetType;
-
-      return sourceMatches && targetMatches;
+    // Update all objects on the scene
+    // TODO: abstract out input from tank
+    scene.traverse((child) => {
+      child.update({ input });
     });
 
-    if (collisionConfig === undefined) {
-      return;
-    }
+    // Detect and handle collisions of all objects on the scene
+    const collisions = CollisionDetector.intersectObjects(scene.children);
+    collisions.forEach((collision) => {
+      const collisionConfig = collisionsConfig.find((config) => {
+        const sourceMatches = collision.source instanceof config.sourceType;
+        const targetMatches = collision.target instanceof config.targetType;
 
-    const collisionHandler = new collisionConfig.Instance(collision, scene);
-    collisionHandler.collide();
-  });
+        return sourceMatches && targetMatches;
+      });
 
-  window.requestAnimationFrame(animate);
-  renderer.render(scene);
-};
-animate();
+      if (collisionConfig === undefined) {
+        return;
+      }
+
+      const collisionHandler = new collisionConfig.Instance(collision, scene);
+      collisionHandler.collide();
+    });
+
+    renderer.render(scene);
+  },
+});
+
+gameLoop.start();

@@ -1,10 +1,10 @@
-import BasicMaterial from './BasicMaterial';
-import GameObject from './GameObject';
-import Node from './Node';
-import SpriteMaterial from './SpriteMaterial';
-import Vector from './Vector';
+import { BasicMaterial } from './BasicMaterial';
+import { GameObject } from './GameObject';
+import { Node } from './Node';
+import { SpriteMaterial } from './SpriteMaterial';
+import { Vector } from './Vector';
 
-class Renderer {
+export class Renderer {
   public domElement: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
 
@@ -75,10 +75,14 @@ class Renderer {
 
     this.context.drawImage(
       sprite.texture.imageElement,
-      sprite.rect.x, sprite.rect.y,
-      sprite.rect.w, sprite.rect.h,
-      min.x, min.y,
-      max.x - min.x, max.y - min.y,
+      sprite.rect.x,
+      sprite.rect.y,
+      sprite.rect.w,
+      sprite.rect.h,
+      min.x,
+      min.y,
+      max.x - min.x,
+      max.y - min.y,
     );
 
     this.renderGameObjectDebugFrame(gameObject);
@@ -99,5 +103,3 @@ class Renderer {
     this.context.stroke();
   }
 }
-
-export default Renderer;

@@ -1,7 +1,6 @@
-import Collision from '../core/Collision';
-import GameObject from '../core/GameObject';
+import { Collision, GameObject } from '../core';
 
-class CollideTankWithWall {
+export class CollideTankWithWall {
   private collision: Collision;
   private scene: GameObject;
 
@@ -22,15 +21,13 @@ class CollideTankWithWall {
     // Fix tank position depending on what wall he hits, so the tank won't be
     // able to pass thru the wall.
     if (tank.rotation === GameObject.Rotation.Up) {
-      tank.position.y = wallBoundingBox.max.y + (height / 2);
+      tank.position.y = wallBoundingBox.max.y + height / 2;
     } else if (tank.rotation === GameObject.Rotation.Down) {
-      tank.position.y = wallBoundingBox.min.y - (height / 2);
+      tank.position.y = wallBoundingBox.min.y - height / 2;
     } else if (tank.rotation === GameObject.Rotation.Left) {
-      tank.position.x = wallBoundingBox.max.x + (width / 2);
+      tank.position.x = wallBoundingBox.max.x + width / 2;
     } else if (tank.rotation === GameObject.Rotation.Right) {
-      tank.position.x = wallBoundingBox.min.x - (width / 2);
+      tank.position.x = wallBoundingBox.min.x - width / 2;
     }
   }
 }
-
-export default CollideTankWithWall;

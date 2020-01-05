@@ -1,10 +1,8 @@
-import Collision from '../core/Collision';
-import GameObject from '../core/GameObject';
+import { Collision, GameObject } from '../core';
 
-import EnemyTank from '../gameObjects/EnemyTank';
-import TankExplosion from '../gameObjects/TankExplosion';
+import { EnemyTank, TankExplosion } from '../gameObjects';
 
-class CollideGrenadePowerupWithTank {
+export class CollideGrenadePowerupWithTank {
   private collision: Collision;
   private scene: GameObject;
 
@@ -33,5 +31,3 @@ class CollideGrenadePowerupWithTank {
     });
   }
 }
-
-export default CollideGrenadePowerupWithTank;

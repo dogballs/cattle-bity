@@ -1,7 +1,7 @@
-import Collision from './Collision';
-import GameObject from './GameObject';
+import { Collision } from './Collision';
+import { GameObject } from './GameObject';
 
-class CollisionDetector {
+export class CollisionDetector {
   public static intersectObjects(objects) {
     const collisions = [];
 
@@ -25,5 +25,3 @@ class CollisionDetector {
     return collisions;
   }
 }
-
-export default CollisionDetector;

@@ -1,7 +1,5 @@
-import GameObject from '../core/GameObject';
+import { GameObject } from '../core';
 
-abstract class EnemyTank extends GameObject {
-  public health: number = 1;
+export abstract class EnemyTank extends GameObject {
+  public health = 1;
 }
-
-export default EnemyTank;

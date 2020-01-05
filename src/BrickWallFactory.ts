@@ -1,16 +1,16 @@
-import Rect from './core/Rect';
-import Vector from './core/Vector';
+import { Rect, Vector } from './core';
 
-import BrickWall from './gameObjects/BrickWall';
+import { BrickWall } from './gameObjects';
 
 const SIZE = 16;
 
 class BrickWallFactory {
   public static create(x = 0, y = 0, width = 0, height = 0) {
-    if (x % SIZE !== 0
-      || y % SIZE !== 0
-      || width % SIZE !== 0
-      || height % SIZE !== 0
+    if (
+      x % SIZE !== 0 ||
+      y % SIZE !== 0 ||
+      width % SIZE !== 0 ||
+      height % SIZE !== 0
     ) {
       throw new Error(`Invalid options (%${SIZE})`);
     }

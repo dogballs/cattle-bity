@@ -1,9 +1,9 @@
-import BoundingBox from './BoundingBox';
-import Dimensions from './Dimensions';
-import KeyboardInput from './KeyboardInput';
-import Material from './Material';
-import Node from './Node';
-import Vector from './Vector';
+import { BoundingBox } from './BoundingBox';
+import { Dimensions } from './Dimensions';
+import { KeyboardInput } from './KeyboardInput';
+import { Material } from './Material';
+import { Node } from './Node';
+import { Vector } from './Vector';
 
 enum Rotation {
   Up,
@@ -12,11 +12,11 @@ enum Rotation {
   Right,
 }
 
-interface IGameObjectUpdateArgs {
+interface GameObjectUpdateArgs {
   input: KeyboardInput;
 }
 
-class GameObject extends Node {
+export class GameObject extends Node {
   public static Rotation = Rotation;
 
   public dimensions: Dimensions;
@@ -24,7 +24,7 @@ class GameObject extends Node {
   public position: Vector;
   public rotation: Rotation;
 
-  constructor(width: number = 0, height: number = 0) {
+  constructor(width = 0, height = 0) {
     super();
 
     this.dimensions = new Dimensions(width, height);
@@ -75,11 +75,9 @@ class GameObject extends Node {
 
   /**
    * Will be called on each game loop iteration
-   * @param {IGameObjectUpdateArgs}
+   * @param {GameObjectUpdateArgs}
    */
-  public update(args: IGameObjectUpdateArgs): void {
+  public update(args: GameObjectUpdateArgs): void {
     return undefined;
   }
 }
-
-export default GameObject;

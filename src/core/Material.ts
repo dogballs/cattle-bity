@@ -1,8 +1,6 @@
-import Sprite from './Sprite';
+import { Sprite } from './Sprite';
 
-class Material {
+export class Material {
   public color: string = null;
   public sprite: Sprite = null;
 }
-
-export default Material;

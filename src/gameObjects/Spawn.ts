@@ -1,23 +1,18 @@
-import Animation from './../core/Animation';
-import Dimensions from './../core/Dimensions';
-import GameObject from './../core/GameObject';
-import SpriteMaterial from './../core/SpriteMaterial';
+import { Animation, Dimensions, GameObject, SpriteMaterial } from './../core';
 
-import SpriteFactory from '../sprite/SpriteFactory';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
-class Spawn extends GameObject {
+export class Spawn extends GameObject {
   private animation: Animation;
   private dims: Dimensions[];
 
   constructor() {
     super(36, 36);
 
-    this.animation = new Animation(SpriteFactory.asList([
-      'spawn.1',
-      'spawn.2',
-      'spawn.3',
-      'spawn.4',
-    ]), { delay: 40, loop: 3 });
+    this.animation = new Animation(
+      SpriteFactory.asList(['spawn.1', 'spawn.2', 'spawn.3', 'spawn.4']),
+      { delay: 40, loop: 3 },
+    );
 
     // Each sprite fragment has different size. Try to match it with
     // canvas size for different animation frames.
@@ -53,5 +48,3 @@ class Spawn extends GameObject {
     this.material.sprite = sprite;
   }
 }
-
-export default Spawn;

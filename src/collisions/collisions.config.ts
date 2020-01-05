@@ -1,24 +1,22 @@
-import Bullet from '../gameObjects/Bullet';
-import SceneWall from '../gameObjects/SceneWall';
+import {
+  BasicEnemyTank,
+  BrickWall,
+  BrickWallDestroyer,
+  Bullet,
+  FastEnemyTank,
+  GrenadePowerup,
+  PowerEnemyTank,
+  SceneWall,
+  Tank,
+} from '../gameObjects';
 
-import BasicEnemyTank from '../gameObjects/BasicEnemyTank';
-import FastEnemyTank from '../gameObjects/FastEnemyTank';
-import PowerEnemyTank from '../gameObjects/PowerEnemyTank';
-import Tank from '../gameObjects/Tank';
-
-import GrenadePowerup from '../gameObjects/GrenadePowerup';
-
-import BrickWall from '../gameObjects/BrickWall';
-
-import BrickWallDestroyer from '../gameObjects/BrickWallDestroyer';
-
-import CollideBrickWallWithBrickWallDestroyer from './CollideBrickWallWithBrickWallDestroyer';
-import CollideBrickWallWithBullet from './CollideBrickWallWithBullet';
-import CollideBullet from './CollideBullet';
-import CollideEnemyTankWithBullet from './CollideEnemyTankWithBullet';
-import CollideEnemyTankWithWall from './CollideEnemyTankWithWall';
-import CollideGrenadePowerupWithTank from './CollideGrenadePowerupWithTank';
-import CollideTankWithWall from './CollideTankWithWall';
+import { CollideBrickWallWithBrickWallDestroyer } from './CollideBrickWallWithBrickWallDestroyer';
+import { CollideBrickWallWithBullet } from './CollideBrickWallWithBullet';
+import { CollideBullet } from './CollideBullet';
+import { CollideEnemyTankWithBullet } from './CollideEnemyTankWithBullet';
+import { CollideEnemyTankWithWall } from './CollideEnemyTankWithWall';
+import { CollideGrenadePowerupWithTank } from './CollideGrenadePowerupWithTank';
+import { CollideTankWithWall } from './CollideTankWithWall';
 
 const config = [
   // Bullet

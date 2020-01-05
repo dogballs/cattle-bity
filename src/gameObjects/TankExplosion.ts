@@ -1,29 +1,23 @@
-import Animation from './../core/Animation';
-import Dimensions from './../core/Dimensions';
-import GameObject from './../core/GameObject';
-import SpriteMaterial from './../core/SpriteMaterial';
+import { Animation, Dimensions, GameObject, SpriteMaterial } from './../core';
 
-import SpriteFactory from '../sprite/SpriteFactory';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
-class TankExplosion extends GameObject {
+export class TankExplosion extends GameObject {
   private animation: Animation;
   private dims: Dimensions[];
 
   constructor() {
     super(124, 108);
 
-    this.animation = new Animation(SpriteFactory.asList([
-      'explosionTank.1',
-      'explosionTank.2',
-    ]), { delay: 100, loop: false });
+    this.animation = new Animation(
+      SpriteFactory.asList(['explosionTank.1', 'explosionTank.2']),
+      { delay: 100, loop: false },
+    );
 
     // Each sprite fragment has different size. Try to match it with
     // canvas size for different animation frames.
     // TODO: refactor dims by centering sprite in box
-    this.dims = [
-      new Dimensions(124, 108),
-      new Dimensions(136, 128),
-    ];
+    this.dims = [new Dimensions(124, 108), new Dimensions(136, 128)];
 
     this.material = new SpriteMaterial();
   }
@@ -49,5 +43,3 @@ class TankExplosion extends GameObject {
     this.material.sprite = sprite;
   }
 }
-
-export default TankExplosion;

@@ -1,20 +1,20 @@
-import BoundingBox from './BoundingBox';
-import RenderableNode from './RenderableNode';
-import Sprite from './Sprite';
-import Vector from './Vector';
+import { BoundingBox } from './BoundingBox';
+import { RenderableNode } from './RenderableNode';
+import { Sprite } from './Sprite';
+import { Vector } from './Vector';
 
-interface IRenderableSpriteRenderResult {
+interface RenderableSpriteRenderResult {
   height: number;
   sprite: Sprite;
   width: number;
 }
 
-abstract class RenderableSprite extends RenderableNode {
+export abstract class RenderableSprite extends RenderableNode {
   public height: number;
   public sprite: Sprite;
   public width: number;
 
-  constructor(width: number = 0, height: number = 0) {
+  constructor(width = 0, height = 0) {
     super();
 
     this.width = width;
@@ -26,8 +26,8 @@ abstract class RenderableSprite extends RenderableNode {
   public getBoundingBox(): BoundingBox {
     // Top-left point of the object
     const min = new Vector(
-      this.position.x - (this.width / 2),
-      this.position.y - (this.height / 2),
+      this.position.x - this.width / 2,
+      this.position.y - this.height / 2,
     );
     // Bottom-right point of the object
     const max = min.clone().add(new Vector(this.width, this.height));
@@ -35,7 +35,5 @@ abstract class RenderableSprite extends RenderableNode {
     return new BoundingBox(min, max);
   }
 
-  public abstract render(): IRenderableSpriteRenderResult;
+  public abstract render(): RenderableSpriteRenderResult;
 }
-
-export default RenderableSprite;

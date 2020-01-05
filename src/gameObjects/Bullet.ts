@@ -1,12 +1,11 @@
-import GameObject from './../core/GameObject';
-import SpriteMaterial from './../core/SpriteMaterial';
+import { GameObject, SpriteMaterial } from './../core';
 
-import SpriteFactory, { IMapNameToSprite } from '../sprite/SpriteFactory';
+import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
 
-class Bullet extends GameObject {
-  public damage: number = 0;
-  public speed: number = 15;
-  private spriteMap: IMapNameToSprite;
+export class Bullet extends GameObject {
+  public damage = 0;
+  public speed = 15;
+  private spriteMap: MapNameToSprite;
 
   constructor() {
     super(12, 16);
@@ -35,5 +34,3 @@ class Bullet extends GameObject {
     this.material.sprite = this.spriteMap[this.rotation];
   }
 }
-
-export default Bullet;

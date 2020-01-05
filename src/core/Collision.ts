@@ -1,6 +1,6 @@
-import GameObject from './GameObject';
+import { GameObject } from './GameObject';
 
-class Collision {
+export class Collision {
   public target: GameObject;
   public source: GameObject;
 
@@ -15,5 +15,3 @@ class Collision {
     this.source = source;
   }
 }
-
-export default Collision;

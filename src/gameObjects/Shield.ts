@@ -1,19 +1,17 @@
-import Animation from '../core/Animation';
-import GameObject from '../core/GameObject';
-import SpriteMaterial from '../core/SpriteMaterial';
+import { Animation, GameObject, SpriteMaterial } from '../core';
 
-import SpriteFactory from '../sprite/SpriteFactory';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
-class Shield extends GameObject {
+export class Shield extends GameObject {
   private animation: Animation;
 
   constructor() {
     super(64, 64);
 
-    this.animation = new Animation(SpriteFactory.asList([
-      'shield.1',
-      'shield.2',
-    ]), { delay: 50 });
+    this.animation = new Animation(
+      SpriteFactory.asList(['shield.1', 'shield.2']),
+      { delay: 50 },
+    );
 
     this.material = new SpriteMaterial();
   }
@@ -25,5 +23,3 @@ class Shield extends GameObject {
     this.material.sprite = sprite;
   }
 }
-
-export default Shield;

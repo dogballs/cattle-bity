@@ -1,15 +1,13 @@
-import Animation from '../core/Animation';
-import GameObject from '../core/GameObject';
-import SpriteMaterial from '../core/SpriteMaterial';
+import { Animation, GameObject, SpriteMaterial } from '../core';
 
-import SpriteFactory from '../sprite/SpriteFactory';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
-import EnemyTank from './EnemyTank';
+import { EnemyTank } from './EnemyTank';
 
 // TODO: create base class for tank with common behavior for both enemy and
 // player tanks to avoid repetition.
 
-class BasicEnemyTank extends EnemyTank {
+export class PowerEnemyTank extends EnemyTank {
   public bulletDamage: number;
   public bulletSpeed: number;
   public health: number;
@@ -25,22 +23,27 @@ class BasicEnemyTank extends EnemyTank {
     this.bulletSpeed = 15;
 
     this.animations = {
-      [GameObject.Rotation.Up]: new Animation(SpriteFactory.asList([
-        'tankEnemyPower.up.1',
-        'tankEnemyPower.up.1',
-      ])),
-      [GameObject.Rotation.Down]: new Animation(SpriteFactory.asList([
-        'tankEnemyPower.down.1',
-        'tankEnemyPower.down.2',
-      ])),
-      [GameObject.Rotation.Left]: new Animation(SpriteFactory.asList([
-        'tankEnemyPower.left.1',
-        'tankEnemyPower.left.1',
-      ])),
-      [GameObject.Rotation.Right]: new Animation(SpriteFactory.asList([
-        'tankEnemyPower.right.1',
-        'tankEnemyPower.right.1',
-      ])),
+      [GameObject.Rotation.Up]: new Animation(
+        SpriteFactory.asList(['tankEnemyPower.up.1', 'tankEnemyPower.up.1']),
+      ),
+      [GameObject.Rotation.Down]: new Animation(
+        SpriteFactory.asList([
+          'tankEnemyPower.down.1',
+          'tankEnemyPower.down.2',
+        ]),
+      ),
+      [GameObject.Rotation.Left]: new Animation(
+        SpriteFactory.asList([
+          'tankEnemyPower.left.1',
+          'tankEnemyPower.left.1',
+        ]),
+      ),
+      [GameObject.Rotation.Right]: new Animation(
+        SpriteFactory.asList([
+          'tankEnemyPower.right.1',
+          'tankEnemyPower.right.1',
+        ]),
+      ),
     };
 
     this.material = new SpriteMaterial();
@@ -64,5 +67,3 @@ class BasicEnemyTank extends EnemyTank {
     this.material.sprite = sprite;
   }
 }
-
-export default BasicEnemyTank;

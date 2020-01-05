@@ -1,9 +1,8 @@
-import Collision from '../core/Collision';
-import GameObject from '../core/GameObject';
+import { Collision, GameObject } from '../core';
 
-import BrickWallDestroyer from '../gameObjects/BrickWallDestroyer';
+import { BrickWallDestroyer } from '../gameObjects';
 
-class CollideBrickWallWithBullet {
+export class CollideBrickWallWithBullet {
   private collision: Collision;
   private scene: GameObject;
 
@@ -25,5 +24,3 @@ class CollideBrickWallWithBullet {
     this.scene.add(destroyer);
   }
 }
-
-export default CollideBrickWallWithBullet;

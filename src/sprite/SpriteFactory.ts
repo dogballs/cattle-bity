@@ -1,17 +1,16 @@
-import Sprite from '../core/Sprite';
-import Texture from '../core/Texture';
+import { Sprite, Texture } from '../core';
 
 import config from './sprite.config';
 
-export interface IMapNameToId {
+export interface MapNameToId {
   [name: string]: string;
 }
 
-export interface IMapNameToSprite {
+export interface MapNameToSprite {
   [name: string]: Sprite;
 }
 
-class SpriteFactory {
+export class SpriteFactory {
   public static asOne(id: string): Sprite {
     const spriteConfig = config[id];
     if (spriteConfig === undefined) {
@@ -27,7 +26,7 @@ class SpriteFactory {
     return sprite;
   }
 
-  public static asMap(mapNameToId: IMapNameToId): IMapNameToSprite {
+  public static asMap(mapNameToId: MapNameToId): MapNameToSprite {
     const mapNameToSprite = {};
 
     Object.keys(mapNameToId).forEach((name) => {
@@ -50,5 +49,3 @@ class SpriteFactory {
     return sprites;
   }
 }
-
-export default SpriteFactory;

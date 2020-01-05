@@ -1,15 +1,13 @@
-import Animation from '../core/Animation';
-import GameObject from '../core/GameObject';
-import SpriteMaterial from '../core/SpriteMaterial';
+import { Animation, GameObject, SpriteMaterial } from '../core';
 
-import SpriteFactory from '../sprite/SpriteFactory';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
-import EnemyTank from './EnemyTank';
+import { EnemyTank } from './EnemyTank';
 
 // TODO: create base class for tank with common behavior for both enemy and
 // player tanks to avoid repetition.
 
-class BasicEnemyTank extends EnemyTank {
+export class FastEnemyTank extends EnemyTank {
   public bulletDamage: number;
   public bulletSpeed: number;
   public health: number;
@@ -25,22 +23,25 @@ class BasicEnemyTank extends EnemyTank {
     this.bulletSpeed = 13;
 
     this.animations = {
-      [GameObject.Rotation.Up]: new Animation(SpriteFactory.asList([
-        'tankEnemyFast.up.1',
-        'tankEnemyFast.up.1',
-      ]), { delay: 20 }),
-      [GameObject.Rotation.Down]: new Animation(SpriteFactory.asList([
-        'tankEnemyFast.down.1',
-        'tankEnemyFast.down.2',
-      ]), { delay: 20 }),
-      [GameObject.Rotation.Left]: new Animation(SpriteFactory.asList([
-        'tankEnemyFast.left.1',
-        'tankEnemyFast.left.1',
-      ]), { delay: 20 }),
-      [GameObject.Rotation.Right]: new Animation(SpriteFactory.asList([
-        'tankEnemyFast.right.1',
-        'tankEnemyFast.right.1',
-      ]), { delay: 20 }),
+      [GameObject.Rotation.Up]: new Animation(
+        SpriteFactory.asList(['tankEnemyFast.up.1', 'tankEnemyFast.up.1']),
+        { delay: 20 },
+      ),
+      [GameObject.Rotation.Down]: new Animation(
+        SpriteFactory.asList(['tankEnemyFast.down.1', 'tankEnemyFast.down.2']),
+        { delay: 20 },
+      ),
+      [GameObject.Rotation.Left]: new Animation(
+        SpriteFactory.asList(['tankEnemyFast.left.1', 'tankEnemyFast.left.1']),
+        { delay: 20 },
+      ),
+      [GameObject.Rotation.Right]: new Animation(
+        SpriteFactory.asList([
+          'tankEnemyFast.right.1',
+          'tankEnemyFast.right.1',
+        ]),
+        { delay: 20 },
+      ),
     };
 
     this.material = new SpriteMaterial();
@@ -64,5 +65,3 @@ class BasicEnemyTank extends EnemyTank {
     this.material.sprite = sprite;
   }
 }
-
-export default BasicEnemyTank;

@@ -1,13 +1,13 @@
-class Vector {
+export class Vector {
   public x: number;
   public y: number;
 
-  constructor(x: number = 0, y: number = 0) {
+  constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
   }
 
-   public set(x: number, y: number) {
+  public set(x: number, y: number) {
     this.x = x;
     this.y = y;
 
@@ -51,5 +51,3 @@ class Vector {
     return new Vector(this.x, this.y);
   }
 }
-
-export default Vector;

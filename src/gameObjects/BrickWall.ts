@@ -1,10 +1,8 @@
-import GameObject from '../core/GameObject';
-import Sprite from '../core/Sprite';
-import SpriteMaterial from '../core/SpriteMaterial';
+import { GameObject, Sprite, SpriteMaterial } from '../core';
 
-import SpriteFactory from '../sprite/SpriteFactory';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
-class BrickWall extends GameObject {
+export class BrickWall extends GameObject {
   private sprites: Sprite[];
 
   constructor() {
@@ -30,8 +28,8 @@ class BrickWall extends GameObject {
   }
 
   private getSpriteByPosition() {
-    const horizontalIndex = this.position.x % 64 / 16;
-    const verticalIndex = this.position.y % 32 / 16;
+    const horizontalIndex = (this.position.x % 64) / 16;
+    const verticalIndex = (this.position.y % 32) / 16;
     const index = horizontalIndex + verticalIndex * 4;
 
     const sprite = this.sprites[index];
@@ -39,5 +37,3 @@ class BrickWall extends GameObject {
     return sprite;
   }
 }
-
-export default BrickWall;

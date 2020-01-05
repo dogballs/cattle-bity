@@ -1,11 +1,8 @@
-import Collision from '../core/Collision';
-import GameObject from '../core/GameObject';
+import { Collision, GameObject } from '../core';
 
-import Bullet from '../gameObjects/Bullet';
-import EnemyTank from '../gameObjects/EnemyTank';
-import TankExplosion from '../gameObjects/TankExplosion';
+import { Bullet, EnemyTank, TankExplosion } from '../gameObjects';
 
-class CollideEnemyTankWithBullet {
+export class CollideEnemyTankWithBullet {
   private collision: Collision;
   private scene: GameObject;
 
@@ -36,5 +33,3 @@ class CollideEnemyTankWithBullet {
     this.scene.add(tankExplosion);
   }
 }
-
-export default CollideEnemyTankWithBullet;

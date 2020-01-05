@@ -1,11 +1,9 @@
-import Material from './Material';
+import { Material } from './Material';
 
-class BasicMaterial extends Material {
-  constructor(color: string = '#000') {
+export class BasicMaterial extends Material {
+  constructor(color = '#000') {
     super();
 
     this.color = color;
   }
 }
-
-export default BasicMaterial;

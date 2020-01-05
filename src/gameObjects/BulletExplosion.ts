@@ -1,22 +1,22 @@
-import Animation from './../core/Animation';
-import Dimensions from './../core/Dimensions';
-import GameObject from './../core/GameObject';
-import SpriteMaterial from './../core/SpriteMaterial';
+import { Animation, Dimensions, GameObject, SpriteMaterial } from './../core';
 
-import SpriteFactory from '../sprite/SpriteFactory';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
-class BulletExplosion extends GameObject {
+export class BulletExplosion extends GameObject {
   private animation: Animation;
   private dims: Dimensions[];
 
   constructor() {
     super(44, 44);
 
-    this.animation = new Animation(SpriteFactory.asList([
-      'explosionBullet.1',
-      'explosionBullet.2',
-      'explosionBullet.3',
-    ]), { delay: 50, loop: false });
+    this.animation = new Animation(
+      SpriteFactory.asList([
+        'explosionBullet.1',
+        'explosionBullet.2',
+        'explosionBullet.3',
+      ]),
+      { delay: 50, loop: false },
+    );
 
     // Each sprite fragment has different size. Try to match it with
     // canvas size for different animation frames.
@@ -51,5 +51,3 @@ class BulletExplosion extends GameObject {
     this.material.sprite = sprite;
   }
 }
-
-export default BulletExplosion;

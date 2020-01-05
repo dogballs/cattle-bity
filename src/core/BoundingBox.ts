@@ -1,6 +1,6 @@
-import Vector from './Vector';
+import { Vector } from './Vector';
 
-class BoundingBox {
+export class BoundingBox {
   public min: Vector;
   public max: Vector;
 
@@ -16,7 +16,10 @@ class BoundingBox {
   }
 
   public getCenter() {
-    return this.min.clone().add(this.max).divideScalar(2);
+    return this.min
+      .clone()
+      .add(this.max)
+      .divideScalar(2);
   }
 
   /**
@@ -25,15 +28,12 @@ class BoundingBox {
    * @return {Boolean}
    */
   public intersectsBox(box) {
-    const isOutside = (
+    const isOutside =
       this.max.x <= box.min.x ||
       this.min.x >= box.max.x ||
       this.max.y <= box.min.y ||
-      this.min.y >= box.max.y
-    );
+      this.min.y >= box.max.y;
 
     return !isOutside;
   }
 }
-
-export default BoundingBox;

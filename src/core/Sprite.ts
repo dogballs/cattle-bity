@@ -1,11 +1,11 @@
-import Rect from './Rect';
-import Texture from './Texture';
+import { Rect } from './Rect';
+import { Texture } from './Texture';
 
 /**
  * Represents a specific fragment of the texture by the coordinates.
  * The coordinates will be used by renderer to render the fragment.
  */
-class Sprite {
+export class Sprite {
   public static Rect = Rect;
 
   public rect: Rect;
@@ -16,5 +16,3 @@ class Sprite {
     this.rect = rect;
   }
 }
-
-export default Sprite;

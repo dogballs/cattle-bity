@@ -1,8 +1,8 @@
-import BoundingBox from './BoundingBox';
-import Node from './Node';
-import Vector from './Vector';
+import { BoundingBox } from './BoundingBox';
+import { Node } from './Node';
+import { Vector } from './Vector';
 
-abstract class RenderableNode extends Node {
+export abstract class RenderableNode extends Node {
   public position: Vector;
 
   constructor() {
@@ -35,5 +35,3 @@ abstract class RenderableNode extends Node {
    */
   public abstract render();
 }
-
-export default RenderableNode;

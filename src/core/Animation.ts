@@ -1,6 +1,6 @@
-import Sprite from './Sprite';
+import { Sprite } from './Sprite';
 
-class Animation {
+export class Animation {
   private delay: number;
   private frameIndex: number;
   private frames: Sprite[];
@@ -10,7 +10,10 @@ class Animation {
 
   constructor(
     frames: Sprite[] = [],
-    { delay = 0, loop = true }: { delay?: number, loop?: number | boolean } = {},
+    {
+      delay = 0,
+      loop = true,
+    }: { delay?: number; loop?: number | boolean } = {},
   ) {
     this.frames = frames;
     this.frameIndex = 0;
@@ -56,19 +59,21 @@ class Animation {
   public animate() {
     // If looping is disabled and last frame animation is complete - nothing else
     // to animate
-    if (this.loop === false
-      && this.isLastFrame()
-      && this.isCurrentFrameAnimated()
+    if (
+      this.loop === false &&
+      this.isLastFrame() &&
+      this.isCurrentFrameAnimated()
     ) {
       return;
     }
 
     // If loop is limited to number and we are on the last loop and last frame
     // animation is complete - nothing else to animate
-    if (typeof this.loop === 'number'
-      && this.loopIndex === this.loop
-      && this.isLastFrame()
-      && this.isCurrentFrameAnimated()
+    if (
+      typeof this.loop === 'number' &&
+      this.loopIndex === this.loop &&
+      this.isLastFrame() &&
+      this.isCurrentFrameAnimated()
     ) {
       return;
     }
@@ -101,5 +106,3 @@ class Animation {
     return this.frameIndex === this.frames.length - 1;
   }
 }
-
-export default Animation;

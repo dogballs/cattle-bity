@@ -2,7 +2,7 @@
  * Represents one node in a scene graph.
  * https://en.wikipedia.org/wiki/Scene_graph
  */
-class Node {
+export class Node {
   public children: this[];
   public parent: this;
 
@@ -52,5 +52,3 @@ class Node {
     return this.children.some((child) => child instanceof type);
   }
 }
-
-export default Node;

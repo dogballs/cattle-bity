@@ -1,7 +1,6 @@
-import GameObject from './core/GameObject';
-import Vector from './core/Vector';
+import { GameObject, Vector } from './core';
 
-import Bullet from './gameObjects/Bullet';
+import { Bullet } from './gameObjects';
 
 class BulletFactory {
   public static makeBullet(tank) {

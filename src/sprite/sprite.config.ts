@@ -1,5 +1,5 @@
 const config = {
-  'block': ['images/sprite.png', 257, 1, 13, 13],
+  block: ['images/sprite.png', 257, 1, 13, 13],
 
   'bullet.down': ['images/sprite.png', 339, 102, 3, 4],
   'bullet.left': ['images/sprite.png', 330, 102, 4, 3],
@@ -13,7 +13,7 @@ const config = {
   'explosionTank.1': ['images/sprite.png', 304, 129, 31, 29],
   'explosionTank.2': ['images/sprite.png', 334, 128, 34, 32],
 
-  'powerupGrenade': ['images/sprite.png', 320, 112, 16, 15],
+  powerupGrenade: ['images/sprite.png', 320, 112, 16, 15],
 
   'shield.1': ['images/sprite.png', 256, 144, 16, 16],
   'shield.2': ['images/sprite.png', 272, 144, 16, 16],

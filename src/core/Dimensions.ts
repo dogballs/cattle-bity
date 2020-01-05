@@ -1,8 +1,8 @@
-class Dimensions {
+export class Dimensions {
   public width: number;
   public height: number;
 
-  constructor(width: number = 0, height: number = 0) {
+  constructor(width = 0, height = 0) {
     this.width = width;
     this.height = height;
   }
@@ -12,5 +12,3 @@ class Dimensions {
     this.height = height;
   }
 }
-
-export default Dimensions;

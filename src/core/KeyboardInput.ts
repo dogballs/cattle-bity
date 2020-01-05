@@ -1,62 +1,99 @@
-class KeyboardInput {
-  public static KEY_ENTER = 13;
-  public static KEY_SPACE = 32;
-  public static KEY_ARROW_LEFT = 37;
-  public static KEY_ARROW_UP = 38;
-  public static KEY_ARROW_RIGHT = 39;
-  public static KEY_ARROW_DOWN = 40;
-  public static KEY_A = 65;
-  public static KEY_D = 68;
-  public static KEY_S = 83;
-  public static KEY_W = 87;
+export enum KeyboardKey {
+  Enter = 13,
+  Space = 32,
+  ArrowLeft = 37,
+  ArrowUp = 38,
+  ArrowRight = 39,
+  ArrowDown = 40,
+  A = 65,
+  D = 68,
+  S = 83,
+  W = 87,
+}
 
-  private pressedKeyCodes: number[];
+export type KeyboardKeyCode = KeyboardKey | number;
 
-  constructor() {
-    this.pressedKeyCodes = [];
+export class KeyboardInput {
+  private listenedDownKeyCodes: KeyboardKeyCode[] = [];
 
-    this.handleWindowKeyDown = this.handleWindowKeyDown.bind(this);
-    this.handleWindowKeyUp = this.handleWindowKeyUp.bind(this);
-  }
+  private downKeyCodes: KeyboardKeyCode[] = [];
+  private holdKeyCodes: KeyboardKeyCode[] = [];
+  private upKeyCodes: KeyboardKeyCode[] = [];
 
-  public listen() {
+  public listen(): void {
     document.addEventListener('keydown', this.handleWindowKeyDown);
     document.addEventListener('keyup', this.handleWindowKeyUp);
   }
 
-  public unlisten() {
+  public unlisten(): void {
     document.removeEventListener('keydown', this.handleWindowKeyDown);
     document.removeEventListener('keyup', this.handleWindowKeyUp);
   }
 
-  public isPressed(keyCode) {
-    return this.pressedKeyCodes.includes(keyCode);
+  public update(): void {
+    const keyCodes = this.listenedDownKeyCodes.slice();
+
+    const downKeyCodes = keyCodes.filter((keyCode) => {
+      return (
+        !this.downKeyCodes.includes(keyCode) &&
+        !this.holdKeyCodes.includes(keyCode)
+      );
+    });
+
+    const holdKeyCodes = keyCodes.filter((keyCode) => {
+      return (
+        this.downKeyCodes.includes(keyCode) ||
+        this.holdKeyCodes.includes(keyCode)
+      );
+    });
+
+    const oldDownKeyCodes = this.downKeyCodes.filter((keyCode) => {
+      return !keyCodes.includes(keyCode);
+    });
+
+    const oldHoldKeyCodes = this.holdKeyCodes.filter((keyCode) => {
+      return !keyCodes.includes(keyCode);
+    });
+
+    this.downKeyCodes = downKeyCodes;
+    this.holdKeyCodes = holdKeyCodes;
+    this.upKeyCodes = [...oldDownKeyCodes, ...oldHoldKeyCodes];
   }
 
-  public isPressedAny(keyCodes) {
-    return keyCodes.some((keyCode) => this.isPressed(keyCode));
+  public isDown(keyCode: KeyboardKeyCode): boolean {
+    return this.downKeyCodes.includes(keyCode);
   }
 
-  public isPressedLast(keyCode) {
-    return this.pressedKeyCodes[this.pressedKeyCodes.length - 1] === keyCode;
+  public isHold(keyCode: KeyboardKeyCode): boolean {
+    return this.holdKeyCodes.includes(keyCode);
   }
 
-  private handleWindowKeyDown(ev) {
+  public isHoldAny(keyCodes: KeyboardKeyCode[]): boolean {
+    return this.holdKeyCodes.some((keyCode) => keyCodes.includes(keyCode));
+  }
+
+  public isHoldLast(keyCode: KeyboardKeyCode): boolean {
+    return this.holdKeyCodes[this.holdKeyCodes.length - 1] === keyCode;
+  }
+
+  public isUp(keyCode: KeyboardKeyCode): boolean {
+    return this.upKeyCodes.includes(keyCode);
+  }
+
+  private handleWindowKeyDown = (ev): void => {
     const { keyCode } = ev;
 
-    if (!this.isPressed(keyCode)) {
-      this.pressedKeyCodes.push(keyCode);
+    if (!this.listenedDownKeyCodes.includes(keyCode)) {
+      this.listenedDownKeyCodes.push(keyCode);
     }
-  }
+  };
 
-  private handleWindowKeyUp(ev) {
+  private handleWindowKeyUp = (ev): void => {
     const { keyCode } = ev;
 
-    const index = this.pressedKeyCodes.indexOf(keyCode);
-    if (index > -1) {
-      this.pressedKeyCodes.splice(index, 1);
+    const index = this.listenedDownKeyCodes.indexOf(keyCode);
+    if (index !== -1) {
+      this.listenedDownKeyCodes.splice(index, 1);
     }
-  }
+  };
 }
-
-export default KeyboardInput;
