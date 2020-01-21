@@ -1,10 +1,18 @@
-import { Animation, GameObject, KeyboardKey, SpriteMaterial } from '../core';
+import {
+  Animation,
+  GameObject,
+  GameObjectRotation,
+  KeyboardKey,
+  Sprite,
+  SpriteMaterial,
+} from '../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class Tank extends GameObject {
   public bulletDamage: number;
   public bulletSpeed: number;
+  public material: SpriteMaterial = new SpriteMaterial();
   private animations: Map<GameObjectRotation, Animation<Sprite>> = new Map();
   private speed: number;
 
@@ -15,25 +23,37 @@ export class Tank extends GameObject {
     this.bulletDamage = 1;
     this.bulletSpeed = 10;
 
-    this.animations = {
-      [GameObject.Rotation.Up]: new Animation(
+    this.animations.set(
+      GameObject.Rotation.Up,
+      new Animation(
         SpriteFactory.asList(['tankPlayer.up.1', 'tankPlayer.up.2']),
+        { loop: true },
       ),
-      [GameObject.Rotation.Down]: new Animation(
+    );
+    this.animations.set(
+      GameObject.Rotation.Down,
+      new Animation(
         SpriteFactory.asList(['tankPlayer.down.1', 'tankPlayer.down.2']),
+        { loop: true },
       ),
-      [GameObject.Rotation.Right]: new Animation(
-        SpriteFactory.asList(['tankPlayer.right.1', 'tankPlayer.right.2']),
-      ),
-      [GameObject.Rotation.Left]: new Animation(
+    );
+    this.animations.set(
+      GameObject.Rotation.Left,
+      new Animation(
         SpriteFactory.asList(['tankPlayer.left.1', 'tankPlayer.left.2']),
+        { loop: true },
       ),
-    };
-
-    this.material = new SpriteMaterial();
+    );
+    this.animations.set(
+      GameObject.Rotation.Right,
+      new Animation(
+        SpriteFactory.asList(['tankPlayer.right.1', 'tankPlayer.right.2']),
+        { loop: true },
+      ),
+    );
   }
 
-  public update({ input }): void {
+  public update({ input, ticks }): void {
     if (input.isHoldLast(KeyboardKey.W)) {
       this.rotate(GameObject.Rotation.Up);
     }
@@ -65,18 +85,16 @@ export class Tank extends GameObject {
       }
     }
 
-    const animation = this.animations[this.rotation];
+    const animation = this.animations.get(this.rotation);
     if (input.isHoldAny(moveKeys)) {
-      animation.animate();
+      animation.animate(ticks);
     }
 
     if (input.isDown(KeyboardKey.Space)) {
       this.onFire();
     }
 
-    const sprite = animation.getCurrentFrame();
-
-    this.material.sprite = sprite;
+    this.material.sprite = animation.getCurrentFrame();
   }
 
   // eslint-disable-next-line class-methods-use-this
