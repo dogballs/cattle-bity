@@ -5,7 +5,7 @@ import { Material } from './Material';
 import { Node } from './Node';
 import { Vector } from './Vector';
 
-enum Rotation {
+export enum GameObjectRotation {
   Up,
   Down,
   Left,
@@ -14,29 +14,33 @@ enum Rotation {
 
 interface GameObjectUpdateArgs {
   input: KeyboardInput;
+  ticks: number;
 }
 
 export class GameObject extends Node {
-  public static Rotation = Rotation;
+  public static Rotation = GameObjectRotation;
 
   public dimensions: Dimensions;
   public material: Material;
   public position: Vector;
-  public rotation: Rotation;
+  public rotation: GameObjectRotation;
 
   constructor(width = 0, height = 0) {
     super();
 
     this.dimensions = new Dimensions(width, height);
     this.position = new Vector();
-    this.rotation = Rotation.Up;
+    this.rotation = GameObjectRotation.Up;
     this.material = null;
   }
 
   public getComputedDimensions(): Dimensions {
     let { width, height } = this.dimensions;
 
-    if (this.rotation === Rotation.Right || this.rotation === Rotation.Left) {
+    if (
+      this.rotation === GameObjectRotation.Right ||
+      this.rotation === GameObjectRotation.Left
+    ) {
       width = this.dimensions.height;
       height = this.dimensions.width;
     }
@@ -44,14 +48,25 @@ export class GameObject extends Node {
     return new Dimensions(width, height);
   }
 
+  public getBoundingBox(): BoundingBox {
+    const { width, height } = this.getComputedDimensions();
+
+    // Top-left point of the object
+    const min = this.position.clone();
+
+    // Bottom-right point of the object
+    const max = min.clone().add(new Vector(width, height));
+
+    return new BoundingBox(min, max);
+  }
+
   public getWorldBoundingBox(): BoundingBox {
     const worldPosition = this.getWorldPosition();
     const { width, height } = this.getComputedDimensions();
 
-    const centerOffset = new Vector(-width / 2, -height / 2);
-
     // Top-left point of the object
-    const min = worldPosition.clone().add(centerOffset);
+    // const min = worldPosition.clone().add(centerOffset);
+    const min = worldPosition.clone();
 
     // Bottom-right point of the object
     const max = min.clone().add(new Vector(width, height));
@@ -69,7 +84,32 @@ export class GameObject extends Node {
     return worldPosition;
   }
 
-  public rotate(rotation: Rotation) {
+  public setWorldPosition(worldPosition: Vector): this {
+    const localPosition = worldPosition.clone();
+
+    this.traverseAncestors((parent) => {
+      localPosition.sub(parent.position);
+    });
+
+    this.position.copy(localPosition);
+
+    return this;
+  }
+
+  public getCenter(): Vector {
+    return this.getBoundingBox().getCenter();
+  }
+
+  public setCenterFrom(gameObject: GameObject): this {
+    const dims = this.getComputedDimensions();
+
+    this.position.copy(
+      gameObject.getCenter().sub(dims.toVector().divideScalar(2)),
+    );
+    return this;
+  }
+
+  public rotate(rotation: GameObjectRotation): void {
     this.rotation = rotation;
   }
 
@@ -77,6 +117,7 @@ export class GameObject extends Node {
    * Will be called on each game loop iteration
    * @param {GameObjectUpdateArgs}
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public update(args: GameObjectUpdateArgs): void {
     return undefined;
   }

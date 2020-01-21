@@ -1,7 +1,5 @@
 import { Collision, GameObject } from '../core';
 
-import { BrickWallDestroyer } from '../gameObjects';
-
 export class CollideBrickWallWithBrickWallDestroyer {
   private collision: Collision;
   private scene: GameObject;
@@ -13,11 +11,11 @@ export class CollideBrickWallWithBrickWallDestroyer {
     this.scene = scene;
   }
 
-  public collide() {
+  public collide(): void {
     const wall = this.collision.target;
     const destroyer = this.collision.source;
 
-    this.scene.remove(wall);
-    this.scene.remove(destroyer);
+    wall.removeSelf();
+    destroyer.removeSelf();
   }
 }

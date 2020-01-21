@@ -6,16 +6,15 @@ import {
   Renderer,
 } from './core';
 
-import BrickWallFactory from './BrickWallFactory';
 import BulletFactory from './BulletFactory';
 
 import {
   BasicEnemyTank,
+  Border,
   Bullet,
   FastEnemyTank,
   GrenadePowerup,
   PowerEnemyTank,
-  SceneWall,
   Shield,
   Spawn,
   Tank,
@@ -23,8 +22,16 @@ import {
 
 import collisionsConfig from './collisions/collisions.config';
 
-const renderer = new Renderer();
-renderer.setSize(900, 900);
+import * as config from './config';
+
+import { MapFactory } from './map/MapFactory';
+import * as mapConfig from './map/test.json';
+
+const renderer = new Renderer({
+  debug: true,
+  height: config.CANVAS_HEIGHT,
+  width: config.CANVAS_WIDTH,
+});
 document.body.appendChild(renderer.domElement);
 
 const input = new KeyboardInput();
@@ -32,90 +39,83 @@ input.listen();
 
 const scene = new GameObject();
 
-const topSceneWall = new SceneWall(900, 40);
-topSceneWall.position.set(450, 20);
-const bottomSceneWall = new SceneWall(900, 40);
-bottomSceneWall.position.set(450, 880);
-const leftSceneWall = new SceneWall(40, 900);
-leftSceneWall.position.set(20, 450);
-const rightSceneWall = new SceneWall(40, 900);
-rightSceneWall.position.set(880, 450);
+scene.add(new Border());
 
-scene.add(topSceneWall);
-scene.add(bottomSceneWall);
-scene.add(leftSceneWall);
-scene.add(rightSceneWall);
+const field = new GameObject(config.FIELD_SIZE, config.FIELD_SIZE);
+field.position.set(config.BORDER_H_DEPTH, config.BORDER_V_DEPTH);
+scene.add(field);
 
-const brickWalls = BrickWallFactory.create(128, 320, 128, 256);
-scene.add(...brickWalls);
+const { objects } = MapFactory.create(mapConfig);
+
+field.add(...objects);
 
 // TODO: create common factory/builder for all tanks
 const spawn = new Spawn();
-spawn.position.set(100, 100);
-spawn.onComplete = () => {
+spawn.position.set(0, 0);
+spawn.onComplete = (): void => {
   const tank = new Tank();
   const shield = new Shield();
+  shield.setCenterFrom(tank);
   tank.add(shield);
 
   tank.position = spawn.position.clone();
-  tank.onFire = () => {
-    if (scene.hasChildrenOfType(Bullet)) {
+  tank.onFire = (): void => {
+    if (field.hasChildrenOfType(Bullet)) {
       return;
     }
     const bullet = BulletFactory.makeBullet(tank);
-    scene.add(bullet);
+    field.add(bullet);
   };
-  scene.add(tank);
-  scene.remove(spawn);
+  field.add(tank);
+  field.remove(spawn);
 };
-scene.add(spawn);
+field.add(spawn);
 
 const enemySpawn = new Spawn();
 enemySpawn.position.set(500, 250);
-enemySpawn.onComplete = () => {
+enemySpawn.onComplete = (): void => {
   const enemy = new BasicEnemyTank();
-  enemy.position = enemySpawn.position.clone();
-  scene.add(enemy);
-  scene.remove(enemySpawn);
+  enemy.setCenterFrom(enemySpawn);
+  enemySpawn.replaceSelf(enemy);
 };
-scene.add(enemySpawn);
+field.add(enemySpawn);
 
 const fastEnemySpawn = new Spawn();
 fastEnemySpawn.position.set(580, 250);
-fastEnemySpawn.onComplete = () => {
+fastEnemySpawn.onComplete = (): void => {
   const enemy = new FastEnemyTank();
-  enemy.position = fastEnemySpawn.position.clone();
-  scene.add(enemy);
-  scene.remove(fastEnemySpawn);
+  enemy.setCenterFrom(fastEnemySpawn);
+  fastEnemySpawn.replaceSelf(enemy);
 };
-scene.add(fastEnemySpawn);
+field.add(fastEnemySpawn);
 
 const powerEnemySpawn = new Spawn();
 powerEnemySpawn.position.set(660, 250);
 powerEnemySpawn.onComplete = (): void => {
   const enemy = new PowerEnemyTank();
-  enemy.position = powerEnemySpawn.position.clone();
-  scene.add(enemy);
-  scene.remove(powerEnemySpawn);
+  enemy.setCenterFrom(powerEnemySpawn);
+  powerEnemySpawn.replaceSelf(enemy);
 };
-scene.add(powerEnemySpawn);
+field.add(powerEnemySpawn);
 
 const grenadePowerup = new GrenadePowerup();
-grenadePowerup.position.set(100, 800);
-scene.add(grenadePowerup);
+grenadePowerup.position.set(100, 300);
+field.add(grenadePowerup);
 
 const gameLoop = new GameLoop({
-  onFrame: (): void => {
+  onTick: (ticks: number): void => {
     input.update();
 
     // Update all objects on the scene
     // TODO: abstract out input from tank
     scene.traverse((child) => {
-      child.update({ input });
+      child.update({ input, ticks });
     });
 
+    const nodes = scene.flatten();
+
     // Detect and handle collisions of all objects on the scene
-    const collisions = CollisionDetector.intersectObjects(scene.children);
+    const collisions = CollisionDetector.intersectObjects(nodes);
     collisions.forEach((collision) => {
       const collisionConfig = collisionsConfig.find((config) => {
         const sourceMatches = collision.source instanceof config.sourceType;
@@ -137,3 +137,7 @@ const gameLoop = new GameLoop({
 });
 
 gameLoop.start();
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+window.gameLoop = gameLoop;

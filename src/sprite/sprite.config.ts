@@ -67,6 +67,8 @@ const config = {
   'wall.brick.6': ['images/sprite.png', 260, 4, 4, 4],
   'wall.brick.7': ['images/sprite.png', 264, 4, 4, 4],
   'wall.brick.8': ['images/sprite.png', 268, 4, 4, 4],
+
+  'wall.steel': ['images/sprite.png', 256, 16, 8, 8],
 };
 
 export default config;

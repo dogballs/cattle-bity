@@ -1,39 +1,39 @@
 export interface GameLoopOptions {
   /**
-   * Add delay for each frame in milliseconds
+   * Add extra delay for each tick (in number of ticks)
    */
-  frameDelay?: number;
-  onFrame?: () => void;
+  // delay?: number;
+  onTick?: (ticks?: number) => void;
 }
 
 export const DEFAULT_GAME_LOOP_OPTIONS = {
-  frameDelay: 0,
-  onFrame: (): void => undefined,
+  // delay: 0,
+  onTick: (): void => undefined,
 };
 
 export class GameLoop {
   public readonly options: GameLoopOptions;
-  private lastFrameTime = 0;
+  // TODO: overflow?
+  public ticks = 0;
 
   constructor(options: GameLoopOptions = {}) {
     this.options = Object.assign({}, DEFAULT_GAME_LOOP_OPTIONS, options);
   }
 
   public start(): void {
-    this.animate();
+    this.loop();
   }
 
-  private animate = (time = 0): void => {
-    // Throttle animation
-    if (time < this.lastFrameTime + this.options.frameDelay) {
-      window.requestAnimationFrame(this.animate);
-      return;
-    }
+  // For manual looping
+  public next(): void {
+    this.ticks += 1;
+    this.options.onTick(this.ticks);
+  }
 
-    this.lastFrameTime = time;
+  private loop = (): void => {
+    this.ticks += 1;
+    this.options.onTick(this.ticks);
 
-    this.options.onFrame();
-
-    window.requestAnimationFrame(this.animate);
+    window.requestAnimationFrame(this.loop);
   };
 }

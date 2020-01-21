@@ -11,17 +11,20 @@ export interface MapNameToSprite {
 }
 
 export class SpriteFactory {
-  public static asOne(id: string): Sprite {
+  public static asOne(
+    id: string,
+    targetDims = new Sprite.Dimensions(),
+  ): Sprite {
     const spriteConfig = config[id];
     if (spriteConfig === undefined) {
       throw new Error(`Invalid sprite id = "${id}"`);
     }
 
-    const [imagePath, ...dimensions] = spriteConfig;
+    const [imagePath, ...textureRectValues] = spriteConfig;
 
     const texture = new Texture(imagePath);
-    const rect = new Sprite.Rect(...dimensions);
-    const sprite = new Sprite(texture, rect);
+    const textureRect = new Sprite.Rect(...textureRectValues);
+    const sprite = new Sprite(texture, textureRect, targetDims);
 
     return sprite;
   }

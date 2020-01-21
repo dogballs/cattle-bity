@@ -1,4 +1,10 @@
-import { Animation, GameObject, SpriteMaterial } from '../core';
+import {
+  Animation,
+  GameObject,
+  GameObjectRotation,
+  Sprite,
+  SpriteMaterial,
+} from '../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
@@ -11,7 +17,8 @@ export class FastEnemyTank extends EnemyTank {
   public bulletDamage: number;
   public bulletSpeed: number;
   public health: number;
-  private animations: object;
+  public material: SpriteMaterial = new SpriteMaterial();
+  private animations: Map<GameObjectRotation, Animation<Sprite>> = new Map();
   private speed: number;
 
   constructor() {
@@ -22,32 +29,40 @@ export class FastEnemyTank extends EnemyTank {
     this.bulletDamage = 1;
     this.bulletSpeed = 13;
 
-    this.animations = {
-      [GameObject.Rotation.Up]: new Animation(
-        SpriteFactory.asList(['tankEnemyFast.up.1', 'tankEnemyFast.up.1']),
-        { delay: 20 },
+    this.animations.set(
+      GameObject.Rotation.Up,
+      new Animation(
+        SpriteFactory.asList(['tankEnemyFast.up.1', 'tankEnemyFast.up.2']),
+        { delay: 2, loop: true },
       ),
-      [GameObject.Rotation.Down]: new Animation(
+    );
+    this.animations.set(
+      GameObject.Rotation.Down,
+      new Animation(
         SpriteFactory.asList(['tankEnemyFast.down.1', 'tankEnemyFast.down.2']),
-        { delay: 20 },
+        { delay: 2, loop: true },
       ),
-      [GameObject.Rotation.Left]: new Animation(
-        SpriteFactory.asList(['tankEnemyFast.left.1', 'tankEnemyFast.left.1']),
-        { delay: 20 },
+    );
+    this.animations.set(
+      GameObject.Rotation.Left,
+      new Animation(
+        SpriteFactory.asList(['tankEnemyFast.left.1', 'tankEnemyFast.left.2']),
+        { delay: 2, loop: true },
       ),
-      [GameObject.Rotation.Right]: new Animation(
+    );
+    this.animations.set(
+      GameObject.Rotation.Right,
+      new Animation(
         SpriteFactory.asList([
           'tankEnemyFast.right.1',
-          'tankEnemyFast.right.1',
+          'tankEnemyFast.right.2',
         ]),
-        { delay: 20 },
+        { delay: 2, loop: true },
       ),
-    };
-
-    this.material = new SpriteMaterial();
+    );
   }
 
-  public update() {
+  public update({ ticks }): void {
     if (this.rotation === GameObject.Rotation.Up) {
       this.position.y -= this.speed;
     } else if (this.rotation === GameObject.Rotation.Down) {
@@ -58,10 +73,9 @@ export class FastEnemyTank extends EnemyTank {
       this.position.x += this.speed;
     }
 
-    const animation = this.animations[this.rotation];
-    animation.animate();
+    const animation = this.animations.get(this.rotation);
+    animation.animate(ticks);
 
-    const sprite = animation.getCurrentFrame();
-    this.material.sprite = sprite;
+    this.material.sprite = animation.getCurrentFrame();
   }
 }

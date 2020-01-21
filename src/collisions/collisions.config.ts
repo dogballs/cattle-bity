@@ -2,11 +2,11 @@ import {
   BasicEnemyTank,
   BrickWall,
   BrickWallDestroyer,
+  BorderWall,
   Bullet,
   FastEnemyTank,
   GrenadePowerup,
   PowerEnemyTank,
-  SceneWall,
   Tank,
 } from '../gameObjects';
 
@@ -27,7 +27,7 @@ const config = [
   },
   {
     Instance: CollideBullet,
-    sourceType: SceneWall,
+    sourceType: BorderWall,
     targetType: Bullet,
   },
   {
@@ -54,14 +54,14 @@ const config = [
   },
   {
     Instance: CollideTankWithWall,
-    sourceType: SceneWall,
+    sourceType: BorderWall,
     targetType: Tank,
   },
 
   // Basic Enemy
   {
     Instance: CollideEnemyTankWithWall,
-    sourceType: SceneWall,
+    sourceType: BorderWall,
     targetType: BasicEnemyTank,
   },
   {
@@ -73,7 +73,7 @@ const config = [
   // Fast enemy
   {
     Instance: CollideEnemyTankWithWall,
-    sourceType: SceneWall,
+    sourceType: BorderWall,
     targetType: FastEnemyTank,
   },
   {
@@ -85,7 +85,7 @@ const config = [
   // Power enemy
   {
     Instance: CollideEnemyTankWithWall,
-    sourceType: SceneWall,
+    sourceType: BorderWall,
     targetType: PowerEnemyTank,
   },
   {

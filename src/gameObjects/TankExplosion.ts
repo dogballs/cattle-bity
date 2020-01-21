@@ -1,45 +1,44 @@
-import { Animation, Dimensions, GameObject, SpriteMaterial } from './../core';
+import {
+  Animation,
+  Dimensions,
+  GameObject,
+  Sprite,
+  SpriteMaterial,
+  SpriteAlignment,
+} from './../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class TankExplosion extends GameObject {
-  private animation: Animation;
-  private dims: Dimensions[];
+  public material: SpriteMaterial = new SpriteMaterial();
+  private readonly animation: Animation<Sprite>;
+  private readonly dims: Dimensions[];
 
   constructor() {
-    super(124, 108);
+    super(136, 136);
 
     this.animation = new Animation(
-      SpriteFactory.asList(['explosionTank.1', 'explosionTank.2']),
-      { delay: 100, loop: false },
+      [
+        SpriteFactory.asOne('explosionTank.1', new Dimensions(124, 108)),
+        SpriteFactory.asOne('explosionTank.2', new Dimensions(136, 128)),
+      ],
+      { delay: 4, loop: false },
     );
 
-    // Each sprite fragment has different size. Try to match it with
-    // canvas size for different animation frames.
-    // TODO: refactor dims by centering sprite in box
-    this.dims = [new Dimensions(124, 108), new Dimensions(136, 128)];
-
-    this.material = new SpriteMaterial();
+    this.material.alignment = SpriteAlignment.Center;
   }
 
   // TODO: @mradionov rethink how to notify parent when animation is ended
-  // eslint-disable-next-line class-methods-use-this
-  public onComplete() {
+  public onComplete(): void {
     return undefined;
   }
 
-  public update() {
+  public update({ ticks }): void {
     if (this.animation.isComplete()) {
       this.onComplete();
       return;
     }
-
-    this.animation.animate();
-
-    const frameIndex = this.animation.getCurrentFrameIndex();
-    this.dimensions = this.dims[frameIndex];
-
-    const sprite = this.animation.getCurrentFrame();
-    this.material.sprite = sprite;
+    this.animation.animate(ticks);
+    this.material.sprite = this.animation.getCurrentFrame();
   }
 }

@@ -1,3 +1,4 @@
+import { Rect } from './Rect';
 import { Vector } from './Vector';
 
 export class BoundingBox {
@@ -15,11 +16,20 @@ export class BoundingBox {
     this.max = max;
   }
 
-  public getCenter() {
+  public getCenter(): Vector {
     return this.min
       .clone()
       .add(this.max)
       .divideScalar(2);
+  }
+
+  public getRect(): Rect {
+    return new Rect(
+      this.min.x,
+      this.min.y,
+      this.max.x - this.min.x,
+      this.max.y - this.min.y,
+    );
   }
 
   /**
@@ -27,7 +37,7 @@ export class BoundingBox {
    * @param  {BoundingBox} box
    * @return {Boolean}
    */
-  public intersectsBox(box) {
+  public intersectsBox(box): boolean {
     const isOutside =
       this.max.x <= box.min.x ||
       this.min.x >= box.max.x ||

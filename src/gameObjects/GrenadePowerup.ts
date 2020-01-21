@@ -1,26 +1,24 @@
-import { Animation, GameObject, SpriteMaterial } from '../core';
+import { Animation, GameObject, Sprite, SpriteMaterial } from '../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class GrenadePowerup extends GameObject {
-  private animation: Animation;
+  private animation: Animation<Sprite>;
 
   constructor() {
-    super(64, 60);
+    super(64, 64);
 
     // Null as a second frame adds a blink effect
     this.animation = new Animation(
       [SpriteFactory.asOne('powerupGrenade'), null],
-      { delay: 130 },
+      { delay: 5, loop: true },
     );
 
     this.material = new SpriteMaterial();
   }
 
-  public update() {
-    this.animation.animate();
-
-    const sprite = this.animation.getCurrentFrame();
-    this.material.sprite = sprite;
+  public update({ ticks }): void {
+    this.animation.animate(ticks);
+    this.material.sprite = this.animation.getCurrentFrame();
   }
 }

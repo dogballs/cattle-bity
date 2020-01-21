@@ -1,50 +1,48 @@
-import { Animation, Dimensions, GameObject, SpriteMaterial } from './../core';
+import {
+  Animation,
+  Dimensions,
+  GameObject,
+  Sprite,
+  SpriteAlignment,
+  SpriteMaterial,
+} from './../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class Spawn extends GameObject {
-  private animation: Animation;
+  public material: SpriteMaterial = new SpriteMaterial();
+  private animation: Animation<Sprite>;
   private dims: Dimensions[];
 
   constructor() {
-    super(36, 36);
+    super(64, 64);
 
     this.animation = new Animation(
-      SpriteFactory.asList(['spawn.1', 'spawn.2', 'spawn.3', 'spawn.4']),
-      { delay: 40, loop: 3 },
+      [
+        SpriteFactory.asOne('spawn.1', new Dimensions(36, 36)),
+        SpriteFactory.asOne('spawn.2', new Dimensions(44, 44)),
+        SpriteFactory.asOne('spawn.3', new Dimensions(52, 52)),
+        SpriteFactory.asOne('spawn.4', new Dimensions(60, 60)),
+      ],
+      { delay: 3, loop: 3 },
     );
 
-    // Each sprite fragment has different size. Try to match it with
-    // canvas size for different animation frames.
-    // TODO: refactor dims by centering sprite in box
-    this.dims = [
-      new Dimensions(36, 36),
-      new Dimensions(44, 44),
-      new Dimensions(52, 52),
-      new Dimensions(60, 60),
-    ];
-
-    this.material = new SpriteMaterial();
+    this.material.alignment = SpriteAlignment.Center;
   }
 
   // TODO: @mradionov rethink how to notify parent when animation is ended
   // eslint-disable-next-line class-methods-use-this
-  public onComplete() {
+  public onComplete(): void {
     return undefined;
   }
 
-  public update() {
+  public update({ ticks }): void {
     if (this.animation.isComplete()) {
       this.onComplete();
       return;
     }
 
-    this.animation.animate();
-
-    const sprite = this.animation.getCurrentFrame();
-    const frameIndex = this.animation.getCurrentFrameIndex();
-
-    this.dimensions = this.dims[frameIndex];
-    this.material.sprite = sprite;
+    this.animation.animate(ticks);
+    this.material.sprite = this.animation.getCurrentFrame();
   }
 }

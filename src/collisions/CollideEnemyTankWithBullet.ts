@@ -13,7 +13,7 @@ export class CollideEnemyTankWithBullet {
     this.scene = scene;
   }
 
-  public collide() {
+  public collide(): void {
     const tank = this.collision.target as EnemyTank;
     const bullet = this.collision.source as Bullet;
 
@@ -23,13 +23,12 @@ export class CollideEnemyTankWithBullet {
       return;
     }
 
-    this.scene.remove(tank);
-
     const tankExplosion = new TankExplosion();
-    tankExplosion.position = tank.position.clone();
-    tankExplosion.onComplete = () => {
-      this.scene.remove(tankExplosion);
+    tankExplosion.setCenterFrom(tank);
+    tankExplosion.onComplete = (): void => {
+      tankExplosion.removeSelf();
     };
-    this.scene.add(tankExplosion);
+
+    tank.replaceSelf(tankExplosion);
   }
 }

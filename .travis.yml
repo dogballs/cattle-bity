@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   # Latest stable version, Node 8 at the moment of creating config
-  - "lts/*"
+  - 'lts/*'
 
 cache:
   directories:
@@ -18,6 +18,8 @@ script:
   - npm run build
   # Run linter checks
   - npm run lint
+  # Run tests
+  - npm test
 
 # Deploys built application to gh-pages
 # Git-ignored files won't be deployed.
@@ -29,7 +31,8 @@ deploy:
   # Prevent travis from cleaning out the branch before the deploy occurs
   skip_cleanup: true
   # Set in travis-ci.org dashboard
-  github_token: $GITHUB_TOKEN
-   # Build only from master
+  github_token:
+    $GITHUB_TOKEN
+    # Build only from master
   on:
     branch: master

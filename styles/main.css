@@ -4,7 +4,7 @@ html {
 }
 
 body {
-  align-items: center;
+  align-items: stretch;
   background: #000;
   display: flex;
   flex: 1;

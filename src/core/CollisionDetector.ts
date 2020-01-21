@@ -1,8 +1,7 @@
 import { Collision } from './Collision';
-import { GameObject } from './GameObject';
 
 export class CollisionDetector {
-  public static intersectObjects(objects) {
+  public static intersectObjects(objects): Collision[] {
     const collisions = [];
 
     objects.forEach((target) => {

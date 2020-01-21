@@ -1,17 +1,11 @@
-import {
-  Animation,
-  GameObject,
-  KeyboardInput,
-  KeyboardKey,
-  SpriteMaterial,
-} from '../core';
+import { Animation, GameObject, KeyboardKey, SpriteMaterial } from '../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class Tank extends GameObject {
   public bulletDamage: number;
   public bulletSpeed: number;
-  private animations: object;
+  private animations: Map<GameObjectRotation, Animation<Sprite>> = new Map();
   private speed: number;
 
   constructor() {

@@ -13,14 +13,14 @@ export class CollideBrickWallWithBullet {
     this.scene = scene;
   }
 
-  public collide() {
-    const wall = this.collision.target;
+  public collide(): void {
     const bullet = this.collision.source;
 
     const destroyer = new BrickWallDestroyer();
-    destroyer.position = bullet.position.clone();
+    // TODO: order here matters, rework
     destroyer.rotate(bullet.rotation);
+    destroyer.setCenterFrom(bullet);
 
-    this.scene.add(destroyer);
+    bullet.parent.add(destroyer);
   }
 }

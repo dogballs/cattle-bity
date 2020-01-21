@@ -12,27 +12,54 @@ export class Node {
   }
 
   // TODO: figure out input type for a child
-  public add(...childrenToAdd) {
+  public add(...childrenToAdd): this {
     childrenToAdd.forEach((childToAdd) => {
       childToAdd.parent = this;
 
       this.children.push(childToAdd);
     });
+
+    return this;
   }
 
-  public remove(childToRemove: this) {
+  public replaceSelf(replacement: Node): this {
+    if (this.parent === null) {
+      return this;
+    }
+
+    this.parent.remove(this);
+    this.parent.add(replacement);
+
+    return this;
+  }
+
+  public remove(childToRemove: this): this {
     this.children = this.children.filter((child) => child !== childToRemove);
+
+    return this;
   }
 
-  public traverse(callback: (node: this) => void) {
+  public removeSelf(): this {
+    if (this.parent === null) {
+      return this;
+    }
+
+    this.parent.remove(this);
+
+    return this;
+  }
+
+  public traverse(callback: (node: this) => void): this {
     callback(this);
 
     this.children.forEach((child) => {
       child.traverse(callback);
     });
+
+    return this;
   }
 
-  public traverseAncestors(callback: (node: this) => void) {
+  public traverseAncestors(callback: (node: this) => void): this {
     const parent = this.parent;
 
     if (parent !== null) {
@@ -40,15 +67,41 @@ export class Node {
 
       parent.traverseAncestors(callback);
     }
+
+    return this;
   }
 
-  // TODO: support deep traverse
-  public getChildrenOfType(type) {
-    return this.children.filter((child) => child instanceof type);
+  public flatten(): this[] {
+    const nodes = [];
+
+    this.traverse((node) => {
+      nodes.push(node);
+    });
+
+    return nodes;
   }
 
-  // TODO: support deep traverse
+  public getChildrenOfType(type): this[] {
+    const nodes = [];
+
+    this.traverse((node) => {
+      if (node instanceof type) {
+        nodes.push(node);
+      }
+    });
+
+    return nodes;
+  }
+
   public hasChildrenOfType(type): boolean {
-    return this.children.some((child) => child instanceof type);
+    let has = false;
+
+    this.traverse((node) => {
+      if (node instanceof type) {
+        has = true;
+      }
+    });
+
+    return has;
   }
 }

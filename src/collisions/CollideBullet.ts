@@ -13,16 +13,15 @@ export class CollideBullet {
     this.scene = scene;
   }
 
-  public collide() {
+  public collide(): void {
     const bullet = this.collision.target;
 
-    this.scene.remove(bullet);
-
     const bulletExplosion = new BulletExplosion();
-    bulletExplosion.position = bullet.position.clone();
-    bulletExplosion.onComplete = () => {
-      this.scene.remove(bulletExplosion);
+    bulletExplosion.setCenterFrom(bullet);
+    bulletExplosion.onComplete = (): void => {
+      bulletExplosion.removeSelf();
     };
-    this.scene.add(bulletExplosion);
+
+    bullet.replaceSelf(bulletExplosion);
   }
 }

@@ -13,21 +13,19 @@ export class CollideGrenadePowerupWithTank {
     this.scene = scene;
   }
 
-  public collide() {
+  public collide(): void {
     const powerup = this.collision.target;
 
-    this.scene.remove(powerup);
+    powerup.removeSelf();
 
     const enemyTanks = this.scene.getChildrenOfType(EnemyTank);
     enemyTanks.forEach((enemyTank) => {
       const tankExplosion = new TankExplosion();
-      this.scene.remove(enemyTank);
-
-      tankExplosion.position = enemyTank.position.clone();
-      tankExplosion.onComplete = () => {
-        this.scene.remove(tankExplosion);
+      tankExplosion.setCenterFrom(enemyTank);
+      tankExplosion.onComplete = (): void => {
+        tankExplosion.removeSelf();
       };
-      this.scene.add(tankExplosion);
+      enemyTank.replaceSelf(tankExplosion);
     });
   }
 }

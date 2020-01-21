@@ -7,47 +7,54 @@ export class Vector {
     this.y = y;
   }
 
-  public set(x: number, y: number) {
+  public set(x: number, y: number): this {
     this.x = x;
     this.y = y;
 
     return this;
   }
 
-  public setX(x: number) {
+  public setX(x: number): this {
     this.x = x;
 
     return this;
   }
 
-  public setY(y: number) {
+  public setY(y: number): this {
     this.y = y;
 
     return this;
   }
 
-  public add(v: Vector) {
+  public add(v: Vector): this {
     this.x += v.x;
     this.y += v.y;
 
     return this;
   }
 
-  public sub(v: Vector) {
+  public sub(v: Vector): this {
     this.x -= v.x;
     this.y -= v.y;
 
     return this;
   }
 
-  public divideScalar(s: number) {
+  public divideScalar(s: number): this {
     this.x /= s;
     this.y /= s;
 
     return this;
   }
 
-  public clone() {
+  public copy(v: Vector): this {
+    this.x = v.x;
+    this.y = v.y;
+
+    return this;
+  }
+
+  public clone(): Vector {
     return new Vector(this.x, this.y);
   }
 }

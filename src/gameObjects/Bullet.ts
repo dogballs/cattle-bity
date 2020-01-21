@@ -20,7 +20,7 @@ export class Bullet extends GameObject {
     this.material = new SpriteMaterial();
   }
 
-  public update() {
+  public update(): void {
     if (this.rotation === GameObject.Rotation.Up) {
       this.position.y -= this.speed;
     } else if (this.rotation === GameObject.Rotation.Down) {

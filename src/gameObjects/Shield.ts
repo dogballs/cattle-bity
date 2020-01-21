@@ -1,25 +1,22 @@
-import { Animation, GameObject, SpriteMaterial } from '../core';
+import { Animation, GameObject, Sprite, SpriteMaterial } from '../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class Shield extends GameObject {
-  private animation: Animation;
+  public material = new SpriteMaterial();
+  private animation: Animation<Sprite>;
 
   constructor() {
     super(64, 64);
 
     this.animation = new Animation(
       SpriteFactory.asList(['shield.1', 'shield.2']),
-      { delay: 50 },
+      { delay: 3, loop: true },
     );
-
-    this.material = new SpriteMaterial();
   }
 
-  public update() {
-    this.animation.animate();
-
-    const sprite = this.animation.getCurrentFrame();
-    this.material.sprite = sprite;
+  public update({ ticks }): void {
+    this.animation.animate(ticks);
+    this.material.sprite = this.animation.getCurrentFrame();
   }
 }

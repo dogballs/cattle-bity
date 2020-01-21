@@ -1,3 +1,5 @@
+import { Vector } from './Vector';
+
 export class Dimensions {
   public width: number;
   public height: number;
@@ -7,8 +9,14 @@ export class Dimensions {
     this.height = height;
   }
 
-  public set(width: number, height: number) {
+  public set(width: number, height: number): this {
     this.width = width;
     this.height = height;
+
+    return this;
+  }
+
+  public toVector(): Vector {
+    return new Vector(this.width, this.height);
   }
 }

@@ -1,4 +1,10 @@
-import { Animation, GameObject, SpriteMaterial } from '../core';
+import {
+  Animation,
+  GameObject,
+  GameObjectRotation,
+  Sprite,
+  SpriteMaterial,
+} from '../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
@@ -11,7 +17,8 @@ export class BasicEnemyTank extends EnemyTank {
   public bulletDamage: number;
   public bulletSpeed: number;
   public health: number;
-  private animations: object;
+  public material: SpriteMaterial = new SpriteMaterial();
+  private animations: Map<GameObjectRotation, Animation<Sprite>> = new Map();
   private speed: number;
 
   constructor() {
@@ -22,38 +29,46 @@ export class BasicEnemyTank extends EnemyTank {
     this.bulletDamage = 1;
     this.bulletSpeed = 10;
 
-    this.animations = {
-      [GameObject.Rotation.Up]: new Animation(
+    this.animations.set(
+      GameObject.Rotation.Up,
+      new Animation(
         SpriteFactory.asList(['tankEnemyBasic.up.1', 'tankEnemyBasic.up.2']),
-        { delay: 20 },
+        { delay: 1, loop: true },
       ),
-      [GameObject.Rotation.Down]: new Animation(
+    );
+    this.animations.set(
+      GameObject.Rotation.Down,
+      new Animation(
         SpriteFactory.asList([
           'tankEnemyBasic.down.1',
           'tankEnemyBasic.down.2',
         ]),
-        { delay: 20 },
+        { delay: 1, loop: true },
       ),
-      [GameObject.Rotation.Left]: new Animation(
+    );
+    this.animations.set(
+      GameObject.Rotation.Left,
+      new Animation(
         SpriteFactory.asList([
           'tankEnemyBasic.left.1',
           'tankEnemyBasic.left.2',
         ]),
-        { delay: 20 },
+        { delay: 1, loop: true },
       ),
-      [GameObject.Rotation.Right]: new Animation(
+    );
+    this.animations.set(
+      GameObject.Rotation.Right,
+      new Animation(
         SpriteFactory.asList([
           'tankEnemyBasic.right.1',
           'tankEnemyBasic.right.2',
         ]),
-        { delay: 20 },
+        { delay: 1, loop: true },
       ),
-    };
-
-    this.material = new SpriteMaterial();
+    );
   }
 
-  public update() {
+  public update({ ticks }): void {
     if (this.rotation === GameObject.Rotation.Up) {
       this.position.y -= this.speed;
     } else if (this.rotation === GameObject.Rotation.Down) {
@@ -64,10 +79,9 @@ export class BasicEnemyTank extends EnemyTank {
       this.position.x += this.speed;
     }
 
-    const animation = this.animations[this.rotation];
-    animation.animate();
+    const animation = this.animations.get(this.rotation);
+    animation.animate(ticks);
 
-    const sprite = animation.getCurrentFrame();
-    this.material.sprite = sprite;
+    this.material.sprite = animation.getCurrentFrame();
   }
 }
