@@ -1,10 +1,14 @@
 import { GameObject, SpriteMaterial } from './../core';
-
 import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
+import { BrickWallDestroyer } from './BrickWallDestroyer';
+import { BulletExplosion } from './BulletExplosion';
+import { Tag } from './Tag';
 
 export class Bullet extends GameObject {
+  public collider = true;
   public damage = 0;
   public speed = 15;
+  public tags = [Tag.Bullet];
   private spriteMap: MapNameToSprite;
 
   constructor() {
@@ -32,5 +36,29 @@ export class Bullet extends GameObject {
     }
 
     this.material.sprite = this.spriteMap[this.rotation];
+  }
+
+  public collide(target: GameObject): void {
+    const isWall = target.tags.includes(Tag.Wall);
+    const isBrickWall = isWall && target.tags.includes(Tag.Brick);
+    const isEnemyTank =
+      target.tags.includes(Tag.Tank) && target.tags.includes(Tag.Enemy);
+
+    if (isBrickWall) {
+      const destroyer = new BrickWallDestroyer();
+      // TODO: order here matters
+      destroyer.rotate(this.rotation);
+      destroyer.setCenterFrom(this);
+      this.parent.add(destroyer);
+    }
+
+    if (isWall || isEnemyTank) {
+      const bulletExplosion = new BulletExplosion();
+      bulletExplosion.setCenterFrom(this);
+      bulletExplosion.onComplete = (): void => {
+        bulletExplosion.removeSelf();
+      };
+      this.replaceSelf(bulletExplosion);
+    }
   }
 }

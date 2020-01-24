@@ -12,5 +12,6 @@ export * from './PowerEnemyTank';
 export * from './Shield';
 export * from './Spawn';
 export * from './SteelWall';
+export * from './Tag';
 export * from './Tank';
 export * from './TankExplosion';

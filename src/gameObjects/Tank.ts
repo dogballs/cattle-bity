@@ -7,12 +7,15 @@ import {
   SpriteMaterial,
 } from '../core';
 
+import { Tag } from './Tag';
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class Tank extends GameObject {
   public bulletDamage: number;
   public bulletSpeed: number;
+  public collider = true;
   public material: SpriteMaterial = new SpriteMaterial();
+  public tags = [Tag.Tank];
   private animations: Map<GameObjectRotation, Animation<Sprite>> = new Map();
   private speed: number;
 
@@ -95,6 +98,34 @@ export class Tank extends GameObject {
     }
 
     this.material.sprite = animation.getCurrentFrame();
+  }
+
+  public collide(target: GameObject): void {
+    if (target.tags.includes(Tag.Wall)) {
+      const wallBoundingBox = target.getWorldBoundingBox();
+      const { width, height } = this.getComputedDimensions();
+      const worldPosition = this.getWorldPosition();
+
+      // Fix tank position depending on what wall he hits, so the tank won't be
+      // able to pass thru the wall.
+      if (this.rotation === GameObject.Rotation.Up) {
+        this.setWorldPosition(
+          worldPosition.clone().setY(wallBoundingBox.max.y),
+        );
+      } else if (this.rotation === GameObject.Rotation.Down) {
+        this.setWorldPosition(
+          worldPosition.clone().setY(wallBoundingBox.min.y - height),
+        );
+      } else if (this.rotation === GameObject.Rotation.Left) {
+        this.setWorldPosition(
+          worldPosition.clone().setX(wallBoundingBox.max.x),
+        );
+      } else if (this.rotation === GameObject.Rotation.Right) {
+        this.setWorldPosition(
+          worldPosition.clone().setX(wallBoundingBox.min.x - width),
+        );
+      }
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this

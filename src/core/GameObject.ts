@@ -20,10 +20,12 @@ interface GameObjectUpdateArgs {
 export class GameObject extends Node {
   public static Rotation = GameObjectRotation;
 
+  public collider = false;
   public dimensions: Dimensions;
   public material: Material;
   public position: Vector;
   public rotation: GameObjectRotation;
+  public tags: string[] = [];
 
   constructor(width = 0, height = 0) {
     super();
@@ -109,8 +111,10 @@ export class GameObject extends Node {
     return this;
   }
 
-  public rotate(rotation: GameObjectRotation): void {
+  public rotate(rotation: GameObjectRotation): this {
     this.rotation = rotation;
+
+    return this;
   }
 
   /**
@@ -119,6 +123,11 @@ export class GameObject extends Node {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public update(args: GameObjectUpdateArgs): void {
+    return undefined;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public collide(target: GameObject): void {
     return undefined;
   }
 }

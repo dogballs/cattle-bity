@@ -20,12 +20,10 @@ import {
   Tank,
 } from './gameObjects';
 
-import collisionsConfig from './collisions/collisions.config';
-
 import * as config from './config';
 
 import { MapFactory } from './map/MapFactory';
-import * as mapConfig from './map/test.json';
+import * as mapConfig from './map/stage1.json';
 
 const renderer = new Renderer({
   debug: true,
@@ -51,14 +49,14 @@ field.add(...objects);
 
 // TODO: create common factory/builder for all tanks
 const spawn = new Spawn();
-spawn.position.set(0, 0);
+spawn.position.set(256, 768);
 spawn.onComplete = (): void => {
   const tank = new Tank();
   const shield = new Shield();
   shield.setCenterFrom(tank);
   tank.add(shield);
 
-  tank.position = spawn.position.clone();
+  tank.setCenterFrom(spawn);
   tank.onFire = (): void => {
     if (field.hasChildrenOfType(Bullet)) {
       return;
@@ -66,15 +64,15 @@ spawn.onComplete = (): void => {
     const bullet = BulletFactory.makeBullet(tank);
     field.add(bullet);
   };
-  field.add(tank);
-  field.remove(spawn);
+  spawn.replaceSelf(tank);
 };
 field.add(spawn);
 
 const enemySpawn = new Spawn();
-enemySpawn.position.set(500, 250);
+enemySpawn.position.set(384, 0);
 enemySpawn.onComplete = (): void => {
   const enemy = new BasicEnemyTank();
+  enemy.rotation = GameObject.Rotation.Down;
   enemy.setCenterFrom(enemySpawn);
   enemySpawn.replaceSelf(enemy);
 };
@@ -99,7 +97,7 @@ powerEnemySpawn.onComplete = (): void => {
 field.add(powerEnemySpawn);
 
 const grenadePowerup = new GrenadePowerup();
-grenadePowerup.position.set(100, 300);
+grenadePowerup.position.set(100, 600);
 field.add(grenadePowerup);
 
 const gameLoop = new GameLoop({
@@ -114,22 +112,12 @@ const gameLoop = new GameLoop({
 
     const nodes = scene.flatten();
 
+    const colliderNodes = nodes.filter((node) => node.collider);
+
     // Detect and handle collisions of all objects on the scene
-    const collisions = CollisionDetector.intersectObjects(nodes);
+    const collisions = CollisionDetector.intersectObjects(colliderNodes, nodes);
     collisions.forEach((collision) => {
-      const collisionConfig = collisionsConfig.find((config) => {
-        const sourceMatches = collision.source instanceof config.sourceType;
-        const targetMatches = collision.target instanceof config.targetType;
-
-        return sourceMatches && targetMatches;
-      });
-
-      if (collisionConfig === undefined) {
-        return;
-      }
-
-      const collisionHandler = new collisionConfig.Instance(collision, scene);
-      collisionHandler.collide();
+      collision.source.collide(collision.target);
     });
 
     renderer.render(scene);

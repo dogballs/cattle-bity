@@ -1,11 +1,15 @@
 import { Collision } from './Collision';
+import { GameObject } from './GameObject';
 
 export class CollisionDetector {
-  public static intersectObjects(objects): Collision[] {
+  public static intersectObjects(
+    sourceObjects: GameObject[],
+    targetObjects: GameObject[],
+  ): Collision[] {
     const collisions = [];
 
-    objects.forEach((target) => {
-      objects.forEach((source) => {
+    sourceObjects.forEach((source) => {
+      targetObjects.forEach((target) => {
         if (target === source) {
           return;
         }

@@ -16,6 +16,7 @@ import { EnemyTank } from './EnemyTank';
 export class PowerEnemyTank extends EnemyTank {
   public bulletDamage: number;
   public bulletSpeed: number;
+  public collider = true;
   public health: number;
   public material: SpriteMaterial = new SpriteMaterial();
   private animations: Map<GameObjectRotation, Animation<Sprite>> = new Map();
