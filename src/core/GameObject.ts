@@ -13,8 +13,8 @@ export enum GameObjectRotation {
 }
 
 interface GameObjectUpdateArgs {
-  input: KeyboardInput;
-  ticks: number;
+  input?: KeyboardInput;
+  ticks?: number;
 }
 
 export class GameObject extends Node {
@@ -22,18 +22,15 @@ export class GameObject extends Node {
 
   public collider = false;
   public dimensions: Dimensions;
-  public material: Material;
-  public position: Vector;
-  public rotation: GameObjectRotation;
+  public material: Material = null;
+  public position: Vector = new Vector();
+  public rotation: GameObjectRotation = GameObjectRotation.Up;
   public tags: string[] = [];
 
   constructor(width = 0, height = 0) {
     super();
 
     this.dimensions = new Dimensions(width, height);
-    this.position = new Vector();
-    this.rotation = GameObjectRotation.Up;
-    this.material = null;
   }
 
   public getComputedDimensions(): Dimensions {

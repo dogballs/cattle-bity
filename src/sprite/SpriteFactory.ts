@@ -1,4 +1,4 @@
-import { Sprite, Texture } from '../core';
+import { Sprite, TextureLoader } from '../core';
 
 import config from './sprite.config';
 
@@ -22,7 +22,7 @@ export class SpriteFactory {
 
     const [imagePath, ...textureRectValues] = spriteConfig;
 
-    const texture = new Texture(imagePath);
+    const texture = TextureLoader.load(imagePath);
     const textureRect = new Sprite.Rect(...textureRectValues);
     const sprite = new Sprite(texture, textureRect, targetDims);
 

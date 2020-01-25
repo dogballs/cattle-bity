@@ -72,20 +72,30 @@ export class Renderer {
     this.context.lineTo(min.x, max.y);
     this.context.lineTo(min.x, min.y);
 
-    const { color } = gameObject.material;
+    const { fillColor, strokeColor } = gameObject.material;
 
-    this.context.fillStyle = color;
-    this.context.fill();
+    if (fillColor !== null) {
+      this.context.fillStyle = fillColor;
+      this.context.fill();
+    }
+
+    if (strokeColor !== null) {
+      this.context.strokeStyle = strokeColor;
+      this.context.stroke();
+    }
   }
 
   private renderGameObjectWithSpriteMaterial(gameObject: GameObject): void {
     const objectBox = gameObject.getWorldBoundingBox();
-    const objectRect = objectBox.getRect();
+    const objectRect = objectBox.toRect();
 
     const material = gameObject.material as SpriteMaterial;
 
     const sprite = material.sprite;
     if (sprite === null) {
+      return;
+    }
+    if (sprite.texture.imageElement === null) {
       return;
     }
 

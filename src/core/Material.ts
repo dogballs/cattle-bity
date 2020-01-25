@@ -1,6 +1,7 @@
 import { Sprite } from './Sprite';
 
 export class Material {
-  public color: string = null;
+  public fillColor: string = null;
+  public strokeColor: string = null;
   public sprite: Sprite = null;
 }

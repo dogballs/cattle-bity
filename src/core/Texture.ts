@@ -4,10 +4,9 @@
  * Should be used to create Sprites.
  */
 export class Texture {
-  public imageElement: HTMLImageElement;
+  public imageElement: HTMLImageElement = null;
 
-  constructor(src = '') {
-    this.imageElement = new Image();
-    this.imageElement.src = src;
+  constructor(imageElement: HTMLImageElement = null) {
+    this.imageElement = imageElement;
   }
 }

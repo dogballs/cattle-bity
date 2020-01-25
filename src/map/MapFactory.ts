@@ -2,20 +2,10 @@ import { GameObject } from '../core';
 
 import { BrickWall, SteelWall } from '../gameObjects';
 
-export interface MapConfigWall {
-  type: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-export interface MapConfig {
-  walls?: MapConfigWall[];
-}
+import { MapConfig, MapConfigWallType } from './MapConfig';
 
 export interface MapResult {
-  objects: GameObject[];
+  walls: GameObject[];
 }
 
 const BRICK_WALL_MULT = 16;
@@ -24,24 +14,13 @@ const STEEL_WALL_MULT = 32;
 // TODO: map config as a separate class with serialization methods and validation
 
 export class MapFactory {
-  public static create(mapConfig: MapConfig = {}): MapResult {
-    const objects = [];
+  public static create(mapConfig: MapConfig): MapResult {
+    const allWalls = [];
 
     mapConfig.walls.forEach((wall) => {
       const { type, x, y, w, h } = wall;
 
-      if (type === 'brick') {
-        if (
-          x % BRICK_WALL_MULT !== 0 ||
-          y % BRICK_WALL_MULT !== 0 ||
-          w % BRICK_WALL_MULT !== 0 ||
-          h % BRICK_WALL_MULT !== 0
-        ) {
-          throw new Error(
-            `Invalid options for brick wall (%${BRICK_WALL_MULT})`,
-          );
-        }
-
+      if (type === MapConfigWallType.Brick) {
         const walls = [];
 
         for (let i = x; i < x + w; i += BRICK_WALL_MULT) {
@@ -52,19 +31,8 @@ export class MapFactory {
           }
         }
 
-        objects.push(...walls);
-      } else if (type === 'steel') {
-        if (
-          x % STEEL_WALL_MULT !== 0 ||
-          y % STEEL_WALL_MULT !== 0 ||
-          w % STEEL_WALL_MULT !== 0 ||
-          h % STEEL_WALL_MULT !== 0
-        ) {
-          throw new Error(
-            `Invalid options for steel wall(%${STEEL_WALL_MULT})`,
-          );
-        }
-
+        allWalls.push(...walls);
+      } else if (MapConfigWallType.Steel) {
         const walls = [];
 
         for (let i = x; i < x + w; i += STEEL_WALL_MULT) {
@@ -75,12 +43,12 @@ export class MapFactory {
           }
         }
 
-        objects.push(...walls);
+        allWalls.push(...walls);
       }
     });
 
     const result: MapResult = {
-      objects,
+      walls: allWalls,
     };
 
     return result;

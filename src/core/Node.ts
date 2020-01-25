@@ -1,12 +1,16 @@
+import { EventEmitter } from './EventEmitter';
+
 /**
  * Represents one node in a scene graph.
  * https://en.wikipedia.org/wiki/Scene_graph
  */
-export class Node {
+export class Node extends EventEmitter {
   public children: this[];
   public parent: this;
 
   constructor() {
+    super();
+
     this.children = [];
     this.parent = null;
   }
@@ -45,6 +49,12 @@ export class Node {
     }
 
     this.parent.remove(this);
+
+    return this;
+  }
+
+  public clear(): this {
+    this.children = [];
 
     return this;
   }

@@ -1,9 +1,10 @@
 import { Material } from './Material';
 
 export class BasicMaterial extends Material {
-  constructor(color = '#000') {
+  constructor(fillColor = null, strokeColor = null) {
     super();
 
-    this.color = color;
+    this.fillColor = fillColor;
+    this.strokeColor = strokeColor;
   }
 }

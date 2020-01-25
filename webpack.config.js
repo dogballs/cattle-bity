@@ -5,10 +5,13 @@ const { CheckerPlugin } = require('awesome-typescript-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.ts',
+  entry: {
+    main: './src/main.ts',
+    editor: './src/editor.ts',
+  },
 
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
 
   mode: 'development',
@@ -32,6 +35,7 @@ module.exports = {
     new CheckerPlugin(),
     new CopyWebpackPlugin([
       'index.html',
+      'editor.html',
       { from: 'images/', to: 'images/' },
       { from: 'styles/', to: 'styles/' },
     ]),

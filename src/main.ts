@@ -22,8 +22,9 @@ import {
 
 import * as config from './config';
 
+import { MapConfig } from './map/MapConfig';
 import { MapFactory } from './map/MapFactory';
-import * as mapConfig from './map/stage1.json';
+import * as mapJSON from './map/stage1.json';
 
 const renderer = new Renderer({
   debug: true,
@@ -43,9 +44,10 @@ const field = new GameObject(config.FIELD_SIZE, config.FIELD_SIZE);
 field.position.set(config.BORDER_H_DEPTH, config.BORDER_V_DEPTH);
 scene.add(field);
 
-const { objects } = MapFactory.create(mapConfig);
+const mapConfig = MapConfig.fromJSON(mapJSON);
+const { walls } = MapFactory.create(mapConfig);
 
-field.add(...objects);
+field.add(...walls);
 
 // TODO: create common factory/builder for all tanks
 const spawn = new Spawn();

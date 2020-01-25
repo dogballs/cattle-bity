@@ -4,6 +4,7 @@ import { Tag } from './Tag';
 
 export class BrickWall extends GameObject {
   public tags = [Tag.Wall, Tag.Brick];
+  public material = new SpriteMaterial();
   private readonly sprites: Sprite[];
 
   constructor() {
@@ -20,7 +21,6 @@ export class BrickWall extends GameObject {
       'wall.brick.8',
     ]);
 
-    this.material = new SpriteMaterial();
     this.material.sprite = this.getSpriteByPosition();
   }
 

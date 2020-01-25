@@ -23,7 +23,7 @@ export class BoundingBox {
       .divideScalar(2);
   }
 
-  public getRect(): Rect {
+  public toRect(): Rect {
     return new Rect(
       this.min.x,
       this.min.y,

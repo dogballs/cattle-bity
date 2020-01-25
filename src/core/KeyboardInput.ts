@@ -6,8 +6,11 @@ export enum KeyboardKey {
   ArrowRight = 39,
   ArrowDown = 40,
   A = 65,
+  B = 66,
   D = 68,
+  E = 69,
   S = 83,
+  T = 84,
   W = 87,
 }
 
