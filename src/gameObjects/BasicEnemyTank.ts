@@ -69,20 +69,18 @@ export class BasicEnemyTank extends EnemyTank {
     );
   }
 
-  public update({ ticks }): void {
-    if (this.rotation === GameObject.Rotation.Up) {
-      this.position.y -= this.speed;
-    } else if (this.rotation === GameObject.Rotation.Down) {
-      this.position.y += this.speed;
-    } else if (this.rotation === GameObject.Rotation.Left) {
-      this.position.x -= this.speed;
-    } else if (this.rotation === GameObject.Rotation.Right) {
-      this.position.x += this.speed;
-    }
-
+  public update(): void {
+    // if (this.rotation === GameObject.Rotation.Up) {
+    //   this.position.y -= this.speed;
+    // } else if (this.rotation === GameObject.Rotation.Down) {
+    //   this.position.y += this.speed;
+    // } else if (this.rotation === GameObject.Rotation.Left) {
+    //   this.position.x -= this.speed;
+    // } else if (this.rotation === GameObject.Rotation.Right) {
+    //   this.position.x += this.speed;
+    // }
     const animation = this.animations.get(this.rotation);
-    animation.animate(ticks);
-
+    // animation.animate(ticks);
     this.material.sprite = animation.getCurrentFrame();
   }
 }

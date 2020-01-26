@@ -5,8 +5,11 @@ import {
   KeyboardKey,
   Sprite,
   SpriteMaterial,
+  Vector,
 } from '../core';
 
+import { Bullet } from './Bullet';
+import { Shield } from './Shield';
 import { Tag } from './Tag';
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
@@ -54,6 +57,10 @@ export class Tank extends GameObject {
         { loop: true },
       ),
     );
+
+    const shield = new Shield();
+    shield.setCenterFrom(this);
+    this.add(shield);
   }
 
   public update({ input, ticks }): void {
@@ -94,7 +101,7 @@ export class Tank extends GameObject {
     }
 
     if (input.isDown(KeyboardKey.Space)) {
-      this.onFire();
+      this.fire();
     }
 
     this.material.sprite = animation.getCurrentFrame();
@@ -128,8 +135,34 @@ export class Tank extends GameObject {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  public onFire(): void {
-    return undefined;
+  private fire(): void {
+    // TODO: reference to parent is ugly
+    if (this.parent.hasChildrenWithTag(Tag.Bullet)) {
+      return;
+    }
+
+    const bullet = new Bullet();
+
+    const { width: bulletWidth, height: bulletHeight } = bullet.dimensions;
+
+    const position = this.position.clone();
+    const { width: tankWidth, height: tankHeight } = this.dimensions;
+
+    if (this.rotation === GameObject.Rotation.Up) {
+      position.add(new Vector(tankWidth / 2 - bulletWidth / 2, 0));
+    } else if (this.rotation === GameObject.Rotation.Down) {
+      position.add(new Vector(tankWidth / 2 - bulletWidth / 2, tankHeight));
+    } else if (this.rotation === GameObject.Rotation.Left) {
+      position.add(new Vector(0, tankHeight / 2 - bulletHeight / 2));
+    } else if (this.rotation === GameObject.Rotation.Right) {
+      position.add(new Vector(tankWidth, tankHeight / 2 - bulletHeight / 2));
+    }
+
+    bullet.position = position;
+    bullet.rotate(this.rotation);
+    bullet.speed = this.bulletSpeed;
+    bullet.damage = this.bulletDamage;
+
+    this.parent.add(bullet);
   }
 }

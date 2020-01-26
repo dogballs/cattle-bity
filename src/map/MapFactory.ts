@@ -17,8 +17,8 @@ export class MapFactory {
   public static create(mapConfig: MapConfig): MapResult {
     const allWalls = [];
 
-    mapConfig.walls.forEach((wall) => {
-      const { type, x, y, w, h } = wall;
+    mapConfig.walls.forEach((wallConfig) => {
+      const { type, x, y, w, h } = wallConfig;
 
       if (type === MapConfigWallType.Brick) {
         const walls = [];

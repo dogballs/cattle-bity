@@ -114,6 +114,18 @@ export class GameObject extends Node {
     return this;
   }
 
+  public hasChildrenWithTag(tag: string): boolean {
+    let has = false;
+
+    this.traverse((object) => {
+      if (object.tags.includes(tag)) {
+        has = true;
+      }
+    });
+
+    return has;
+  }
+
   /**
    * Will be called on each game loop iteration
    * @param {GameObjectUpdateArgs}

@@ -30,15 +30,9 @@ export class Spawn extends GameObject {
     this.material.alignment = SpriteAlignment.Center;
   }
 
-  // TODO: @mradionov rethink how to notify parent when animation is ended
-  // eslint-disable-next-line class-methods-use-this
-  public onComplete(): void {
-    return undefined;
-  }
-
   public update({ ticks }): void {
     if (this.animation.isComplete()) {
-      this.onComplete();
+      this.emit('completed');
       return;
     }
 
