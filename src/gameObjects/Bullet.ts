@@ -1,4 +1,4 @@
-import { GameObject, SpriteMaterial } from './../core';
+import { GameObject, Rotation, SpriteMaterial } from './../core';
 import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
 import { BrickWallDestroyer } from './BrickWallDestroyer';
 import { BulletExplosion } from './BulletExplosion';
@@ -15,23 +15,23 @@ export class Bullet extends GameObject {
     super(12, 16);
 
     this.spriteMap = SpriteFactory.asMap({
-      [GameObject.Rotation.Up]: 'bullet.up',
-      [GameObject.Rotation.Down]: 'bullet.down',
-      [GameObject.Rotation.Left]: 'bullet.left',
-      [GameObject.Rotation.Right]: 'bullet.right',
+      [Rotation.Up]: 'bullet.up',
+      [Rotation.Down]: 'bullet.down',
+      [Rotation.Left]: 'bullet.left',
+      [Rotation.Right]: 'bullet.right',
     });
 
     this.material = new SpriteMaterial();
   }
 
   public update(): void {
-    if (this.rotation === GameObject.Rotation.Up) {
+    if (this.rotation === Rotation.Up) {
       this.position.y -= this.speed;
-    } else if (this.rotation === GameObject.Rotation.Down) {
+    } else if (this.rotation === Rotation.Down) {
       this.position.y += this.speed;
-    } else if (this.rotation === GameObject.Rotation.Left) {
+    } else if (this.rotation === Rotation.Left) {
       this.position.x -= this.speed;
-    } else if (this.rotation === GameObject.Rotation.Right) {
+    } else if (this.rotation === Rotation.Right) {
       this.position.x += this.speed;
     }
 
@@ -41,8 +41,8 @@ export class Bullet extends GameObject {
   public collide(target: GameObject): void {
     const isWall = target.tags.includes(Tag.Wall);
     const isBrickWall = isWall && target.tags.includes(Tag.Brick);
-    const isEnemyTank =
-      target.tags.includes(Tag.Tank) && target.tags.includes(Tag.Enemy);
+    // const isEnemyTank =
+    // target.tags.includes(Tag.Tank) && target.tags.includes(Tag.Enemy);
 
     if (isBrickWall) {
       const destroyer = new BrickWallDestroyer();
@@ -52,13 +52,14 @@ export class Bullet extends GameObject {
       this.parent.add(destroyer);
     }
 
-    if (isWall || isEnemyTank) {
+    if (isWall) {
       const bulletExplosion = new BulletExplosion();
       bulletExplosion.setCenterFrom(this);
       bulletExplosion.onComplete = (): void => {
         bulletExplosion.removeSelf();
       };
       this.replaceSelf(bulletExplosion);
+      this.emit('died');
     }
   }
 }

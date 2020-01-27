@@ -1,7 +1,7 @@
 import { EventEmitter, GameObject } from './core';
 import {
   Spawn,
-  Tank,
+  PlayerTank,
   BasicEnemyTank,
   FastEnemyTank,
   PowerEnemyTank,
@@ -43,7 +43,7 @@ export class Spawner extends EventEmitter {
         return new PowerEnemyTank();
       case MapConfigSpawnType.Player:
       default:
-        return new Tank();
+        return new PlayerTank();
     }
   }
 }

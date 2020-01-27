@@ -12,6 +12,7 @@ export * from './Material';
 export * from './Node';
 export * from './Rect';
 export * from './Renderer';
+export * from './Rotation';
 export * from './Sprite';
 export * from './SpriteMaterial';
 export * from './Texture';

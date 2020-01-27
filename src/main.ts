@@ -59,10 +59,11 @@ const gameLoop = new GameLoop({
 
     const nodes = scene.flatten();
 
-    const colliderNodes = nodes.filter((node) => node.collider);
+    // Nodes that initiate collision
+    const activeNodes = nodes.filter((node) => node.collider);
 
     // Detect and handle collisions of all objects on the scene
-    const collisions = CollisionDetector.intersectObjects(colliderNodes, nodes);
+    const collisions = CollisionDetector.intersectObjects(activeNodes, nodes);
     collisions.forEach((collision) => {
       collision.source.collide(collision.target);
     });

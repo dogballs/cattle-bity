@@ -3,27 +3,19 @@ import { Dimensions } from './Dimensions';
 import { KeyboardInput } from './KeyboardInput';
 import { Material } from './Material';
 import { Node } from './Node';
+import { Rotation } from './Rotation';
 import { Vector } from './Vector';
-
-export enum GameObjectRotation {
-  Up,
-  Down,
-  Left,
-  Right,
-}
 
 interface GameObjectUpdateArgs {
   input?: KeyboardInput;
 }
 
 export class GameObject extends Node {
-  public static Rotation = GameObjectRotation;
-
   public collider = false;
   public dimensions: Dimensions;
   public material: Material = null;
   public position: Vector = new Vector();
-  public rotation: GameObjectRotation = GameObjectRotation.Up;
+  public rotation: Rotation = Rotation.Up;
   public tags: string[] = [];
 
   constructor(width = 0, height = 0) {
@@ -35,10 +27,7 @@ export class GameObject extends Node {
   public getComputedDimensions(): Dimensions {
     let { width, height } = this.dimensions;
 
-    if (
-      this.rotation === GameObjectRotation.Right ||
-      this.rotation === GameObjectRotation.Left
-    ) {
+    if (this.rotation === Rotation.Right || this.rotation === Rotation.Left) {
       width = this.dimensions.height;
       height = this.dimensions.width;
     }
@@ -107,7 +96,7 @@ export class GameObject extends Node {
     return this;
   }
 
-  public rotate(rotation: GameObjectRotation): this {
+  public rotate(rotation: Rotation): this {
     this.rotation = rotation;
 
     return this;

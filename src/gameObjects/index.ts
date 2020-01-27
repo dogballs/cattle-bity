@@ -9,6 +9,7 @@ export * from './EditorBrush';
 export * from './EnemyTank';
 export * from './FastEnemyTank';
 export * from './GrenadePowerup';
+export * from './PlayerTank';
 export * from './PowerEnemyTank';
 export * from './Shield';
 export * from './Spawn';
