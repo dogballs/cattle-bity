@@ -63,7 +63,7 @@ export class Tank extends GameObject {
     this.add(shield);
   }
 
-  public update({ input, ticks }): void {
+  public update({ input }): void {
     if (input.isHoldLast(KeyboardKey.W)) {
       this.rotate(GameObject.Rotation.Up);
     }
@@ -97,7 +97,7 @@ export class Tank extends GameObject {
 
     const animation = this.animations.get(this.rotation);
     if (input.isHoldAny(moveKeys)) {
-      animation.animate(ticks);
+      animation.animate();
     }
 
     if (input.isDown(KeyboardKey.Space)) {

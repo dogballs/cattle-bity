@@ -16,8 +16,8 @@ export class GrenadePowerup extends GameObject {
     this.material = new SpriteMaterial();
   }
 
-  public update({ ticks }): void {
-    this.animation.animate(ticks);
+  public update(): void {
+    this.animation.animate();
     this.material.sprite = this.animation.getCurrentFrame();
   }
 

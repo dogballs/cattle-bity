@@ -14,7 +14,6 @@ export enum GameObjectRotation {
 
 interface GameObjectUpdateArgs {
   input?: KeyboardInput;
-  ticks?: number;
 }
 
 export class GameObject extends Node {

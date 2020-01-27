@@ -48,13 +48,13 @@ spawner.init();
 // field.add(grenadePowerup);
 
 const gameLoop = new GameLoop({
-  onTick: (ticks: number): void => {
+  onTick: (): void => {
     input.update();
 
     // Update all objects on the scene
     // TODO: abstract out input from tank
     scene.traverse((child) => {
-      child.update({ input, ticks });
+      child.update({ input });
     });
 
     const nodes = scene.flatten();

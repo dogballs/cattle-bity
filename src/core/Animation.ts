@@ -5,8 +5,7 @@ export class Animation<T> {
   private loop: boolean | number;
   private loopIndex: number;
 
-  private startTicks = -1;
-  private lastTicks = -1;
+  private ticks = 0;
 
   constructor(
     frames: T[] = [],
@@ -54,12 +53,11 @@ export class Animation<T> {
     return isComplete;
   }
 
-  public animate(ticks: number): void {
+  public animate(): void {
     // Record when entire animation has started. First frame will be shown for
     // at least one tick
-    if (this.startTicks === -1) {
-      this.startTicks = ticks;
-      this.lastTicks = ticks;
+    if (this.ticks === 0) {
+      this.ticks = 1;
       return;
     }
 
@@ -81,14 +79,14 @@ export class Animation<T> {
       this.isLastFrame() &&
       this.isCurrentFrameComplete()
     ) {
-      this.lastTicks = ticks;
+      this.ticks += 1;
       return;
     }
 
     // Debounces animation to create a delay between frames.
     // If enough ticks has not passed yet from the last animation - wait.
     if (!this.isCurrentFrameComplete()) {
-      this.lastTicks = ticks;
+      this.ticks += 1;
       return;
     }
 
@@ -96,11 +94,12 @@ export class Animation<T> {
     this.frameIndex += 1;
     if (this.frameIndex > this.frames.length - 1) {
       this.frameIndex = 0;
-      // When frame is reset to the first one, consider one animation loop complete
+      // When frame is reset to the first one,
+      // consider one animation loop complete
       this.loopIndex += 1;
     }
 
-    this.lastTicks = ticks;
+    this.ticks += 1;
   }
 
   private isCurrentFrameComplete(): boolean {
@@ -116,7 +115,7 @@ export class Animation<T> {
         singleFrameTicks -
       1;
 
-    const isComplete = this.lastTicks >= this.startTicks + passedFrameTicks;
+    const isComplete = this.ticks > passedFrameTicks;
 
     return isComplete;
   }

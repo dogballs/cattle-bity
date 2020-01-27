@@ -33,12 +33,12 @@ export class TankExplosion extends GameObject {
     return undefined;
   }
 
-  public update({ ticks }): void {
+  public update(): void {
     if (this.animation.isComplete()) {
       this.onComplete();
       return;
     }
-    this.animation.animate(ticks);
+    this.animation.animate();
     this.material.sprite = this.animation.getCurrentFrame();
   }
 }

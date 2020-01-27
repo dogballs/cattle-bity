@@ -30,13 +30,13 @@ export class Spawn extends GameObject {
     this.material.alignment = SpriteAlignment.Center;
   }
 
-  public update({ ticks }): void {
+  public update(): void {
     if (this.animation.isComplete()) {
       this.emit('completed');
       return;
     }
 
-    this.animation.animate(ticks);
+    this.animation.animate();
     this.material.sprite = this.animation.getCurrentFrame();
   }
 }
