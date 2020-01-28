@@ -4,16 +4,27 @@ export const BRICK_WALL_MULT = 16;
 export const STEEL_WALL_MULT = 32;
 
 export enum MapConfigSpawnType {
-  Player = 'Player',
+  EnemyAny = 'EnemyAny',
   EnemyBasic = 'EnemyBasic',
   EnemyFast = 'EnemyFast',
   EnemyPower = 'EnemyPower',
+  PlayerPrimary = 'PlayerPrimary',
 }
 
-export interface MapConfigSpawn {
+export interface MapConfigSpawnDistribution {
+  type: MapConfigSpawnType;
+  count: number;
+}
+
+export interface MapConfigSpawnLocation {
   type: MapConfigSpawnType;
   x: number;
   y: number;
+}
+
+export interface MapConfigSpawn {
+  distributions: MapConfigSpawnDistribution[];
+  locations: MapConfigSpawnLocation[];
 }
 
 export enum MapConfigWallType {
@@ -25,21 +36,29 @@ export interface MapConfigWall extends Rect {
   type: MapConfigWallType;
 }
 
-interface MapJSONSpawn extends Omit<MapConfigSpawn, 'type'> {
+// TODO: get rid of this duplication
+
+interface MapDtoSpawnLocation extends Omit<MapConfigSpawnLocation, 'type'> {
   type: string;
 }
 
-interface MapJSONWall extends Omit<MapConfigWall, 'type'> {
+interface MapDtoSpawn {
+  distributions?: MapConfigSpawnDistribution[];
+  locations?: MapDtoSpawnLocation[];
+}
+
+interface MapDtoWall extends Omit<MapConfigWall, 'type'> {
   type: string;
 }
 
-interface MapJSON {
-  spawns?: MapJSONSpawn[];
-  walls?: MapJSONWall[];
+interface MapDto {
+  spawn?: MapDtoSpawn;
+  walls?: MapDtoWall[];
 }
 
 export class MapConfig {
-  public spawns: MapConfigSpawn[] = [];
+  public spawnDistributions: MapConfigSpawnDistribution[] = [];
+  public spawnLocations: MapConfigSpawnLocation[] = [];
   public walls: MapConfigWall[] = [];
 
   public addWall(type: MapConfigWallType, rect: Rect): this {
@@ -50,40 +69,37 @@ export class MapConfig {
     return this;
   }
 
+  // TODO
   public validate(): boolean {
     return true;
   }
 
-  public toJSON(): MapJSON {
-    const json: MapJSON = {
-      walls: this.walls,
-    };
-    return json;
-  }
-
-  public static fromJSON(json: MapJSON): MapConfig {
-    const { spawns = [], walls = [] } = json;
-
-    const config = new MapConfig();
+  public parse(dto: MapDto): this {
+    const { spawn = {}, walls = [] } = dto;
+    const { locations = [], distributions = [] } = spawn;
 
     walls.forEach((wall) => {
-      config.addWall(wall.type as MapConfigWallType, wall);
+      this.addWall(wall.type as MapConfigWallType, wall);
     });
 
-    spawns.forEach((spawn) => {
-      config.spawns.push(spawn as MapConfigSpawn);
+    locations.forEach((spawn) => {
+      this.spawnLocations.push(spawn as MapConfigSpawnLocation);
     });
 
-    return config;
+    distributions.forEach((distribution) => {
+      this.spawnDistributions.push(distribution as MapConfigSpawnDistribution);
+    });
+
+    return this;
   }
 
-  private assertWall(wall: MapConfigWall, mult: number): void {
-    const { x, y, w, h, type } = wall;
+  // private assertWall(wall: MapConfigWall, mult: number): void {
+  //   const { x, y, w, h, type } = wall;
 
-    if (x % mult !== 0 || y % mult !== 0 || w % mult !== 0 || h % mult !== 0) {
-      throw new Error(
-        `Invalid rect for "${type}" wall, should be multiple of ${mult}`,
-      );
-    }
-  }
+  //   if (x % mult !== 0 || y % mult !== 0 || w % mult !== 0 || h % mult !== 0) {
+  //     throw new Error(
+  //       `Invalid rect for "${type}" wall, should be multiple of ${mult}`,
+  //     );
+  //   }
+  // }
 }

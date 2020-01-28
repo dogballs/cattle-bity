@@ -1,0 +1,10 @@
+- why i need nested scene graph
+  - scene offset
+    - scene will have it's offset, renderer will add it to all children when rendering, for children it will start at 0,0
+  - shield animation connected to tank
+    - render inside tank - two sprite materials?
+    - have a separate GO - but how to move it along with tank?
+- why I DONT NEED IT
+  - complex world coordinates
+  - powerup can't find all tanks to remove
+  - calculate brick wall sprite offset based on offset from field

@@ -8,7 +8,7 @@ import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class PlayerTank extends Tank {
   public strategy: Strategy = new PlayerStrategy();
-  public tags = [Tag.Tank];
+  public tags = [Tag.Tank, Tag.Player];
   protected speed = 3;
 
   constructor() {

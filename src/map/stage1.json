@@ -1,4 +1,29 @@
 {
+  "version": 1,
+  "spawn": {
+    "distributions": [
+      {
+        "type": "EnemyBasic",
+        "count": 18
+      },
+      {
+        "type": "EnemyFast",
+        "count": 2
+      }
+    ],
+    "locations": [
+      {
+        "type": "PlayerPrimary",
+        "x": 256,
+        "y": 768
+      },
+      {
+        "type": "EnemyAny",
+        "x": 0,
+        "y": 0
+      }
+    ]
+  },
   "walls": [
     {
       "type": "Brick",

@@ -34,7 +34,7 @@ const field = new GameObject(config.FIELD_SIZE, config.FIELD_SIZE);
 field.position.set(config.BORDER_H_DEPTH, config.BORDER_V_DEPTH);
 scene.add(field);
 
-const mapConfig = MapConfig.fromJSON(mapJSON);
+const mapConfig = new MapConfig().parse(mapJSON);
 const { walls } = MapFactory.create(mapConfig);
 
 field.add(...walls);

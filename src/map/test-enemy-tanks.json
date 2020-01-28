@@ -1,24 +1,26 @@
 {
-  "spawns": [
-    {
-      "type": "Player",
-      "x": 256,
-      "y": 768
-    },
-    {
-      "type": "EnemyBasic",
-      "x": 256,
-      "y": 512
-    },
-    {
-      "type": "EnemyFast",
-      "x": 320,
-      "y": 512
-    },
-    {
-      "type": "EnemyPower",
-      "x": 384,
-      "y": 512
-    }
-  ]
+  "spawn": {
+    "locations": [
+      {
+        "type": "Player",
+        "x": 256,
+        "y": 768
+      },
+      {
+        "type": "EnemyBasic",
+        "x": 256,
+        "y": 512
+      },
+      {
+        "type": "EnemyFast",
+        "x": 320,
+        "y": 512
+      },
+      {
+        "type": "EnemyPower",
+        "x": 384,
+        "y": 512
+      }
+    ]
+  }
 }

@@ -73,6 +73,7 @@ export class Tank extends GameObject {
           tankExplosion.removeSelf();
         });
         this.replaceSelf(tankExplosion);
+        this.emit('died');
       }
     }
   }
@@ -103,6 +104,12 @@ export class Tank extends GameObject {
     bullet.rotate(this.rotation);
     bullet.speed = this.bulletSpeed;
     bullet.damage = this.bulletDamage;
+
+    if (this.tags.includes(Tag.Player)) {
+      bullet.tags.push(Tag.Player);
+    } else if (this.tags.includes(Tag.Enemy)) {
+      bullet.tags.push(Tag.Enemy);
+    }
 
     bullet.on('died', () => {
       this.bullet = null;
