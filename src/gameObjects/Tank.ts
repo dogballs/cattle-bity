@@ -10,6 +10,7 @@ import {
 import { Strategy, StandStillStrategy } from '../strategy';
 
 import { Bullet } from './Bullet';
+import { Shield } from './Shield';
 import { Tag } from './Tag';
 import { TankExplosion } from './TankExplosion';
 
@@ -19,6 +20,7 @@ export class Tank extends GameObject {
   public strategy: Strategy = new StandStillStrategy();
   public tags = [Tag.Tank];
   public bullet: Bullet = null;
+  public shield: Shield = null;
   protected bulletDamage = 1;
   protected bulletSpeed = 10;
   protected speed = 2;
@@ -27,6 +29,7 @@ export class Tank extends GameObject {
 
   public update({ input }: { input: KeyboardInput }): void {
     this.strategy.update(this, input);
+    this.material.sprite = this.animations.get(this.rotation).getCurrentFrame();
   }
 
   public collide(target: GameObject): void {
@@ -57,23 +60,25 @@ export class Tank extends GameObject {
     }
 
     if (target.tags.includes(Tag.Bullet)) {
+      const bullet = target as Bullet;
+
       // Prevent self-destruction
       if (target === this.bullet) {
         return;
       }
 
-      const bullet = target as Bullet;
+      // If tank has shield - swallow the bullet
+      if (this.shield !== null) {
+        bullet.nullify();
+        return;
+      }
+
       const nextHealth = this.health - bullet.damage;
       if (nextHealth > 0) {
         this.health = nextHealth;
+        bullet.explode();
       } else {
-        const tankExplosion = new TankExplosion();
-        tankExplosion.setCenterFrom(this);
-        tankExplosion.on('completed', () => {
-          tankExplosion.removeSelf();
-        });
-        this.replaceSelf(tankExplosion);
-        this.emit('died');
+        this.explode();
       }
     }
   }
@@ -111,11 +116,11 @@ export class Tank extends GameObject {
       bullet.tags.push(Tag.Enemy);
     }
 
+    this.bullet = bullet;
+
     bullet.on('died', () => {
       this.bullet = null;
     });
-
-    this.bullet = bullet;
 
     this.parent.add(bullet);
   }
@@ -135,5 +140,15 @@ export class Tank extends GameObject {
     if (animation !== undefined) {
       this.material.sprite = animation.getCurrentFrame();
     }
+  }
+
+  public explode(): void {
+    const tankExplosion = new TankExplosion();
+    tankExplosion.setCenterFrom(this);
+    tankExplosion.on('completed', () => {
+      tankExplosion.removeSelf();
+    });
+    this.replaceSelf(tankExplosion);
+    this.emit('died');
   }
 }

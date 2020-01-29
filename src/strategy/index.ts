@@ -1,4 +1,3 @@
-export * from './AiStrategy';
 export * from './PlayerStrategy';
 export * from './StandFireStrategy';
 export * from './StandStillStrategy';

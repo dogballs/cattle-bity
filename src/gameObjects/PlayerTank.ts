@@ -43,9 +43,9 @@ export class PlayerTank extends Tank {
       ),
     );
 
-    const shield = new Shield();
-    shield.setCenterFrom(this);
-    this.add(shield);
+    this.shield = new Shield();
+    this.shield.setCenterFrom(this);
+    this.add(this.shield);
 
     this.material.sprite = this.animations.get(this.rotation).getCurrentFrame();
   }

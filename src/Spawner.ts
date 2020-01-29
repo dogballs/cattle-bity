@@ -1,10 +1,11 @@
-import { EventEmitter, GameObject } from './core';
+import { EventEmitter, GameObject, Rotation } from './core';
 import {
   Spawn,
   PlayerTank,
   BasicEnemyTank,
   FastEnemyTank,
   PowerEnemyTank,
+  Tag,
 } from './gameObjects';
 import {
   MapConfig,
@@ -36,6 +37,9 @@ export class Spawner extends EventEmitter {
     spawn.position.set(spawnLocation.x, spawnLocation.y);
     spawn.on('completed', () => {
       const tank = this.createTank(spawnLocation.type);
+      if (tank.tags.includes(Tag.Enemy)) {
+        tank.rotation = Rotation.Down;
+      }
       tank.setCenterFrom(spawn);
       tank.on('died', () => {
         this.spawn(spawnLocation);

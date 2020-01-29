@@ -39,12 +39,20 @@ export class Bullet extends GameObject {
   }
 
   public collide(target: GameObject): void {
-    const isWall = target.tags.includes(Tag.Wall);
-    const isBrickWall = isWall && target.tags.includes(Tag.Brick);
-    const isEnemyTank =
-      target.tags.includes(Tag.Tank) && target.tags.includes(Tag.Enemy);
-    const isPlayerToEnemy = isEnemyTank && this.tags.includes(Tag.Player);
+    if (target.tags.includes(Tag.Bullet)) {
+      const bullet = target as Bullet;
+      this.nullify();
+      bullet.nullify();
+      return;
+    }
 
+    const isWall = target.tags.includes(Tag.Wall);
+    if (isWall) {
+      this.explode();
+      return;
+    }
+
+    const isBrickWall = isWall && target.tags.includes(Tag.Brick);
     if (isBrickWall) {
       const destroyer = new BrickWallDestroyer();
       // TODO: order here matters
@@ -52,15 +60,20 @@ export class Bullet extends GameObject {
       destroyer.setCenterFrom(this);
       this.parent.add(destroyer);
     }
+  }
 
-    if (isWall || isPlayerToEnemy) {
-      const bulletExplosion = new BulletExplosion();
-      bulletExplosion.setCenterFrom(this);
-      bulletExplosion.on('completed', () => {
-        bulletExplosion.removeSelf();
-      });
-      this.replaceSelf(bulletExplosion);
-      this.emit('died');
-    }
+  public nullify(): void {
+    this.removeSelf();
+    this.emit('died');
+  }
+
+  public explode(): void {
+    const bulletExplosion = new BulletExplosion();
+    bulletExplosion.setCenterFrom(this);
+    bulletExplosion.on('completed', () => {
+      bulletExplosion.removeSelf();
+    });
+    this.replaceSelf(bulletExplosion);
+    this.emit('died');
   }
 }
