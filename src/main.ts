@@ -17,7 +17,7 @@ import { MapFactory } from './map/MapFactory';
 import * as mapJSON from './map/test-enemy-tanks.json';
 
 const renderer = new Renderer({
-  debug: true,
+  debug: false,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
@@ -31,7 +31,7 @@ const scene = new GameObject();
 scene.add(new Border());
 
 const field = new GameObject(config.FIELD_SIZE, config.FIELD_SIZE);
-field.position.set(config.BORDER_H_DEPTH, config.BORDER_V_DEPTH);
+field.position.set(config.BORDER_LEFT_WIDTH, config.BORDER_TOP_BOTTOM_HEIGHT);
 scene.add(field);
 
 const mapConfig = new MapConfig().parse(mapJSON);

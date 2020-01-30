@@ -1,5 +1,10 @@
 import { GameObject } from '../core';
-import * as config from '../config';
+import {
+  BORDER_LEFT_WIDTH,
+  BORDER_RIGHT_WIDTH,
+  BORDER_TOP_BOTTOM_HEIGHT,
+  FIELD_SIZE,
+} from '../config';
 
 import { BorderWall } from './BorderWall';
 
@@ -7,24 +12,29 @@ export class Border extends GameObject {
   constructor() {
     super();
 
-    const innerLength = config.FIELD_SIZE;
-    const hDepth = config.BORDER_H_DEPTH;
-    const vDepth = config.BORDER_V_DEPTH;
-
-    const topBorder = new BorderWall(innerLength + hDepth * 2, vDepth);
+    const topBorder = new BorderWall(
+      BORDER_LEFT_WIDTH + FIELD_SIZE + BORDER_RIGHT_WIDTH,
+      BORDER_TOP_BOTTOM_HEIGHT,
+    );
     topBorder.position.set(0, 0);
     this.add(topBorder);
 
-    const bottomBorder = new BorderWall(innerLength + hDepth * 2, vDepth);
-    bottomBorder.position.set(0, innerLength + vDepth);
+    const bottomBorder = new BorderWall(
+      BORDER_LEFT_WIDTH + FIELD_SIZE + BORDER_RIGHT_WIDTH,
+      BORDER_TOP_BOTTOM_HEIGHT,
+    );
+    bottomBorder.position.set(0, FIELD_SIZE + BORDER_TOP_BOTTOM_HEIGHT);
     this.add(bottomBorder);
 
-    const leftBorder = new BorderWall(hDepth, innerLength);
-    leftBorder.position.set(0, vDepth);
+    const leftBorder = new BorderWall(BORDER_LEFT_WIDTH, FIELD_SIZE);
+    leftBorder.position.set(0, BORDER_TOP_BOTTOM_HEIGHT);
     this.add(leftBorder);
 
-    const rightBorder = new BorderWall(hDepth, innerLength);
-    rightBorder.position.set(hDepth + innerLength, vDepth);
+    const rightBorder = new BorderWall(BORDER_RIGHT_WIDTH, FIELD_SIZE);
+    rightBorder.position.set(
+      BORDER_LEFT_WIDTH + FIELD_SIZE,
+      BORDER_TOP_BOTTOM_HEIGHT,
+    );
     this.add(rightBorder);
   }
 }
