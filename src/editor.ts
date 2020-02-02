@@ -1,17 +1,6 @@
-import {
-  BoundingBox,
-  GameLoop,
-  GameObject,
-  KeyboardInput,
-  Renderer,
-} from './core';
+import { GameLoop, GameObject, KeyboardInput, Renderer } from './core';
 
-import {
-  Border,
-  EditorBrush,
-  EditorBrushEvent,
-  EditorBrushType,
-} from './gameObjects';
+import { Border, EditorBrush, EditorBrushType } from './gameObjects';
 
 import { MapConfig, MapConfigWallType } from './map/MapConfig';
 import { MapFactory } from './map/MapFactory';
@@ -39,17 +28,15 @@ scene.add(field);
 const mapConfig = new MapConfig();
 
 const brush = new EditorBrush();
-brush.on(
-  EditorBrushEvent.Draw,
-  (brushType: EditorBrushType, box: BoundingBox) => {
-    console.log(brushType, box);
-    // TODO: check if coordinates are already taken?
+brush.draw.addListener((event) => {
+  console.log(event);
 
-    if (brushType === EditorBrushType.BrickWall) {
-      mapConfig.addWall(MapConfigWallType.Brick, box.toRect());
-    }
-  },
-);
+  // TODO: check if coordinates are already taken?
+
+  if (event.brushType === EditorBrushType.BrickWall) {
+    mapConfig.addWall(MapConfigWallType.Brick, event.box.toRect());
+  }
+});
 field.add(brush);
 
 const gameLoop = new GameLoop({

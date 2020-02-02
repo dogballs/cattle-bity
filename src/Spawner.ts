@@ -1,11 +1,12 @@
-import { EventEmitter, GameObject, Rotation } from './core';
+import { GameObject, Rotation } from './core';
 import {
-  Spawn,
-  PlayerTank,
   BasicEnemyTank,
   FastEnemyTank,
+  PlayerTank,
   PowerEnemyTank,
+  Spawn,
   Tag,
+  Tank,
 } from './gameObjects';
 import {
   MapConfig,
@@ -14,14 +15,12 @@ import {
 } from './map/MapConfig';
 import { ArrayUtils } from './utils';
 
-export class Spawner extends EventEmitter {
+export class Spawner {
   private readonly mapConfig: MapConfig;
   private readonly field: GameObject;
   private readonly history: Map<MapConfigSpawnType, number> = new Map();
 
   constructor(mapConfig: MapConfig, field: GameObject) {
-    super();
-
     this.mapConfig = mapConfig;
     this.field = field;
   }
@@ -35,13 +34,13 @@ export class Spawner extends EventEmitter {
   private spawn(spawnLocation: MapConfigSpawnLocation): void {
     const spawn = new Spawn();
     spawn.position.set(spawnLocation.x, spawnLocation.y);
-    spawn.on('completed', () => {
+    spawn.completed.addListener(() => {
       const tank = this.createTank(spawnLocation.type);
       if (tank.tags.includes(Tag.Enemy)) {
         tank.rotation = Rotation.Down;
       }
       tank.setCenterFrom(spawn);
-      tank.on('died', () => {
+      tank.died.addListener(() => {
         this.spawn(spawnLocation);
       });
       spawn.replaceSelf(tank);
@@ -52,7 +51,7 @@ export class Spawner extends EventEmitter {
     this.history.set(spawnLocation.type, count + 1);
   }
 
-  private createTank(type: MapConfigSpawnType): GameObject {
+  private createTank(type: MapConfigSpawnType): Tank {
     switch (type) {
       case MapConfigSpawnType.EnemyAny:
         return this.createTank(this.getAnyEnemyType());

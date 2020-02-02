@@ -5,12 +5,14 @@ import {
   Sprite,
   SpriteMaterial,
   SpriteAlignment,
+  Subject,
 } from './../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class TankExplosion extends GameObject {
-  public material: SpriteMaterial = new SpriteMaterial();
+  public material = new SpriteMaterial();
+  public completed = new Subject();
   private readonly animation: Animation<Sprite>;
   private readonly dims: Dimensions[];
 
@@ -30,7 +32,7 @@ export class TankExplosion extends GameObject {
 
   public update(): void {
     if (this.animation.isComplete()) {
-      this.emit('completed');
+      this.completed.notify();
       return;
     }
     this.animation.animate();

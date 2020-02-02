@@ -5,12 +5,14 @@ import {
   Sprite,
   SpriteAlignment,
   SpriteMaterial,
+  Subject,
 } from './../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class BulletExplosion extends GameObject {
-  public material: SpriteMaterial = new SpriteMaterial();
+  public material = new SpriteMaterial();
+  public completed = new Subject();
   private animation: Animation<Sprite>;
   private dims: Dimensions[];
 
@@ -31,7 +33,7 @@ export class BulletExplosion extends GameObject {
 
   public update(): void {
     if (this.animation.isComplete()) {
-      this.emit('completed');
+      this.completed.notify();
       return;
     }
 

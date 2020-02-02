@@ -1,4 +1,4 @@
-import { GameObject, Rotation, SpriteMaterial } from './../core';
+import { GameObject, Rotation, SpriteMaterial, Subject } from './../core';
 import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
 import { BrickWallDestroyer } from './BrickWallDestroyer';
 import { BulletExplosion } from './BulletExplosion';
@@ -9,6 +9,7 @@ export class Bullet extends GameObject {
   public damage = 0;
   public speed = 15;
   public tags = [Tag.Bullet];
+  public died = new Subject();
   private spriteMap: MapNameToSprite;
 
   constructor() {
@@ -64,16 +65,16 @@ export class Bullet extends GameObject {
 
   public nullify(): void {
     this.removeSelf();
-    this.emit('died');
+    this.died.notify();
   }
 
   public explode(): void {
     const bulletExplosion = new BulletExplosion();
     bulletExplosion.setCenterFrom(this);
-    bulletExplosion.on('completed', () => {
+    bulletExplosion.completed.addListener(() => {
       bulletExplosion.removeSelf();
     });
     this.replaceSelf(bulletExplosion);
-    this.emit('died');
+    this.died.notify();
   }
 }

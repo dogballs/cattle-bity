@@ -5,6 +5,7 @@ import {
   Rotation,
   Sprite,
   SpriteMaterial,
+  Subject,
   Vector,
 } from '../core';
 import { Strategy, StandStillStrategy } from '../strategy';
@@ -21,6 +22,7 @@ export class Tank extends GameObject {
   public tags = [Tag.Tank];
   public bullet: Bullet = null;
   public shield: Shield = null;
+  public died = new Subject();
   protected bulletDamage = 1;
   protected bulletSpeed = 10;
   protected speed = 2;
@@ -118,7 +120,7 @@ export class Tank extends GameObject {
 
     this.bullet = bullet;
 
-    bullet.on('died', () => {
+    bullet.died.addListener(() => {
       this.bullet = null;
     });
 
@@ -145,10 +147,10 @@ export class Tank extends GameObject {
   public explode(): void {
     const tankExplosion = new TankExplosion();
     tankExplosion.setCenterFrom(this);
-    tankExplosion.on('completed', () => {
+    tankExplosion.completed.addListener(() => {
       tankExplosion.removeSelf();
     });
     this.replaceSelf(tankExplosion);
-    this.emit('died');
+    this.died.notify();
   }
 }

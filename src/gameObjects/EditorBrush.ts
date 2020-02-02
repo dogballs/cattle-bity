@@ -1,9 +1,11 @@
 import {
   BasicMaterial,
+  BoundingBox,
   Dimensions,
   GameObject,
   KeyboardInput,
   KeyboardKey,
+  Subject,
 } from '../core';
 
 export enum EditorBrushSize {
@@ -17,14 +19,11 @@ export enum EditorBrushType {
   SteelWall = 1,
 }
 
-export enum EditorBrushEvent {
-  Draw = 'Draw',
-}
-
 export class EditorBrush extends GameObject {
   public brushSize: EditorBrushSize = EditorBrushSize.Large;
   public brushType: EditorBrushType = EditorBrushType.BrickWall;
   public material = new BasicMaterial(null, 'red');
+  public draw = new Subject<{ brushType: EditorBrushType; box: BoundingBox }>();
 
   constructor() {
     super();
@@ -50,7 +49,10 @@ export class EditorBrush extends GameObject {
     }
 
     if (input.isDown(KeyboardKey.Space)) {
-      this.emit(EditorBrushEvent.Draw, this.brushType, this.getBoundingBox());
+      this.draw.notify({
+        brushType: this.brushType,
+        box: this.getBoundingBox(),
+      });
     }
   }
 

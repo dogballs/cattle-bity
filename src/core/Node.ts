@@ -1,16 +1,12 @@
-import { EventEmitter } from './EventEmitter';
-
 /**
  * Represents one node in a scene graph.
  * https://en.wikipedia.org/wiki/Scene_graph
  */
-export class Node extends EventEmitter {
+export class Node {
   public children: this[];
   public parent: this;
 
   constructor() {
-    super();
-
     this.children = [];
     this.parent = null;
   }
