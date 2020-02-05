@@ -81,6 +81,7 @@ export class Tank extends GameObject {
         bullet.explode();
       } else {
         this.explode();
+        bullet.explode();
       }
     }
   }

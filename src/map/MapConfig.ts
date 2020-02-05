@@ -4,6 +4,10 @@ export const BRICK_WALL_MULT = 16;
 export const STEEL_WALL_MULT = 32;
 
 export enum MapConfigSpawnType {
+  EnemyNext = 'EnemyNext',
+  EnemyLeft = 'EnemyLeft',
+  EnemyMid = 'EnemyMid',
+  EnemyRight = 'EnemyRight',
   EnemyAny = 'EnemyAny',
   EnemyBasic = 'EnemyBasic',
   EnemyFast = 'EnemyFast',
@@ -22,9 +26,12 @@ export interface MapConfigSpawnLocation {
   y: number;
 }
 
+export type MapConfigSpawnEnemies = MapConfigSpawnType[];
+
 export interface MapConfigSpawn {
   distributions: MapConfigSpawnDistribution[];
   locations: MapConfigSpawnLocation[];
+  enemies: MapConfigSpawnEnemies;
 }
 
 export enum MapConfigWallType {
@@ -38,13 +45,21 @@ export interface MapConfigWall extends Rect {
 
 // TODO: get rid of this duplication
 
+interface MapDtoSpawnDistribution
+  extends Omit<MapConfigSpawnDistribution, 'type'> {
+  type: string;
+}
+
 interface MapDtoSpawnLocation extends Omit<MapConfigSpawnLocation, 'type'> {
   type: string;
 }
 
+type MapDtoSpawnEnemies = string[];
+
 interface MapDtoSpawn {
-  distributions?: MapConfigSpawnDistribution[];
+  distributions?: MapDtoSpawnDistribution[];
   locations?: MapDtoSpawnLocation[];
+  enemies?: MapDtoSpawnEnemies;
 }
 
 interface MapDtoWall extends Omit<MapConfigWall, 'type'> {
@@ -59,6 +74,7 @@ interface MapDto {
 export class MapConfig {
   public spawnDistributions: MapConfigSpawnDistribution[] = [];
   public spawnLocations: MapConfigSpawnLocation[] = [];
+  public spawnEnemies: MapConfigSpawnEnemies = [];
   public walls: MapConfigWall[] = [];
 
   public addWall(type: MapConfigWallType, rect: Rect): this {
@@ -76,7 +92,7 @@ export class MapConfig {
 
   public parse(dto: MapDto): this {
     const { spawn = {}, walls = [] } = dto;
-    const { locations = [], distributions = [] } = spawn;
+    const { locations = [], distributions = [], enemies = [] } = spawn;
 
     walls.forEach((wall) => {
       this.addWall(wall.type as MapConfigWallType, wall);
@@ -89,6 +105,8 @@ export class MapConfig {
     distributions.forEach((distribution) => {
       this.spawnDistributions.push(distribution as MapConfigSpawnDistribution);
     });
+
+    this.spawnEnemies = enemies as MapConfigSpawnEnemies;
 
     return this;
   }

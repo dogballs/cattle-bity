@@ -6,6 +6,7 @@ export * from './BorderWall';
 export * from './Bullet';
 export * from './BulletExplosion';
 export * from './EditorBrush';
+export * from './EnemyCounter';
 export * from './EnemyTank';
 export * from './FastEnemyTank';
 export * from './GrenadePowerup';

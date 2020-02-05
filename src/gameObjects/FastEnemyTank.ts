@@ -6,7 +6,7 @@ import { EnemyTank } from './EnemyTank';
 
 export class FastEnemyTank extends EnemyTank {
   protected bulletSpeed = 13;
-  protected health = 2;
+  protected health = 1;
   protected speed = 4;
 
   constructor() {
