@@ -1,13 +1,8 @@
 export interface GameLoopOptions {
-  /**
-   * Add extra delay for each tick (in number of ticks)
-   */
-  // delay?: number;
   onTick?: () => void;
 }
 
 export const DEFAULT_GAME_LOOP_OPTIONS = {
-  // delay: 0,
   onTick: (): void => undefined,
 };
 

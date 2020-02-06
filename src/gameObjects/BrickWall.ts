@@ -1,6 +1,7 @@
+import { Tag } from '../Tag';
+
 import { GameObject, Sprite, SpriteMaterial } from '../core';
 import { SpriteFactory } from '../sprite/SpriteFactory';
-import { Tag } from './Tag';
 
 export class BrickWall extends GameObject {
   public tags = [Tag.Wall, Tag.Brick];

@@ -1,24 +1,25 @@
 import {
-  Animation,
   GameObject,
   KeyboardInput,
   Rotation,
-  Sprite,
   SpriteMaterial,
   Subject,
   Vector,
 } from '../core';
-import { Strategy, StandStillStrategy } from '../strategy';
+import { TankAnimationMap } from '../animations';
+import { Behavior, StandStillBehavior } from '../behaviors';
 
 import { Bullet } from './Bullet';
 import { Shield } from './Shield';
-import { Tag } from './Tag';
+import { Tag } from '../Tag';
+
 import { TankExplosion } from './TankExplosion';
 
 export class Tank extends GameObject {
+  public animationMap: TankAnimationMap;
   public collider = true;
   public material: SpriteMaterial = new SpriteMaterial();
-  public strategy: Strategy = new StandStillStrategy();
+  public behavior: Behavior = new StandStillBehavior();
   public tags = [Tag.Tank];
   public bullet: Bullet = null;
   public shield: Shield = null;
@@ -27,11 +28,22 @@ export class Tank extends GameObject {
   protected bulletSpeed = 10;
   protected speed = 2;
   protected health = 1;
-  protected animations: Map<Rotation, Animation<Sprite>> = new Map();
+
+  constructor(width: number, height: number) {
+    super(width, height);
+
+    // TODO: tank is not rendered when constructed, only on update
+    //       (field initializers)
+  }
 
   public update({ input }: { input: KeyboardInput }): void {
-    this.strategy.update(this, input);
-    this.material.sprite = this.animations.get(this.rotation).getCurrentFrame();
+    this.behavior.update(this, input);
+
+    const animation = this.animationMap[this.rotation];
+
+    animation.animate();
+
+    this.material.sprite = animation.getCurrentFrame();
   }
 
   public collide(target: GameObject): void {
@@ -139,10 +151,9 @@ export class Tank extends GameObject {
       this.position.x -= this.speed;
     }
 
-    const animation = this.animations.get(this.rotation);
-    if (animation !== undefined) {
-      this.material.sprite = animation.getCurrentFrame();
-    }
+    const animation = this.animationMap[this.rotation];
+    animation.animate();
+    this.material.sprite = animation.getCurrentFrame();
   }
 
   public explode(): void {

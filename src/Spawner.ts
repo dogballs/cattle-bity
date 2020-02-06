@@ -1,13 +1,17 @@
 import { GameObject, Rotation, Subject, Vector } from './core';
 import {
-  BasicEnemyTank,
-  FastEnemyTank,
+  EnemyBasicTank,
+  EnemyFastTank,
+  EnemyPowerTank,
   PlayerTank,
-  PowerEnemyTank,
   Spawn,
   Tank,
 } from './gameObjects';
-import { MapConfig, MapConfigSpawnType } from './map/MapConfig';
+import {
+  MapConfig,
+  MapConfigSpawnType,
+  MapConfigSpawnEnemy,
+} from './map/MapConfig';
 
 const PLAYER_FIRST_SPAWN_DELAY = 0;
 const PLAYER_SPAWN_DELAY = 0;
@@ -36,7 +40,7 @@ export class Spawner {
   private readonly field: GameObject;
   private locations: Map<SpawnLocation, Vector> = new Map();
   private currentEnemyLocation: SpawnLocation = SpawnLocation.EnemyMid;
-  private enemyQueue: MapConfigSpawnType[] = [];
+  private enemyQueue: MapConfigSpawnEnemy[] = [];
   private aliveEnemyCount = 0;
   private timers: Map<TimerType, number> = new Map();
 
@@ -47,9 +51,9 @@ export class Spawner {
     this.enemyQueue = mapConfig.spawnEnemies.slice(0, ENEMY_MAX_TOTAL_COUNT);
 
     this.locations.set(SpawnLocation.PlayerPrimary, new Vector(256, 768));
-    this.locations.set(SpawnLocation.EnemyLeft, new Vector(256, 256));
-    this.locations.set(SpawnLocation.EnemyMid, new Vector(320, 256));
-    this.locations.set(SpawnLocation.EnemyRight, new Vector(384, 256));
+    this.locations.set(SpawnLocation.EnemyLeft, new Vector(256, 384));
+    this.locations.set(SpawnLocation.EnemyMid, new Vector(320, 384));
+    this.locations.set(SpawnLocation.EnemyRight, new Vector(384, 384));
 
     this.timers.set(TimerType.PlayerPrimary, PLAYER_FIRST_SPAWN_DELAY);
     this.timers.set(TimerType.Enemy, ENEMY_FIRST_SPAWN_DELAY);
@@ -110,14 +114,14 @@ export class Spawner {
   }
 
   private spawnEnemy(): void {
-    const enemyType = this.enemyQueue.shift();
+    const enemyConfig = this.enemyQueue.shift();
 
     const locationPosition = this.locations.get(this.currentEnemyLocation);
 
     const spawn = new Spawn();
     spawn.position.copy(locationPosition);
     spawn.completed.addListener(() => {
-      const tank = this.createTank(enemyType);
+      const tank = this.createTank(enemyConfig.type, enemyConfig.hasDrop);
       tank.rotation = Rotation.Down;
       tank.setCenterFrom(spawn);
       tank.died.addListener(() => {
@@ -143,14 +147,14 @@ export class Spawner {
     this.enemySpawned.notify();
   }
 
-  private createTank(type: MapConfigSpawnType): Tank {
+  private createTank(type: MapConfigSpawnType, hasDrop = false): Tank {
     switch (type) {
       case MapConfigSpawnType.EnemyBasic:
-        return new BasicEnemyTank();
+        return new EnemyBasicTank(hasDrop);
       case MapConfigSpawnType.EnemyFast:
-        return new FastEnemyTank();
+        return new EnemyFastTank(hasDrop);
       case MapConfigSpawnType.EnemyPower:
-        return new PowerEnemyTank();
+        return new EnemyPowerTank(hasDrop);
       case MapConfigSpawnType.PlayerPrimary:
       default:
         return new PlayerTank();

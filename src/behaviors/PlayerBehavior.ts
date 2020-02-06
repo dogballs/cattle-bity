@@ -1,9 +1,9 @@
 import { KeyboardInput, KeyboardKey, Rotation } from '../core';
 import { Tank } from '../gameObjects';
 
-import { Strategy } from './Strategy';
+import { Behavior } from './Behavior';
 
-export class PlayerStrategy extends Strategy {
+export class PlayerBehavior extends Behavior {
   public update(tank: Tank, input: KeyboardInput): void {
     if (input.isHoldLast(KeyboardKey.W)) {
       tank.rotate(Rotation.Up);

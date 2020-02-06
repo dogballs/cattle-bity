@@ -1,5 +1,26 @@
 {
   "spawn": {
-    "enemies": ["EnemyFast", "EnemyFast"]
+    "enemies": [
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic", "hasDrop": true },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyBasic" },
+      { "type": "EnemyFast" },
+      { "type": "EnemyFast" }
+    ]
   }
 }

@@ -1,8 +1,8 @@
 import { Tank } from '../gameObjects';
 
-import { Strategy } from './Strategy';
+import { Behavior } from './Behavior';
 
-export class StandFireStrategy extends Strategy {
+export class StandFireBehavior extends Behavior {
   public update(tank: Tank): void {
     tank.fire();
   }

@@ -17,7 +17,7 @@ import { MapFactory } from './map/MapFactory';
 import * as mapJSON from './map/test-enemy-tanks.json';
 
 const renderer = new Renderer({
-  debug: true,
+  // debug: true,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
@@ -49,7 +49,6 @@ enemyCounter.position.set(
 scene.add(enemyCounter);
 
 spawner.enemySpawned.addListener(() => {
-  console.log('hello');
   enemyCounter.updateCount(spawner.getUnspawnedEnemiesCount());
 });
 

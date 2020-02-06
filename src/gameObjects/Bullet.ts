@@ -1,8 +1,9 @@
 import { GameObject, Rotation, SpriteMaterial, Subject } from './../core';
 import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
+import { Tag } from '../Tag';
+
 import { BrickWallDestroyer } from './BrickWallDestroyer';
 import { BulletExplosion } from './BulletExplosion';
-import { Tag } from './Tag';
 
 export class Bullet extends GameObject {
   public collider = true;

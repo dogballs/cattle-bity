@@ -1,5 +1,6 @@
+import { Tag } from '../Tag';
+
 import { GameObject } from './../core';
-import { Tag } from './Tag';
 
 export class BrickWallDestroyer extends GameObject {
   public collider = true;

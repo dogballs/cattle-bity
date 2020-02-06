@@ -14,7 +14,6 @@ export class Spawn extends GameObject {
   public material = new SpriteMaterial();
   public completed = new Subject();
   private animation: Animation<Sprite>;
-  private dims: Dimensions[];
 
   constructor() {
     super(64, 64);
