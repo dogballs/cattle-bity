@@ -1,6 +1,6 @@
 import {
   GameObject,
-  KeyboardInput,
+  GameObjectUpdateArgs,
   Rotation,
   SpriteMaterial,
   Subject,
@@ -36,13 +36,10 @@ export class Tank extends GameObject {
     //       (field initializers)
   }
 
-  public update({ input }: { input: KeyboardInput }): void {
-    this.behavior.update(this, input);
+  public update(updateArgs: GameObjectUpdateArgs): void {
+    this.behavior.update(this, updateArgs);
 
     const animation = this.animationMap[this.rotation];
-
-    animation.animate();
-
     this.material.sprite = animation.getCurrentFrame();
   }
 
@@ -98,9 +95,9 @@ export class Tank extends GameObject {
     }
   }
 
-  public fire(): void {
+  public fire(): boolean {
     if (this.bullet !== null) {
-      return;
+      return false;
     }
 
     const bullet = new Bullet();
@@ -137,7 +134,11 @@ export class Tank extends GameObject {
       this.bullet = null;
     });
 
+    // this.fired.notify();
+
     this.parent.add(bullet);
+
+    return true;
   }
 
   public move(): void {

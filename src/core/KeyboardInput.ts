@@ -75,6 +75,10 @@ export class KeyboardInput {
     return this.holdKeyCodes.some((keyCode) => keyCodes.includes(keyCode));
   }
 
+  public isNotHoldAll(keyCodes: KeyboardKeyCode[]): boolean {
+    return this.holdKeyCodes.every((keyCode) => !keyCodes.includes(keyCode));
+  }
+
   public isHoldLast(keyCode: KeyboardKeyCode): boolean {
     return this.holdKeyCodes[this.holdKeyCodes.length - 1] === keyCode;
   }

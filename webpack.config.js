@@ -36,7 +36,7 @@ module.exports = {
     new CopyWebpackPlugin([
       'index.html',
       'editor.html',
-      { from: 'images/', to: 'images/' },
+      { from: 'data/', to: 'data/' },
       { from: 'styles/', to: 'styles/' },
     ]),
   ],

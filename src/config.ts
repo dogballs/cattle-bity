@@ -1,3 +1,6 @@
+export const AUDIO_BASE_PATH = 'data/audio/';
+export const GRAPHICS_BASE_PATH = 'data/graphics/';
+
 export const TILE_SIZE = 64;
 export const TILE_COUNT = 13;
 export const FIELD_SIZE = TILE_COUNT * TILE_SIZE;

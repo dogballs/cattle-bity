@@ -1,4 +1,6 @@
 export * from './Animation';
+export * from './AudioLoader';
+export * from './AudioSource';
 export * from './BasicMaterial';
 export * from './BoundingBox';
 export * from './Collision';
@@ -6,7 +8,9 @@ export * from './CollisionDetector';
 export * from './Dimensions';
 export * from './GameLoop';
 export * from './GameObject';
+export * from './GameState';
 export * from './KeyboardInput';
+export * from './Logger';
 export * from './Material';
 export * from './Node';
 export * from './Rect';

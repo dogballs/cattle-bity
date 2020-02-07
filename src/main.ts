@@ -2,7 +2,9 @@ import {
   CollisionDetector,
   GameLoop,
   GameObject,
+  GameState,
   KeyboardInput,
+  KeyboardKey,
   Renderer,
 } from './core';
 
@@ -12,6 +14,7 @@ import * as config from './config';
 
 import { Spawner } from './Spawner';
 
+import { AudioManager } from './audio/AudioManager';
 import { MapConfig } from './map/MapConfig';
 import { MapFactory } from './map/MapFactory';
 import * as mapJSON from './map/test-enemy-tanks.json';
@@ -52,20 +55,42 @@ spawner.enemySpawned.addListener(() => {
   enemyCounter.updateCount(spawner.getUnspawnedEnemiesCount());
 });
 
+AudioManager.preloadAll();
+
 // const grenadePowerup = new GrenadePowerup();
 // grenadePowerup.position.set(100, 600);
 // field.add(grenadePowerup);
 
+let gameState = GameState.Playing;
+
+const pauseAudio = AudioManager.load('pause');
+
 const gameLoop = new GameLoop({
   onTick: (): void => {
     input.update();
+
+    if (input.isDown(KeyboardKey.Enter)) {
+      if (gameState === GameState.Playing) {
+        gameState = GameState.Paused;
+        AudioManager.pauseAll();
+        pauseAudio.play();
+      } else {
+        gameState = GameState.Playing;
+        AudioManager.resumeAll();
+      }
+    }
+
+    // TODO: enemies with drops are still animated
+    if (gameState === GameState.Paused) {
+      return;
+    }
 
     spawner.update();
 
     // Update all objects on the scene
     // TODO: abstract out input from tank
     scene.traverse((child) => {
-      child.update({ input });
+      child.update({ input, gameState });
     });
 
     const nodes = scene.flatten();

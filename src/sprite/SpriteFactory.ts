@@ -1,4 +1,6 @@
 import { Sprite, TextureLoader } from '../core';
+import { PathUtils } from '../utils';
+import { GRAPHICS_BASE_PATH } from '../config';
 
 import config from './sprite.config';
 
@@ -10,6 +12,8 @@ export interface MapNameToSprite {
   [name: string]: Sprite;
 }
 
+// TODO: refactor, used as a singleton
+
 export class SpriteFactory {
   public static asOne(
     id: string,
@@ -20,7 +24,8 @@ export class SpriteFactory {
       throw new Error(`Invalid sprite id = "${id}"`);
     }
 
-    const [imagePath, ...textureRectValues] = spriteConfig;
+    const [imageName, ...textureRectValues] = spriteConfig;
+    const imagePath = PathUtils.join(GRAPHICS_BASE_PATH, imageName);
 
     const texture = TextureLoader.load(imagePath);
     const textureRect = new Sprite.Rect(...textureRectValues);

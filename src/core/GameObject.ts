@@ -1,13 +1,15 @@
 import { BoundingBox } from './BoundingBox';
 import { Dimensions } from './Dimensions';
+import { GameState } from './GameState';
 import { KeyboardInput } from './KeyboardInput';
 import { Material } from './Material';
 import { Node } from './Node';
 import { Rotation } from './Rotation';
 import { Vector } from './Vector';
 
-interface GameObjectUpdateArgs {
+export interface GameObjectUpdateArgs {
   input?: KeyboardInput;
+  gameState?: GameState;
 }
 
 export class GameObject extends Node {
