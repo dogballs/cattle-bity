@@ -5,15 +5,17 @@ import { KeyboardInput } from './KeyboardInput';
 import { Material } from './Material';
 import { Node } from './Node';
 import { Rotation } from './Rotation';
+import { State } from './State';
 import { Vector } from './Vector';
 
 export interface GameObjectUpdateArgs {
   input?: KeyboardInput;
-  gameState?: GameState;
+  gameState?: State<GameState>;
 }
 
 export class GameObject extends Node {
   public collider = false;
+  public ignorePause = false;
   public dimensions: Dimensions;
   public material: Material = null;
   public position: Vector = new Vector();

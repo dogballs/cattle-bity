@@ -1,8 +1,10 @@
 import { GameObject, Rotation, Subject, Vector } from './core';
 import {
+  GrenadePowerup,
+  TankPowerup,
   EnemyBasicTank,
-  EnemyFastTank,
-  EnemyPowerTank,
+  // EnemyFastTank,
+  // EnemyPowerTank,
   PlayerTank,
   Spawn,
   Tank,
@@ -12,6 +14,9 @@ import {
   MapConfigSpawnType,
   MapConfigSpawnEnemy,
 } from './map/MapConfig';
+import { RandomUtils } from './utils';
+
+import { FIELD_SIZE } from './config';
 
 const PLAYER_FIRST_SPAWN_DELAY = 0;
 const PLAYER_SPAWN_DELAY = 0;
@@ -21,6 +26,10 @@ const ENEMY_SPAWN_DELAY = 180;
 const ENEMY_MAX_TOTAL_COUNT = 20;
 const ENEMY_MAX_ALIVE_COUNT = 4;
 
+// SHIELD STAYS 10 src
+// POWERUP STAYS 30 secs, new drop overrides existing
+// BASE DEFENCE 20 sec + 3 sec blinking?
+
 enum SpawnLocation {
   EnemyLeft,
   EnemyMid,
@@ -28,9 +37,15 @@ enum SpawnLocation {
   PlayerPrimary,
 }
 
+enum PowerupType {
+  Grenade,
+  Tank,
+}
+
 enum TimerType {
   PlayerPrimary,
   Enemy,
+  Powerup,
 }
 
 export class Spawner {
@@ -72,10 +87,7 @@ export class Spawner {
       if (timerType === TimerType.PlayerPrimary) {
         this.spawnPlayer();
         this.timers.set(timerType, -1);
-        return;
-      }
-
-      if (timerType === TimerType.Enemy) {
+      } else if (timerType === TimerType.Enemy) {
         if (this.aliveEnemyCount >= ENEMY_MAX_ALIVE_COUNT) {
           this.timers.set(timerType, -1);
           return;
@@ -115,20 +127,24 @@ export class Spawner {
 
   private spawnEnemy(): void {
     const enemyConfig = this.enemyQueue.shift();
+    const { hasDrop } = enemyConfig;
 
     const locationPosition = this.locations.get(this.currentEnemyLocation);
 
     const spawn = new Spawn();
     spawn.position.copy(locationPosition);
     spawn.completed.addListener(() => {
-      const tank = this.createTank(enemyConfig.type, enemyConfig.hasDrop);
-      tank.rotation = Rotation.Down;
+      const tank = this.createTank(enemyConfig.type, hasDrop);
+      tank.rotate(Rotation.Down);
       tank.setCenterFrom(spawn);
       tank.died.addListener(() => {
         this.aliveEnemyCount = Math.max(0, this.aliveEnemyCount - 1);
         const timer = this.timers.get(TimerType.Enemy);
         if (timer === -1) {
           this.timers.set(TimerType.Enemy, ENEMY_SPAWN_DELAY);
+        }
+        if (hasDrop) {
+          this.spawnPowerup();
         }
       });
       spawn.replaceSelf(tank);
@@ -147,17 +163,45 @@ export class Spawner {
     this.enemySpawned.notify();
   }
 
+  private spawnPowerup(): void {
+    const type = RandomUtils.arrayElement(
+      Object.values(PowerupType),
+    ) as PowerupType;
+    const powerup = this.createPowerup(type);
+
+    // TODO: Positioning should be smart
+    // - on a road
+    // - not spawn on top of base/tank/steel or water walls, etc
+    const x = RandomUtils.number(0, FIELD_SIZE);
+    const y = RandomUtils.number(0, FIELD_SIZE);
+
+    powerup.position.set(x, y);
+
+    this.field.add(powerup);
+  }
+
   private createTank(type: MapConfigSpawnType, hasDrop = false): Tank {
     switch (type) {
       case MapConfigSpawnType.EnemyBasic:
         return new EnemyBasicTank(hasDrop);
-      case MapConfigSpawnType.EnemyFast:
-        return new EnemyFastTank(hasDrop);
-      case MapConfigSpawnType.EnemyPower:
-        return new EnemyPowerTank(hasDrop);
+      // case MapConfigSpawnType.EnemyFast:
+      //   return new EnemyFastTank(hasDrop);
+      // case MapConfigSpawnType.EnemyPower:
+      //   return new EnemyPowerTank(hasDrop);
       case MapConfigSpawnType.PlayerPrimary:
       default:
         return new PlayerTank();
+    }
+  }
+
+  private createPowerup(type: PowerupType): GameObject {
+    switch (type) {
+      case PowerupType.Grenade:
+        return new GrenadePowerup();
+      case PowerupType.Tank:
+        return new TankPowerup();
+      default:
+        return new GameObject();
     }
   }
 }

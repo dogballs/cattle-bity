@@ -1,3 +1,5 @@
+export * from './powerups';
+
 export * from './BrickWall';
 export * from './BrickWallDestroyer';
 export * from './Border';
@@ -7,10 +9,9 @@ export * from './BulletExplosion';
 export * from './EditorBrush';
 export * from './EnemyBasicTank';
 export * from './EnemyCounter';
-export * from './EnemyFastTank';
-export * from './EnemyPowerTank';
+// export * from './EnemyFastTank';
+// export * from './EnemyPowerTank';
 export * from './EnemyTank';
-export * from './GrenadePowerup';
 export * from './PlayerTank';
 export * from './Shield';
 export * from './Spawn';

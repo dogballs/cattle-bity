@@ -1,2 +1,2 @@
-export * from './ArrayUtils';
 export * from './PathUtils';
+export * from './RandomUtils';

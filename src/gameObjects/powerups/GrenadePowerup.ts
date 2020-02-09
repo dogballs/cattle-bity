@@ -1,7 +1,8 @@
-import { Animation, GameObject, Sprite, SpriteMaterial } from '../core';
-import { SpriteFactory } from '../sprite/SpriteFactory';
+import { Animation, GameObject, Sprite, SpriteMaterial } from '../../core';
+import { SpriteFactory } from '../../sprite/SpriteFactory';
 
 export class GrenadePowerup extends GameObject {
+  public material = new SpriteMaterial();
   private animation: Animation<Sprite>;
 
   constructor() {
@@ -12,8 +13,6 @@ export class GrenadePowerup extends GameObject {
       [SpriteFactory.asOne('powerupGrenade'), null],
       { delay: 5, loop: true },
     );
-
-    this.material = new SpriteMaterial();
   }
 
   public update(): void {

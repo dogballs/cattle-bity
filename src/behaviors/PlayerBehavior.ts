@@ -1,24 +1,11 @@
-import {
-  GameObjectUpdateArgs,
-  GameState,
-  KeyboardKey,
-  Rotation,
-} from '../core';
-import { Tank } from '../gameObjects';
+import { GameObjectUpdateArgs, KeyboardKey, Rotation } from '../core';
+import { Tank, TankState } from '../gameObjects';
 import { AudioManager } from '../audio/AudioManager';
 
 import { Behavior } from './Behavior';
 
-enum State {
-  Uninitialized,
-  Idle,
-  Moving,
-}
-
 export class PlayerBehavior extends Behavior {
   // TODO: Is it ok in here?
-  private state = State.Uninitialized;
-  private lastGameState: GameState = null;
   private fireAudio = AudioManager.load('fire');
   private moveAudio = AudioManager.load('tankMove');
   private idleAudio = AudioManager.load('tankIdle');
@@ -45,17 +32,15 @@ export class PlayerBehavior extends Behavior {
     ];
 
     if (input.isHoldAny(moveKeys)) {
-      tank.move();
-
-      if (this.state !== State.Moving) {
-        this.state = State.Moving;
+      if (tank.state !== TankState.Moving) {
         this.idleAudio.stop();
         this.moveAudio.playLoop();
       }
+      tank.move();
     }
 
-    if (input.isNotHoldAll(moveKeys) && this.state !== State.Idle) {
-      this.state = State.Idle;
+    if (input.isNotHoldAll(moveKeys) && tank.state !== TankState.Idle) {
+      tank.idle();
       this.moveAudio.stop();
       this.idleAudio.playLoop();
     }

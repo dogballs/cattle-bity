@@ -11,13 +11,13 @@ export class PatrolBehavior extends Behavior {
 
     if (this.lastPosition !== null && this.lastPosition.equals(tank.position)) {
       if (tank.rotation === Rotation.Up) {
-        tank.rotation = Rotation.Down;
+        tank.rotate(Rotation.Down);
       } else if (tank.rotation === Rotation.Down) {
-        tank.rotation = Rotation.Up;
+        tank.rotate(Rotation.Up);
       } else if (tank.rotation === Rotation.Left) {
-        tank.rotation = Rotation.Right;
+        tank.rotate(Rotation.Right);
       } else if (tank.rotation === Rotation.Right) {
-        tank.rotation = Rotation.Left;
+        tank.rotate(Rotation.Left);
       }
       tank.move();
       return;

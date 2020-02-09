@@ -1,13 +1,15 @@
 import {
+  Animation,
   GameObject,
   GameObjectUpdateArgs,
   Rotation,
+  Sprite,
   SpriteMaterial,
   Subject,
   Vector,
 } from '../core';
-import { TankAnimationMap } from '../animations';
 import { Behavior, StandStillBehavior } from '../behaviors';
+import { TankSkin } from '../TankSkin';
 
 import { Bullet } from './Bullet';
 import { Shield } from './Shield';
@@ -15,8 +17,13 @@ import { Tag } from '../Tag';
 
 import { TankExplosion } from './TankExplosion';
 
+export enum TankState {
+  Uninitialized,
+  Idle,
+  Moving,
+}
+
 export class Tank extends GameObject {
-  public animationMap: TankAnimationMap;
   public collider = true;
   public material: SpriteMaterial = new SpriteMaterial();
   public behavior: Behavior = new StandStillBehavior();
@@ -24,23 +31,29 @@ export class Tank extends GameObject {
   public bullet: Bullet = null;
   public shield: Shield = null;
   public died = new Subject();
+  public skin: TankSkin;
+  public state = TankState.Uninitialized;
   protected bulletDamage = 1;
   protected bulletSpeed = 10;
   protected speed = 2;
   protected health = 1;
+  protected animation: Animation<Sprite>;
 
   constructor(width: number, height: number) {
     super(width, height);
 
     // TODO: tank is not rendered when constructed, only on update
     //       (field initializers)
+    // this.skin.hasDrop = true;
+    // this.skin.rotation = this.rotation;
+    // this.animation = this.skin.createIdleAnimation();
   }
 
   public update(updateArgs: GameObjectUpdateArgs): void {
     this.behavior.update(this, updateArgs);
 
-    const animation = this.animationMap[this.rotation];
-    this.material.sprite = animation.getCurrentFrame();
+    this.animation.animate();
+    this.material.sprite = this.animation.getCurrentFrame();
   }
 
   public collide(target: GameObject): void {
@@ -134,14 +147,17 @@ export class Tank extends GameObject {
       this.bullet = null;
     });
 
-    // this.fired.notify();
-
     this.parent.add(bullet);
 
     return true;
   }
 
   public move(): void {
+    if (this.state !== TankState.Moving) {
+      this.state = TankState.Moving;
+      this.animation = this.skin.createMoveAnimation();
+    }
+
     if (this.rotation === Rotation.Up) {
       this.position.y -= this.speed;
     } else if (this.rotation === Rotation.Down) {
@@ -152,9 +168,31 @@ export class Tank extends GameObject {
       this.position.x -= this.speed;
     }
 
-    const animation = this.animationMap[this.rotation];
-    animation.animate();
-    this.material.sprite = animation.getCurrentFrame();
+    // const animation = this.animationMap[this.rotation];
+    // animation.animate();
+    // this.material.sprite = animation.getCurrentFrame();
+  }
+
+  public idle(): void {
+    if (this.state !== TankState.Idle) {
+      this.state = TankState.Idle;
+      this.animation = this.skin.createIdleAnimation();
+    }
+  }
+
+  public rotate(rotation: Rotation): this {
+    if (this.rotation !== rotation) {
+      this.skin.rotation = rotation;
+      if (this.state === TankState.Moving) {
+        this.animation = this.skin.createMoveAnimation();
+      } else {
+        this.animation = this.skin.createIdleAnimation();
+      }
+    }
+
+    super.rotate(rotation);
+
+    return this;
   }
 
   public explode(): void {

@@ -6,6 +6,7 @@ import {
   KeyboardInput,
   KeyboardKey,
   Renderer,
+  State,
 } from './core';
 
 import { Border, EnemyCounter } from './gameObjects';
@@ -61,7 +62,7 @@ AudioManager.preloadAll();
 // grenadePowerup.position.set(100, 600);
 // field.add(grenadePowerup);
 
-let gameState = GameState.Playing;
+const gameState = new State<GameState>(GameState.Playing);
 
 const pauseAudio = AudioManager.load('pause');
 
@@ -70,27 +71,28 @@ const gameLoop = new GameLoop({
     input.update();
 
     if (input.isDown(KeyboardKey.Enter)) {
-      if (gameState === GameState.Playing) {
-        gameState = GameState.Paused;
+      if (gameState.is(GameState.Playing)) {
+        gameState.set(GameState.Paused);
         AudioManager.pauseAll();
         pauseAudio.play();
       } else {
-        gameState = GameState.Playing;
+        gameState.set(GameState.Playing);
         AudioManager.resumeAll();
       }
     }
 
     // TODO: enemies with drops are still animated
-    if (gameState === GameState.Paused) {
-      return;
+    if (!gameState.is(GameState.Paused)) {
+      spawner.update();
     }
-
-    spawner.update();
 
     // Update all objects on the scene
     // TODO: abstract out input from tank
     scene.traverse((child) => {
-      child.update({ input, gameState });
+      const shouldUpdate = gameState.is(GameState.Playing) || child.ignorePause;
+      if (shouldUpdate) {
+        child.update({ input, gameState });
+      }
     });
 
     const nodes = scene.flatten();
@@ -105,6 +107,8 @@ const gameLoop = new GameLoop({
     });
 
     renderer.render(scene);
+
+    gameState.tick();
   },
 });
 

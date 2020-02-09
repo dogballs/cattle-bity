@@ -18,6 +18,7 @@ export * from './Renderer';
 export * from './Rotation';
 export * from './Sprite';
 export * from './SpriteMaterial';
+export * from './State';
 export * from './Subject';
 export * from './Texture';
 export * from './TextureLoader';

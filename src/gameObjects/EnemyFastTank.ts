@@ -1,8 +1,3 @@
-import {
-  EnemyFastTankAnimationMap,
-  EnemyFastDropTankAnimationMap,
-} from '../animations';
-
 import { EnemyTank } from './EnemyTank';
 
 export class EnemyFastTank extends EnemyTank {
@@ -12,9 +7,5 @@ export class EnemyFastTank extends EnemyTank {
 
   constructor(hasDrop = false) {
     super(52, 60, hasDrop);
-
-    this.animationMap = hasDrop
-      ? new EnemyFastDropTankAnimationMap()
-      : new EnemyFastTankAnimationMap();
   }
 }
