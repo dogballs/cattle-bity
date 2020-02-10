@@ -58,10 +58,6 @@ spawner.enemySpawned.addListener(() => {
 
 AudioManager.preloadAll();
 
-// const grenadePowerup = new GrenadePowerup();
-// grenadePowerup.position.set(100, 600);
-// field.add(grenadePowerup);
-
 const gameState = new State<GameState>(GameState.Playing);
 
 const pauseAudio = AudioManager.load('pause');

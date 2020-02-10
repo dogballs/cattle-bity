@@ -22,4 +22,5 @@ export * from './State';
 export * from './Subject';
 export * from './Texture';
 export * from './TextureLoader';
+export * from './Timer';
 export * from './Vector';

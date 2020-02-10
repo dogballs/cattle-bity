@@ -10,7 +10,7 @@ export class EnemyBasicTank extends EnemyTank {
   constructor(hasDrop = false) {
     super(52, 60, hasDrop);
 
-    this.skin.hasDrop = true;
+    this.skin.hasDrop = hasDrop;
     this.skin.rotation = this.rotation;
     this.animation = this.skin.createIdleAnimation();
   }

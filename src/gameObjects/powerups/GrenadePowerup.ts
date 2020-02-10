@@ -1,7 +1,11 @@
 import { Animation, GameObject, Sprite, SpriteMaterial } from '../../core';
+import { EnemyTank } from '../../gameObjects';
 import { SpriteFactory } from '../../sprite/SpriteFactory';
+import { Tag } from '../../Tag';
 
 export class GrenadePowerup extends GameObject {
+  public collider = true;
+  public ignorePause = true;
   public material = new SpriteMaterial();
   private animation: Animation<Sprite>;
 
@@ -11,7 +15,7 @@ export class GrenadePowerup extends GameObject {
     // Null as a second frame adds a blink effect
     this.animation = new Animation(
       [SpriteFactory.asOne('powerupGrenade'), null],
-      { delay: 5, loop: true },
+      { delay: 7, loop: true },
     );
   }
 
@@ -20,22 +24,22 @@ export class GrenadePowerup extends GameObject {
     this.material.sprite = this.animation.getCurrentFrame();
   }
 
-  public collide(): void {
-    // scene remove all tanks
-    /*
-    const powerup = this.collision.target;
+  public collide(target: GameObject): void {
+    if (target.tags.includes(Tag.Player)) {
+      this.removeSelf();
 
-    powerup.removeSelf();
+      // TODO: ref to parent not nice
+      // TODO: is this logic even ok here?
+      const enemyTanks = this.parent.getChildrenWithTag([
+        Tag.Tank,
+        Tag.Enemy,
+      ]) as EnemyTank[];
 
-    const enemyTanks = this.scene.getChildrenOfType(EnemyTank);
-    enemyTanks.forEach((enemyTank) => {
-      const tankExplosion = new TankExplosion();
-      tankExplosion.setCenterFrom(enemyTank);
-      tankExplosion.onComplete = (): void => {
-        tankExplosion.removeSelf();
-      };
-      enemyTank.replaceSelf(tankExplosion);
-    });
-     */
+      enemyTanks.forEach((enemyTank) => {
+        // Enemy with drop cant drop it when killed by another powerup
+        enemyTank.discardDrop();
+        enemyTank.explode();
+      });
+    }
   }
 }

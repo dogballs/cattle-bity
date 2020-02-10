@@ -5,7 +5,7 @@ import { Tank } from './Tank';
 
 export abstract class EnemyTank extends Tank {
   public tags = [Tag.Tank, Tag.Enemy];
-  public readonly hasDrop: boolean = false;
+  public hasDrop = false;
 
   constructor(width: number, height: number, hasDrop = false) {
     super(width, height);
@@ -16,7 +16,7 @@ export abstract class EnemyTank extends Tank {
     }
   }
 
-  update(updateArgs: GameObjectUpdateArgs): void {
+  public update(updateArgs: GameObjectUpdateArgs): void {
     const { gameState } = updateArgs;
 
     if (gameState.hasChangedTo(GameState.Paused)) {
@@ -30,5 +30,11 @@ export abstract class EnemyTank extends Tank {
     }
 
     super.update(updateArgs);
+  }
+
+  public discardDrop(): this {
+    this.hasDrop = false;
+
+    return this;
   }
 }

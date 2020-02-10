@@ -97,6 +97,7 @@ export class GameObject extends Node {
     this.position.copy(
       gameObject.getCenter().sub(dims.toVector().divideScalar(2)),
     );
+
     return this;
   }
 
@@ -104,6 +105,25 @@ export class GameObject extends Node {
     this.rotation = rotation;
 
     return this;
+  }
+
+  public getChildrenWithTag(argTags: string | string[]): GameObject[] {
+    const objects = [];
+
+    const tags = Array.isArray(argTags) ? argTags : [argTags];
+
+    // TODO: These loops look like shit
+    this.traverse((object) => {
+      const hasAllTags = tags.every((tag) => {
+        return object.tags.includes(tag);
+      });
+
+      if (hasAllTags) {
+        objects.push(object);
+      }
+    });
+
+    return objects;
   }
 
   public hasChildrenWithTag(tag: string): boolean {
