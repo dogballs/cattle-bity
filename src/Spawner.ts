@@ -1,7 +1,7 @@
 import { GameObject, Rotation, Subject, Timer, Vector } from './core';
 import {
-  GrenadePowerup,
-  TankPowerup,
+  WipeoutPowerup,
+  UpgradePowerup,
   EnemyBasicTank,
   // EnemyFastTank,
   // EnemyPowerTank,
@@ -43,8 +43,9 @@ enum SpawnLocation {
 }
 
 enum PowerupType {
-  Grenade,
-  Tank,
+  Upgrade,
+  Wipeout,
+  // Tank,
 }
 
 export class Spawner {
@@ -145,6 +146,13 @@ export class Spawner {
     const enemyConfig = this.enemyQueue.shift();
     const { hasDrop } = enemyConfig;
 
+    // When new tank with powerup spawns - remove active powerup
+    if (hasDrop && this.activePowerup !== null) {
+      this.powerupTimer.stop();
+      this.activePowerup.removeSelf();
+      this.activePowerup = null;
+    }
+
     const locationPosition = this.locations.get(this.currentEnemyLocation);
 
     const spawn = new Spawn();
@@ -187,8 +195,8 @@ export class Spawner {
     }
 
     const types = [
-      PowerupType.Grenade,
-      // PowerupType.Tank
+      // PowerupType.Wipeout,
+      PowerupType.Upgrade,
     ];
     const type = RandomUtils.arrayElement(types);
 
@@ -225,10 +233,10 @@ export class Spawner {
 
   private createPowerup(type: PowerupType): GameObject {
     switch (type) {
-      case PowerupType.Grenade:
-        return new GrenadePowerup();
-      case PowerupType.Tank:
-        return new TankPowerup();
+      case PowerupType.Wipeout:
+        return new WipeoutPowerup();
+      case PowerupType.Upgrade:
+        return new UpgradePowerup();
       default:
         return new GameObject();
     }

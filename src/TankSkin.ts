@@ -3,28 +3,41 @@ import { SpriteFactory } from './sprite/SpriteFactory';
 
 export enum TankGrade {
   A = 'a',
-  E = 'e',
+  B = 'b',
+  C = 'c',
+  D = 'd',
 }
 
 export enum TankColor {
-  Gray = 'gray',
-  Yellow = 'yellow',
+  Default = 'default',
+  Primary = 'primary',
+  Danger = 'danger',
+}
+
+export enum TankParty {
+  Player = 'player',
+  Enemy = 'enemy',
 }
 
 const TANK_STRING = 'tank';
-const DROP_STRING = 'drop';
 const SPRITE_ID_SEPARATOR = '.';
 
 export class TankSkin {
   public color: TankColor;
   public grade: TankGrade;
+  public party: TankParty;
   public rotation: Rotation = Rotation.Up;
   public hasDrop: boolean;
-  private sprites: Sprite[] = [];
 
-  constructor(color: TankColor, grade: TankGrade, hasDrop = false) {
+  constructor(
+    party: TankParty,
+    color: TankColor,
+    grade: TankGrade,
+    hasDrop = false,
+  ) {
     this.color = color;
     this.grade = grade;
+    this.party = party;
     this.hasDrop = hasDrop;
   }
 
@@ -67,18 +80,16 @@ export class TankSkin {
   }
 
   private getSpriteId(frameNumber: number, hasDrop = false): string {
-    const parts = [];
+    const color = hasDrop ? TankColor.Danger : this.color;
 
-    parts.push(TANK_STRING);
-    parts.push(this.getColorString(this.color));
-    parts.push(this.getGradeString(this.grade));
-
-    if (hasDrop) {
-      parts.push(DROP_STRING);
-    }
-
-    parts.push(this.getRotationString(this.rotation));
-    parts.push(frameNumber.toString());
+    const parts = [
+      TANK_STRING,
+      this.getPartyString(this.party),
+      this.getColorString(color),
+      this.getGradeString(this.grade),
+      this.getRotationString(this.rotation),
+      frameNumber.toString(),
+    ];
 
     const id = parts.join(SPRITE_ID_SEPARATOR);
 
@@ -91,6 +102,10 @@ export class TankSkin {
 
   private getGradeString(grade: TankGrade): string {
     return grade.toString();
+  }
+
+  private getPartyString(party: TankParty): string {
+    return party.toString();
   }
 
   private getRotationString(rotation: Rotation): string {

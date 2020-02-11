@@ -3,7 +3,7 @@ import { EnemyTank } from '../../gameObjects';
 import { SpriteFactory } from '../../sprite/SpriteFactory';
 import { Tag } from '../../Tag';
 
-export class GrenadePowerup extends GameObject {
+export class WipeoutPowerup extends GameObject {
   public collider = true;
   public ignorePause = true;
   public material = new SpriteMaterial();
@@ -14,7 +14,7 @@ export class GrenadePowerup extends GameObject {
 
     // Null as a second frame adds a blink effect
     this.animation = new Animation(
-      [SpriteFactory.asOne('powerupGrenade'), null],
+      [SpriteFactory.asOne('powerup.grenade'), null],
       { delay: 7, loop: true },
     );
   }

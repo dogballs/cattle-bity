@@ -1,11 +1,11 @@
 import { PatrolBehavior } from '../behaviors';
-import { TankSkin, TankGrade, TankColor } from '../TankSkin';
+import { TankSkin, TankColor, TankGrade, TankParty } from '../TankSkin';
 
 import { EnemyTank } from './EnemyTank';
 
 export class EnemyBasicTank extends EnemyTank {
   public behavior = new PatrolBehavior();
-  public skin = new TankSkin(TankColor.Gray, TankGrade.E);
+  public skin = new TankSkin(TankParty.Enemy, TankColor.Default, TankGrade.A);
 
   constructor(hasDrop = false) {
     super(52, 60, hasDrop);

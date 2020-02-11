@@ -1,2 +1,3 @@
-export * from './GrenadePowerup';
-export * from './TankPowerup';
+export * from './LifePowerup';
+export * from './UpgradePowerup';
+export * from './WipeoutPowerup';
