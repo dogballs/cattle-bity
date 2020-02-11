@@ -111,8 +111,8 @@ export class Renderer {
       );
     } else if (material.alignment === SpriteAlignment.Center) {
       targetRect = new Rect(
-        objectRect.x + objectRect.w / 2 - sprite.targetDims.width / 2,
-        objectRect.y + objectRect.h / 2 - sprite.targetDims.height / 2,
+        objectRect.x + objectRect.width / 2 - sprite.targetDims.width / 2,
+        objectRect.y + objectRect.height / 2 - sprite.targetDims.height / 2,
         sprite.targetDims.width,
         sprite.targetDims.height,
       );
@@ -122,12 +122,12 @@ export class Renderer {
       sprite.texture.imageElement,
       sprite.textureRect.x,
       sprite.textureRect.y,
-      sprite.textureRect.w,
-      sprite.textureRect.h,
+      sprite.textureRect.width,
+      sprite.textureRect.height,
       targetRect.x,
       targetRect.y,
-      targetRect.w,
-      targetRect.h,
+      targetRect.width,
+      targetRect.height,
     );
   }
 

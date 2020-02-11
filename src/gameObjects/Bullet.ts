@@ -49,9 +49,9 @@ export class Bullet extends GameObject {
     }
 
     const isWall = target.tags.includes(Tag.Wall);
+
     if (isWall) {
       this.explode();
-      return;
     }
 
     const isBrickWall = isWall && target.tags.includes(Tag.Brick);

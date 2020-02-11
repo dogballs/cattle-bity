@@ -24,6 +24,9 @@ const config = {
   'shield.1': ['sprite.png', 256, 144, 16, 16],
   'shield.2': ['sprite.png', 272, 144, 16, 16],
 
+  'base.heart.alive': ['sprite.png', 304, 32, 16, 16],
+  'base.heart.dead': ['sprite.png', 320, 32, 16, 16],
+
   'spawn.1': ['sprite.png', 259, 99, 9, 9],
   'spawn.2': ['sprite.png', 274, 98, 11, 11],
   'spawn.3': ['sprite.png', 289, 97, 13, 13],

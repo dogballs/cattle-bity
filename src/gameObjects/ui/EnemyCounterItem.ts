@@ -3,9 +3,9 @@ import {
   GameObject,
   SpriteAlignment,
   SpriteMaterial,
-} from '../core';
+} from '../../core';
 
-import { SpriteFactory } from '../sprite/SpriteFactory';
+import { SpriteFactory } from '../../sprite/SpriteFactory';
 
 export class EnemyCounterItem extends GameObject {
   public readonly material = new SpriteMaterial();

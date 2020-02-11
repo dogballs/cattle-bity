@@ -9,7 +9,7 @@ import {
   State,
 } from './core';
 
-import { Border, EnemyCounter } from './gameObjects';
+import { Base, Border, EnemyCounter } from './gameObjects';
 
 import * as config from './config';
 
@@ -21,7 +21,7 @@ import { MapFactory } from './map/MapFactory';
 import * as mapJSON from './map/test-enemy-tanks.json';
 
 const renderer = new Renderer({
-  // debug: true,
+  debug: true,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
@@ -42,6 +42,10 @@ const mapConfig = new MapConfig().parse(mapJSON);
 const { walls } = MapFactory.create(mapConfig);
 
 field.add(...walls);
+
+const base = new Base();
+base.position.set(352, 736);
+field.add(base);
 
 const spawner = new Spawner(mapConfig, field);
 

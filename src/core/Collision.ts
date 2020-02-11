@@ -1,8 +1,8 @@
 import { GameObject } from './GameObject';
 
 export class Collision {
-  public target: GameObject;
   public source: GameObject;
+  public target: GameObject;
 
   /**
    * Collision holds info about intersection of two objects
@@ -10,8 +10,8 @@ export class Collision {
    * @param  {GameObject} source - collision comes from source
    * @return {Collision}
    */
-  constructor(target: GameObject, source: GameObject) {
-    this.target = target;
+  constructor(source: GameObject, target: GameObject) {
     this.source = source;
+    this.target = target;
   }
 }

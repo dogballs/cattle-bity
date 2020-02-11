@@ -18,13 +18,13 @@ export class MapFactory {
     const allWalls = [];
 
     mapConfig.walls.forEach((wallConfig) => {
-      const { type, x, y, w, h } = wallConfig;
+      const { type, x, y, width, height } = wallConfig;
 
       if (type === MapConfigWallType.Brick) {
         const walls = [];
 
-        for (let i = x; i < x + w; i += BRICK_WALL_MULT) {
-          for (let j = y; j < y + h; j += BRICK_WALL_MULT) {
+        for (let i = x; i < x + width; i += BRICK_WALL_MULT) {
+          for (let j = y; j < y + height; j += BRICK_WALL_MULT) {
             const wall = new BrickWall();
             wall.position.set(i, j);
             walls.push(wall);
@@ -35,8 +35,8 @@ export class MapFactory {
       } else if (MapConfigWallType.Steel) {
         const walls = [];
 
-        for (let i = x; i < x + w; i += STEEL_WALL_MULT) {
-          for (let j = y; j < y + h; j += STEEL_WALL_MULT) {
+        for (let i = x; i < x + width; i += STEEL_WALL_MULT) {
+          for (let j = y; j < y + height; j += STEEL_WALL_MULT) {
             const wall = new SteelWall();
             wall.position.set(i, j);
             walls.push(wall);

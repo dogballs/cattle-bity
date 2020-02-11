@@ -25,7 +25,6 @@ export class LifePowerup extends GameObject {
 
   public collide(target: GameObject): void {
     if (target.tags.includes(Tag.Player)) {
-      console.log('collide');
     }
   }
 }

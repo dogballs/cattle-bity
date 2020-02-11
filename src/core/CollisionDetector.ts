@@ -17,8 +17,8 @@ export class CollisionDetector {
         const targetBoundingBox = target.getWorldBoundingBox();
         const sourceBoundingBox = source.getWorldBoundingBox();
 
-        if (targetBoundingBox.intersectsBox(sourceBoundingBox)) {
-          const collision = new Collision(target, source);
+        if (sourceBoundingBox.intersectsBox(targetBoundingBox)) {
+          const collision = new Collision(source, target);
 
           collisions.push(collision);
         }
