@@ -19,4 +19,8 @@ export class PauseNotification extends GameObject {
     this.animation.animate();
     this.material.sprite = this.animation.getCurrentFrame();
   }
+
+  public restart(): void {
+    this.animation.restart();
+  }
 }

@@ -6,6 +6,7 @@ import {
   Sprite,
   SpriteMaterial,
   Subject,
+  Timer,
   Vector,
 } from '../core';
 import { Behavior, StandStillBehavior } from '../behaviors';
@@ -37,6 +38,7 @@ export class Tank extends GameObject {
   protected bulletSpeed = 10;
   protected speed = 2;
   protected health = 1;
+  protected shieldTimer = new Timer();
   protected animation: Animation<Sprite>;
 
   constructor(width: number, height: number) {
@@ -44,12 +46,13 @@ export class Tank extends GameObject {
 
     // TODO: tank is not rendered when constructed, only on update
     //       (field initializers)
-    // this.skin.hasDrop = true;
-    // this.skin.rotation = this.rotation;
-    // this.animation = this.skin.createIdleAnimation();
+
+    this.shieldTimer.done.addListener(this.handleShieldTimer);
   }
 
   public update(updateArgs: GameObjectUpdateArgs): void {
+    this.shieldTimer.tick();
+
     this.behavior.update(this, updateArgs);
 
     this.animation.animate();
@@ -204,4 +207,24 @@ export class Tank extends GameObject {
     this.replaceSelf(tankExplosion);
     this.died.notify();
   }
+
+  public activateShield(duration: number): void {
+    if (this.shield !== null) {
+      this.shield.removeSelf();
+      this.shieldTimer.stop();
+      this.shield = null;
+    }
+
+    this.shield = new Shield();
+    this.shield.setCenter(this.getChildrenCenter());
+
+    this.add(this.shield);
+
+    this.shieldTimer.reset(duration);
+  }
+
+  private handleShieldTimer = (): void => {
+    this.shield.removeSelf();
+    this.shield = null;
+  };
 }

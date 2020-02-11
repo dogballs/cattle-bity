@@ -3,7 +3,6 @@ import { Behavior, PlayerBehavior } from '../behaviors';
 import { Tag } from '../Tag';
 import { TankSkin, TankColor, TankGrade, TankParty } from '../TankSkin';
 
-import { Shield } from './Shield';
 import { Tank, TankState } from './Tank';
 
 const MAX_GRADE = 4;
@@ -17,10 +16,6 @@ export class PlayerTank extends Tank {
 
   constructor() {
     super(52, 52);
-
-    this.shield = new Shield();
-    this.shield.setCenterFrom(this);
-    // this.add(this.shield);
 
     this.animation = this.skin.createIdleAnimation();
   }

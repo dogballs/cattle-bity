@@ -16,6 +16,7 @@ export interface GameObjectUpdateArgs {
 export class GameObject extends Node {
   public collider = false;
   public ignorePause = false;
+  public visible = true;
   public dimensions: Dimensions;
   public material: Material = null;
   public position: Vector = new Vector();
@@ -103,6 +104,10 @@ export class GameObject extends Node {
     this.setCenter(gameObject.getCenter());
 
     return this;
+  }
+
+  public getChildrenCenter(): Vector {
+    return this.dimensions.toVector().divideScalar(2);
   }
 
   public rotate(rotation: Rotation): this {

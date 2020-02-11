@@ -45,6 +45,10 @@ export class Renderer {
   }
 
   private renderGameObject(gameObject: GameObject): void {
+    if (!gameObject.visible) {
+      return;
+    }
+
     const material = gameObject.material;
 
     if (material instanceof BasicMaterial) {

@@ -102,6 +102,14 @@ export class Animation<T> {
     this.ticks += 1;
   }
 
+  public restart(): this {
+    this.frameIndex = 0;
+    this.loopIndex = 0;
+    this.ticks = 0;
+
+    return this;
+  }
+
   private isCurrentFrameComplete(): boolean {
     // By default each frame will have 1 tick guaranteed
     const minFrameTicks = 1;

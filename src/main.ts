@@ -21,7 +21,7 @@ import { MapFactory } from './map/MapFactory';
 import * as mapJSON from './map/test-enemy-tanks.json';
 
 const renderer = new Renderer({
-  debug: true,
+  // debug: true,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
@@ -66,7 +66,7 @@ const gameState = new State<GameState>(GameState.Playing);
 
 const pauseAudio = AudioManager.load('pause');
 const pauseNotification = new PauseNotification();
-pauseNotification.setCenter(field.dimensions.toVector().divideScalar(2));
+pauseNotification.setCenter(field.getChildrenCenter());
 
 const gameLoop = new GameLoop({
   onTick: (): void => {
@@ -77,6 +77,7 @@ const gameLoop = new GameLoop({
         gameState.set(GameState.Paused);
         AudioManager.pauseAll();
         pauseAudio.play();
+        pauseNotification.restart();
         field.add(pauseNotification);
       } else {
         gameState.set(GameState.Playing);

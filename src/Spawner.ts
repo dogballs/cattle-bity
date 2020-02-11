@@ -1,5 +1,6 @@
 import { GameObject, Rotation, Subject, Timer, Vector } from './core';
 import {
+  ShieldPowerup,
   WipeoutPowerup,
   UpgradePowerup,
   EnemyBasicTank,
@@ -17,22 +18,9 @@ import {
 } from './map/MapConfig';
 import { RandomUtils } from './utils';
 
-import { FIELD_SIZE } from './config';
+import * as config from './config';
 
-const FPS = 60;
-
-const PLAYER_FIRST_SPAWN_DELAY = 0;
-const PLAYER_SPAWN_DELAY = 0;
-const ENEMY_FIRST_SPAWN_DELAY = 10;
-const ENEMY_SPAWN_DELAY = 3 * FPS;
-
-const ENEMY_MAX_TOTAL_COUNT = 20;
-const ENEMY_MAX_ALIVE_COUNT = 4;
-
-const POWERUP_DURATION = 30 * FPS;
-
-// SHIELD STAYS 10 src
-// POWERUP STAYS 30 secs, new drop overrides existing
+// SHIELD STAYS 10 sec
 // BASE DEFENCE 20 sec + 3 sec blinking?
 
 enum SpawnLocation {
@@ -43,9 +31,9 @@ enum SpawnLocation {
 }
 
 enum PowerupType {
+  Shield,
   Upgrade,
   Wipeout,
-  // Tank,
 }
 
 export class Spawner {
@@ -70,17 +58,20 @@ export class Spawner {
     this.mapConfig = mapConfig;
     this.field = field;
 
-    this.enemyQueue = mapConfig.spawnEnemies.slice(0, ENEMY_MAX_TOTAL_COUNT);
+    this.enemyQueue = mapConfig.spawnEnemies.slice(
+      0,
+      config.ENEMY_MAX_TOTAL_COUNT,
+    );
 
     this.locations.set(SpawnLocation.PlayerPrimary, new Vector(256, 768));
     this.locations.set(SpawnLocation.EnemyLeft, new Vector(256, 384));
     this.locations.set(SpawnLocation.EnemyMid, new Vector(320, 384));
     this.locations.set(SpawnLocation.EnemyRight, new Vector(384, 384));
 
-    this.playerSpawnTimer.reset(PLAYER_FIRST_SPAWN_DELAY);
+    this.playerSpawnTimer.reset(config.PLAYER_FIRST_SPAWN_DELAY);
     this.playerSpawnTimer.done.addListener(this.handlePlayerSpawnTimer);
 
-    this.enemySpawnTimer.reset(ENEMY_FIRST_SPAWN_DELAY);
+    this.enemySpawnTimer.reset(config.ENEMY_FIRST_SPAWN_DELAY);
     this.enemySpawnTimer.done.addListener(this.handleEnemySpawnTimer);
 
     this.powerupTimer.done.addListener(this.handlePowerupTimer);
@@ -102,7 +93,7 @@ export class Spawner {
 
   private handleEnemySpawnTimer = (): void => {
     // Happens after max enemies spawn
-    if (this.aliveEnemyCount >= ENEMY_MAX_ALIVE_COUNT) {
+    if (this.aliveEnemyCount >= config.ENEMY_MAX_ALIVE_COUNT) {
       this.enemySpawnTimer.stop();
       return;
     }
@@ -115,7 +106,7 @@ export class Spawner {
 
     this.spawnEnemy();
     this.aliveEnemyCount += 1;
-    this.enemySpawnTimer.reset(ENEMY_SPAWN_DELAY);
+    this.enemySpawnTimer.reset(config.ENEMY_SPAWN_DELAY);
   };
 
   private handlePowerupTimer = (): void => {
@@ -135,8 +126,9 @@ export class Spawner {
       const tank = new PlayerTank();
       tank.setCenterFrom(spawn);
       tank.died.addListener(() => {
-        this.playerSpawnTimer.reset(PLAYER_SPAWN_DELAY);
+        this.playerSpawnTimer.reset(config.PLAYER_SPAWN_DELAY);
       });
+      tank.activateShield(config.SHIELD_SPAWN_DURATION);
       spawn.replaceSelf(tank);
     });
     this.field.add(spawn);
@@ -164,7 +156,7 @@ export class Spawner {
       tank.died.addListener(() => {
         this.aliveEnemyCount = Math.max(0, this.aliveEnemyCount - 1);
         if (!this.enemySpawnTimer.isActive()) {
-          this.enemySpawnTimer.reset(ENEMY_SPAWN_DELAY);
+          this.enemySpawnTimer.reset(config.ENEMY_SPAWN_DELAY);
         }
         if (tank.hasDrop) {
           this.spawnPowerup();
@@ -195,8 +187,9 @@ export class Spawner {
     }
 
     const types = [
+      PowerupType.Shield,
       // PowerupType.Wipeout,
-      PowerupType.Upgrade,
+      // PowerupType.Upgrade,
     ];
     const type = RandomUtils.arrayElement(types);
 
@@ -205,8 +198,14 @@ export class Spawner {
     // TODO: Positioning should be smart
     // - on a road
     // - not spawn on top of base/tank/steel or water walls, etc
-    const x = RandomUtils.number(0, FIELD_SIZE - powerup.dimensions.width);
-    const y = RandomUtils.number(0, FIELD_SIZE - powerup.dimensions.height);
+    const x = RandomUtils.number(
+      0,
+      config.FIELD_SIZE - powerup.dimensions.width,
+    );
+    const y = RandomUtils.number(
+      0,
+      config.FIELD_SIZE - powerup.dimensions.height,
+    );
 
     powerup.position.set(x, y);
 
@@ -214,7 +213,7 @@ export class Spawner {
 
     this.activePowerup = powerup;
 
-    this.powerupTimer.reset(POWERUP_DURATION);
+    this.powerupTimer.reset(config.POWERUP_DURATION);
   }
 
   private createTank(type: MapConfigSpawnType, hasDrop = false): Tank {
@@ -233,6 +232,8 @@ export class Spawner {
 
   private createPowerup(type: PowerupType): GameObject {
     switch (type) {
+      case PowerupType.Shield:
+        return new ShieldPowerup();
       case PowerupType.Wipeout:
         return new WipeoutPowerup();
       case PowerupType.Upgrade:

@@ -2,8 +2,9 @@ import { Animation, GameObject, Sprite, SpriteMaterial } from '../../core';
 import { PlayerTank } from '../../gameObjects';
 import { SpriteFactory } from '../../sprite/SpriteFactory';
 import { Tag } from '../../Tag';
+import * as config from '../../config';
 
-export class UpgradePowerup extends GameObject {
+export class ShieldPowerup extends GameObject {
   public collider = true;
   public ignorePause = true;
   public material = new SpriteMaterial();
@@ -14,7 +15,7 @@ export class UpgradePowerup extends GameObject {
 
     // Null as a second frame adds a blink effect
     this.animation = new Animation(
-      [SpriteFactory.asOne('powerup.star'), null],
+      [SpriteFactory.asOne('powerup.helmet'), null],
       { delay: 7, loop: true },
     );
   }
@@ -28,7 +29,7 @@ export class UpgradePowerup extends GameObject {
     if (target.tags.includes(Tag.Player)) {
       const tank = target as PlayerTank;
       this.removeSelf();
-      tank.upgrade();
+      tank.activateShield(config.SHIELD_POWERUP_DURATION);
     }
   }
 }
