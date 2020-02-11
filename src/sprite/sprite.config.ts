@@ -134,6 +134,7 @@ const config = {
   'wall.steel': ['sprite.png', 256, 16, 8, 8],
 
   'ui.enemyCounter': ['sprite.png', 377, 144, 7, 8],
+  'ui.pause': ['sprite.png', 289, 176, 39, 7],
 };
 
 export default config;

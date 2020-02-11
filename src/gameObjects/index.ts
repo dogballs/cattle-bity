@@ -1,4 +1,5 @@
 export * from './powerups';
+export * from './ui';
 
 export * from './Base';
 export * from './BrickWall';
@@ -9,7 +10,7 @@ export * from './Bullet';
 export * from './BulletExplosion';
 export * from './EditorBrush';
 export * from './EnemyBasicTank';
-export * from './ui/EnemyCounter';
+
 // export * from './EnemyFastTank';
 // export * from './EnemyPowerTank';
 export * from './EnemyTank';

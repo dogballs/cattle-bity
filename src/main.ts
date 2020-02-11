@@ -9,7 +9,7 @@ import {
   State,
 } from './core';
 
-import { Base, Border, EnemyCounter } from './gameObjects';
+import { Base, Border, EnemyCounter, PauseNotification } from './gameObjects';
 
 import * as config from './config';
 
@@ -65,6 +65,8 @@ AudioManager.preloadAll();
 const gameState = new State<GameState>(GameState.Playing);
 
 const pauseAudio = AudioManager.load('pause');
+const pauseNotification = new PauseNotification();
+pauseNotification.setCenter(field.dimensions.toVector().divideScalar(2));
 
 const gameLoop = new GameLoop({
   onTick: (): void => {
@@ -75,9 +77,11 @@ const gameLoop = new GameLoop({
         gameState.set(GameState.Paused);
         AudioManager.pauseAll();
         pauseAudio.play();
+        field.add(pauseNotification);
       } else {
         gameState.set(GameState.Playing);
         AudioManager.resumeAll();
+        field.remove(pauseNotification);
       }
     }
 

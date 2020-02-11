@@ -91,12 +91,16 @@ export class GameObject extends Node {
     return this.getBoundingBox().getCenter();
   }
 
-  public setCenterFrom(gameObject: GameObject): this {
+  public setCenter(v: Vector): this {
     const dims = this.getComputedDimensions();
 
-    this.position.copy(
-      gameObject.getCenter().sub(dims.toVector().divideScalar(2)),
-    );
+    this.position.copy(v.sub(dims.toVector().divideScalar(2)));
+
+    return this;
+  }
+
+  public setCenterFrom(gameObject: GameObject): this {
+    this.setCenter(gameObject.getCenter());
 
     return this;
   }
