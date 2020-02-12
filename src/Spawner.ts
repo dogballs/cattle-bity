@@ -1,8 +1,5 @@
 import { GameObject, Rotation, Subject, Timer, Vector } from './core';
 import {
-  ShieldPowerup,
-  WipeoutPowerup,
-  UpgradePowerup,
   EnemyBasicTank,
   // EnemyFastTank,
   // EnemyPowerTank,
@@ -16,6 +13,7 @@ import {
   MapConfigSpawnType,
   MapConfigSpawnEnemy,
 } from './map/MapConfig';
+import { PowerupFactory } from './powerups';
 import { RandomUtils } from './utils';
 
 import * as config from './config';
@@ -28,12 +26,6 @@ enum SpawnLocation {
   EnemyMid,
   EnemyRight,
   PlayerPrimary,
-}
-
-enum PowerupType {
-  Shield,
-  Upgrade,
-  Wipeout,
 }
 
 export class Spawner {
@@ -186,14 +178,7 @@ export class Spawner {
       this.activePowerup = null;
     }
 
-    const types = [
-      PowerupType.Shield,
-      // PowerupType.Wipeout,
-      // PowerupType.Upgrade,
-    ];
-    const type = RandomUtils.arrayElement(types);
-
-    const powerup = this.createPowerup(type);
+    const powerup = PowerupFactory.createRandom();
 
     // TODO: Positioning should be smart
     // - on a road
@@ -227,19 +212,6 @@ export class Spawner {
       case MapConfigSpawnType.PlayerPrimary:
       default:
         return new PlayerTank();
-    }
-  }
-
-  private createPowerup(type: PowerupType): GameObject {
-    switch (type) {
-      case PowerupType.Shield:
-        return new ShieldPowerup();
-      case PowerupType.Wipeout:
-        return new WipeoutPowerup();
-      case PowerupType.Upgrade:
-        return new UpgradePowerup();
-      default:
-        return new GameObject();
     }
   }
 }
