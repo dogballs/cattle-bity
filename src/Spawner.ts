@@ -1,5 +1,6 @@
 import { GameObject, Rotation, Subject, Timer, Vector } from './core';
 import {
+  Base,
   EnemyBasicTank,
   // EnemyFastTank,
   // EnemyPowerTank,
@@ -13,13 +14,11 @@ import {
   MapConfigSpawnType,
   MapConfigSpawnEnemy,
 } from './map/MapConfig';
+import { AudioManager } from './audio/AudioManager';
 import { PowerupFactory } from './powerups';
 import { RandomUtils } from './utils';
 
 import * as config from './config';
-
-// SHIELD STAYS 10 sec
-// BASE DEFENCE 20 sec + 3 sec blinking?
 
 enum SpawnLocation {
   EnemyLeft,
@@ -33,6 +32,9 @@ export class Spawner {
 
   private readonly mapConfig: MapConfig;
   private readonly field: GameObject;
+  private readonly base: Base;
+
+  private playerTank: PlayerTank;
 
   private locations: Map<SpawnLocation, Vector> = new Map();
   private currentEnemyLocation: SpawnLocation = SpawnLocation.EnemyMid;
@@ -46,9 +48,10 @@ export class Spawner {
 
   private activePowerup: GameObject = null;
 
-  constructor(mapConfig: MapConfig, field: GameObject) {
+  constructor(mapConfig: MapConfig, field: GameObject, base: Base) {
     this.mapConfig = mapConfig;
     this.field = field;
+    this.base = base;
 
     this.enemyQueue = mapConfig.spawnEnemies.slice(
       0,
@@ -121,6 +124,9 @@ export class Spawner {
         this.playerSpawnTimer.reset(config.PLAYER_SPAWN_DELAY);
       });
       tank.activateShield(config.SHIELD_SPAWN_DURATION);
+
+      this.playerTank = tank;
+
       spawn.replaceSelf(tank);
     });
     this.field.add(spawn);
@@ -194,11 +200,18 @@ export class Spawner {
 
     powerup.position.set(x, y);
 
+    powerup.picked.addListener(() => {
+      powerup.action.execute(this.playerTank, powerup, this.base);
+    });
+
     this.field.add(powerup);
 
     this.activePowerup = powerup;
 
     this.powerupTimer.reset(config.POWERUP_DURATION);
+
+    const powerupAppearSound = AudioManager.load('powerup.spawn');
+    powerupAppearSound.play();
   }
 
   private createTank(type: MapConfigSpawnType, hasDrop = false): Tank {

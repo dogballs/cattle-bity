@@ -45,9 +45,12 @@ field.add(...walls);
 
 const base = new Base();
 base.position.set(352, 736);
+base.died.addListener(() => {
+  console.log('Game over! Reason: Base');
+});
 field.add(base);
 
-const spawner = new Spawner(mapConfig, field);
+const spawner = new Spawner(mapConfig, field, base);
 
 const enemyCounter = new EnemyCounter(spawner.getUnspawnedEnemiesCount());
 enemyCounter.position.set(
@@ -92,10 +95,10 @@ const gameLoop = new GameLoop({
     }
 
     // Update all objects on the scene
-    // TODO: abstract out input from tank
     scene.traverse((child) => {
       const shouldUpdate = gameState.is(GameState.Playing) || child.ignorePause;
       if (shouldUpdate) {
+        // TODO: abstract out input from tank
         child.update({ input, gameState });
       }
     });

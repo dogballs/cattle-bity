@@ -35,6 +35,7 @@ export class PlayerTank extends Tank {
         TankGrade.A,
       );
     } else if (this.grade === 2) {
+      // TODO: Faster bullet
       this.dimensions = new Dimensions(52, 64);
       this.skin = new TankSkin(
         TankParty.Player,
@@ -42,6 +43,7 @@ export class PlayerTank extends Tank {
         TankGrade.B,
       );
     } else if (this.grade === 3) {
+      // TODO: Faster bullet, 2 at a time
       this.dimensions = new Dimensions(52, 60);
       this.skin = new TankSkin(
         TankParty.Player,
@@ -49,6 +51,7 @@ export class PlayerTank extends Tank {
         TankGrade.C,
       );
     } else if (this.grade === 4) {
+      // TODO: Faster bullet, 2 at a time, higher damage
       this.dimensions = new Dimensions(52, 60);
       this.skin = new TankSkin(
         TankParty.Player,

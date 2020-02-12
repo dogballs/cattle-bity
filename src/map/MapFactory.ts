@@ -11,8 +11,6 @@ export interface MapResult {
 const BRICK_WALL_MULT = 16;
 const STEEL_WALL_MULT = 32;
 
-// TODO: map config as a separate class with serialization methods and validation
-
 export class MapFactory {
   public static create(mapConfig: MapConfig): MapResult {
     const allWalls = [];

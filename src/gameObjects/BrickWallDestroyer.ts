@@ -8,6 +8,7 @@ export class BrickWallDestroyer extends GameObject {
   constructor() {
     super(64, 16);
   }
+
   public collide(target: GameObject): void {
     const isBrickWall =
       target.tags.includes(Tag.Wall) && target.tags.includes(Tag.Brick);

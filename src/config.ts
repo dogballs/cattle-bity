@@ -23,3 +23,5 @@ export const ENEMY_MAX_ALIVE_COUNT = 4;
 export const POWERUP_DURATION = 30 * FPS;
 export const SHIELD_SPAWN_DURATION = 3.5 * FPS;
 export const SHIELD_POWERUP_DURATION = 10 * FPS;
+export const BASE_DEFENCE_POWERUP_DURATION = 5 * FPS;
+export const FREEZE_POWERUP_DURATION = 10 * FPS;

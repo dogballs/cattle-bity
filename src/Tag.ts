@@ -1,9 +1,15 @@
 export enum Tag {
-  Brick = 'Brick',
-  Bullet = 'Bullet',
-  Enemy = 'Enemy',
-  Powerup = 'Powerup',
-  Player = 'Player',
+  BlockMove = 'BlockMove',
+
   Tank = 'Tank',
+  Enemy = 'Enemy',
+  Player = 'Player',
+
+  Bullet = 'Bullet',
+
+  Powerup = 'Powerup',
+
   Wall = 'Wall',
+  Brick = 'Brick',
+  Steel = 'Steel',
 }

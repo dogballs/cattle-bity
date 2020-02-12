@@ -16,7 +16,7 @@ import { Bullet } from './Bullet';
 import { Shield } from './Shield';
 import { Tag } from '../Tag';
 
-import { TankExplosion } from './TankExplosion';
+import { Explosion } from './Explosion';
 
 export enum TankState {
   Uninitialized,
@@ -60,7 +60,7 @@ export class Tank extends GameObject {
   }
 
   public collide(target: GameObject): void {
-    if (target.tags.includes(Tag.Wall)) {
+    if (target.tags.includes(Tag.BlockMove)) {
       const wallBoundingBox = target.getWorldBoundingBox();
       const { width, height } = this.getComputedDimensions();
       const worldPosition = this.getWorldPosition();
@@ -199,12 +199,9 @@ export class Tank extends GameObject {
   }
 
   public explode(): void {
-    const tankExplosion = new TankExplosion();
-    tankExplosion.setCenterFrom(this);
-    tankExplosion.completed.addListener(() => {
-      tankExplosion.removeSelf();
-    });
-    this.replaceSelf(tankExplosion);
+    const explosion = new Explosion();
+    explosion.setCenterFrom(this);
+    this.replaceSelf(explosion);
     this.died.notify();
   }
 

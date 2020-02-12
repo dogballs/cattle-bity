@@ -10,9 +10,9 @@ import {
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
-export class TankExplosion extends GameObject {
+export class Explosion extends GameObject {
   public material = new SpriteMaterial();
-  public completed = new Subject();
+  public readonly done = new Subject();
   private readonly animation: Animation<Sprite>;
   private readonly dims: Dimensions[];
 
@@ -32,7 +32,8 @@ export class TankExplosion extends GameObject {
 
   public update(): void {
     if (this.animation.isComplete()) {
-      this.completed.notify();
+      this.removeSelf();
+      this.done.notify();
       return;
     }
     this.animation.animate();

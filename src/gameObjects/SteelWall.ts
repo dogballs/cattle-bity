@@ -4,7 +4,7 @@ import { GameObject, Sprite, SpriteMaterial } from '../core';
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class SteelWall extends GameObject {
-  public tags = [Tag.Wall];
+  public tags = [Tag.Wall, Tag.Steel, Tag.BlockMove];
   private readonly sprites: Sprite[];
 
   constructor() {
