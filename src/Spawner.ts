@@ -30,11 +30,11 @@ enum SpawnLocation {
 export class Spawner {
   public readonly enemySpawned = new Subject();
 
-  private readonly mapConfig: MapConfig;
-  private readonly field: GameObject;
-  private readonly base: Base;
+  public readonly mapConfig: MapConfig;
+  public readonly field: GameObject;
+  public readonly base: Base;
 
-  private playerTank: PlayerTank;
+  public playerTank: PlayerTank;
 
   private locations: Map<SpawnLocation, Vector> = new Map();
   private currentEnemyLocation: SpawnLocation = SpawnLocation.EnemyMid;

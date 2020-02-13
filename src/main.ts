@@ -13,6 +13,7 @@ import { Base, Border, EnemyCounter, PauseNotification } from './gameObjects';
 
 import * as config from './config';
 
+import { Debug } from './Debug';
 import { Spawner } from './Spawner';
 
 import { AudioManager } from './audio/AudioManager';
@@ -51,6 +52,8 @@ base.died.addListener(() => {
 field.add(base);
 
 const spawner = new Spawner(mapConfig, field, base);
+
+const debug = new Debug(spawner);
 
 const enemyCounter = new EnemyCounter(spawner.getUnspawnedEnemiesCount());
 enemyCounter.position.set(
@@ -125,3 +128,7 @@ gameLoop.start();
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 window.gameLoop = gameLoop;
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+window.debug = debug;

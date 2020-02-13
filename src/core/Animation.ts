@@ -4,7 +4,6 @@ export class Animation<T> {
   private frames: T[];
   private loop: boolean | number;
   private loopIndex: number;
-
   private ticks = 0;
 
   constructor(
@@ -79,7 +78,6 @@ export class Animation<T> {
       this.isLastFrame() &&
       this.isCurrentFrameComplete()
     ) {
-      this.ticks += 1;
       return;
     }
 
@@ -102,7 +100,7 @@ export class Animation<T> {
     this.ticks += 1;
   }
 
-  public restart(): this {
+  public reset(): this {
     this.frameIndex = 0;
     this.loopIndex = 0;
     this.ticks = 0;

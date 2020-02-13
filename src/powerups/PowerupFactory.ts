@@ -52,6 +52,12 @@ export class PowerupFactory {
 
     const type = RandomUtils.arrayElement(types);
 
+    const powerup = this.create(type);
+
+    return powerup;
+  }
+
+  public static create(type: PowerupType): Powerup {
     const description = map.get(type);
 
     const powerup = new Powerup(

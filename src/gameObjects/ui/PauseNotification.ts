@@ -21,6 +21,6 @@ export class PauseNotification extends GameObject {
   }
 
   public restart(): void {
-    this.animation.restart();
+    this.animation.reset();
   }
 }

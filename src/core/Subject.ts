@@ -1,5 +1,3 @@
-// type Listener = (...args: T[]) => any;
-
 export class Subject<T> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private listeners: ((event?: T) => any)[] = [];
@@ -20,13 +18,12 @@ export class Subject<T> {
     return this;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public notify(event?: T): this {
+  public notify = (event?: T): this => {
     this.listeners.forEach((listener) => {
       // TODO: handle errors
       listener(event);
     });
 
     return this;
-  }
+  };
 }
