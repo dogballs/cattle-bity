@@ -25,7 +25,7 @@ export class Base extends GameObject {
   private readonly defenceTimer = new Timer();
   private readonly fadeAnimation: Animation<WallType>;
   private isFading = false;
-  private lastFadeWallType: WallType = WallType.Brick;
+  private lastFadeWallType: WallType = WallType.Steel;
 
   constructor() {
     super(128, 96);
@@ -68,18 +68,19 @@ export class Base extends GameObject {
 
   public activateDefence(duration: number): void {
     this.resetFading();
-    this.setWalls(WallType.Brick);
+    this.setWalls(WallType.Steel);
     this.defenceTimer.reset(duration);
   }
 
   private resetFading(): void {
     this.isFading = false;
     this.fadeAnimation.reset();
-    this.lastFadeWallType = WallType.Brick;
+    this.lastFadeWallType = WallType.Steel;
   }
 
   private handleDefenceTimer = (): void => {
     this.isFading = true;
+    this.lastFadeWallType = WallType.Steel;
   };
 
   private setWalls(wallType: WallType): void {
