@@ -1,4 +1,5 @@
-import { GameObject, Rotation, SpriteMaterial, Subject } from './../core';
+import { GameObject, Rotation, SpriteMaterial, Subject } from '../core';
+import { AudioManager } from '../audio/AudioManager';
 import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
 import { Tag } from '../Tag';
 
@@ -43,24 +44,48 @@ export class Bullet extends GameObject {
   public collide(target: GameObject): void {
     if (target.tags.includes(Tag.Bullet)) {
       const bullet = target as Bullet;
+
+      // Enemy bullets don't discard each other, they pass thru
+      if (bullet.tags.includes(Tag.Enemy) && this.tags.includes(Tag.Enemy)) {
+        return;
+      }
+
+      // When player bullet hits enemy bullet, they dissappear
       this.nullify();
       bullet.nullify();
+
       return;
     }
 
     const isWall = target.tags.includes(Tag.Wall);
+    const isBrickWall = isWall && target.tags.includes(Tag.Brick);
+    const isBorderWall = isWall && target.tags.includes(Tag.Border);
+    const isSteelWall = isWall && target.tags.includes(Tag.Steel);
 
     if (isWall) {
       this.explode();
     }
 
-    const isBrickWall = isWall && target.tags.includes(Tag.Brick);
     if (isBrickWall) {
       const destroyer = new BrickWallDestroyer();
       // TODO: order here matters
       destroyer.rotate(this.rotation);
       destroyer.setCenterFrom(this);
       this.parent.add(destroyer);
+
+      // TODO: it collides with multiple "bricks", multiple audio sources are
+      // triggered
+      // Only player bullets make sound
+      if (this.tags.includes(Tag.Player)) {
+        AudioManager.load('hit.brick').play();
+      }
+    } else if (isSteelWall || isBorderWall) {
+      // TODO: when tank is grade 4, it can destroy steel walls, and in that
+      // case they make the same sound as brick walls
+      // Only player bullets make sound
+      if (this.tags.includes(Tag.Player)) {
+        AudioManager.load('hit.steel').play();
+      }
     }
   }
 

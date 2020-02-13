@@ -100,6 +100,11 @@ export class Tank extends GameObject {
         return;
       }
 
+      // Enemy bullets don't affect enemy tanks
+      if (bullet.tags.includes(Tag.Enemy) && this.tags.includes(Tag.Enemy)) {
+        return;
+      }
+
       const nextHealth = this.health - bullet.damage;
       if (nextHealth > 0) {
         this.health = nextHealth;

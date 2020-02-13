@@ -121,6 +121,7 @@ export class Spawner {
       const tank = new PlayerTank();
       tank.setCenterFrom(spawn);
       tank.died.addListener(() => {
+        AudioManager.load('explosion.player').play();
         this.playerSpawnTimer.reset(config.PLAYER_SPAWN_DELAY);
       });
       tank.activateShield(config.SHIELD_SPAWN_DURATION);
@@ -152,6 +153,10 @@ export class Spawner {
       tank.rotate(Rotation.Down);
       tank.setCenterFrom(spawn);
       tank.died.addListener(() => {
+        // TODO: grenade explosion explodes multiple enemies, should trigger
+        // single audio
+        AudioManager.load('explosion.enemy').play();
+
         this.aliveEnemyCount = Math.max(0, this.aliveEnemyCount - 1);
         if (!this.enemySpawnTimer.isActive()) {
           this.enemySpawnTimer.reset(config.ENEMY_SPAWN_DELAY);
@@ -210,8 +215,7 @@ export class Spawner {
 
     this.powerupTimer.reset(config.POWERUP_DURATION);
 
-    const powerupAppearSound = AudioManager.load('powerup.spawn');
-    powerupAppearSound.play();
+    AudioManager.load('powerup.spawn').play();
   }
 
   private createTank(type: MapConfigSpawnType, hasDrop = false): Tank {

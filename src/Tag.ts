@@ -10,6 +10,7 @@ export enum Tag {
   Powerup = 'Powerup',
 
   Wall = 'Wall',
+  Border = 'Border',
   Brick = 'Brick',
   Steel = 'Steel',
 }
