@@ -2,7 +2,7 @@ import { GameObject, Rotation, Subject, Timer, Vector } from './core';
 import {
   Base,
   EnemyBasicTank,
-  // EnemyFastTank,
+  EnemyFastTank,
   // EnemyPowerTank,
   EnemyTank,
   PlayerTank,
@@ -222,8 +222,8 @@ export class Spawner {
     switch (type) {
       case MapConfigSpawnType.EnemyBasic:
         return new EnemyBasicTank(hasDrop);
-      // case MapConfigSpawnType.EnemyFast:
-      //   return new EnemyFastTank(hasDrop);
+      case MapConfigSpawnType.EnemyFast:
+        return new EnemyFastTank(hasDrop);
       // case MapConfigSpawnType.EnemyPower:
       //   return new EnemyPowerTank(hasDrop);
       case MapConfigSpawnType.PlayerPrimary:

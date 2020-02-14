@@ -1,11 +1,23 @@
+import { PatrolFireBehavior } from '../behaviors';
+import {
+  TankAttributesFactory,
+  TankSkin,
+  TankColor,
+  TankGrade,
+  TankParty,
+} from '../tank';
+
 import { EnemyTank } from './EnemyTank';
 
 export class EnemyFastTank extends EnemyTank {
-  protected bulletSpeed = 13;
-  protected health = 1;
-  protected speed = 4;
-
   constructor(hasDrop = false) {
-    super(52, 60, hasDrop);
+    const attributes = TankAttributesFactory.create(
+      TankParty.Enemy,
+      TankGrade.B,
+    );
+    const behavior = new PatrolFireBehavior();
+    const skin = new TankSkin(TankParty.Enemy, TankColor.Default, TankGrade.B);
+
+    super(52, 60, attributes, behavior, skin, hasDrop);
   }
 }

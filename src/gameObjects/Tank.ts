@@ -9,8 +9,8 @@ import {
   Timer,
   Vector,
 } from '../core';
-import { Behavior, StandStillBehavior } from '../behaviors';
-import { TankSkin } from '../TankSkin';
+import { Behavior } from '../behaviors';
+import { TankAttributes, TankSkin } from '../tank';
 
 import { Bullet } from './Bullet';
 import { Shield } from './Shield';
@@ -25,24 +25,31 @@ export enum TankState {
 }
 
 export class Tank extends GameObject {
+  public attributes: TankAttributes;
+  public behavior: Behavior;
+  public skin: TankSkin;
   public collider = true;
-  public material: SpriteMaterial = new SpriteMaterial();
-  public behavior: Behavior = new StandStillBehavior();
   public tags = [Tag.Tank];
-  public bullet: Bullet = null;
+  public bullets: Bullet[] = [];
   public shield: Shield = null;
   public died = new Subject();
-  public skin: TankSkin;
   public state = TankState.Uninitialized;
-  protected bulletDamage = 1;
-  protected bulletSpeed = 10;
-  protected speed = 2;
-  protected health = 1;
+  public material: SpriteMaterial = new SpriteMaterial();
   protected shieldTimer = new Timer();
   protected animation: Animation<Sprite>;
 
-  constructor(width: number, height: number) {
+  constructor(
+    width: number,
+    height: number,
+    attributes: TankAttributes,
+    behavior: Behavior,
+    skin: TankSkin,
+  ) {
     super(width, height);
+
+    this.attributes = attributes;
+    this.behavior = behavior;
+    this.skin = skin;
 
     // TODO: tank is not rendered when constructed, only on update
     //       (field initializers)
@@ -90,7 +97,7 @@ export class Tank extends GameObject {
       const bullet = target as Bullet;
 
       // Prevent self-destruction
-      if (target === this.bullet) {
+      if (this.bullets.includes(bullet)) {
         return;
       }
 
@@ -105,9 +112,9 @@ export class Tank extends GameObject {
         return;
       }
 
-      const nextHealth = this.health - bullet.damage;
+      const nextHealth = this.attributes.health - bullet.damage;
       if (nextHealth > 0) {
-        this.health = nextHealth;
+        this.attributes.health = nextHealth;
         bullet.explode();
       } else {
         this.explode();
@@ -117,8 +124,8 @@ export class Tank extends GameObject {
   }
 
   public fire(): boolean {
-    if (this.bullet !== null) {
-      return false;
+    if (this.bullets.length >= this.attributes.bulletMaxCount) {
+      return;
     }
 
     const bullet = new Bullet();
@@ -140,8 +147,8 @@ export class Tank extends GameObject {
 
     bullet.position = position;
     bullet.rotate(this.rotation);
-    bullet.speed = this.bulletSpeed;
-    bullet.damage = this.bulletDamage;
+    bullet.speed = this.attributes.bulletSpeed;
+    bullet.damage = this.attributes.bulletDamage;
 
     if (this.tags.includes(Tag.Player)) {
       bullet.tags.push(Tag.Player);
@@ -149,10 +156,12 @@ export class Tank extends GameObject {
       bullet.tags.push(Tag.Enemy);
     }
 
-    this.bullet = bullet;
+    this.bullets.push(bullet);
 
     bullet.died.addListener(() => {
-      this.bullet = null;
+      this.bullets = this.bullets.filter((tankBullet) => {
+        return tankBullet !== bullet;
+      });
     });
 
     this.parent.add(bullet);
@@ -167,13 +176,13 @@ export class Tank extends GameObject {
     }
 
     if (this.rotation === Rotation.Up) {
-      this.position.y -= this.speed;
+      this.position.y -= this.attributes.moveSpeed;
     } else if (this.rotation === Rotation.Down) {
-      this.position.y += this.speed;
+      this.position.y += this.attributes.moveSpeed;
     } else if (this.rotation === Rotation.Right) {
-      this.position.x += this.speed;
+      this.position.x += this.attributes.moveSpeed;
     } else if (this.rotation === Rotation.Left) {
-      this.position.x -= this.speed;
+      this.position.x -= this.attributes.moveSpeed;
     }
 
     // const animation = this.animationMap[this.rotation];

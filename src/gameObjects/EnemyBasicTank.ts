@@ -1,17 +1,23 @@
 import { PatrolFireBehavior } from '../behaviors';
-import { TankSkin, TankColor, TankGrade, TankParty } from '../TankSkin';
+import {
+  TankAttributesFactory,
+  TankSkin,
+  TankColor,
+  TankGrade,
+  TankParty,
+} from '../tank';
 
 import { EnemyTank } from './EnemyTank';
 
 export class EnemyBasicTank extends EnemyTank {
-  public behavior = new PatrolFireBehavior();
-  public skin = new TankSkin(TankParty.Enemy, TankColor.Default, TankGrade.A);
-
   constructor(hasDrop = false) {
-    super(52, 60, hasDrop);
+    const attributes = TankAttributesFactory.create(
+      TankParty.Enemy,
+      TankGrade.A,
+    );
+    const behavior = new PatrolFireBehavior();
+    const skin = new TankSkin(TankParty.Enemy, TankColor.Default, TankGrade.A);
 
-    this.skin.hasDrop = hasDrop;
-    this.skin.rotation = this.rotation;
-    this.animation = this.skin.createIdleAnimation();
+    super(52, 60, attributes, behavior, skin, hasDrop);
   }
 }

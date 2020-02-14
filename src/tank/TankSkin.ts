@@ -1,12 +1,8 @@
-import { Animation, Rotation, Sprite } from './core';
-import { SpriteFactory } from './sprite/SpriteFactory';
+import { Animation, Rotation, Sprite } from '../core';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
-export enum TankGrade {
-  A = 'a',
-  B = 'b',
-  C = 'c',
-  D = 'd',
-}
+import { TankGrade } from './TankGrade';
+import { TankParty } from './TankParty';
 
 export enum TankColor {
   Default = 'default',
@@ -14,18 +10,15 @@ export enum TankColor {
   Danger = 'danger',
 }
 
-export enum TankParty {
-  Player = 'player',
-  Enemy = 'enemy',
-}
-
 const TANK_STRING = 'tank';
 const SPRITE_ID_SEPARATOR = '.';
 
+// TODO: Remake to factory?
+
 export class TankSkin {
+  public party: TankParty;
   public color: TankColor;
   public grade: TankGrade;
-  public party: TankParty;
   public rotation: Rotation = Rotation.Up;
   public hasDrop: boolean;
 
@@ -35,9 +28,9 @@ export class TankSkin {
     grade: TankGrade,
     hasDrop = false,
   ) {
+    this.party = party;
     this.color = color;
     this.grade = grade;
-    this.party = party;
     this.hasDrop = hasDrop;
   }
 

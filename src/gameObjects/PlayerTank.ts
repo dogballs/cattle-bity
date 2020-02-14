@@ -1,21 +1,33 @@
 import { Dimensions } from '../core';
-import { Behavior, PlayerBehavior } from '../behaviors';
+import { PlayerBehavior } from '../behaviors';
 import { Tag } from '../Tag';
-import { TankSkin, TankColor, TankGrade, TankParty } from '../TankSkin';
+import {
+  TankSkin,
+  TankColor,
+  TankGrade,
+  TankParty,
+  TankAttributesFactory,
+} from '../tank';
 
 import { Tank, TankState } from './Tank';
 
 const MAX_GRADE = 4;
 
 export class PlayerTank extends Tank {
-  public behavior: Behavior = new PlayerBehavior();
-  public tags = [Tag.Tank, Tag.Player];
-  public skin = new TankSkin(TankParty.Player, TankColor.Primary, TankGrade.A);
-  public grade = 1;
-  protected speed = 3;
+  public grade: number;
 
   constructor() {
-    super(52, 52);
+    const attributes = TankAttributesFactory.create(
+      TankParty.Player,
+      TankGrade.A,
+    );
+    const behavior = new PlayerBehavior();
+    const skin = new TankSkin(TankParty.Player, TankColor.Primary, TankGrade.A);
+
+    super(52, 52, attributes, behavior, skin);
+
+    this.tags = [Tag.Tank, Tag.Player];
+    this.grade = 1;
 
     this.animation = this.skin.createIdleAnimation();
   }
@@ -29,29 +41,43 @@ export class PlayerTank extends Tank {
 
     if (this.grade === 1) {
       this.dimensions = new Dimensions(52, 52);
+      this.attributes = TankAttributesFactory.create(
+        TankParty.Player,
+        TankGrade.A,
+      );
       this.skin = new TankSkin(
         TankParty.Player,
         TankColor.Primary,
         TankGrade.A,
       );
     } else if (this.grade === 2) {
-      // TODO: Faster bullet
       this.dimensions = new Dimensions(52, 64);
+      this.attributes = TankAttributesFactory.create(
+        TankParty.Player,
+        TankGrade.B,
+      );
       this.skin = new TankSkin(
         TankParty.Player,
         TankColor.Primary,
         TankGrade.B,
       );
     } else if (this.grade === 3) {
-      // TODO: Faster bullet, 2 at a time
       this.dimensions = new Dimensions(52, 60);
+      this.attributes = TankAttributesFactory.create(
+        TankParty.Player,
+        TankGrade.C,
+      );
       this.skin = new TankSkin(
         TankParty.Player,
         TankColor.Primary,
         TankGrade.C,
       );
     } else if (this.grade === 4) {
-      // TODO: Faster bullet, 2 at a time, higher damage
+      // TODO: Higher damage
+      this.attributes = TankAttributesFactory.create(
+        TankParty.Player,
+        TankGrade.D,
+      );
       this.dimensions = new Dimensions(52, 60);
       this.skin = new TankSkin(
         TankParty.Player,
