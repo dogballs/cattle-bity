@@ -21,8 +21,8 @@ export class EnemyCounter extends GameObject {
     for (let i = 0; i < count; i += 1) {
       const item = new EnemyCounterItem();
 
-      const x = item.dimensions.width * (i % 2);
-      const y = item.dimensions.height * Math.floor(i / 2);
+      const x = item.size.width * (i % 2);
+      const y = item.size.height * Math.floor(i / 2);
 
       item.position.set(x, y);
 

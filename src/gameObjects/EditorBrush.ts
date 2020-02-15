@@ -1,6 +1,6 @@
 import {
   BoundingBox,
-  Dimensions,
+  Size,
   GameObject,
   KeyboardInput,
   KeyboardKey,
@@ -28,20 +28,20 @@ export class EditorBrush extends GameObject {
   constructor() {
     super();
 
-    this.dimensions = this.getBrushDims();
+    this.size = this.getBrushSize();
   }
 
   public update({ input }: { input: KeyboardInput }): void {
-    const { dimensions } = this;
+    const { size } = this;
 
     if (input.isDown(KeyboardKey.ArrowUp)) {
-      this.position.y -= dimensions.height;
+      this.position.y -= size.height;
     } else if (input.isDown(KeyboardKey.ArrowDown)) {
-      this.position.y += dimensions.height;
+      this.position.y += size.height;
     } else if (input.isDown(KeyboardKey.ArrowLeft)) {
-      this.position.x -= dimensions.width;
+      this.position.x -= size.width;
     } else if (input.isDown(KeyboardKey.ArrowRight)) {
-      this.position.x += dimensions.height;
+      this.position.x += size.height;
     }
 
     if (input.isDown(KeyboardKey.B)) {
@@ -62,18 +62,18 @@ export class EditorBrush extends GameObject {
       nextSize = EditorBrushSize.Small;
     }
     this.brushSize = nextSize;
-    this.dimensions = this.getBrushDims();
+    this.size = this.getBrushSize();
   }
 
-  private getBrushDims(): Dimensions {
+  private getBrushSize(): Size {
     switch (this.brushSize) {
       case EditorBrushSize.Small:
-        return new Dimensions(16, 16);
+        return new Size(16, 16);
       case EditorBrushSize.Medium:
-        return new Dimensions(32, 32);
+        return new Size(32, 32);
       case EditorBrushSize.Large:
       default:
-        return new Dimensions(64, 64);
+        return new Size(64, 64);
     }
   }
 }

@@ -194,14 +194,8 @@ export class Spawner {
     // TODO: Positioning should be smart
     // - on a road
     // - not spawn on top of base/tank/steel or water walls, etc
-    const x = RandomUtils.number(
-      0,
-      config.FIELD_SIZE - powerup.dimensions.width,
-    );
-    const y = RandomUtils.number(
-      0,
-      config.FIELD_SIZE - powerup.dimensions.height,
-    );
+    const x = RandomUtils.number(0, config.FIELD_SIZE - powerup.size.width);
+    const y = RandomUtils.number(0, config.FIELD_SIZE - powerup.size.height);
 
     powerup.position.set(x, y);
 

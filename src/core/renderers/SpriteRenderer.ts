@@ -36,17 +36,17 @@ export class SpriteRenderer extends Renderer {
       targetRect = new Rect(
         objectRect.x,
         objectRect.y,
-        this.sprite.targetDims.width,
-        this.sprite.targetDims.height,
+        this.sprite.targetSize.width,
+        this.sprite.targetSize.height,
       );
     } else if (this.alignment === SpriteAlignment.Center) {
       targetRect = new Rect(
-        objectRect.x + objectRect.width / 2 - this.sprite.targetDims.width / 2,
+        objectRect.x + objectRect.width / 2 - this.sprite.targetSize.width / 2,
         objectRect.y +
           objectRect.height / 2 -
-          this.sprite.targetDims.height / 2,
-        this.sprite.targetDims.width,
-        this.sprite.targetDims.height,
+          this.sprite.targetSize.height / 2,
+        this.sprite.targetSize.width,
+        this.sprite.targetSize.height,
       );
     }
 

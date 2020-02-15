@@ -1,5 +1,5 @@
-import { Dimensions } from './Dimensions';
 import { Rect } from './Rect';
+import { Size } from './Size';
 import { Texture } from './Texture';
 
 /**
@@ -7,9 +7,6 @@ import { Texture } from './Texture';
  * The coordinates will be used by renderer to render the fragment.
  */
 export class Sprite {
-  public static Dimensions = Dimensions;
-  public static Rect = Rect;
-
   /**
    * Location of the sprite on the original texture
    * @type {Rect}
@@ -18,17 +15,17 @@ export class Sprite {
   public texture: Texture;
   /**
    * Desired rendered size
-   * @type {Dimensions}
+   * @type {Size}
    */
-  public targetDims: Dimensions;
+  public targetSize: Size;
 
   constructor(
     texture: Texture = new Texture(),
     textureRect: Rect = new Rect(),
-    targetDims: Dimensions = new Dimensions(),
+    targetSize: Size = new Size(),
   ) {
     this.texture = texture;
     this.textureRect = textureRect;
-    this.targetDims = targetDims;
+    this.targetSize = targetSize;
   }
 }

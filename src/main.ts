@@ -61,7 +61,7 @@ debugGrid.position.set(
   config.BORDER_LEFT_WIDTH,
   config.BORDER_TOP_BOTTOM_HEIGHT,
 );
-scene.add(debugGrid);
+// scene.add(debugGrid);
 
 const spawner = new Spawner(mapConfig, field, base);
 

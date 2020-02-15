@@ -1,5 +1,4 @@
-import { Dimensions } from '../core';
-import { Tag } from '../Tag';
+import { Size } from '../core';
 import {
   PlayerTankBehavior,
   TankSkin,
@@ -8,8 +7,9 @@ import {
   TankParty,
   TankAttributesFactory,
 } from '../tank';
+import { Tag } from '../Tag';
 
-import { Tank, TankState } from './Tank';
+import { Tank } from './Tank';
 
 const MAX_GRADE = 4;
 
@@ -22,14 +22,17 @@ export class PlayerTank extends Tank {
       TankGrade.A,
     );
     const behavior = new PlayerTankBehavior();
-    const skin = new TankSkin(TankParty.Player, TankColor.Primary, TankGrade.A);
+    const skin = new TankSkin(
+      TankParty.Player,
+      TankColor.Primary,
+      TankGrade.A,
+      new Size(52, 52),
+    );
 
-    super(52, 52, attributes, behavior, skin);
+    super(64, 64, attributes, behavior, skin);
 
     this.tags = [Tag.Tank, Tag.Player];
     this.grade = 1;
-
-    this.animation = this.skin.createIdleAnimation();
   }
 
   public upgrade(): void {
@@ -40,7 +43,6 @@ export class PlayerTank extends Tank {
     this.grade += 1;
 
     if (this.grade === 1) {
-      this.dimensions = new Dimensions(52, 52);
       this.attributes = TankAttributesFactory.create(
         TankParty.Player,
         TankGrade.A,
@@ -49,9 +51,9 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankColor.Primary,
         TankGrade.A,
+        new Size(52, 52),
       );
     } else if (this.grade === 2) {
-      this.dimensions = new Dimensions(52, 64);
       this.attributes = TankAttributesFactory.create(
         TankParty.Player,
         TankGrade.B,
@@ -60,9 +62,9 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankColor.Primary,
         TankGrade.B,
+        new Size(52, 64),
       );
     } else if (this.grade === 3) {
-      this.dimensions = new Dimensions(52, 60);
       this.attributes = TankAttributesFactory.create(
         TankParty.Player,
         TankGrade.C,
@@ -71,6 +73,7 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankColor.Primary,
         TankGrade.C,
+        new Size(52, 60),
       );
     } else if (this.grade === 4) {
       // TODO: Higher damage
@@ -78,19 +81,12 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankGrade.D,
       );
-      this.dimensions = new Dimensions(52, 60);
       this.skin = new TankSkin(
         TankParty.Player,
         TankColor.Primary,
         TankGrade.D,
+        new Size(52, 60),
       );
-    }
-
-    this.skin.rotation = this.rotation;
-    if (this.state === TankState.Moving) {
-      this.animation = this.skin.createMoveAnimation();
-    } else {
-      this.animation = this.skin.createIdleAnimation();
     }
   }
 }

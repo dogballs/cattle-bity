@@ -1,6 +1,6 @@
 import { Vector } from './Vector';
 
-export class Dimensions {
+export class Size {
   public width: number;
   public height: number;
 
@@ -14,6 +14,18 @@ export class Dimensions {
     this.height = height;
 
     return this;
+  }
+
+  public flip(): this {
+    const tmp = this.width;
+    this.width = this.height;
+    this.height = tmp;
+
+    return this;
+  }
+
+  public clone(): Size {
+    return new Size(this.width, this.height);
   }
 
   public toVector(): Vector {

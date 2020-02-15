@@ -1,4 +1,5 @@
-import { Animation, Rotation, Sprite } from '../core';
+import { Animation, Rotation, Size, Sprite } from '../core';
+import { Tank, TankState } from '../gameObjects';
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 import { TankGrade } from './TankGrade';
@@ -15,64 +16,147 @@ const SPRITE_ID_SEPARATOR = '.';
 
 // TODO: Remake to factory?
 
+type AnimationMap = Map<Rotation, Animation<Sprite>>;
+
 export class TankSkin {
-  public party: TankParty;
-  public color: TankColor;
-  public grade: TankGrade;
-  public rotation: Rotation = Rotation.Up;
-  public hasDrop: boolean;
+  public readonly party: TankParty;
+  public readonly color: TankColor;
+  public readonly grade: TankGrade;
+  public readonly size: Size;
+  public readonly hasDrop: boolean;
+
+  protected rotation: Rotation = Rotation.Up;
+  protected tankState: TankState = TankState.Uninitialized;
+
+  protected readonly moveAnimationMap: AnimationMap = new Map();
+  protected readonly idleAnimationMap: AnimationMap = new Map();
+  protected currentAnimationMap: AnimationMap;
 
   constructor(
     party: TankParty,
     color: TankColor,
     grade: TankGrade,
+    size: Size,
     hasDrop = false,
   ) {
     this.party = party;
     this.color = color;
     this.grade = grade;
+    this.size = size;
     this.hasDrop = hasDrop;
+
+    this.idleAnimationMap.set(
+      Rotation.Up,
+      this.createIdleAnimation(Rotation.Up),
+    );
+    this.idleAnimationMap.set(
+      Rotation.Down,
+      this.createIdleAnimation(Rotation.Down),
+    );
+    this.idleAnimationMap.set(
+      Rotation.Left,
+      this.createIdleAnimation(Rotation.Left),
+    );
+    this.idleAnimationMap.set(
+      Rotation.Right,
+      this.createIdleAnimation(Rotation.Right),
+    );
+
+    this.moveAnimationMap.set(
+      Rotation.Up,
+      this.createMoveAnimation(Rotation.Up),
+    );
+    this.moveAnimationMap.set(
+      Rotation.Down,
+      this.createMoveAnimation(Rotation.Down),
+    );
+    this.moveAnimationMap.set(
+      Rotation.Left,
+      this.createMoveAnimation(Rotation.Left),
+    );
+    this.moveAnimationMap.set(
+      Rotation.Right,
+      this.createMoveAnimation(Rotation.Right),
+    );
+
+    this.currentAnimationMap = this.idleAnimationMap;
   }
 
-  public createIdleAnimation(): Animation<Sprite> {
+  public update(tank: Tank): void {
+    this.rotation = tank.rotation;
+
+    if (tank.state === this.tankState) {
+      const animation = this.currentAnimationMap.get(this.rotation);
+      animation.animate();
+      return;
+    }
+
+    this.tankState = tank.state;
+    this.currentAnimationMap =
+      tank.state === TankState.Idle
+        ? this.idleAnimationMap
+        : this.moveAnimationMap;
+
+    const animation = this.currentAnimationMap.get(tank.rotation);
+    animation.reset();
+  }
+
+  public getCurrentFrame(): Sprite {
+    const animation = this.currentAnimationMap.get(this.rotation);
+    return animation.getCurrentFrame();
+  }
+
+  private createIdleAnimation(rotation): Animation<Sprite> {
     const spriteIds = [];
 
     const frameNumber = 1;
 
-    spriteIds.push(this.getSpriteId(frameNumber));
+    spriteIds.push(this.getSpriteId(frameNumber, rotation));
 
     if (this.hasDrop) {
-      spriteIds.push(this.getSpriteId(frameNumber, true));
+      spriteIds.push(this.getSpriteId(frameNumber, rotation, true));
     }
 
-    const sprites = SpriteFactory.asList(spriteIds);
+    const targetSize = this.getRotationSize(rotation);
+
+    const sprites = spriteIds.map((spriteId) => {
+      return SpriteFactory.asOne(spriteId, targetSize);
+    });
     const animation = new Animation(sprites, { delay: 7, loop: true });
 
     return animation;
   }
 
-  public createMoveAnimation(): Animation<Sprite> {
+  protected createMoveAnimation(rotation: Rotation): Animation<Sprite> {
     const spriteIds = [];
 
-    spriteIds.push(this.getSpriteId(1));
-    spriteIds.push(this.getSpriteId(2));
-    spriteIds.push(this.getSpriteId(1));
-    spriteIds.push(this.getSpriteId(2));
+    spriteIds.push(this.getSpriteId(1, rotation));
+    spriteIds.push(this.getSpriteId(2, rotation));
+    spriteIds.push(this.getSpriteId(1, rotation));
+    spriteIds.push(this.getSpriteId(2, rotation));
 
     if (this.hasDrop) {
-      spriteIds.push(this.getSpriteId(1, true));
-      spriteIds.push(this.getSpriteId(2, true));
-      spriteIds.push(this.getSpriteId(1, true));
-      spriteIds.push(this.getSpriteId(2, true));
+      spriteIds.push(this.getSpriteId(1, rotation, true));
+      spriteIds.push(this.getSpriteId(2, rotation, true));
+      spriteIds.push(this.getSpriteId(1, rotation, true));
+      spriteIds.push(this.getSpriteId(2, rotation, true));
     }
 
-    const sprites = SpriteFactory.asList(spriteIds);
+    const targetSize = this.getRotationSize(rotation);
+
+    const sprites = spriteIds.map((spriteId) => {
+      return SpriteFactory.asOne(spriteId, targetSize);
+    });
     const animation = new Animation(sprites, { delay: 1, loop: true });
 
     return animation;
   }
 
-  private getSpriteId(frameNumber: number, hasDrop = false): string {
+  protected getSpriteId(
+    frameNumber: number,
+    rotation: Rotation,
+    hasDrop = false,
+  ): string {
     const color = hasDrop ? TankColor.Danger : this.color;
 
     const parts = [
@@ -80,7 +164,7 @@ export class TankSkin {
       this.getPartyString(this.party),
       this.getColorString(color),
       this.getGradeString(this.grade),
-      this.getRotationString(this.rotation),
+      this.getRotationString(rotation),
       frameNumber.toString(),
     ];
 
@@ -89,19 +173,19 @@ export class TankSkin {
     return id;
   }
 
-  private getColorString(color: TankColor): string {
+  protected getColorString(color: TankColor): string {
     return color.toString();
   }
 
-  private getGradeString(grade: TankGrade): string {
+  protected getGradeString(grade: TankGrade): string {
     return grade.toString();
   }
 
-  private getPartyString(party: TankParty): string {
+  protected getPartyString(party: TankParty): string {
     return party.toString();
   }
 
-  private getRotationString(rotation: Rotation): string {
+  protected getRotationString(rotation: Rotation): string {
     switch (rotation) {
       case Rotation.Up:
         return 'up';
@@ -112,5 +196,12 @@ export class TankSkin {
       case Rotation.Right:
         return 'right';
     }
+  }
+
+  private getRotationSize(rotation: Rotation): Size {
+    if (rotation === Rotation.Up || rotation === Rotation.Down) {
+      return this.size;
+    }
+    return this.size.clone().flip();
   }
 }

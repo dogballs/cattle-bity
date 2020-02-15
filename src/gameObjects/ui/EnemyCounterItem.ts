@@ -1,9 +1,4 @@
-import {
-  Dimensions,
-  GameObject,
-  SpriteAlignment,
-  SpriteRenderer,
-} from '../../core';
+import { GameObject, Size, SpriteAlignment, SpriteRenderer } from '../../core';
 
 import { SpriteFactory } from '../../sprite/SpriteFactory';
 
@@ -15,7 +10,7 @@ export class EnemyCounterItem extends GameObject {
 
     this.renderer.sprite = SpriteFactory.asOne(
       'ui.enemyCounter',
-      new Dimensions(28, 28),
+      new Size(28, 28),
     );
     this.renderer.alignment = SpriteAlignment.Center;
   }

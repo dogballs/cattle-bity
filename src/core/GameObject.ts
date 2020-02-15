@@ -1,9 +1,9 @@
 import { BoundingBox } from './BoundingBox';
-import { Dimensions } from './Dimensions';
 import { GameState } from './GameState';
 import { KeyboardInput } from './KeyboardInput';
 import { Node } from './Node';
 import { Rotation } from './Rotation';
+import { Size } from './Size';
 import { State } from './State';
 import { Vector } from './Vector';
 
@@ -18,7 +18,7 @@ export class GameObject extends Node {
   public collider = false;
   public ignorePause = false;
   public visible = true;
-  public dimensions: Dimensions;
+  public size: Size;
   public renderer: Renderer = null;
   public position: Vector = new Vector();
   public rotation: Rotation = Rotation.Up;
@@ -27,22 +27,22 @@ export class GameObject extends Node {
   constructor(width = 0, height = 0) {
     super();
 
-    this.dimensions = new Dimensions(width, height);
+    this.size = new Size(width, height);
   }
 
-  public getComputedDimensions(): Dimensions {
-    let { width, height } = this.dimensions;
+  public getComputedSize(): Size {
+    let { width, height } = this.size;
 
     if (this.rotation === Rotation.Right || this.rotation === Rotation.Left) {
-      width = this.dimensions.height;
-      height = this.dimensions.width;
+      width = this.size.height;
+      height = this.size.width;
     }
 
-    return new Dimensions(width, height);
+    return new Size(width, height);
   }
 
   public getBoundingBox(): BoundingBox {
-    const { width, height } = this.getComputedDimensions();
+    const { width, height } = this.getComputedSize();
 
     // Top-left point of the object
     const min = this.position.clone();
@@ -55,7 +55,7 @@ export class GameObject extends Node {
 
   public getWorldBoundingBox(): BoundingBox {
     const worldPosition = this.getWorldPosition();
-    const { width, height } = this.getComputedDimensions();
+    const { width, height } = this.getComputedSize();
 
     // Top-left point of the object
     // const min = worldPosition.clone().add(centerOffset);
@@ -94,9 +94,9 @@ export class GameObject extends Node {
   }
 
   public setCenter(v: Vector): this {
-    const dims = this.getComputedDimensions();
+    const size = this.getComputedSize();
 
-    this.position.copy(v.sub(dims.toVector().divideScalar(2)));
+    this.position.copy(v.sub(size.toVector().divideScalar(2)));
 
     return this;
   }
@@ -108,7 +108,7 @@ export class GameObject extends Node {
   }
 
   public getChildrenCenter(): Vector {
-    return this.dimensions.toVector().divideScalar(2);
+    return this.size.toVector().divideScalar(2);
   }
 
   public rotate(rotation: Rotation): this {

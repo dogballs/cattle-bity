@@ -1,7 +1,7 @@
 import {
   Animation,
-  Dimensions,
   GameObject,
+  Size,
   Sprite,
   SpriteAlignment,
   SpriteRenderer,
@@ -14,16 +14,15 @@ export class BulletExplosion extends GameObject {
   public renderer = new SpriteRenderer();
   public completed = new Subject();
   private animation: Animation<Sprite>;
-  private dims: Dimensions[];
 
   constructor() {
     super(64, 64);
 
     this.animation = new Animation(
       [
-        SpriteFactory.asOne('explosionBullet.1', new Dimensions(44, 44)),
-        SpriteFactory.asOne('explosionBullet.2', new Dimensions(60, 60)),
-        SpriteFactory.asOne('explosionBullet.3', new Dimensions(64, 64)),
+        SpriteFactory.asOne('explosionBullet.1', new Size(44, 44)),
+        SpriteFactory.asOne('explosionBullet.2', new Size(60, 60)),
+        SpriteFactory.asOne('explosionBullet.3', new Size(64, 64)),
       ],
       { delay: 3, loop: false },
     );

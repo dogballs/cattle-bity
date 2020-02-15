@@ -1,3 +1,4 @@
+import { Size } from '../core';
 import {
   PatrolFireTankBehavior,
   TankAttributesFactory,
@@ -16,8 +17,13 @@ export class EnemyFastTank extends EnemyTank {
       TankGrade.B,
     );
     const behavior = new PatrolFireTankBehavior();
-    const skin = new TankSkin(TankParty.Enemy, TankColor.Default, TankGrade.B);
+    const skin = new TankSkin(
+      TankParty.Enemy,
+      TankColor.Default,
+      TankGrade.B,
+      new Size(52, 60),
+    );
 
-    super(52, 60, attributes, behavior, skin, hasDrop);
+    super(64, 64, attributes, behavior, skin, hasDrop);
   }
 }

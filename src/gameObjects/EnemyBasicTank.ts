@@ -1,5 +1,6 @@
+import { Size } from '../core';
 import {
-  PatrolFireTankBehavior,
+  PatrolTankBehavior,
   TankAttributesFactory,
   TankSkin,
   TankColor,
@@ -15,9 +16,15 @@ export class EnemyBasicTank extends EnemyTank {
       TankParty.Enemy,
       TankGrade.A,
     );
-    const behavior = new PatrolFireTankBehavior();
-    const skin = new TankSkin(TankParty.Enemy, TankColor.Default, TankGrade.A);
+    const behavior = new PatrolTankBehavior();
+    const skin = new TankSkin(
+      TankParty.Enemy,
+      TankColor.Default,
+      TankGrade.A,
+      new Size(52, 60),
+      hasDrop,
+    );
 
-    super(52, 60, attributes, behavior, skin, hasDrop);
+    super(64, 64, attributes, behavior, skin, hasDrop);
   }
 }

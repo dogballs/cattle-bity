@@ -22,10 +22,6 @@ export abstract class EnemyTank extends Tank {
     if (hasDrop) {
       this.ignorePause = true;
     }
-
-    this.skin.hasDrop = hasDrop;
-    this.skin.rotation = this.rotation;
-    this.animation = this.skin.createIdleAnimation();
   }
 
   public update(updateArgs: GameObjectUpdateArgs): void {
@@ -36,8 +32,8 @@ export abstract class EnemyTank extends Tank {
     }
 
     if (gameState.is(GameState.Paused)) {
-      this.animation.animate();
-      this.renderer.sprite = this.animation.getCurrentFrame();
+      this.skin.update(this);
+      this.renderer.sprite = this.skin.getCurrentFrame();
       return;
     }
 
@@ -46,6 +42,7 @@ export abstract class EnemyTank extends Tank {
 
   public discardDrop(): this {
     this.hasDrop = false;
+    this.ignorePause = false;
 
     return this;
   }

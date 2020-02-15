@@ -4,18 +4,19 @@ import {
   GameObjectUpdateArgs,
   Rotation,
   Sprite,
+  SpriteAlignment,
   SpriteRenderer,
   Subject,
   Timer,
   Vector,
 } from '../core';
 import { TankAttributes, TankBehavior, TankSkin } from '../tank';
+import { Tag } from '../Tag';
+import * as config from '../config';
 
 import { Bullet } from './Bullet';
-import { Shield } from './Shield';
-import { Tag } from '../Tag';
-
 import { Explosion } from './Explosion';
+import { Shield } from './Shield';
 
 export enum TankState {
   Uninitialized,
@@ -50,8 +51,8 @@ export class Tank extends GameObject {
     this.behavior = behavior;
     this.skin = skin;
 
-    // TODO: tank is not rendered when constructed, only on update
-    //       (field initializers)
+    this.renderer.alignment = SpriteAlignment.Center;
+    this.renderer.sprite = this.skin.getCurrentFrame();
 
     this.shieldTimer.done.addListener(this.handleShieldTimer);
   }
@@ -61,14 +62,15 @@ export class Tank extends GameObject {
 
     this.behavior.update(this, updateArgs);
 
-    this.animation.animate();
-    this.renderer.sprite = this.animation.getCurrentFrame();
+    this.skin.update(this);
+
+    this.renderer.sprite = this.skin.getCurrentFrame();
   }
 
   public collide(target: GameObject): void {
     if (target.tags.includes(Tag.BlockMove)) {
       const wallBoundingBox = target.getWorldBoundingBox();
-      const { width, height } = this.getComputedDimensions();
+      const { width, height } = this.getComputedSize();
       const worldPosition = this.getWorldPosition();
 
       // Fix tank position depending on what wall he hits, so the tank won't be
@@ -129,10 +131,10 @@ export class Tank extends GameObject {
 
     const bullet = new Bullet();
 
-    const { width: bulletWidth, height: bulletHeight } = bullet.dimensions;
+    const { width: bulletWidth, height: bulletHeight } = bullet.size;
 
     const position = this.position.clone();
-    const { width: tankWidth, height: tankHeight } = this.dimensions;
+    const { width: tankWidth, height: tankHeight } = this.size;
 
     if (this.rotation === Rotation.Up) {
       position.add(new Vector(tankWidth / 2 - bulletWidth / 2, 0));
@@ -171,7 +173,6 @@ export class Tank extends GameObject {
   public move(): void {
     if (this.state !== TankState.Moving) {
       this.state = TankState.Moving;
-      this.animation = this.skin.createMoveAnimation();
     }
 
     if (this.rotation === Rotation.Up) {
@@ -183,27 +184,27 @@ export class Tank extends GameObject {
     } else if (this.rotation === Rotation.Left) {
       this.position.x -= this.attributes.moveSpeed;
     }
-
-    // const animation = this.animationMap[this.rotation];
-    // animation.animate();
-    // this.renderer.sprite = animation.getCurrentFrame();
   }
 
   public idle(): void {
     if (this.state !== TankState.Idle) {
       this.state = TankState.Idle;
-      this.animation = this.skin.createIdleAnimation();
     }
   }
 
   public rotate(rotation: Rotation): this {
-    if (this.rotation !== rotation) {
-      this.skin.rotation = rotation;
-      if (this.state === TankState.Moving) {
-        this.animation = this.skin.createMoveAnimation();
-      } else {
-        this.animation = this.skin.createIdleAnimation();
-      }
+    // When tank is rotating align it to grid. It is needed to:
+    // - simplify user navigation when moving into narrow passages; without it
+    //   user will be stuck on corners
+    const alignSize = config.TILE_SIZE_MEDIUM;
+    if (rotation === Rotation.Up || rotation === Rotation.Down) {
+      const alignedTileIndexX = Math.round(this.position.x / alignSize);
+      const nextX = alignedTileIndexX * alignSize;
+      this.position.setX(nextX);
+    } else if (rotation === Rotation.Left || rotation === Rotation.Right) {
+      const alignedTileIndexY = Math.round(this.position.y / alignSize);
+      const nextY = alignedTileIndexY * alignSize;
+      this.position.setY(nextY);
     }
 
     super.rotate(rotation);
