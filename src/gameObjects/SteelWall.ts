@@ -1,6 +1,6 @@
 import { Tag } from '../Tag';
 
-import { GameObject, Sprite, SpriteMaterial } from '../core';
+import { GameObject, Sprite, SpriteRenderer } from '../core';
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class SteelWall extends GameObject {
@@ -10,6 +10,6 @@ export class SteelWall extends GameObject {
   constructor() {
     super(32, 32);
 
-    this.material = new SpriteMaterial(SpriteFactory.asOne('wall.steel'));
+    this.renderer = new SpriteRenderer(SpriteFactory.asOne('wall.steel'));
   }
 }

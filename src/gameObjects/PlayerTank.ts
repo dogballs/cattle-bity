@@ -1,7 +1,7 @@
 import { Dimensions } from '../core';
-import { PlayerBehavior } from '../behaviors';
 import { Tag } from '../Tag';
 import {
+  PlayerTankBehavior,
   TankSkin,
   TankColor,
   TankGrade,
@@ -21,7 +21,7 @@ export class PlayerTank extends Tank {
       TankParty.Player,
       TankGrade.A,
     );
-    const behavior = new PlayerBehavior();
+    const behavior = new PlayerTankBehavior();
     const skin = new TankSkin(TankParty.Player, TankColor.Primary, TankGrade.A);
 
     super(52, 52, attributes, behavior, skin);

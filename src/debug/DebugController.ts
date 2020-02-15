@@ -1,8 +1,8 @@
-import { PowerupFactory, PowerupType } from './powerups';
+import { PowerupFactory, PowerupType } from '../powerups';
 
-import { Spawner } from './Spawner';
+import { Spawner } from '../Spawner';
 
-export class Debug {
+export class DebugController {
   private readonly spawner: Spawner;
 
   constructor(spawner: Spawner) {

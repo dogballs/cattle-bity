@@ -4,13 +4,12 @@ import {
   GameObjectUpdateArgs,
   Rotation,
   Sprite,
-  SpriteMaterial,
+  SpriteRenderer,
   Subject,
   Timer,
   Vector,
 } from '../core';
-import { Behavior } from '../behaviors';
-import { TankAttributes, TankSkin } from '../tank';
+import { TankAttributes, TankBehavior, TankSkin } from '../tank';
 
 import { Bullet } from './Bullet';
 import { Shield } from './Shield';
@@ -26,7 +25,7 @@ export enum TankState {
 
 export class Tank extends GameObject {
   public attributes: TankAttributes;
-  public behavior: Behavior;
+  public behavior: TankBehavior;
   public skin: TankSkin;
   public collider = true;
   public tags = [Tag.Tank];
@@ -34,7 +33,7 @@ export class Tank extends GameObject {
   public shield: Shield = null;
   public died = new Subject();
   public state = TankState.Uninitialized;
-  public material: SpriteMaterial = new SpriteMaterial();
+  public renderer: SpriteRenderer = new SpriteRenderer();
   protected shieldTimer = new Timer();
   protected animation: Animation<Sprite>;
 
@@ -42,7 +41,7 @@ export class Tank extends GameObject {
     width: number,
     height: number,
     attributes: TankAttributes,
-    behavior: Behavior,
+    behavior: TankBehavior,
     skin: TankSkin,
   ) {
     super(width, height);
@@ -63,7 +62,7 @@ export class Tank extends GameObject {
     this.behavior.update(this, updateArgs);
 
     this.animation.animate();
-    this.material.sprite = this.animation.getCurrentFrame();
+    this.renderer.sprite = this.animation.getCurrentFrame();
   }
 
   public collide(target: GameObject): void {
@@ -187,7 +186,7 @@ export class Tank extends GameObject {
 
     // const animation = this.animationMap[this.rotation];
     // animation.animate();
-    // this.material.sprite = animation.getCurrentFrame();
+    // this.renderer.sprite = animation.getCurrentFrame();
   }
 
   public idle(): void {

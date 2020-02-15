@@ -2,21 +2,21 @@ import {
   Dimensions,
   GameObject,
   SpriteAlignment,
-  SpriteMaterial,
+  SpriteRenderer,
 } from '../../core';
 
 import { SpriteFactory } from '../../sprite/SpriteFactory';
 
 export class EnemyCounterItem extends GameObject {
-  public readonly material = new SpriteMaterial();
+  public readonly renderer = new SpriteRenderer();
 
   constructor() {
     super(32, 32);
 
-    this.material.sprite = SpriteFactory.asOne(
+    this.renderer.sprite = SpriteFactory.asOne(
       'ui.enemyCounter',
       new Dimensions(28, 28),
     );
-    this.material.alignment = SpriteAlignment.Center;
+    this.renderer.alignment = SpriteAlignment.Center;
   }
 }

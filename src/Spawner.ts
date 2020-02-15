@@ -59,9 +59,9 @@ export class Spawner {
     );
 
     this.locations.set(SpawnLocation.PlayerPrimary, new Vector(256, 768));
-    this.locations.set(SpawnLocation.EnemyLeft, new Vector(256, 384));
-    this.locations.set(SpawnLocation.EnemyMid, new Vector(320, 384));
-    this.locations.set(SpawnLocation.EnemyRight, new Vector(384, 384));
+    this.locations.set(SpawnLocation.EnemyLeft, new Vector(0, 0));
+    this.locations.set(SpawnLocation.EnemyMid, new Vector(384, 0));
+    this.locations.set(SpawnLocation.EnemyRight, new Vector(768, 0));
 
     this.playerSpawnTimer.reset(config.PLAYER_FIRST_SPAWN_DELAY);
     this.playerSpawnTimer.done.addListener(this.handlePlayerSpawnTimer);

@@ -3,7 +3,7 @@ import {
   AudioSource,
   GameObject,
   Sprite,
-  SpriteMaterial,
+  SpriteRenderer,
   Subject,
 } from '../core';
 import { AudioManager } from '../audio/AudioManager';
@@ -24,7 +24,7 @@ export class Powerup extends GameObject {
 
   public readonly pickupSound: AudioSource;
 
-  public material = new SpriteMaterial();
+  public renderer = new SpriteRenderer();
   private animation: Animation<Sprite>;
 
   constructor(action: PowerupAction, spriteId: string, pickupSoundId: string) {
@@ -45,7 +45,7 @@ export class Powerup extends GameObject {
 
   public update(): void {
     this.animation.animate();
-    this.material.sprite = this.animation.getCurrentFrame();
+    this.renderer.sprite = this.animation.getCurrentFrame();
   }
 
   public collide(target: GameObject): void {

@@ -1,4 +1,4 @@
-import { GameLoop, GameObject, KeyboardInput, Renderer } from './core';
+import { GameLoop, GameObject, GameRenderer, KeyboardInput } from './core';
 
 import { Border, EditorBrush, EditorBrushType } from './gameObjects';
 
@@ -7,12 +7,12 @@ import { MapFactory } from './map/MapFactory';
 
 import * as config from './config';
 
-const renderer = new Renderer({
+const gameRenderer = new GameRenderer({
   debug: true,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
-document.body.appendChild(renderer.domElement);
+document.body.appendChild(gameRenderer.domElement);
 
 const input = new KeyboardInput();
 input.listen();
@@ -54,7 +54,7 @@ const gameLoop = new GameLoop({
     field.clear();
     field.add(...nodes);
 
-    renderer.render(scene);
+    gameRenderer.render(scene);
   },
 });
 

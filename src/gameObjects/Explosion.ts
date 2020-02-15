@@ -3,7 +3,7 @@ import {
   Dimensions,
   GameObject,
   Sprite,
-  SpriteMaterial,
+  SpriteRenderer,
   SpriteAlignment,
   Subject,
 } from './../core';
@@ -11,10 +11,9 @@ import {
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class Explosion extends GameObject {
-  public material = new SpriteMaterial();
+  public renderer = new SpriteRenderer();
   public readonly done = new Subject();
   private readonly animation: Animation<Sprite>;
-  private readonly dims: Dimensions[];
 
   constructor() {
     super(136, 136);
@@ -27,7 +26,7 @@ export class Explosion extends GameObject {
       { delay: 4, loop: false },
     );
 
-    this.material.alignment = SpriteAlignment.Center;
+    this.renderer.alignment = SpriteAlignment.Center;
   }
 
   public update(): void {
@@ -37,6 +36,6 @@ export class Explosion extends GameObject {
       return;
     }
     this.animation.animate();
-    this.material.sprite = this.animation.getCurrentFrame();
+    this.renderer.sprite = this.animation.getCurrentFrame();
   }
 }

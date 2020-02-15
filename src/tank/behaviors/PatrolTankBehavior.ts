@@ -1,9 +1,9 @@
-import { Rotation, Vector } from '../core';
-import { Tank } from '../gameObjects';
+import { Rotation, Vector } from '../../core';
+import { Tank } from '../../gameObjects';
 
-import { Behavior } from './Behavior';
+import { TankBehavior } from './TankBehavior';
 
-export class PatrolBehavior extends Behavior {
+export class PatrolTankBehavior extends TankBehavior {
   private lastPosition: Vector = null;
 
   public update(tank: Tank): void {

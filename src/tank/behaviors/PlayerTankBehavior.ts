@@ -1,10 +1,10 @@
-import { GameObjectUpdateArgs, KeyboardKey, Rotation } from '../core';
-import { Tank, TankState } from '../gameObjects';
-import { AudioManager } from '../audio/AudioManager';
+import { GameObjectUpdateArgs, KeyboardKey, Rotation } from '../../core';
+import { Tank, TankState } from '../../gameObjects';
+import { AudioManager } from '../../audio/AudioManager';
 
-import { Behavior } from './Behavior';
+import { TankBehavior } from './TankBehavior';
 
-export class PlayerBehavior extends Behavior {
+export class PlayerTankBehavior extends TankBehavior {
   // TODO: Is it ok in here?
   private fireAudio = AudioManager.load('fire');
   private moveAudio = AudioManager.load('tankMove');

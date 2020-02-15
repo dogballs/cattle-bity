@@ -4,14 +4,14 @@ import {
   GameObject,
   Sprite,
   SpriteAlignment,
-  SpriteMaterial,
+  SpriteRenderer,
   Subject,
 } from './../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class BulletExplosion extends GameObject {
-  public material = new SpriteMaterial();
+  public renderer = new SpriteRenderer();
   public completed = new Subject();
   private animation: Animation<Sprite>;
   private dims: Dimensions[];
@@ -28,7 +28,7 @@ export class BulletExplosion extends GameObject {
       { delay: 3, loop: false },
     );
 
-    this.material.alignment = SpriteAlignment.Center;
+    this.renderer.alignment = SpriteAlignment.Center;
   }
 
   public update(): void {
@@ -38,6 +38,6 @@ export class BulletExplosion extends GameObject {
     }
 
     this.animation.animate();
-    this.material.sprite = this.animation.getCurrentFrame();
+    this.renderer.sprite = this.animation.getCurrentFrame();
   }
 }

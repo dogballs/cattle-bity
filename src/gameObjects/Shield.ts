@@ -4,14 +4,14 @@ import {
   GameObjectUpdateArgs,
   GameState,
   Sprite,
-  SpriteMaterial,
+  SpriteRenderer,
 } from '../core';
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class Shield extends GameObject {
   public ignorePause = true;
-  public material = new SpriteMaterial();
+  public renderer = new SpriteRenderer();
   private animation: Animation<Sprite>;
 
   constructor() {
@@ -36,6 +36,6 @@ export class Shield extends GameObject {
     }
 
     this.animation.animate();
-    this.material.sprite = this.animation.getCurrentFrame();
+    this.renderer.sprite = this.animation.getCurrentFrame();
   }
 }

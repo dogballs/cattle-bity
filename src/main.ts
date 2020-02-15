@@ -2,10 +2,10 @@ import {
   CollisionDetector,
   GameLoop,
   GameObject,
+  GameRenderer,
   GameState,
   KeyboardInput,
   KeyboardKey,
-  Renderer,
   State,
 } from './core';
 
@@ -13,20 +13,20 @@ import { Base, Border, EnemyCounter, PauseNotification } from './gameObjects';
 
 import * as config from './config';
 
-import { Debug } from './Debug';
+import { DebugController, DebugGrid } from './debug';
 import { Spawner } from './Spawner';
 
 import { AudioManager } from './audio/AudioManager';
 import { MapConfig } from './map/MapConfig';
 import { MapFactory } from './map/MapFactory';
-import * as mapJSON from './map/test-enemy-tanks.json';
+import * as mapJSON from './map/stage1.json';
 
-const renderer = new Renderer({
+const gameRenderer = new GameRenderer({
   // debug: true,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
-document.body.appendChild(renderer.domElement);
+document.body.appendChild(gameRenderer.domElement);
 
 const input = new KeyboardInput();
 input.listen();
@@ -51,9 +51,21 @@ base.died.addListener(() => {
 });
 field.add(base);
 
+const debugGrid = new DebugGrid(
+  config.FIELD_SIZE,
+  config.FIELD_SIZE,
+  config.TILE_SIZE_SMALL,
+  'rgba(255,255,255,0.3)',
+);
+debugGrid.position.set(
+  config.BORDER_LEFT_WIDTH,
+  config.BORDER_TOP_BOTTOM_HEIGHT,
+);
+scene.add(debugGrid);
+
 const spawner = new Spawner(mapConfig, field, base);
 
-const debug = new Debug(spawner);
+const debug = new DebugController(spawner);
 
 const enemyCounter = new EnemyCounter(spawner.getUnspawnedEnemiesCount());
 enemyCounter.position.set(
@@ -117,7 +129,7 @@ const gameLoop = new GameLoop({
       collision.source.collide(collision.target);
     });
 
-    renderer.render(scene);
+    gameRenderer.render(scene);
 
     gameState.tick();
   },

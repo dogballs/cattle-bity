@@ -1,4 +1,4 @@
-import { GameObject, Rotation, SpriteMaterial, Subject } from '../core';
+import { GameObject, Rotation, SpriteRenderer, Subject } from '../core';
 import { AudioManager } from '../audio/AudioManager';
 import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
 import { Tag } from '../Tag';
@@ -12,6 +12,7 @@ export class Bullet extends GameObject {
   public speed = 15;
   public tags = [Tag.Bullet];
   public died = new Subject();
+  public renderer = new SpriteRenderer();
   private spriteMap: MapNameToSprite;
 
   constructor() {
@@ -23,8 +24,6 @@ export class Bullet extends GameObject {
       [Rotation.Left]: 'bullet.left',
       [Rotation.Right]: 'bullet.right',
     });
-
-    this.material = new SpriteMaterial();
   }
 
   public update(): void {
@@ -38,7 +37,7 @@ export class Bullet extends GameObject {
       this.position.x += this.speed;
     }
 
-    this.material.sprite = this.spriteMap[this.rotation];
+    this.renderer.sprite = this.spriteMap[this.rotation];
   }
 
   public collide(target: GameObject): void {

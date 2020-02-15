@@ -1,6 +1,5 @@
 import { GameObjectUpdateArgs, GameState } from '../core';
-import { Behavior } from '../behaviors';
-import { TankAttributes, TankSkin } from '../tank';
+import { TankAttributes, TankBehavior, TankSkin } from '../tank';
 import { Tag } from '../Tag';
 
 import { Tank } from './Tank';
@@ -13,7 +12,7 @@ export abstract class EnemyTank extends Tank {
     width: number,
     height: number,
     attributes: TankAttributes,
-    behavior: Behavior,
+    behavior: TankBehavior,
     skin: TankSkin,
     hasDrop = false,
   ) {
@@ -38,7 +37,7 @@ export abstract class EnemyTank extends Tank {
 
     if (gameState.is(GameState.Paused)) {
       this.animation.animate();
-      this.material.sprite = this.animation.getCurrentFrame();
+      this.renderer.sprite = this.animation.getCurrentFrame();
       return;
     }
 

@@ -1,11 +1,10 @@
-import { Tag } from '../Tag';
-
-import { GameObject, Sprite, SpriteMaterial } from '../core';
+import { GameObject, Sprite, SpriteRenderer } from '../core';
 import { SpriteFactory } from '../sprite/SpriteFactory';
+import { Tag } from '../Tag';
 
 export class BrickWall extends GameObject {
   public tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
-  public material = new SpriteMaterial();
+  public renderer = new SpriteRenderer();
   private readonly sprites: Sprite[];
 
   constructor() {
@@ -22,11 +21,11 @@ export class BrickWall extends GameObject {
       'wall.brick.8',
     ]);
 
-    this.material.sprite = this.getSpriteByPosition();
+    this.renderer.sprite = this.getSpriteByPosition();
   }
 
   public update(): void {
-    this.material.sprite = this.getSpriteByPosition();
+    this.renderer.sprite = this.getSpriteByPosition();
   }
 
   private getSpriteByPosition(): Sprite {

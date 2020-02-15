@@ -1,10 +1,10 @@
 import {
-  BasicMaterial,
   BoundingBox,
   Dimensions,
   GameObject,
   KeyboardInput,
   KeyboardKey,
+  RectRenderer,
   Subject,
 } from '../core';
 
@@ -22,7 +22,7 @@ export enum EditorBrushType {
 export class EditorBrush extends GameObject {
   public brushSize: EditorBrushSize = EditorBrushSize.Large;
   public brushType: EditorBrushType = EditorBrushType.BrickWall;
-  public material = new BasicMaterial(null, 'red');
+  public renderer = new RectRenderer(null, 'red');
   public draw = new Subject<{ brushType: EditorBrushType; box: BoundingBox }>();
 
   constructor() {

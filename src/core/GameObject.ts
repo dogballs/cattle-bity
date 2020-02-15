@@ -2,11 +2,12 @@ import { BoundingBox } from './BoundingBox';
 import { Dimensions } from './Dimensions';
 import { GameState } from './GameState';
 import { KeyboardInput } from './KeyboardInput';
-import { Material } from './Material';
 import { Node } from './Node';
 import { Rotation } from './Rotation';
 import { State } from './State';
 import { Vector } from './Vector';
+
+import { Renderer } from './renderers';
 
 export interface GameObjectUpdateArgs {
   input?: KeyboardInput;
@@ -18,7 +19,7 @@ export class GameObject extends Node {
   public ignorePause = false;
   public visible = true;
   public dimensions: Dimensions;
-  public material: Material = null;
+  public renderer: Renderer = null;
   public position: Vector = new Vector();
   public rotation: Rotation = Rotation.Up;
   public tags: string[] = [];
