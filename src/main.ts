@@ -7,13 +7,14 @@ import {
   KeyboardInput,
   KeyboardKey,
   State,
+  Vector,
 } from './core';
 
 import { Base, Border, EnemyCounter, PauseNotification } from './gameObjects';
 
 import * as config from './config';
 
-import { DebugController, DebugGrid } from './debug';
+import { DebugController, DebugGrid, DebugInspector } from './debug';
 import { Spawner } from './Spawner';
 
 import { AudioManager } from './audio/AudioManager';
@@ -66,6 +67,20 @@ debugGrid.position.set(
 const spawner = new Spawner(mapConfig, field, base);
 
 const debug = new DebugController(spawner);
+
+const debugInspector = new DebugInspector(gameRenderer.domElement);
+// debugInspector.listen();
+debugInspector.click.addListener((position: Vector) => {
+  const intersections: GameObject[] = [];
+
+  scene.traverse((child) => {
+    if (child.getWorldBoundingBox().contains(position)) {
+      intersections.push(child);
+    }
+  });
+
+  console.log(intersections);
+});
 
 const enemyCounter = new EnemyCounter(spawner.getUnspawnedEnemiesCount());
 enemyCounter.position.set(

@@ -33,6 +33,18 @@ export class Vector {
     return this;
   }
 
+  public addX(x: number): this {
+    this.x += x;
+
+    return this;
+  }
+
+  public addY(y: number): this {
+    this.y += y;
+
+    return this;
+  }
+
   public sub(v: Vector): this {
     this.x -= v.x;
     this.y -= v.y;
@@ -47,7 +59,7 @@ export class Vector {
     return this;
   }
 
-  public copy(v: Vector): this {
+  public copyFrom(v: Vector): this {
     this.x = v.x;
     this.y = v.y;
 

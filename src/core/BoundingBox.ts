@@ -37,12 +37,22 @@ export class BoundingBox {
    * @param  {BoundingBox} box
    * @return {Boolean}
    */
-  public intersectsBox(box): boolean {
+  public intersectsBox(box: BoundingBox): boolean {
     const isOutside =
       this.max.x <= box.min.x ||
       this.min.x >= box.max.x ||
       this.max.y <= box.min.y ||
       this.min.y >= box.max.y;
+
+    return !isOutside;
+  }
+
+  public contains(v: Vector): boolean {
+    const isOutside =
+      this.max.x <= v.x ||
+      this.min.x >= v.x ||
+      this.max.y <= v.y ||
+      this.min.y >= v.y;
 
     return !isOutside;
   }

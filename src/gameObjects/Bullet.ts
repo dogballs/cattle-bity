@@ -70,7 +70,32 @@ export class Bullet extends GameObject {
       // TODO: order here matters
       destroyer.rotate(this.rotation);
       destroyer.setCenterFrom(this);
+
+      const wallWorldPosition = target.getWorldPosition();
+
+      // TODO: order matters
+      // TODO: these world positions are very messy
       this.parent.add(destroyer);
+
+      const destroyerWorldPosition = destroyer.getWorldPosition();
+
+      if (this.rotation === Rotation.Up) {
+        destroyer.setWorldPosition(
+          wallWorldPosition.clone().setX(destroyerWorldPosition.x),
+        );
+      } else if (this.rotation === Rotation.Down) {
+        destroyer.setWorldPosition(
+          wallWorldPosition.clone().setX(destroyerWorldPosition.x),
+        );
+      } else if (this.rotation === Rotation.Left) {
+        destroyer.setWorldPosition(
+          wallWorldPosition.clone().setY(destroyerWorldPosition.y),
+        );
+      } else if (this.rotation === Rotation.Right) {
+        destroyer.setWorldPosition(
+          wallWorldPosition.clone().setY(destroyerWorldPosition.y),
+        );
+      }
 
       // TODO: it collides with multiple "bricks", multiple audio sources are
       // triggered

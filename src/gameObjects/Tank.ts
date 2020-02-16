@@ -8,7 +8,6 @@ import {
   SpriteRenderer,
   Subject,
   Timer,
-  Vector,
 } from '../core';
 import { TankAttributes, TankBehavior, TankSkin } from '../tank';
 import { Tag } from '../Tag';
@@ -131,23 +130,29 @@ export class Tank extends GameObject {
 
     const bullet = new Bullet();
 
-    const { width: bulletWidth, height: bulletHeight } = bullet.size;
+    const tankSize = this.getComputedSize();
 
-    const position = this.position.clone();
-    const { width: tankWidth, height: tankHeight } = this.size;
+    // Position bullet where the gun is
+
+    // TODO: order here matters
+    bullet.rotate(this.rotation);
+    bullet.setCenterFrom(this);
+
+    // Get after rotation
+    const bulletSize = bullet.getComputedSize();
 
     if (this.rotation === Rotation.Up) {
-      position.add(new Vector(tankWidth / 2 - bulletWidth / 2, 0));
+      bullet.position.setY(this.position.y);
     } else if (this.rotation === Rotation.Down) {
-      position.add(new Vector(tankWidth / 2 - bulletWidth / 2, tankHeight));
+      bullet.position.setY(
+        this.position.y + tankSize.height - bulletSize.height,
+      );
     } else if (this.rotation === Rotation.Left) {
-      position.add(new Vector(0, tankHeight / 2 - bulletHeight / 2));
+      bullet.position.setX(this.position.x);
     } else if (this.rotation === Rotation.Right) {
-      position.add(new Vector(tankWidth, tankHeight / 2 - bulletHeight / 2));
+      bullet.position.setX(this.position.x + tankSize.width - bulletSize.width);
     }
 
-    bullet.position = position;
-    bullet.rotate(this.rotation);
     bullet.speed = this.attributes.bulletSpeed;
     bullet.damage = this.attributes.bulletDamage;
 

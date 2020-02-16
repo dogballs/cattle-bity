@@ -1,16 +1,25 @@
+import { GameObject } from '../core';
 import { PowerupFactory, PowerupType } from '../powerups';
 
 import { Spawner } from '../Spawner';
 
 export class DebugController {
-  private readonly spawner: Spawner;
+  protected readonly spawner: Spawner;
 
   constructor(spawner: Spawner) {
     this.spawner = spawner;
   }
 
-  activatePowerup(type: PowerupType): void {
+  public activatePowerup(type: PowerupType): void {
     const powerup = PowerupFactory.create(type);
     powerup.action.execute(this.spawner.playerTank, powerup, this.spawner.base);
+  }
+
+  public playerTankFire(): void {
+    this.spawner.playerTank.fire();
+  }
+
+  public findByTag(tags: string | string[]): GameObject[] {
+    return this.spawner.field.getChildrenWithTag(tags);
   }
 }

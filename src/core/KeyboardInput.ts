@@ -17,11 +17,11 @@ export enum KeyboardKey {
 export type KeyboardKeyCode = KeyboardKey | number;
 
 export class KeyboardInput {
-  private listenedDownKeyCodes: KeyboardKeyCode[] = [];
+  protected listenedDownKeyCodes: KeyboardKeyCode[] = [];
 
-  private downKeyCodes: KeyboardKeyCode[] = [];
-  private holdKeyCodes: KeyboardKeyCode[] = [];
-  private upKeyCodes: KeyboardKeyCode[] = [];
+  protected downKeyCodes: KeyboardKeyCode[] = [];
+  protected holdKeyCodes: KeyboardKeyCode[] = [];
+  protected upKeyCodes: KeyboardKeyCode[] = [];
 
   public listen(): void {
     document.addEventListener('keydown', this.handleWindowKeyDown);
@@ -87,7 +87,7 @@ export class KeyboardInput {
     return this.upKeyCodes.includes(keyCode);
   }
 
-  private handleWindowKeyDown = (ev): void => {
+  protected handleWindowKeyDown = (ev): void => {
     const { keyCode } = ev;
 
     if (!this.listenedDownKeyCodes.includes(keyCode)) {
@@ -95,7 +95,7 @@ export class KeyboardInput {
     }
   };
 
-  private handleWindowKeyUp = (ev): void => {
+  protected handleWindowKeyUp = (ev): void => {
     const { keyCode } = ev;
 
     const index = this.listenedDownKeyCodes.indexOf(keyCode);

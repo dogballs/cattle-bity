@@ -84,7 +84,7 @@ export class GameObject extends Node {
       localPosition.sub(parent.position);
     });
 
-    this.position.copy(localPosition);
+    this.position.copyFrom(localPosition);
 
     return this;
   }
@@ -96,7 +96,7 @@ export class GameObject extends Node {
   public setCenter(v: Vector): this {
     const size = this.getComputedSize();
 
-    this.position.copy(v.sub(size.toVector().divideScalar(2)));
+    this.position.copyFrom(v.sub(size.toVector().divideScalar(2)));
 
     return this;
   }

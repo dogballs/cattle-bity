@@ -116,7 +116,7 @@ export class Spawner {
   private spawnPlayer(): void {
     const locationPosition = this.locations.get(SpawnLocation.PlayerPrimary);
     const spawn = new Spawn();
-    spawn.position.copy(locationPosition);
+    spawn.position.copyFrom(locationPosition);
     spawn.completed.addListener(() => {
       const tank = new PlayerTank();
       tank.setCenterFrom(spawn);
@@ -147,7 +147,7 @@ export class Spawner {
     const locationPosition = this.locations.get(this.currentEnemyLocation);
 
     const spawn = new Spawn();
-    spawn.position.copy(locationPosition);
+    spawn.position.copyFrom(locationPosition);
     spawn.completed.addListener(() => {
       const tank = this.createTank(enemyConfig.type, hasDrop) as EnemyTank;
       tank.rotate(Rotation.Down);
