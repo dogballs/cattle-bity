@@ -3,20 +3,25 @@ import { AudioManager } from '../audio/AudioManager';
 import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
 import { Tag } from '../Tag';
 
-import { BrickWallDestroyer } from './BrickWallDestroyer';
 import { BulletExplosion } from './BulletExplosion';
+import { WallDestroyer } from './WallDestroyer';
 
 export class Bullet extends GameObject {
   public collider = true;
-  public damage = 0;
-  public speed = 15;
+  public tankDamage: number;
+  public wallDamage: number;
+  public speed: number;
   public tags = [Tag.Bullet];
   public died = new Subject();
   public renderer = new SpriteRenderer();
   private spriteMap: MapNameToSprite;
 
-  constructor() {
+  constructor(speed: number, tankDamage: number, wallDamage: number) {
     super(12, 16);
+
+    this.speed = speed;
+    this.tankDamage = tankDamage;
+    this.wallDamage = wallDamage;
 
     this.spriteMap = SpriteFactory.asMap({
       [Rotation.Up]: 'bullet.up',
@@ -65,35 +70,47 @@ export class Bullet extends GameObject {
       this.explode();
     }
 
-    if (isBrickWall) {
-      const destroyer = new BrickWallDestroyer();
+    if (isBrickWall || (isSteelWall && this.wallDamage === 2)) {
+      const wallWorldBox = target.getWorldBoundingBox();
+
+      const destroyer = new WallDestroyer(this.wallDamage);
       // TODO: order here matters
       destroyer.rotate(this.rotation);
       destroyer.setCenterFrom(this);
 
-      const wallWorldPosition = target.getWorldPosition();
+      // At this point destroyer is aligned by at the main axis, i.e.
+      // if bullet rotation is left/right - destroyer is aligned at "y";
+      // if bullet rotation is up/down - destroyer is aligned at "x".
+      // What is left is to fix counterpart axis.
 
       // TODO: order matters
-      // TODO: these world positions are very messy
-      this.parent.add(destroyer);
+      // TODO: these world positions are very messy, but are required to be
+      // able to hit bricks in base
 
+      // Adding to parent will influence in world position calculation
+      this.parent.add(destroyer);
       const destroyerWorldPosition = destroyer.getWorldPosition();
+      const destroyerSize = destroyer.getComputedSize();
 
       if (this.rotation === Rotation.Up) {
         destroyer.setWorldPosition(
-          wallWorldPosition.clone().setX(destroyerWorldPosition.x),
+          destroyerWorldPosition
+            .clone()
+            .setY(wallWorldBox.max.y - destroyerSize.height),
         );
       } else if (this.rotation === Rotation.Down) {
         destroyer.setWorldPosition(
-          wallWorldPosition.clone().setX(destroyerWorldPosition.x),
+          destroyerWorldPosition.clone().setY(wallWorldBox.min.y),
         );
       } else if (this.rotation === Rotation.Left) {
         destroyer.setWorldPosition(
-          wallWorldPosition.clone().setY(destroyerWorldPosition.y),
+          destroyerWorldPosition
+            .clone()
+            .setX(wallWorldBox.max.x - destroyerSize.width),
         );
       } else if (this.rotation === Rotation.Right) {
         destroyer.setWorldPosition(
-          wallWorldPosition.clone().setY(destroyerWorldPosition.y),
+          destroyerWorldPosition.clone().setX(wallWorldBox.min.x),
         );
       }
 

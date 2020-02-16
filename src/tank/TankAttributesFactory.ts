@@ -4,9 +4,10 @@ import { TankParty } from './TankParty';
 export interface TankAttributes {
   party: TankParty;
   grade: TankGrade;
-  bulletDamage: number;
   bulletMaxCount: number;
   bulletSpeed: number;
+  bulletTankDamage: number;
+  bulletWallDamage: number;
   health: number;
   moveSpeed: number;
 }
@@ -16,54 +17,60 @@ const list: TankAttributes[] = [
   {
     party: TankParty.Player,
     grade: TankGrade.A,
-    bulletDamage: 1,
     bulletMaxCount: 1,
     bulletSpeed: 10,
+    bulletTankDamage: 1,
+    bulletWallDamage: 1,
     health: 1,
     moveSpeed: 3,
   },
   {
     party: TankParty.Player,
     grade: TankGrade.B,
-    bulletDamage: 1,
     bulletMaxCount: 1,
     bulletSpeed: 15,
+    bulletTankDamage: 1,
+    bulletWallDamage: 1,
     health: 1,
     moveSpeed: 3,
   },
   {
     party: TankParty.Player,
     grade: TankGrade.C,
-    bulletDamage: 1,
     bulletMaxCount: 2,
     bulletSpeed: 15,
+    bulletTankDamage: 1,
+    bulletWallDamage: 1,
     health: 1,
     moveSpeed: 3,
   },
   {
     party: TankParty.Player,
     grade: TankGrade.D,
-    bulletDamage: 2,
     bulletMaxCount: 2,
     bulletSpeed: 15,
+    bulletTankDamage: 2,
+    bulletWallDamage: 2,
     health: 1,
     moveSpeed: 3,
   },
   {
     party: TankParty.Enemy,
     grade: TankGrade.A,
-    bulletDamage: 1,
     bulletMaxCount: 1,
     bulletSpeed: 10,
+    bulletTankDamage: 1,
+    bulletWallDamage: 1,
     health: 1,
     moveSpeed: 2,
   },
   {
     party: TankParty.Enemy,
     grade: TankGrade.B,
-    bulletDamage: 1,
     bulletMaxCount: 1,
     bulletSpeed: 13,
+    bulletTankDamage: 1,
+    bulletWallDamage: 1,
     health: 1,
     moveSpeed: 4,
   },

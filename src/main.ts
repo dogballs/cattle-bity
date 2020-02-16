@@ -69,7 +69,7 @@ const spawner = new Spawner(mapConfig, field, base);
 const debug = new DebugController(spawner);
 
 const debugInspector = new DebugInspector(gameRenderer.domElement);
-// debugInspector.listen();
+debugInspector.listen();
 debugInspector.click.addListener((position: Vector) => {
   const intersections: GameObject[] = [];
 

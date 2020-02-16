@@ -72,6 +72,8 @@ export class Tank extends GameObject {
       const { width, height } = this.getComputedSize();
       const worldPosition = this.getWorldPosition();
 
+      // TODO: world positions are messy, but required to check for all walls
+      // for whatever nesting levels.
       // Fix tank position depending on what wall he hits, so the tank won't be
       // able to pass thru the wall.
       if (this.rotation === Rotation.Up) {
@@ -112,7 +114,7 @@ export class Tank extends GameObject {
         return;
       }
 
-      const nextHealth = this.attributes.health - bullet.damage;
+      const nextHealth = this.attributes.health - bullet.tankDamage;
       if (nextHealth > 0) {
         this.attributes.health = nextHealth;
         bullet.explode();
@@ -128,7 +130,11 @@ export class Tank extends GameObject {
       return;
     }
 
-    const bullet = new Bullet();
+    const bullet = new Bullet(
+      this.attributes.bulletSpeed,
+      this.attributes.bulletTankDamage,
+      this.attributes.bulletWallDamage,
+    );
 
     const tankSize = this.getComputedSize();
 
@@ -152,9 +158,6 @@ export class Tank extends GameObject {
     } else if (this.rotation === Rotation.Right) {
       bullet.position.setX(this.position.x + tankSize.width - bulletSize.width);
     }
-
-    bullet.speed = this.attributes.bulletSpeed;
-    bullet.damage = this.attributes.bulletDamage;
 
     if (this.tags.includes(Tag.Player)) {
       bullet.tags.push(Tag.Player);

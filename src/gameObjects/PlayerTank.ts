@@ -76,7 +76,6 @@ export class PlayerTank extends Tank {
         new Size(52, 60),
       );
     } else if (this.grade === 4) {
-      // TODO: Higher damage
       this.attributes = TankAttributesFactory.create(
         TankParty.Player,
         TankGrade.D,

@@ -2,7 +2,6 @@ export * from './ui';
 
 export * from './Base';
 export * from './BrickWall';
-export * from './BrickWallDestroyer';
 export * from './Border';
 export * from './BorderWall';
 export * from './Bullet';
@@ -18,3 +17,4 @@ export * from './Shield';
 export * from './Spawn';
 export * from './SteelWall';
 export * from './Tank';
+export * from './WallDestroyer';
