@@ -1,26 +1,54 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+export enum LogLevel {
+  Debug = 1,
+  Info = 2,
+  Warn = 3,
+  Error = 4,
+  None = 5,
+}
+
 export class Logger {
   public readonly tag: string;
+  public level: LogLevel;
 
-  constructor(tag = '') {
+  constructor(tag = '', level: LogLevel = LogLevel.Error) {
     this.tag = tag ? `[${tag}]` : '';
+    this.level = level;
   }
 
-  public info(...args: any[]): void {
-    console.log(...this.composeArgs(...args));
+  public setLevel(level: LogLevel): this {
+    this.level = level;
+
+    return this;
   }
 
   public debug(...args: any[]): void {
     // TODO: check for prod build
+    if (this.level > LogLevel.Debug) {
+      return;
+    }
+    console.log(...this.composeArgs(...args));
+  }
+
+  public info(...args: any[]): void {
+    if (this.level > LogLevel.Info) {
+      return;
+    }
     console.log(...this.composeArgs(...args));
   }
 
   public warn = (...args: any[]): void => {
+    if (this.level > LogLevel.Warn) {
+      return;
+    }
     console.warn(...this.composeArgs(...args));
   };
 
   public error = (...args: any[]): void => {
+    if (this.level > LogLevel.Error) {
+      return;
+    }
     console.error(...this.composeArgs(...args));
   };
 

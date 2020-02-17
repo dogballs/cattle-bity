@@ -21,8 +21,8 @@ export class Timer {
   }
 
   public tick(): this {
-    if (this.ticks === -1) {
-      return this;
+    if (!this.isActive()) {
+      return;
     }
 
     this.ticks = this.ticks - 1;
@@ -36,5 +36,9 @@ export class Timer {
 
   public isActive(): boolean {
     return this.ticks > -1;
+  }
+
+  public isDone(): boolean {
+    return this.ticks === -1;
   }
 }

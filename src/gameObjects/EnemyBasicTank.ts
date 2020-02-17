@@ -1,6 +1,6 @@
 import { Size } from '../core';
 import {
-  PatrolTankBehavior,
+  DumbAiTankBehavior,
   TankAttributesFactory,
   TankSkin,
   TankColor,
@@ -16,7 +16,7 @@ export class EnemyBasicTank extends EnemyTank {
       TankParty.Enemy,
       TankGrade.A,
     );
-    const behavior = new PatrolTankBehavior();
+    const behavior = new DumbAiTankBehavior();
     const skin = new TankSkin(
       TankParty.Enemy,
       TankColor.Default,

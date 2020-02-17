@@ -68,7 +68,7 @@ export class Tank extends GameObject {
 
   public collide(target: GameObject): void {
     if (target.tags.includes(Tag.BlockMove)) {
-      const wallBoundingBox = target.getWorldBoundingBox();
+      const targetBox = target.getWorldBoundingBox();
       const { width, height } = this.getComputedSize();
       const worldPosition = this.getWorldPosition();
 
@@ -77,20 +77,16 @@ export class Tank extends GameObject {
       // Fix tank position depending on what wall he hits, so the tank won't be
       // able to pass thru the wall.
       if (this.rotation === Rotation.Up) {
-        this.setWorldPosition(
-          worldPosition.clone().setY(wallBoundingBox.max.y),
-        );
+        this.setWorldPosition(worldPosition.clone().setY(targetBox.max.y));
       } else if (this.rotation === Rotation.Down) {
         this.setWorldPosition(
-          worldPosition.clone().setY(wallBoundingBox.min.y - height),
+          worldPosition.clone().setY(targetBox.min.y - height),
         );
       } else if (this.rotation === Rotation.Left) {
-        this.setWorldPosition(
-          worldPosition.clone().setX(wallBoundingBox.max.x),
-        );
+        this.setWorldPosition(worldPosition.clone().setX(targetBox.max.x));
       } else if (this.rotation === Rotation.Right) {
         this.setWorldPosition(
-          worldPosition.clone().setX(wallBoundingBox.min.x - width),
+          worldPosition.clone().setX(targetBox.min.x - width),
         );
       }
     }
