@@ -1,6 +1,6 @@
 export enum PowerupType {
-  BaseDefence,
-  Shield,
-  Upgrade,
-  Wipeout,
+  BaseDefence = 'defence',
+  Shield = 'shield',
+  Upgrade = 'upgrade',
+  Wipeout = 'wipeout',
 }

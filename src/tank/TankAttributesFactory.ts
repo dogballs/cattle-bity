@@ -68,7 +68,7 @@ const list: TankAttributes[] = [
     party: TankParty.Enemy,
     tier: TankTier.B,
     bulletMaxCount: 1,
-    bulletSpeed: 13,
+    bulletSpeed: 10,
     bulletTankDamage: 1,
     bulletWallDamage: 1,
     health: 1,

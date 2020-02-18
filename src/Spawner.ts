@@ -13,7 +13,7 @@ import { MapConfig, MapConfigSpawnEnemyListItem } from './map';
 import { AudioManager } from './audio/AudioManager';
 import { PointsValue } from './points';
 import { PowerupFactory } from './powerups';
-import { TankTier } from './tank';
+import { TankDeathReason, TankTier } from './tank';
 import { RandomUtils } from './utils';
 
 import * as config from './config';
@@ -183,7 +183,7 @@ export class Spawner {
       const tank = this.createEnemyTank(enemyConfig.tier, hasDrop) as EnemyTank;
       tank.rotate(Rotation.Down);
       tank.setCenterFrom(spawn);
-      tank.died.addListener(() => {
+      tank.died.addListener((event) => {
         // TODO: grenade explosion explodes multiple enemies, should trigger
         // single audio
         AudioManager.load('explosion.enemy').play();
@@ -201,11 +201,14 @@ export class Spawner {
         explosion.setCenterFrom(tank);
         tank.replaceSelf(explosion);
 
-        explosion.done.addListenerOnce(() => {
-          const points = this.createEnemyTankPoints(tank);
-          points.setCenterFrom(tank);
-          this.field.add(points);
-        });
+        // Only player kills are awarded
+        if (event.reason === TankDeathReason.Bullet) {
+          explosion.done.addListenerOnce(() => {
+            const points = this.createEnemyTankPoints(tank);
+            points.setCenterFrom(tank);
+            this.field.add(points);
+          });
+        }
       });
       spawn.replaceSelf(tank);
     });

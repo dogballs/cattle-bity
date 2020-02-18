@@ -9,12 +9,16 @@ import {
   Subject,
   Timer,
 } from '../core';
-import { TankAttributes, TankBehavior, TankSkin } from '../tank';
+import {
+  TankAttributes,
+  TankBehavior,
+  TankDeathReason,
+  TankSkin,
+} from '../tank';
 import { Tag } from '../Tag';
 import * as config from '../config';
 
 import { Bullet } from './Bullet';
-import { Explosion } from './Explosion';
 import { Shield } from './Shield';
 
 export enum TankState {
@@ -31,7 +35,7 @@ export class Tank extends GameObject {
   public tags = [Tag.Tank];
   public bullets: Bullet[] = [];
   public shield: Shield = null;
-  public died = new Subject();
+  public died = new Subject<{ reason: TankDeathReason }>();
   public state = TankState.Uninitialized;
   public renderer: SpriteRenderer = new SpriteRenderer();
   protected shieldTimer = new Timer();
@@ -216,8 +220,8 @@ export class Tank extends GameObject {
     return this;
   }
 
-  public die(): void {
-    this.died.notify();
+  public die(reason: TankDeathReason = TankDeathReason.Bullet): void {
+    this.died.notify({ reason });
   }
 
   public activateShield(duration: number): void {

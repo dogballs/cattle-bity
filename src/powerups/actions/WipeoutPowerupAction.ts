@@ -1,4 +1,5 @@
 import { PlayerTank, EnemyTank } from '../../gameObjects';
+import { TankDeathReason } from '../../tank';
 import { Tag } from '../../Tag';
 
 import { PowerupAction } from '../PowerupAction';
@@ -15,7 +16,10 @@ export class WipeoutPowerupAction extends PowerupAction {
     enemyTanks.forEach((enemyTank) => {
       // Enemy with drop cant drop it when killed by powerup
       enemyTank.discardDrop();
-      enemyTank.die();
+
+      // Pass death reason because picking up this powerup does not award
+      // per-enemy points. Only powerup pickup points are awarded.
+      enemyTank.die(TankDeathReason.WipeoutPowerup);
     });
   }
 }
