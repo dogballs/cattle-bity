@@ -2,7 +2,7 @@ import { Animation, Rotation, Size, Sprite } from '../core';
 import { Tank, TankState } from '../gameObjects';
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
-import { TankGrade } from './TankGrade';
+import { TankTier } from './TankTier';
 import { TankParty } from './TankParty';
 
 export enum TankColor {
@@ -11,7 +11,7 @@ export enum TankColor {
   Danger = 'danger',
 }
 
-const TANK_STRING = 'tank';
+const SPRITE_TANK_PREFIX = 'tank';
 const SPRITE_ID_SEPARATOR = '.';
 
 // TODO: Remake to factory?
@@ -21,7 +21,7 @@ type AnimationMap = Map<Rotation, Animation<Sprite>>;
 export class TankSkin {
   public readonly party: TankParty;
   public readonly color: TankColor;
-  public readonly grade: TankGrade;
+  public readonly tier: TankTier;
   public readonly size: Size;
   public readonly hasDrop: boolean;
 
@@ -35,13 +35,13 @@ export class TankSkin {
   constructor(
     party: TankParty,
     color: TankColor,
-    grade: TankGrade,
+    tier: TankTier,
     size: Size,
     hasDrop = false,
   ) {
     this.party = party;
     this.color = color;
-    this.grade = grade;
+    this.tier = tier;
     this.size = size;
     this.hasDrop = hasDrop;
 
@@ -160,10 +160,10 @@ export class TankSkin {
     const color = hasDrop ? TankColor.Danger : this.color;
 
     const parts = [
-      TANK_STRING,
+      SPRITE_TANK_PREFIX,
       this.getPartyString(this.party),
       this.getColorString(color),
-      this.getGradeString(this.grade),
+      this.getTierString(this.tier),
       this.getRotationString(rotation),
       frameNumber.toString(),
     ];
@@ -177,8 +177,8 @@ export class TankSkin {
     return color.toString();
   }
 
-  protected getGradeString(grade: TankGrade): string {
-    return grade.toString();
+  protected getTierString(tier: TankTier): string {
+    return tier.toString();
   }
 
   protected getPartyString(party: TankParty): string {

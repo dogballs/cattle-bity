@@ -1,17 +1,15 @@
 const config = {
-  block: ['sprite.png', 257, 1, 13, 13],
-
   'bullet.down': ['sprite.png', 339, 102, 3, 4],
   'bullet.left': ['sprite.png', 330, 102, 4, 3],
   'bullet.right': ['sprite.png', 346, 102, 4, 3],
   'bullet.up': ['sprite.png', 323, 102, 3, 4],
 
-  'explosionBullet.1': ['sprite.png', 259, 130, 11, 11],
-  'explosionBullet.2': ['sprite.png', 273, 129, 15, 15],
-  'explosionBullet.3': ['sprite.png', 288, 128, 16, 16],
+  'explosion.small.1': ['sprite.png', 259, 130, 11, 11],
+  'explosion.small.2': ['sprite.png', 273, 129, 15, 15],
+  'explosion.small.3': ['sprite.png', 288, 128, 16, 16],
 
-  'explosionTank.1': ['sprite.png', 304, 129, 31, 29],
-  'explosionTank.2': ['sprite.png', 334, 128, 34, 32],
+  'explosion.large.1': ['sprite.png', 304, 129, 31, 29],
+  'explosion.large.2': ['sprite.png', 334, 128, 34, 32],
 
   'powerup.helmet': ['sprite.png', 256, 112, 16, 15],
   'powerup.clock': ['sprite.png', 272, 112, 16, 15],
@@ -20,6 +18,15 @@ const config = {
   'powerup.grenade': ['sprite.png', 320, 112, 16, 15],
   'powerup.tank': ['sprite.png', 336, 112, 16, 15],
   'powerup.gun': ['sprite.png', 352, 112, 16, 15],
+
+  'points.100': ['sprite.png', 289, 164, 14, 7],
+  'points.200': ['sprite.png', 305, 164, 14, 7],
+  'points.300': ['sprite.png', 321, 164, 14, 7],
+  'points.400': ['sprite.png', 337, 164, 14, 7],
+  'points.500': ['sprite.png', 353, 164, 14, 7],
+
+  'ui.enemy': ['sprite.png', 320, 192, 8, 8],
+  'ui.pause': ['sprite.png', 289, 176, 39, 7],
 
   'shield.1': ['sprite.png', 256, 144, 16, 16],
   'shield.2': ['sprite.png', 272, 144, 16, 16],
@@ -31,6 +38,17 @@ const config = {
   'spawn.2': ['sprite.png', 274, 98, 11, 11],
   'spawn.3': ['sprite.png', 289, 97, 13, 13],
   'spawn.4': ['sprite.png', 304, 96, 15, 15],
+
+  'wall.brick.1': ['sprite.png', 256, 0, 4, 4],
+  'wall.brick.2': ['sprite.png', 260, 0, 4, 4],
+  'wall.brick.3': ['sprite.png', 264, 0, 4, 4],
+  'wall.brick.4': ['sprite.png', 268, 0, 4, 4],
+  'wall.brick.5': ['sprite.png', 256, 4, 4, 4],
+  'wall.brick.6': ['sprite.png', 260, 4, 4, 4],
+  'wall.brick.7': ['sprite.png', 264, 4, 4, 4],
+  'wall.brick.8': ['sprite.png', 268, 4, 4, 4],
+
+  'wall.steel': ['sprite.png', 256, 16, 8, 8],
 
   'tank.enemy.default.a.up.1': ['sprite.png', 129, 64, 13, 15],
   'tank.enemy.default.a.up.2': ['sprite.png', 145, 64, 13, 15],
@@ -121,20 +139,6 @@ const config = {
   'tank.player.primary.d.left.2': ['sprite.png', 48, 49, 15, 14],
   'tank.player.primary.d.right.1': ['sprite.png', 97, 49, 15, 14],
   'tank.player.primary.d.right.2': ['sprite.png', 113, 49, 15, 14],
-
-  'wall.brick.1': ['sprite.png', 256, 0, 4, 4],
-  'wall.brick.2': ['sprite.png', 260, 0, 4, 4],
-  'wall.brick.3': ['sprite.png', 264, 0, 4, 4],
-  'wall.brick.4': ['sprite.png', 268, 0, 4, 4],
-  'wall.brick.5': ['sprite.png', 256, 4, 4, 4],
-  'wall.brick.6': ['sprite.png', 260, 4, 4, 4],
-  'wall.brick.7': ['sprite.png', 264, 4, 4, 4],
-  'wall.brick.8': ['sprite.png', 268, 4, 4, 4],
-
-  'wall.steel': ['sprite.png', 256, 16, 8, 8],
-
-  'ui.enemyCounter': ['sprite.png', 377, 144, 7, 8],
-  'ui.pause': ['sprite.png', 289, 176, 39, 7],
 };
 
 export default config;

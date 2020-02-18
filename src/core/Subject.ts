@@ -1,15 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export class Subject<T> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private listeners: ((event?: T) => any)[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public addListener(listenerToAdd: (event?: T) => any): this {
+  public addListener(listenerToAdd: (event?: T) => any): () => void {
     this.listeners.push(listenerToAdd);
 
-    return this;
+    const unsubscribe = (): void => {
+      this.removeListener(listenerToAdd);
+    };
+
+    return unsubscribe;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public addListenerOnce(listenerToAdd: (event?: T) => any): () => void {
+    const wrappedListener = (...args): void => {
+      this.removeListener(wrappedListener);
+      listenerToAdd(...args);
+    };
+
+    const unsubscribe = this.addListener(wrappedListener);
+
+    return unsubscribe;
+  }
+
   public removeListener(listenerToRemove: (event?: T) => any): this {
     this.listeners = this.listeners.filter((listener) => {
       return listener !== listenerToRemove;

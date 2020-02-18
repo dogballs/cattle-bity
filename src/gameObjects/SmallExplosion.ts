@@ -10,19 +10,19 @@ import {
 
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
-export class BulletExplosion extends GameObject {
-  public renderer = new SpriteRenderer();
-  public completed = new Subject();
-  private animation: Animation<Sprite>;
+export class SmallExplosion extends GameObject {
+  public readonly renderer = new SpriteRenderer();
+  public readonly done = new Subject();
+  protected readonly animation: Animation<Sprite>;
 
   constructor() {
     super(64, 64);
 
     this.animation = new Animation(
       [
-        SpriteFactory.asOne('explosionBullet.1', new Size(44, 44)),
-        SpriteFactory.asOne('explosionBullet.2', new Size(60, 60)),
-        SpriteFactory.asOne('explosionBullet.3', new Size(64, 64)),
+        SpriteFactory.asOne('explosion.small.1', new Size(44, 44)),
+        SpriteFactory.asOne('explosion.small.2', new Size(60, 60)),
+        SpriteFactory.asOne('explosion.small.3', new Size(64, 64)),
       ],
       { delay: 3, loop: false },
     );
@@ -32,7 +32,8 @@ export class BulletExplosion extends GameObject {
 
   public update(): void {
     if (this.animation.isComplete()) {
-      this.completed.notify();
+      this.removeSelf();
+      this.done.notify();
       return;
     }
 

@@ -1,9 +1,9 @@
-import { TankGrade } from './TankGrade';
+import { TankTier } from './TankTier';
 import { TankParty } from './TankParty';
 
 export interface TankAttributes {
   party: TankParty;
-  grade: TankGrade;
+  tier: TankTier;
   bulletMaxCount: number;
   bulletSpeed: number;
   bulletTankDamage: number;
@@ -16,7 +16,7 @@ export interface TankAttributes {
 const list: TankAttributes[] = [
   {
     party: TankParty.Player,
-    grade: TankGrade.A,
+    tier: TankTier.A,
     bulletMaxCount: 1,
     bulletSpeed: 10,
     bulletTankDamage: 1,
@@ -26,7 +26,7 @@ const list: TankAttributes[] = [
   },
   {
     party: TankParty.Player,
-    grade: TankGrade.B,
+    tier: TankTier.B,
     bulletMaxCount: 1,
     bulletSpeed: 15,
     bulletTankDamage: 1,
@@ -36,7 +36,7 @@ const list: TankAttributes[] = [
   },
   {
     party: TankParty.Player,
-    grade: TankGrade.C,
+    tier: TankTier.C,
     bulletMaxCount: 2,
     bulletSpeed: 15,
     bulletTankDamage: 1,
@@ -46,7 +46,7 @@ const list: TankAttributes[] = [
   },
   {
     party: TankParty.Player,
-    grade: TankGrade.D,
+    tier: TankTier.D,
     bulletMaxCount: 2,
     bulletSpeed: 15,
     bulletTankDamage: 2,
@@ -56,7 +56,7 @@ const list: TankAttributes[] = [
   },
   {
     party: TankParty.Enemy,
-    grade: TankGrade.A,
+    tier: TankTier.A,
     bulletMaxCount: 1,
     bulletSpeed: 10,
     bulletTankDamage: 1,
@@ -66,7 +66,7 @@ const list: TankAttributes[] = [
   },
   {
     party: TankParty.Enemy,
-    grade: TankGrade.B,
+    tier: TankTier.B,
     bulletMaxCount: 1,
     bulletSpeed: 13,
     bulletTankDamage: 1,
@@ -77,14 +77,14 @@ const list: TankAttributes[] = [
 ];
 
 export class TankAttributesFactory {
-  public static create(party: TankParty, grade: TankGrade): TankAttributes {
+  public static create(party: TankParty, tier: TankTier): TankAttributes {
     const foundDescription = list.find((description) => {
-      return description.party === party && description.grade === grade;
+      return description.party === party && description.tier === tier;
     });
 
     if (foundDescription === undefined) {
       throw new Error(
-        `Tank attributes not found for party = "${party}" and grade = "${grade}"`,
+        `Tank attributes not found for party = "${party}" and tier = "${tier}"`,
       );
     }
 

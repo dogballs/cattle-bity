@@ -13,9 +13,9 @@ export class WipeoutPowerupAction extends PowerupAction {
     ]) as EnemyTank[];
 
     enemyTanks.forEach((enemyTank) => {
-      // Enemy with drop cant drop it when killed by another powerup
+      // Enemy with drop cant drop it when killed by powerup
       enemyTank.discardDrop();
-      enemyTank.explode();
+      enemyTank.die();
     });
   }
 }

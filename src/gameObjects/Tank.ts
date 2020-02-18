@@ -115,7 +115,7 @@ export class Tank extends GameObject {
         this.attributes.health = nextHealth;
         bullet.explode();
       } else {
-        this.explode();
+        this.die();
         bullet.explode();
       }
     }
@@ -216,10 +216,7 @@ export class Tank extends GameObject {
     return this;
   }
 
-  public explode(): void {
-    const explosion = new Explosion();
-    explosion.setCenterFrom(this);
-    this.replaceSelf(explosion);
+  public die(): void {
     this.died.notify();
   }
 

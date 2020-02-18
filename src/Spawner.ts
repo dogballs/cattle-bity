@@ -3,29 +3,28 @@ import {
   Base,
   EnemyBasicTank,
   EnemyFastTank,
-  // EnemyPowerTank,
   EnemyTank,
+  Explosion,
   PlayerTank,
+  Points,
   Spawn,
-  Tank,
 } from './gameObjects';
-import {
-  MapConfig,
-  MapConfigSpawnType,
-  MapConfigSpawnEnemy,
-} from './map/MapConfig';
+import { MapConfig, MapConfigSpawnEnemyListItem } from './map';
 import { AudioManager } from './audio/AudioManager';
+import { PointsValue } from './points';
 import { PowerupFactory } from './powerups';
+import { TankTier } from './tank';
 import { RandomUtils } from './utils';
 
 import * as config from './config';
 
-enum SpawnLocation {
-  EnemyLeft,
-  EnemyMid,
-  EnemyRight,
-  PlayerPrimary,
-}
+const DEFAULT_ENEMY_LOCATIONS = [
+  new Vector(384, 0),
+  new Vector(768, 0),
+  new Vector(0, 0),
+];
+
+const DEFAULT_PLAYER_LOCATIONS = [new Vector(256, 768)];
 
 export class Spawner {
   public readonly enemySpawned = new Subject();
@@ -36,16 +35,16 @@ export class Spawner {
 
   public playerTank: PlayerTank;
 
-  private locations: Map<SpawnLocation, Vector> = new Map();
-  private currentEnemyLocation: SpawnLocation = SpawnLocation.EnemyMid;
-
-  private enemyQueue: MapConfigSpawnEnemy[] = [];
+  private enemyLocations: Vector[];
+  private enemyLocationIndex = 0;
+  private enemyList: MapConfigSpawnEnemyListItem[] = [];
+  private enemyTimer = new Timer();
   private aliveEnemyCount = 0;
 
-  private playerSpawnTimer = new Timer();
-  private enemySpawnTimer = new Timer();
-  private powerupTimer = new Timer();
+  private playerLocations: Vector[];
+  private playerTimers: Timer[];
 
+  private powerupTimer = new Timer();
   private activePowerup: GameObject = null;
 
   constructor(mapConfig: MapConfig, field: GameObject, base: Base) {
@@ -53,55 +52,80 @@ export class Spawner {
     this.field = field;
     this.base = base;
 
-    this.enemyQueue = mapConfig.spawnEnemies.slice(
+    this.enemyList = mapConfig.spawn.enemy.list.slice(
       0,
       config.ENEMY_MAX_TOTAL_COUNT,
     );
 
-    this.locations.set(SpawnLocation.PlayerPrimary, new Vector(256, 768));
-    this.locations.set(SpawnLocation.EnemyLeft, new Vector(0, 0));
-    this.locations.set(SpawnLocation.EnemyMid, new Vector(384, 0));
-    this.locations.set(SpawnLocation.EnemyRight, new Vector(768, 0));
+    const configPlayerLocations = mapConfig.spawn.player.locations.map(
+      (location) => {
+        return new Vector(location.x, location.y);
+      },
+    );
 
-    this.playerSpawnTimer.reset(config.PLAYER_FIRST_SPAWN_DELAY);
-    this.playerSpawnTimer.done.addListener(this.handlePlayerSpawnTimer);
+    this.playerLocations =
+      configPlayerLocations.length > 0
+        ? configPlayerLocations
+        : DEFAULT_PLAYER_LOCATIONS;
 
-    this.enemySpawnTimer.reset(config.ENEMY_FIRST_SPAWN_DELAY);
-    this.enemySpawnTimer.done.addListener(this.handleEnemySpawnTimer);
+    this.playerTimers = this.playerLocations.map((_, index) => {
+      const timer = new Timer(config.PLAYER_FIRST_SPAWN_DELAY);
+      timer.done.addListener(() => {
+        this.handlePlayerSpawnTimer(index);
+      });
+      return timer;
+    });
+
+    const configEnemyLocations = mapConfig.spawn.enemy.locations.map(
+      (location) => {
+        return new Vector(location.x, location.y);
+      },
+    );
+    this.enemyLocations =
+      configEnemyLocations.length > 0
+        ? configEnemyLocations
+        : DEFAULT_ENEMY_LOCATIONS;
+
+    this.enemyTimer.reset(config.ENEMY_FIRST_SPAWN_DELAY);
+    this.enemyTimer.done.addListener(this.handleEnemySpawnTimer);
 
     this.powerupTimer.done.addListener(this.handlePowerupTimer);
   }
 
   public update(): void {
-    this.playerSpawnTimer.tick();
-    this.enemySpawnTimer.tick();
+    this.playerTimers.forEach((timer) => {
+      timer.tick();
+    });
+
+    this.enemyTimer.tick();
+
     this.powerupTimer.tick();
   }
 
   public getUnspawnedEnemiesCount(): number {
-    return this.enemyQueue.length;
+    return this.enemyList.length;
   }
 
-  private handlePlayerSpawnTimer = (): void => {
-    this.spawnPlayer();
+  private handlePlayerSpawnTimer = (index: number): void => {
+    this.spawnPlayer(index);
   };
 
   private handleEnemySpawnTimer = (): void => {
     // Happens after max enemies spawn
     if (this.aliveEnemyCount >= config.ENEMY_MAX_ALIVE_COUNT) {
-      this.enemySpawnTimer.stop();
+      this.enemyTimer.stop();
       return;
     }
 
     // We won!
-    if (this.enemyQueue.length === 0) {
-      this.enemySpawnTimer.stop();
+    if (this.enemyList.length === 0) {
+      this.enemyTimer.stop();
       return;
     }
 
     this.spawnEnemy();
     this.aliveEnemyCount += 1;
-    this.enemySpawnTimer.reset(config.ENEMY_SPAWN_DELAY);
+    this.enemyTimer.reset(config.ENEMY_SPAWN_DELAY);
   };
 
   private handlePowerupTimer = (): void => {
@@ -113,16 +137,22 @@ export class Spawner {
     this.activePowerup = null;
   };
 
-  private spawnPlayer(): void {
-    const locationPosition = this.locations.get(SpawnLocation.PlayerPrimary);
+  private spawnPlayer(index: number): void {
+    const location = this.playerLocations[index];
+    const timer = this.playerTimers[index];
+
     const spawn = new Spawn();
-    spawn.position.copyFrom(locationPosition);
+    spawn.position.copyFrom(location);
     spawn.completed.addListener(() => {
       const tank = new PlayerTank();
       tank.setCenterFrom(spawn);
       tank.died.addListener(() => {
+        const explosion = new Explosion();
+        explosion.setCenterFrom(tank);
+        tank.replaceSelf(explosion);
+
         AudioManager.load('explosion.player').play();
-        this.playerSpawnTimer.reset(config.PLAYER_SPAWN_DELAY);
+        timer.reset(config.PLAYER_SPAWN_DELAY);
       });
       tank.activateShield(config.SHIELD_SPAWN_DURATION);
 
@@ -134,8 +164,8 @@ export class Spawner {
   }
 
   private spawnEnemy(): void {
-    const enemyConfig = this.enemyQueue.shift();
-    const { hasDrop } = enemyConfig;
+    const enemyConfig = this.enemyList.shift();
+    const { drop: hasDrop } = enemyConfig;
 
     // When new tank with powerup spawns - remove active powerup
     if (hasDrop && this.activePowerup !== null) {
@@ -144,12 +174,13 @@ export class Spawner {
       this.activePowerup = null;
     }
 
-    const locationPosition = this.locations.get(this.currentEnemyLocation);
+    const location = this.enemyLocations[this.enemyLocationIndex];
 
+    // TODO: refactor this chain of subscriptions
     const spawn = new Spawn();
-    spawn.position.copyFrom(locationPosition);
+    spawn.position.copyFrom(location);
     spawn.completed.addListener(() => {
-      const tank = this.createTank(enemyConfig.type, hasDrop) as EnemyTank;
+      const tank = this.createEnemyTank(enemyConfig.tier, hasDrop) as EnemyTank;
       tank.rotate(Rotation.Down);
       tank.setCenterFrom(spawn);
       tank.died.addListener(() => {
@@ -158,24 +189,32 @@ export class Spawner {
         AudioManager.load('explosion.enemy').play();
 
         this.aliveEnemyCount = Math.max(0, this.aliveEnemyCount - 1);
-        if (!this.enemySpawnTimer.isActive()) {
-          this.enemySpawnTimer.reset(config.ENEMY_SPAWN_DELAY);
+        if (!this.enemyTimer.isActive()) {
+          this.enemyTimer.reset(config.ENEMY_SPAWN_DELAY);
         }
+
         if (tank.hasDrop) {
           this.spawnPowerup();
         }
+
+        const explosion = new Explosion();
+        explosion.setCenterFrom(tank);
+        tank.replaceSelf(explosion);
+
+        explosion.done.addListenerOnce(() => {
+          const points = this.createEnemyTankPoints(tank);
+          points.setCenterFrom(tank);
+          this.field.add(points);
+        });
       });
       spawn.replaceSelf(tank);
     });
 
     this.field.add(spawn);
 
-    if (this.currentEnemyLocation === SpawnLocation.EnemyMid) {
-      this.currentEnemyLocation = SpawnLocation.EnemyRight;
-    } else if (this.currentEnemyLocation === SpawnLocation.EnemyRight) {
-      this.currentEnemyLocation = SpawnLocation.EnemyLeft;
-    } else if (this.currentEnemyLocation === SpawnLocation.EnemyLeft) {
-      this.currentEnemyLocation = SpawnLocation.EnemyMid;
+    this.enemyLocationIndex += 1;
+    if (this.enemyLocationIndex >= this.enemyLocations.length) {
+      this.enemyLocationIndex = 0;
     }
 
     this.enemySpawned.notify();
@@ -201,6 +240,13 @@ export class Spawner {
 
     powerup.picked.addListener(() => {
       powerup.action.execute(this.playerTank, powerup, this.base);
+
+      const points = new Points(
+        PointsValue.V500,
+        config.POINTS_POWERUP_DURATION,
+      );
+      points.setCenterFrom(powerup);
+      this.field.add(points);
     });
 
     this.field.add(powerup);
@@ -212,17 +258,34 @@ export class Spawner {
     AudioManager.load('powerup.spawn').play();
   }
 
-  private createTank(type: MapConfigSpawnType, hasDrop = false): Tank {
-    switch (type) {
-      case MapConfigSpawnType.EnemyBasic:
-        return new EnemyBasicTank(hasDrop);
-      case MapConfigSpawnType.EnemyFast:
-        return new EnemyFastTank(hasDrop);
-      // case MapConfigSpawnType.EnemyPower:
-      //   return new EnemyPowerTank(hasDrop);
-      case MapConfigSpawnType.PlayerPrimary:
+  private createEnemyTankPoints(tank: EnemyTank): Points {
+    const value = this.getEnemyTankPointsValue(tank);
+    const points = new Points(value, config.POINTS_ENEMY_TANK_DURATION);
+    return points;
+  }
+
+  private getEnemyTankPointsValue(tank: EnemyTank): PointsValue {
+    switch (tank.attributes.tier) {
+      case TankTier.A:
+        return PointsValue.V100;
+      case TankTier.B:
+        return PointsValue.V200;
+      case TankTier.C:
+        return PointsValue.V300;
+      case TankTier.D:
+        return PointsValue.V400;
       default:
-        return new PlayerTank();
+        return 0;
+    }
+  }
+
+  private createEnemyTank(tier: TankTier, hasDrop = false): EnemyTank {
+    switch (tier) {
+      case TankTier.B:
+        return new EnemyFastTank(hasDrop);
+      case TankTier.A:
+      default:
+        return new EnemyBasicTank(hasDrop);
     }
   }
 }

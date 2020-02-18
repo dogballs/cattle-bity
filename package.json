@@ -8,6 +8,8 @@
     "test:watch": "ava --verbose --watch"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "@types/hapi__joi": "^16.0.10",
     "typescript": "^3.7.4"
   },
   "devDependencies": {

@@ -10,7 +10,7 @@ export class PauseNotification extends GameObject {
     super(156, 28);
 
     this.animation = new Animation([SpriteFactory.asOne('ui.pause'), null], {
-      delay: 13,
+      delay: 16,
       loop: true,
     });
   }

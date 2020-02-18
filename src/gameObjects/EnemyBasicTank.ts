@@ -4,7 +4,7 @@ import {
   TankAttributesFactory,
   TankSkin,
   TankColor,
-  TankGrade,
+  TankTier,
   TankParty,
 } from '../tank';
 
@@ -14,13 +14,13 @@ export class EnemyBasicTank extends EnemyTank {
   constructor(hasDrop = false) {
     const attributes = TankAttributesFactory.create(
       TankParty.Enemy,
-      TankGrade.A,
+      TankTier.A,
     );
     const behavior = new DumbAiTankBehavior();
     const skin = new TankSkin(
       TankParty.Enemy,
       TankColor.Default,
-      TankGrade.A,
+      TankTier.A,
       new Size(52, 60),
       hasDrop,
     );

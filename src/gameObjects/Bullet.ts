@@ -3,7 +3,7 @@ import { AudioManager } from '../audio/AudioManager';
 import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
 import { Tag } from '../Tag';
 
-import { BulletExplosion } from './BulletExplosion';
+import { SmallExplosion } from './SmallExplosion';
 import { WallDestroyer } from './WallDestroyer';
 
 export class Bullet extends GameObject {
@@ -136,12 +136,9 @@ export class Bullet extends GameObject {
   }
 
   public explode(): void {
-    const bulletExplosion = new BulletExplosion();
-    bulletExplosion.setCenterFrom(this);
-    bulletExplosion.completed.addListener(() => {
-      bulletExplosion.removeSelf();
-    });
-    this.replaceSelf(bulletExplosion);
+    const explosion = new SmallExplosion();
+    explosion.setCenterFrom(this);
+    this.replaceSelf(explosion);
     this.died.notify();
   }
 }

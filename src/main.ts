@@ -6,6 +6,7 @@ import {
   GameState,
   KeyboardInput,
   KeyboardKey,
+  Rect,
   State,
   Vector,
 } from './core';
@@ -15,12 +16,13 @@ import { Base, Border, EnemyCounter, PauseNotification } from './gameObjects';
 import * as config from './config';
 
 import { DebugController, DebugGrid, DebugInspector } from './debug';
+import { ConfigParser } from './ConfigParser';
 import { Spawner } from './Spawner';
 
 import { AudioManager } from './audio/AudioManager';
-import { MapConfig } from './map/MapConfig';
-import { MapFactory } from './map/MapFactory';
-import * as mapJSON from './map/stage1.json';
+import { MapConfig, MapConfigSchema } from './map';
+import { TerrainFactory } from './terrain';
+import * as mapJSON from '../data/maps/stage1.json';
 
 const gameRenderer = new GameRenderer({
   // debug: true,
@@ -40,10 +42,16 @@ const field = new GameObject(config.FIELD_SIZE, config.FIELD_SIZE);
 field.position.set(config.BORDER_LEFT_WIDTH, config.BORDER_TOP_BOTTOM_HEIGHT);
 scene.add(field);
 
-const mapConfig = new MapConfig().parse(mapJSON);
-const { walls } = MapFactory.create(mapConfig);
+const mapConfig = ConfigParser.parse<MapConfig>(mapJSON, MapConfigSchema);
 
-field.add(...walls);
+const terrainTiles = [];
+mapConfig.terrain.regions.forEach((region) => {
+  const regionRect = new Rect(region.x, region.y, region.width, region.height);
+  const tiles = TerrainFactory.createFromRegion(region.type, regionRect);
+  terrainTiles.push(...tiles);
+});
+
+field.add(...terrainTiles);
 
 const base = new Base();
 base.position.set(352, 736);
@@ -100,6 +108,7 @@ const gameState = new State<GameState>(GameState.Playing);
 const pauseAudio = AudioManager.load('pause');
 const pauseNotification = new PauseNotification();
 pauseNotification.setCenter(field.getChildrenCenter());
+pauseNotification.position.y += 18;
 
 const gameLoop = new GameLoop({
   onTick: (): void => {

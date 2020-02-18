@@ -8,7 +8,7 @@ import { TankBehavior } from './TankBehavior';
 enum State {
   Moving,
   Thinking,
-  UntuckThinking,
+  UnstuckThinking,
   Firing,
 }
 
@@ -53,12 +53,12 @@ export class DumbAiTankBehavior extends TankBehavior {
       return;
     }
 
-    if (this.state === State.Thinking || this.state === State.UntuckThinking) {
+    if (this.state === State.Thinking || this.state === State.UnstuckThinking) {
       if (this.thinkTimer.isDone()) {
         // When tank is done thinking, he can either fire in his current
         // direction or rotate and move to another direction. First, find out
         // if he wants to fire.
-        if (this.state === State.Thinking && this.shouldStuckFire()) {
+        if (this.state === State.Thinking && this.shouldFireWhenStuck()) {
           this.log.debug('I am done thinking. I want to fire!');
           this.state = State.Firing;
           return;
@@ -91,9 +91,9 @@ export class DumbAiTankBehavior extends TankBehavior {
 
     // If tank is not stuck and can still move in his direction, there is a
     // chance that he will do something instead of just moving forward
-    if (this.shouldUnstuckThink(tank)) {
+    if (this.shouldThinkWhenUnstuck(tank)) {
       this.log.debug('I changed my mind all of a sudden. Thinking...');
-      this.state = State.UntuckThinking;
+      this.state = State.UnstuckThinking;
       this.thinkTimer.reset(THINK_DURATION);
       return;
     }
@@ -107,7 +107,7 @@ export class DumbAiTankBehavior extends TankBehavior {
     this.fireTimer.reset(delay);
   }
 
-  private shouldUnstuckThink(tank: Tank): boolean {
+  private shouldThinkWhenUnstuck(tank: Tank): boolean {
     const num = RandomUtils.number(1, 100);
     const hasChance = num <= UNSTUCK_THINK_CHANCE;
 
@@ -128,7 +128,7 @@ export class DumbAiTankBehavior extends TankBehavior {
     return shouldThink;
   }
 
-  private shouldStuckFire(): boolean {
+  private shouldFireWhenStuck(): boolean {
     const num = RandomUtils.number(1, 100);
     const hasChance = num <= STUCK_FIRE_CHANCE;
 

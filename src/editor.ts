@@ -1,10 +1,7 @@
 import { GameLoop, GameObject, GameRenderer, KeyboardInput } from './core';
-
 import { Border, EditorBrush, EditorBrushType } from './gameObjects';
-
-import { MapConfig, MapConfigWallType } from './map/MapConfig';
-import { MapFactory } from './map/MapFactory';
-
+import { MapConfig } from './map';
+import { TerrainType } from './terrain';
 import * as config from './config';
 
 const gameRenderer = new GameRenderer({
@@ -25,16 +22,28 @@ const field = new GameObject(config.FIELD_SIZE, config.FIELD_SIZE);
 field.position.set(config.BORDER_LEFT_WIDTH, config.BORDER_TOP_BOTTOM_HEIGHT);
 scene.add(field);
 
-const mapConfig = new MapConfig();
+const mapDto: MapConfig = {
+  terrain: {
+    regions: [],
+  },
+};
 
 const brush = new EditorBrush();
 brush.draw.addListener((event) => {
   console.log(event);
 
+  const rect = event.box.toRect();
+
   // TODO: check if coordinates are already taken?
 
   if (event.brushType === EditorBrushType.BrickWall) {
-    mapConfig.addWall(MapConfigWallType.Brick, event.box.toRect());
+    mapDto.terrain.regions.push({
+      type: TerrainType.Brick,
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height,
+    });
   }
 });
 field.add(brush);
@@ -43,9 +52,11 @@ const gameLoop = new GameLoop({
   onTick: (): void => {
     input.update();
 
-    const { walls } = MapFactory.create(mapConfig);
+    // TODO
+    // const { walls } = MapFactory.create(mapConfig);
 
-    const nodes = [...walls, brush];
+    // const nodes = [...walls, brush];
+    const nodes = [brush];
 
     nodes.forEach((node) => {
       node.update({ input });

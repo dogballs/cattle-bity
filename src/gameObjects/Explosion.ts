@@ -11,7 +11,7 @@ import {
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class Explosion extends GameObject {
-  public renderer = new SpriteRenderer();
+  public readonly renderer = new SpriteRenderer();
   public readonly done = new Subject();
   private readonly animation: Animation<Sprite>;
 
@@ -20,8 +20,8 @@ export class Explosion extends GameObject {
 
     this.animation = new Animation(
       [
-        SpriteFactory.asOne('explosionTank.1', new Size(124, 108)),
-        SpriteFactory.asOne('explosionTank.2', new Size(136, 128)),
+        SpriteFactory.asOne('explosion.large.1', new Size(124, 108)),
+        SpriteFactory.asOne('explosion.large.2', new Size(136, 128)),
       ],
       { delay: 4, loop: false },
     );
