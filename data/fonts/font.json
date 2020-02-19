@@ -1,0 +1,125 @@
+{
+  "fillSymbol": "o",
+  "emptySymbol": "-",
+  "characterWidth": 7,
+  "characterHeight": 7,
+  "characters": {
+    "A": [
+      "--ooo--",
+      "-oo-oo-",
+      "oo---oo",
+      "oo---oo",
+      "ooooooo",
+      "oo---oo",
+      "oo---oo"
+    ],
+    "B": [
+      "oooooo-",
+      "oo---oo",
+      "oo---oo",
+      "oooooo-",
+      "oo---oo",
+      "oo---oo",
+      "oooooo-"
+    ],
+    "C": [
+      "--oooo-",
+      "-oo--oo",
+      "oo-----",
+      "oo-----",
+      "oo-----",
+      "-oo--oo",
+      "--oooo-"
+    ],
+    "E": [
+      "-oooooo",
+      "-oo----",
+      "-oo----",
+      "-ooooo-",
+      "-oo----",
+      "-oo----",
+      "-oooooo"
+    ],
+    "I": [
+      "-oooooo",
+      "---oo--",
+      "---oo--",
+      "---oo--",
+      "---oo--",
+      "---oo--",
+      "-oooooo"
+    ],
+    "G": [
+      "--ooooo",
+      "-oo----",
+      "oo-----",
+      "oo--ooo",
+      "oo---oo",
+      "-oo--oo",
+      "--ooooo"
+    ],
+    "L": [
+      "-oo----",
+      "-oo----",
+      "-oo----",
+      "-oo----",
+      "-oo----",
+      "-oo----",
+      "-oooooo"
+    ],
+    "M": [
+      "oo---oo",
+      "ooo-ooo",
+      "ooooooo",
+      "ooooooo",
+      "oo-o-oo",
+      "oo---oo",
+      "oo---oo"
+    ],
+    "O": [
+      "-ooooo-",
+      "oo---oo",
+      "oo---oo",
+      "oo---oo",
+      "oo---oo",
+      "oo---oo",
+      "-ooooo-"
+    ],
+    "R": [
+      "oooooo-",
+      "oo---oo",
+      "oo---oo",
+      "oo--ooo",
+      "ooooo--",
+      "oo-ooo-",
+      "oo--ooo"
+    ],
+    "T": [
+      "-oooooo",
+      "---oo--",
+      "---oo--",
+      "---oo--",
+      "---oo--",
+      "---oo--",
+      "---oo--"
+    ],
+    "V": [
+      "oo---oo",
+      "oo---oo",
+      "oo---oo",
+      "ooo-ooo",
+      "-ooooo-",
+      "--ooo--",
+      "---o---"
+    ],
+    "Y": [
+      "-oo--oo",
+      "-oo--oo",
+      "-oo--oo",
+      "--oooo-",
+      "---oo--",
+      "---oo--",
+      "---oo--"
+    ]
+  }
+}

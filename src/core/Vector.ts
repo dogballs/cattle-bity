@@ -45,6 +45,13 @@ export class Vector {
     return this;
   }
 
+  public addScalar(s: number): this {
+    this.x += s;
+    this.y += s;
+
+    return this;
+  }
+
   public sub(v: Vector): this {
     this.x -= v.x;
     this.y -= v.y;
@@ -55,6 +62,13 @@ export class Vector {
   public divideScalar(s: number): this {
     this.x /= s;
     this.y /= s;
+
+    return this;
+  }
+
+  public multScalar(s: number): this {
+    this.x *= s;
+    this.y *= s;
 
     return this;
   }

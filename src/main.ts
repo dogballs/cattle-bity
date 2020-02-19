@@ -25,11 +25,13 @@ document.body.appendChild(gameRenderer.domElement);
 const input = new KeyboardInput();
 input.listen();
 
-const levelScene = new LevelScene();
-
 // const debug = new DebugController(spawner);
 
-const currentScene = levelScene;
+const currentScene = new LevelScene();
+// const currentScene = new GameOverScene(
+//   config.CANVAS_WIDTH,
+//   config.CANVAS_HEIGHT,
+// );
 
 const debugInspector = new DebugInspector(gameRenderer.domElement);
 debugInspector.listen();
