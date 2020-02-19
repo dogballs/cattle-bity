@@ -1,2 +1,2 @@
 export * from './EnemyCounter';
-export * from './PauseNotification';
+export * from './PauseNotice';

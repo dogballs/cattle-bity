@@ -5,7 +5,7 @@ export class EnemyCounter extends GameObject {
   // TODO: can only display 20 items as in original game there can only be
   // max 20 enemy tanks
 
-  constructor(count: number) {
+  constructor(count = 0) {
     super(64, 320);
 
     this.append(count);

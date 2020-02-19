@@ -27,6 +27,7 @@ const config = {
 
   'ui.enemy': ['sprite.png', 320, 192, 8, 8],
   'ui.pause': ['sprite.png', 289, 176, 39, 7],
+  'ui.gameOver': ['sprite.png', 289, 184, 31, 15],
 
   'shield.1': ['sprite.png', 256, 144, 16, 16],
   'shield.2': ['sprite.png', 272, 144, 16, 16],

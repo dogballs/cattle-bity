@@ -1,9 +1,9 @@
 import { Animation, GameObject, Sprite, SpriteRenderer } from '../../core';
 import { SpriteFactory } from '../../sprite/SpriteFactory';
 
-export class PauseNotification extends GameObject {
+export class PauseNotice extends GameObject {
   public ignorePause = true;
-  public renderer = new SpriteRenderer();
+  public readonly renderer = new SpriteRenderer();
   private animation: Animation<Sprite>;
 
   constructor() {

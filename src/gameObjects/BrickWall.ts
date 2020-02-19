@@ -20,11 +20,13 @@ export class BrickWall extends GameObject {
       'wall.brick.7',
       'wall.brick.8',
     ]);
-
-    this.renderer.sprite = this.getSpriteByPosition();
   }
 
   public update(): void {
+    this.renderer.sprite = this.getSpriteByPosition();
+  }
+
+  protected onAdded(): void {
     this.renderer.sprite = this.getSpriteByPosition();
   }
 

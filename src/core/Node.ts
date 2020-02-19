@@ -15,11 +15,16 @@ export class Node {
   public add(...childrenToAdd): this {
     childrenToAdd.forEach((childToAdd) => {
       childToAdd.parent = this;
+      childToAdd.onAdded();
 
       this.children.push(childToAdd);
     });
 
     return this;
+  }
+
+  protected onAdded(): void {
+    // To be implemented in child
   }
 
   public replaceSelf(replacement: Node): this {
@@ -85,29 +90,5 @@ export class Node {
     });
 
     return nodes;
-  }
-
-  public getChildrenOfType(type): this[] {
-    const nodes = [];
-
-    this.traverse((node) => {
-      if (node instanceof type) {
-        nodes.push(node);
-      }
-    });
-
-    return nodes;
-  }
-
-  public hasChildrenOfType(type): boolean {
-    let has = false;
-
-    this.traverse((node) => {
-      if (node instanceof type) {
-        has = true;
-      }
-    });
-
-    return has;
   }
 }
