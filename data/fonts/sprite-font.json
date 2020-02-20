@@ -1,0 +1,9 @@
+{
+  "characterSet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+  "characterWidth": 7,
+  "characterHeight": 7,
+  "rowCount": 4,
+  "columnCount": 10,
+  "horizontalSpacing": 1,
+  "verticalSpacing": 1
+}

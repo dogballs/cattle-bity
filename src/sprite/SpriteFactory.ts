@@ -1,4 +1,4 @@
-import { Rect, Size, Sprite, TextureLoader } from '../core';
+import { Rect, Sprite, TextureLoader } from '../core';
 import { PathUtils } from '../utils';
 import { GRAPHICS_BASE_PATH } from '../config';
 
@@ -15,18 +15,18 @@ export interface MapNameToSprite {
 // TODO: refactor, used as a singleton
 
 export class SpriteFactory {
-  public static asOne(id: string, targetSize = new Size()): Sprite {
+  public static asOne(id: string, targetRect = new Rect()): Sprite {
     const spriteConfig = config[id];
     if (spriteConfig === undefined) {
       throw new Error(`Invalid sprite id = "${id}"`);
     }
 
-    const [imageName, ...textureRectValues] = spriteConfig;
+    const [imageName, ...sourceRectValues] = spriteConfig;
     const imagePath = PathUtils.join(GRAPHICS_BASE_PATH, imageName);
 
     const texture = TextureLoader.load(imagePath);
-    const textureRect = new Rect(...textureRectValues);
-    const sprite = new Sprite(texture, textureRect, targetSize);
+    const sourceRect = new Rect(...sourceRectValues);
+    const sprite = new Sprite(texture, sourceRect, targetRect);
 
     return sprite;
   }

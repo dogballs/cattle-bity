@@ -28,6 +28,10 @@ input.listen();
 // const debug = new DebugController(spawner);
 
 const currentScene = new LevelScene();
+// const currentScene: Scene = new StageSelectionScene(
+//   config.CANVAS_WIDTH,
+//   config.CANVAS_HEIGHT,
+// );
 // const currentScene = new GameOverScene(
 //   config.CANVAS_WIDTH,
 //   config.CANVAS_HEIGHT,

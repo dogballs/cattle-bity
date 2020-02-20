@@ -35,3 +35,5 @@ export const FREEZE_POWERUP_DURATION = 10 * FPS;
 
 export const POINTS_POWERUP_DURATION = 50;
 export const POINTS_ENEMY_TANK_DURATION = 10;
+
+export const BACKGROUND_COLOR = '#636363';

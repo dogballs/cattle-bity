@@ -1,4 +1,4 @@
-import { Animation, Rotation, Size, Sprite } from '../core';
+import { Animation, Rotation, Rect, Sprite } from '../core';
 import { Tank, TankState } from '../gameObjects';
 import { SpriteFactory } from '../sprite/SpriteFactory';
 
@@ -22,7 +22,7 @@ export class TankSkin {
   public readonly party: TankParty;
   public readonly color: TankColor;
   public readonly tier: TankTier;
-  public readonly size: Size;
+  public readonly targetRect: Rect;
   public readonly hasDrop: boolean;
 
   protected rotation: Rotation = Rotation.Up;
@@ -36,13 +36,13 @@ export class TankSkin {
     party: TankParty,
     color: TankColor,
     tier: TankTier,
-    size: Size,
+    targetRect: Rect,
     hasDrop = false,
   ) {
     this.party = party;
     this.color = color;
     this.tier = tier;
-    this.size = size;
+    this.targetRect = targetRect;
     this.hasDrop = hasDrop;
 
     this.idleAnimationMap.set(
@@ -117,10 +117,10 @@ export class TankSkin {
       spriteIds.push(this.getSpriteId(frameNumber, rotation, true));
     }
 
-    const targetSize = this.getRotationSize(rotation);
+    const targetRect = this.getRotationRect(rotation);
 
     const sprites = spriteIds.map((spriteId) => {
-      return SpriteFactory.asOne(spriteId, targetSize);
+      return SpriteFactory.asOne(spriteId, targetRect);
     });
     const animation = new Animation(sprites, { delay: 7, loop: true });
 
@@ -142,10 +142,10 @@ export class TankSkin {
       spriteIds.push(this.getSpriteId(2, rotation, true));
     }
 
-    const targetSize = this.getRotationSize(rotation);
+    const targetRect = this.getRotationRect(rotation);
 
     const sprites = spriteIds.map((spriteId) => {
-      return SpriteFactory.asOne(spriteId, targetSize);
+      return SpriteFactory.asOne(spriteId, targetRect);
     });
     const animation = new Animation(sprites, { delay: 1, loop: true });
 
@@ -198,10 +198,16 @@ export class TankSkin {
     }
   }
 
-  private getRotationSize(rotation: Rotation): Size {
+  private getRotationRect(rotation: Rotation): Rect {
     if (rotation === Rotation.Up || rotation === Rotation.Down) {
-      return this.size;
+      return this.targetRect;
     }
-    return this.size.clone().flip();
+    const flippedRect = new Rect(
+      this.targetRect.x,
+      this.targetRect.y,
+      this.targetRect.height,
+      this.targetRect.width,
+    );
+    return flippedRect;
   }
 }

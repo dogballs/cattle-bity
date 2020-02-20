@@ -1,10 +1,11 @@
 import { GameObject, Vector } from '../core';
-import { Font, FontConfig, FontConfigSchema } from '../font';
+import { TileFont, TileFontConfig, TileFontConfigSchema } from '../font';
 import { TerrainFactory, TerrainType } from '../terrain';
 import { ConfigParser } from '../ConfigParser';
 import * as config from '../config';
 
-import * as fontJSON from '../../data/fonts/font.json';
+// TODO: use loader
+import * as fontJSON from '../../data/fonts/tile-font.json';
 
 import { Scene } from './Scene';
 
@@ -13,11 +14,11 @@ const CENTER_VERTICAL_OFFSET = -32;
 
 export class GameOverScene extends Scene {
   public setup(): void {
-    const fontConfig = ConfigParser.parse<FontConfig>(
+    const fontConfig = ConfigParser.parse<TileFontConfig>(
       fontJSON,
-      FontConfigSchema,
+      TileFontConfigSchema,
     );
-    const font = new Font(fontConfig, {
+    const font = new TileFont(fontConfig, {
       lineSpacing: 6,
       scale: new Vector(config.TILE_SIZE_SMALL, config.TILE_SIZE_SMALL),
     });

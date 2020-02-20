@@ -1,8 +1,8 @@
 import { Rect, Vector } from '../core';
 
-import { FontConfig } from './FontConfig';
+import { TileFontConfig } from './TileFontConfig';
 
-export interface FontOptions {
+export interface TileFontOptions {
   letterSpacing?: number;
   lineSpacing?: number;
   scale?: Vector;
@@ -14,21 +14,22 @@ const DEFAULT_OPTIONS = {
   scale: new Vector(1, 1),
 };
 
-export class Font {
-  public readonly config: FontConfig;
-  public readonly options: FontOptions;
+export class TileFont {
+  public readonly config: TileFontConfig;
+  public readonly options: TileFontOptions;
 
-  constructor(config: FontConfig, argOptions: FontOptions) {
+  constructor(config: TileFontConfig, argOptions: TileFontOptions) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, argOptions);
 
     this.config = config;
   }
 
   character(character: string, offset = new Vector(0, 0)): Rect[] {
-    const characterConfig = this.config.characters[character];
-    if (characterConfig === undefined) {
+    const characterIndex = this.config.characterSet.indexOf(character);
+    if (characterIndex === -1) {
       throw new Error(`Font character "${character}" is not defined`);
     }
+    const characterConfig = this.config.characters[characterIndex];
 
     const rects: Rect[] = [];
 

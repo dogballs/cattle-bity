@@ -1,4 +1,4 @@
-import { Size } from '../core';
+import { Rect } from '../core';
 import {
   DumbAiTankBehavior,
   TankAttributesFactory,
@@ -21,7 +21,7 @@ export class EnemyBasicTank extends EnemyTank {
       TankParty.Enemy,
       TankColor.Default,
       TankTier.A,
-      new Size(52, 60),
+      new Rect(0, 0, 52, 60),
       hasDrop,
     );
 

@@ -22,7 +22,7 @@ export class SpriteRenderer extends Renderer {
     }
 
     // Image element for sprite is not available
-    if (this.sprite.texture.imageElement === null) {
+    if (!this.sprite.isTextureReady()) {
       return;
     }
 
@@ -36,17 +36,17 @@ export class SpriteRenderer extends Renderer {
       targetRect = new Rect(
         objectRect.x,
         objectRect.y,
-        this.sprite.targetSize.width,
-        this.sprite.targetSize.height,
+        this.sprite.targetRect.width,
+        this.sprite.targetRect.height,
       );
     } else if (this.alignment === SpriteAlignment.Center) {
       targetRect = new Rect(
-        objectRect.x + objectRect.width / 2 - this.sprite.targetSize.width / 2,
+        objectRect.x + objectRect.width / 2 - this.sprite.targetRect.width / 2,
         objectRect.y +
           objectRect.height / 2 -
-          this.sprite.targetSize.height / 2,
-        this.sprite.targetSize.width,
-        this.sprite.targetSize.height,
+          this.sprite.targetRect.height / 2,
+        this.sprite.targetRect.width,
+        this.sprite.targetRect.height,
       );
     }
 
@@ -54,10 +54,10 @@ export class SpriteRenderer extends Renderer {
 
     context.drawImage(
       this.sprite.texture.imageElement,
-      this.sprite.textureRect.x,
-      this.sprite.textureRect.y,
-      this.sprite.textureRect.width,
-      this.sprite.textureRect.height,
+      this.sprite.sourceRect.x,
+      this.sprite.sourceRect.y,
+      this.sprite.sourceRect.width,
+      this.sprite.sourceRect.height,
       targetRect.x,
       targetRect.y,
       targetRect.width,

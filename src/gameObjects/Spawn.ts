@@ -1,7 +1,7 @@
 import {
   Animation,
   GameObject,
-  Size,
+  Rect,
   Sprite,
   SpriteAlignment,
   SpriteRenderer,
@@ -20,10 +20,10 @@ export class Spawn extends GameObject {
 
     this.animation = new Animation(
       [
-        SpriteFactory.asOne('spawn.1', new Size(36, 36)),
-        SpriteFactory.asOne('spawn.2', new Size(44, 44)),
-        SpriteFactory.asOne('spawn.3', new Size(52, 52)),
-        SpriteFactory.asOne('spawn.4', new Size(60, 60)),
+        SpriteFactory.asOne('spawn.1', new Rect(0, 0, 36, 36)),
+        SpriteFactory.asOne('spawn.2', new Rect(0, 0, 44, 44)),
+        SpriteFactory.asOne('spawn.3', new Rect(0, 0, 52, 52)),
+        SpriteFactory.asOne('spawn.4', new Rect(0, 0, 60, 60)),
       ],
       { delay: 3, loop: 3 },
     );

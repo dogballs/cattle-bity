@@ -1,4 +1,4 @@
-import { Size } from '../core';
+import { Rect } from '../core';
 import {
   PlayerTankBehavior,
   TankSkin,
@@ -26,7 +26,7 @@ export class PlayerTank extends Tank {
       TankParty.Player,
       TankColor.Primary,
       TankTier.A,
-      new Size(52, 52),
+      new Rect(0, 0, 52, 52),
     );
 
     super(64, 64, attributes, behavior, skin);
@@ -51,7 +51,7 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankColor.Primary,
         TankTier.A,
-        new Size(52, 52),
+        new Rect(0, 0, 52, 52),
       );
     } else if (this.tier === 2) {
       this.attributes = TankAttributesFactory.create(
@@ -62,7 +62,7 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankColor.Primary,
         TankTier.B,
-        new Size(52, 64),
+        new Rect(0, 0, 52, 64),
       );
     } else if (this.tier === 3) {
       this.attributes = TankAttributesFactory.create(
@@ -73,7 +73,7 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankColor.Primary,
         TankTier.C,
-        new Size(52, 60),
+        new Rect(0, 0, 52, 60),
       );
     } else if (this.tier === 4) {
       this.attributes = TankAttributesFactory.create(
@@ -84,7 +84,7 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankColor.Primary,
         TankTier.D,
-        new Size(52, 60),
+        new Rect(0, 0, 52, 60),
       );
     }
   }

@@ -1,3 +1,4 @@
-export * from './Font';
-export * from './FontConfig';
-export * from './FontConfigSchema';
+export * from './SpriteFontConfigSchema';
+export * from './TileFont';
+export * from './TileFontConfig';
+export * from './TileFontConfigSchema';

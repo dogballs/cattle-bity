@@ -3,8 +3,9 @@
   "emptySymbol": "-",
   "characterWidth": 7,
   "characterHeight": 7,
-  "characters": {
-    "A": [
+  "characterSet": "ABCEIGLMORTVY",
+  "characters": [
+    [
       "--ooo--",
       "-oo-oo-",
       "oo---oo",
@@ -13,7 +14,7 @@
       "oo---oo",
       "oo---oo"
     ],
-    "B": [
+    [
       "oooooo-",
       "oo---oo",
       "oo---oo",
@@ -22,7 +23,7 @@
       "oo---oo",
       "oooooo-"
     ],
-    "C": [
+    [
       "--oooo-",
       "-oo--oo",
       "oo-----",
@@ -31,7 +32,7 @@
       "-oo--oo",
       "--oooo-"
     ],
-    "E": [
+    [
       "-oooooo",
       "-oo----",
       "-oo----",
@@ -40,7 +41,7 @@
       "-oo----",
       "-oooooo"
     ],
-    "I": [
+    [
       "-oooooo",
       "---oo--",
       "---oo--",
@@ -49,7 +50,7 @@
       "---oo--",
       "-oooooo"
     ],
-    "G": [
+    [
       "--ooooo",
       "-oo----",
       "oo-----",
@@ -58,7 +59,7 @@
       "-oo--oo",
       "--ooooo"
     ],
-    "L": [
+    [
       "-oo----",
       "-oo----",
       "-oo----",
@@ -67,7 +68,7 @@
       "-oo----",
       "-oooooo"
     ],
-    "M": [
+    [
       "oo---oo",
       "ooo-ooo",
       "ooooooo",
@@ -76,7 +77,7 @@
       "oo---oo",
       "oo---oo"
     ],
-    "O": [
+    [
       "-ooooo-",
       "oo---oo",
       "oo---oo",
@@ -85,7 +86,7 @@
       "oo---oo",
       "-ooooo-"
     ],
-    "R": [
+    [
       "oooooo-",
       "oo---oo",
       "oo---oo",
@@ -94,7 +95,7 @@
       "oo-ooo-",
       "oo--ooo"
     ],
-    "T": [
+    [
       "-oooooo",
       "---oo--",
       "---oo--",
@@ -103,7 +104,7 @@
       "---oo--",
       "---oo--"
     ],
-    "V": [
+    [
       "oo---oo",
       "oo---oo",
       "oo---oo",
@@ -112,7 +113,7 @@
       "--ooo--",
       "---o---"
     ],
-    "Y": [
+    [
       "-oo--oo",
       "-oo--oo",
       "-oo--oo",
@@ -121,5 +122,5 @@
       "---oo--",
       "---oo--"
     ]
-  }
+  ]
 }

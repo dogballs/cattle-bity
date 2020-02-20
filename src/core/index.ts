@@ -1,3 +1,4 @@
+export * from './fonts';
 export * from './renderers';
 
 export * from './Animation';

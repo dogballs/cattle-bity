@@ -1,7 +1,7 @@
 import {
   Animation,
   GameObject,
-  Size,
+  Rect,
   Sprite,
   SpriteRenderer,
   SpriteAlignment,
@@ -20,8 +20,8 @@ export class Explosion extends GameObject {
 
     this.animation = new Animation(
       [
-        SpriteFactory.asOne('explosion.large.1', new Size(124, 108)),
-        SpriteFactory.asOne('explosion.large.2', new Size(136, 128)),
+        SpriteFactory.asOne('explosion.large.1', new Rect(0, 0, 124, 108)),
+        SpriteFactory.asOne('explosion.large.2', new Rect(0, 0, 136, 128)),
       ],
       { delay: 4, loop: false },
     );

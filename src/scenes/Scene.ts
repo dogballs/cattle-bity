@@ -5,7 +5,7 @@ export interface SceneUpdateArgs {
   gameState?: State<GameState>;
 }
 
-export class Scene {
+export abstract class Scene {
   public readonly root;
 
   constructor(width?: number, height?: number) {
@@ -13,11 +13,11 @@ export class Scene {
   }
 
   public setup(): void {
-    // To be implemented in child
+    // Virtual, to be implemented in child if needed
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public update(updateArgs?: SceneUpdateArgs): void {
-    // To be implemented in child
+    // Virtual, to be implemented in child if needed
   }
 }
