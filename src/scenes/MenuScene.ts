@@ -8,7 +8,7 @@ import * as config from '../config';
 import { Scene } from './Scene';
 
 // TODO: use loader
-import * as fontJSON from '../../data/fonts/tile-font.json';
+import * as fontJSON from '../../data/fonts/rect-font.json';
 
 export class MenuScene extends Scene {
   public setup(): void {

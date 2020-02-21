@@ -6,7 +6,7 @@ import { ConfigParser } from '../ConfigParser';
 import * as config from '../config';
 
 // TODO: use loader
-import * as fontJSON from '../../data/fonts/tile-font.json';
+import * as fontJSON from '../../data/fonts/rect-font.json';
 
 import { Scene } from './Scene';
 
