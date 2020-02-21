@@ -4,13 +4,20 @@ import { Font } from './Font';
 
 // TODO: scale might belong to font
 
+export enum TextAlignment {
+  Left,
+  Center,
+}
+
 export interface TextOptions {
+  alignment?: TextAlignment;
   letterSpacing?: number;
   lineSpacing?: number;
   scale?: Vector | number;
 }
 
 const DEFAULT_OPTIONS = {
+  alignment: TextAlignment.Left,
   letterSpacing: 1,
   lineSpacing: 1,
   scale: 1,
@@ -34,21 +41,14 @@ export class Text<T> {
   }
 
   public build(textOffset = new Vector(0, 0)): T[] {
-    const items = this.buildTextLines(this.text, textOffset);
+    const items = this.buildLinesFromText(this.text, textOffset);
     return items;
   }
 
   public getWidth(): number {
-    const lines = this.getTextLines(this.text);
-
-    const lineWidths = lines.map((line) => {
-      return this.getUnscaledLineWidth(line);
-    });
-
-    const maxLineWidth = Math.max(...lineWidths);
-
-    const scale = this.getScaleVector();
-    const width = maxLineWidth * scale.x;
+    const unscaledWidth = this.getUnscaledTextWidth(this.text);
+    const scale = this.getScale();
+    const width = unscaledWidth * scale.x;
 
     return width;
   }
@@ -56,9 +56,9 @@ export class Text<T> {
   public getHeight(): number {
     const { lineSpacing } = this.options;
 
-    const lines = this.getTextLines(this.text);
+    const lines = this.splitTextToLines(this.text);
     const characterHeight = this.font.getCharacterHeight();
-    const scale = this.getScaleVector();
+    const scale = this.getScale();
 
     const charactersHeight = lines.length * characterHeight * scale.y;
     const spacingHeight = (lines.length - 1) * lineSpacing * scale.y;
@@ -67,52 +67,64 @@ export class Text<T> {
     return linesHeight;
   }
 
-  private buildTextLines(text: string, textOffset = new Vector(0, 0)): T[] {
+  private buildLinesFromText(text: string, textOffset = new Vector(0, 0)): T[] {
     const textItems: T[] = [];
 
-    const lines = this.getTextLines(text);
+    const characterHeight = this.font.getCharacterHeight();
+    const textWidth = this.getUnscaledTextWidth(this.text);
+
+    const lines = this.splitTextToLines(text);
     lines.forEach((line, index) => {
       const lineSpacing = index > 0 ? this.options.lineSpacing : 0;
+      const lineOffsetY = index * (characterHeight + lineSpacing);
+
+      let lineOffsetX = 0;
+      if (this.options.alignment === TextAlignment.Center) {
+        const lineWidth = this.getUnscaledLineWidth(line);
+        lineOffsetX = (textWidth - lineWidth) / 2;
+      }
+
       const lineOffset = textOffset
         .clone()
-        .addY(index * (this.font.getCharacterHeight() + lineSpacing));
+        .addX(lineOffsetX)
+        .addY(lineOffsetY);
 
-      const lineItems = this.buildLineWords(line, lineOffset);
+      const lineItems = this.buildWordsFromLine(line, lineOffset);
       textItems.push(...lineItems);
     });
 
     return textItems;
   }
 
-  private buildLineWords(line: string, lineOffset = new Vector(0, 0)): T[] {
+  private buildWordsFromLine(line: string, lineOffset = new Vector(0, 0)): T[] {
     const lineItems: T[] = [];
 
-    let priorWordsWidthSum = 0;
+    let wordOffsetX = 0;
 
-    const words = this.getLineWords(line);
+    const words = this.splitLineToWords(line);
     words.forEach((word, index) => {
-      const wordOffset = lineOffset.clone().addX(priorWordsWidthSum);
+      const wordOffset = lineOffset.clone().addX(wordOffsetX);
       const wordWidth = this.getUnscaledWordWidth(word);
 
-      const wordItems = this.buildWordCharacters(word, wordOffset);
+      const wordItems = this.buildCharactersFromWord(word, wordOffset);
       lineItems.push(...wordItems);
 
       const wordSpacing =
         index < words.length - 1 ? this.getWordSeparatorWidth() : 0;
-      priorWordsWidthSum += wordWidth + wordSpacing;
+      wordOffsetX += wordWidth + wordSpacing;
     });
 
     return lineItems;
   }
 
-  private buildWordCharacters(
+  private buildCharactersFromWord(
     word: string,
     wordOffset = new Vector(0, 0),
   ): T[] {
     const wordItems: T[] = [];
 
-    const scale = this.getScaleVector();
-    const characters = this.getWordCharacters(word);
+    const scale = this.getScale();
+    const characters = this.splitWordToCharacters(word);
 
     characters.forEach((character, index) => {
       const letterSpacing = index > 0 ? this.options.letterSpacing : 0;
@@ -132,10 +144,22 @@ export class Text<T> {
     return wordItems;
   }
 
+  private getUnscaledTextWidth(text: string): number {
+    const lines = this.splitTextToLines(text);
+
+    const lineWidths = lines.map((line) => {
+      return this.getUnscaledLineWidth(line);
+    });
+
+    const maxLineWidth = Math.max(...lineWidths);
+
+    return maxLineWidth;
+  }
+
   private getUnscaledLineWidth(line: string): number {
     let lineWidth = 0;
 
-    const words = this.getLineWords(line);
+    const words = this.splitLineToWords(line);
     words.forEach((word, index) => {
       const wordWidth = this.getUnscaledWordWidth(word);
       const wordSpacing = index > 0 ? this.getWordSeparatorWidth() : 0;
@@ -163,22 +187,22 @@ export class Text<T> {
     return this.font.getCharacterWidth();
   }
 
-  private getTextLines(text: string): string[] {
+  private splitTextToLines(text: string): string[] {
     const lines = text.split(TEXT_LINE_SEPARATOR);
     return lines;
   }
 
-  private getLineWords(line: string): string[] {
+  private splitLineToWords(line: string): string[] {
     const words = line.split(TEXT_WORD_SEPARATOR);
     return words;
   }
 
-  private getWordCharacters(word: string): string[] {
+  private splitWordToCharacters(word: string): string[] {
     const characters = Array.from(word);
     return characters;
   }
 
-  private getScaleVector(): Vector {
+  private getScale(): Vector {
     const { scale } = this.options;
 
     if (typeof scale === 'number') {

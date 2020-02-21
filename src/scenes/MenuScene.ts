@@ -1,4 +1,10 @@
-import { GameObject, RectFont, RectFontConfig, Text } from '../core';
+import {
+  GameObject,
+  RectFont,
+  RectFontConfig,
+  Text,
+  TextAlignment,
+} from '../core';
 import { RectFontConfigSchema } from '../font';
 import { TerrainFactory, TerrainType } from '../terrain';
 import { ArrayUtils } from '../utils';
@@ -18,6 +24,7 @@ export class MenuScene extends Scene {
     );
     const font = new RectFont(fontConfig);
     const text = new Text('BATTLE\nCITY', font, {
+      alignment: TextAlignment.Center,
       lineSpacing: 3,
       scale: config.TILE_SIZE_SMALL,
     });

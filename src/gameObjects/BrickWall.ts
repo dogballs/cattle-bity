@@ -27,8 +27,8 @@ export class BrickWall extends GameObject {
   }
 
   private getSpriteByPosition(): Sprite {
-    const horizontalIndex = (this.position.x / 16) % 2;
-    const verticalIndex = (this.position.y / 16) % 2;
+    const horizontalIndex = Math.floor(this.position.x / 16) % 2;
+    const verticalIndex = Math.floor(this.position.y / 16) % 2;
     const index = (horizontalIndex + verticalIndex) % 2;
 
     const sprite = this.sprites[index];
