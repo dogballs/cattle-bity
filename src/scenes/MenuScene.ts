@@ -5,33 +5,32 @@ import { ArrayUtils } from '../utils';
 import { ConfigParser } from '../ConfigParser';
 import * as config from '../config';
 
+import { Scene } from './Scene';
+
 // TODO: use loader
 import * as fontJSON from '../../data/fonts/tile-font.json';
 
-import { Scene } from './Scene';
-
-export class GameOverScene extends Scene {
+export class MenuScene extends Scene {
   public setup(): void {
     const fontConfig = ConfigParser.parse<RectFontConfig>(
       fontJSON,
       RectFontConfigSchema,
     );
     const font = new RectFont(fontConfig);
-    const text = new Text('GAME\nOVER', font, {
-      lineSpacing: 6,
+    const text = new Text('BATTLE\nCITY', font, {
+      lineSpacing: 3,
       scale: config.TILE_SIZE_SMALL,
     });
 
     const rects = text.build();
     const tiles = TerrainFactory.createFromRegions(
-      TerrainType.Brick,
+      TerrainType.MenuBrick,
       ArrayUtils.flatten(rects),
     );
 
     const textGroup = new GameObject(text.getWidth(), text.getHeight());
     textGroup.add(...tiles);
     textGroup.setCenter(this.root.getChildrenCenter());
-    textGroup.position.addY(-32);
     this.root.add(textGroup);
   }
 }

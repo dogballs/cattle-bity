@@ -1,8 +1,6 @@
 import * as Joi from '@hapi/joi';
 
-import { TileFontConfig } from './TileFontConfig';
-
-export const TileFontConfigSchema = Joi.object<TileFontConfig>({
+export const RectFontConfigSchema = Joi.object({
   fillSymbol: Joi.string()
     .length(1)
     .required(),
@@ -13,7 +11,11 @@ export const TileFontConfigSchema = Joi.object<TileFontConfig>({
   characterHeight: Joi.number().required(),
   characterSet: Joi.string().required(),
   characters: Joi.array()
-    .items(Joi.string().length(7))
-    .length(7)
+    .items(
+      Joi.array()
+        .items(Joi.string().length(7))
+        .length(7)
+        .default([]),
+    )
     .default([]),
 }).default();

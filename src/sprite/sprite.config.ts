@@ -42,12 +42,9 @@ const config = {
 
   'wall.brick.1': ['sprite.png', 256, 0, 4, 4],
   'wall.brick.2': ['sprite.png', 260, 0, 4, 4],
-  'wall.brick.3': ['sprite.png', 264, 0, 4, 4],
-  'wall.brick.4': ['sprite.png', 268, 0, 4, 4],
-  'wall.brick.5': ['sprite.png', 256, 4, 4, 4],
-  'wall.brick.6': ['sprite.png', 260, 4, 4, 4],
-  'wall.brick.7': ['sprite.png', 264, 4, 4, 4],
-  'wall.brick.8': ['sprite.png', 268, 4, 4, 4],
+
+  'menu.brick.1': ['menu-brick.png', 0, 0, 4, 4],
+  'menu.brick.2': ['menu-brick.png', 4, 0, 4, 4],
 
   'wall.steel': ['sprite.png', 256, 16, 8, 8],
 

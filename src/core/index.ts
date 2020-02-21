@@ -1,5 +1,5 @@
-export * from './fonts';
 export * from './renderers';
+export * from './text';
 
 export * from './Animation';
 export * from './AudioLoader';

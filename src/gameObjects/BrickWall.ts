@@ -3,23 +3,19 @@ import { SpriteFactory } from '../sprite/SpriteFactory';
 import { Tag } from '../Tag';
 
 export class BrickWall extends GameObject {
-  public tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
-  public renderer = new SpriteRenderer();
+  public readonly tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
+  public readonly renderer = new SpriteRenderer();
   private readonly sprites: Sprite[];
 
-  constructor() {
+  constructor(isMenu = false) {
     super(16, 16);
 
-    this.sprites = SpriteFactory.asList([
-      'wall.brick.1',
-      'wall.brick.2',
-      'wall.brick.3',
-      'wall.brick.4',
-      'wall.brick.5',
-      'wall.brick.6',
-      'wall.brick.7',
-      'wall.brick.8',
-    ]);
+    let spriteIds = ['wall.brick.1', 'wall.brick.2'];
+    if (isMenu) {
+      spriteIds = ['menu.brick.1', 'menu.brick.2'];
+    }
+
+    this.sprites = SpriteFactory.asList(spriteIds);
   }
 
   public update(): void {
@@ -31,9 +27,9 @@ export class BrickWall extends GameObject {
   }
 
   private getSpriteByPosition(): Sprite {
-    const horizontalIndex = (this.position.x % 64) / 16;
-    const verticalIndex = (this.position.y % 32) / 16;
-    const index = horizontalIndex + verticalIndex * 4;
+    const horizontalIndex = (this.position.x / 16) % 2;
+    const verticalIndex = (this.position.y / 16) % 2;
+    const index = (horizontalIndex + verticalIndex) % 2;
 
     const sprite = this.sprites[index];
 

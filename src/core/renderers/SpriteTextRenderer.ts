@@ -1,25 +1,30 @@
-import { SpriteFont } from '../fonts';
+import { Sprite } from '../Sprite';
+import { SpriteFont, Text } from '../text';
 
 import { Renderer } from './Renderer';
 
 export class SpriteTextRenderer extends Renderer {
-  public font: SpriteFont;
-  public text = '';
+  public text: Text<Sprite> = null;
 
-  constructor(font: SpriteFont) {
+  constructor(text: Text<Sprite> = null) {
     super();
 
-    this.font = font;
+    this.text = text;
   }
 
   public render(canvas: HTMLCanvasElement): void {
-    if (this.font.texture.imageElement === null) {
+    if (this.text === null) {
       return;
     }
 
-    const context = canvas.getContext('2d');
+    const font = this.text.font as SpriteFont;
+    if (font.texture.imageElement === null) {
+      return;
+    }
 
-    const sprites = this.font.word(this.text);
+    const sprites = this.text.build();
+
+    const context = canvas.getContext('2d');
 
     sprites.forEach((sprite) => {
       context.drawImage(

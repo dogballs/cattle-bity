@@ -4,6 +4,7 @@ import {
   SpriteFont,
   SpriteFontConfig,
   SpriteTextRenderer,
+  Text,
   TextureLoader,
 } from '../core';
 import { ConfigParser } from '../ConfigParser';
@@ -25,14 +26,14 @@ export class StageSelectionScene extends Scene {
     );
 
     const texture = TextureLoader.load('data/fonts/sprite-font.png');
-    const font = new SpriteFont(fontConfig, texture, {
+    const font = new SpriteFont(fontConfig, texture);
+    const text = new Text('HEY MAN HOW IT IS GOING\nBRO', font, {
       scale: 4,
     });
 
-    const textRenderer = new SpriteTextRenderer(font);
-    textRenderer.text = 'HELLO';
+    const textRenderer = new SpriteTextRenderer(text);
 
-    const stageText = new GameObject();
+    const stageText = new GameObject(text.getWidth(), text.getHeight());
     stageText.renderer = textRenderer;
 
     this.root.add(stageText);

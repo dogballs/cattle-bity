@@ -25,11 +25,13 @@ export class TerrainFactory {
       return walls;
     }
 
+    const isMenu = type === TerrainType.MenuBrick;
+
     const walls = [];
 
     for (let i = x; i < x + width; i += config.BRICK_TILE_SIZE) {
       for (let j = y; j < y + height; j += config.BRICK_TILE_SIZE) {
-        const wall = new BrickWall();
+        const wall = new BrickWall(isMenu);
         wall.position.set(i, j);
         walls.push(wall);
       }
