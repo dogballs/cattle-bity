@@ -1,6 +1,7 @@
 export * from './renderers';
 export * from './text';
 
+export * from './Alignment';
 export * from './Animation';
 export * from './AudioLoader';
 export * from './AudioSource';
@@ -18,7 +19,6 @@ export * from './Rect';
 export * from './Rotation';
 export * from './Size';
 export * from './Sprite';
-export * from './SpriteAlignment';
 export * from './State';
 export * from './Subject';
 export * from './Texture';

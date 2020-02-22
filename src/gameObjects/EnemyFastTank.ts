@@ -2,7 +2,7 @@ import { Rect } from '../core';
 import {
   DumbAiTankBehavior,
   TankAttributesFactory,
-  TankSkin,
+  TankSkinAnimation,
   TankColor,
   TankTier,
   TankParty,
@@ -17,7 +17,7 @@ export class EnemyFastTank extends EnemyTank {
       TankTier.B,
     );
     const behavior = new DumbAiTankBehavior();
-    const skin = new TankSkin(
+    const skin = new TankSkinAnimation(
       TankParty.Enemy,
       TankColor.Default,
       TankTier.B,

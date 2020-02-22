@@ -1,7 +1,7 @@
 import { Rect } from '../core';
 import {
   PlayerTankBehavior,
-  TankSkin,
+  TankSkinAnimation,
   TankColor,
   TankTier,
   TankParty,
@@ -22,14 +22,14 @@ export class PlayerTank extends Tank {
       TankTier.A,
     );
     const behavior = new PlayerTankBehavior();
-    const skin = new TankSkin(
+    const skinAnimation = new TankSkinAnimation(
       TankParty.Player,
       TankColor.Primary,
       TankTier.A,
       new Rect(0, 0, 52, 52),
     );
 
-    super(64, 64, attributes, behavior, skin);
+    super(64, 64, attributes, behavior, skinAnimation);
 
     this.tags = [Tag.Tank, Tag.Player];
     this.tier = 1;
@@ -47,7 +47,7 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankTier.A,
       );
-      this.skin = new TankSkin(
+      this.skinAnimation = new TankSkinAnimation(
         TankParty.Player,
         TankColor.Primary,
         TankTier.A,
@@ -58,7 +58,7 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankTier.B,
       );
-      this.skin = new TankSkin(
+      this.skinAnimation = new TankSkinAnimation(
         TankParty.Player,
         TankColor.Primary,
         TankTier.B,
@@ -69,7 +69,7 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankTier.C,
       );
-      this.skin = new TankSkin(
+      this.skinAnimation = new TankSkinAnimation(
         TankParty.Player,
         TankColor.Primary,
         TankTier.C,
@@ -80,7 +80,7 @@ export class PlayerTank extends Tank {
         TankParty.Player,
         TankTier.D,
       );
-      this.skin = new TankSkin(
+      this.skinAnimation = new TankSkinAnimation(
         TankParty.Player,
         TankColor.Primary,
         TankTier.D,

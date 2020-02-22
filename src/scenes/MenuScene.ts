@@ -1,43 +1,32 @@
-import {
-  GameObject,
-  RectFont,
-  RectFontConfig,
-  Text,
-  TextAlignment,
-} from '../core';
-import { RectFontConfigSchema } from '../font';
-import { TerrainFactory, TerrainType } from '../terrain';
-import { ArrayUtils } from '../utils';
-import { ConfigParser } from '../ConfigParser';
+import { RectRenderer } from '../core';
+import { Menu, Title } from '../gameObjects';
 import * as config from '../config';
 
-import { Scene } from './Scene';
-
-// TODO: use loader
-import * as fontJSON from '../../data/fonts/rect-font.json';
+import { Scene, SceneUpdateArgs } from './Scene';
 
 export class MenuScene extends Scene {
   public setup(): void {
-    const fontConfig = ConfigParser.parse<RectFontConfig>(
-      fontJSON,
-      RectFontConfigSchema,
-    );
-    const font = new RectFont(fontConfig);
-    const text = new Text('BATTLE\nCITY', font, {
-      alignment: TextAlignment.Center,
-      lineSpacing: 3,
-      scale: config.TILE_SIZE_SMALL,
-    });
+    this.root.renderer = new RectRenderer(config.BACKGROUND_COLOR);
 
-    const rects = text.build();
-    const tiles = TerrainFactory.createFromRegions(
-      TerrainType.MenuBrick,
-      ArrayUtils.flatten(rects),
-    );
+    const title = new Title();
+    title.setCenter(this.root.getChildrenCenter());
+    title.position.setY(160);
+    this.root.add(title);
 
-    const textGroup = new GameObject(text.getWidth(), text.getHeight());
-    textGroup.add(...tiles);
-    textGroup.setCenter(this.root.getChildrenCenter());
-    this.root.add(textGroup);
+    const menu = new Menu();
+    menu.setCenter(this.root.getChildrenCenter());
+    menu.position.setY(512);
+    menu.selected.addListener(this.handleMenuSelected);
+    this.root.add(menu);
   }
+
+  public update({ input, gameState }: SceneUpdateArgs): void {
+    this.root.traverse((child) => {
+      child.update({ input, gameState });
+    });
+  }
+
+  private handleMenuSelected = (selectedIndex): void => {
+    console.log({ selectedIndex });
+  };
 }

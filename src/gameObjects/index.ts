@@ -1,5 +1,3 @@
-export * from './ui';
-
 export * from './Base';
 export * from './BrickWall';
 export * from './Border';
@@ -7,9 +5,13 @@ export * from './BorderWall';
 export * from './Bullet';
 export * from './EditorBrush';
 export * from './EnemyBasicTank';
+export * from './EnemyCounter';
 export * from './EnemyFastTank';
 export * from './EnemyTank';
 export * from './Explosion';
+export * from './GameOverNotice';
+export * from './Menu';
+export * from './PauseNotice';
 export * from './PlayerTank';
 export * from './Points';
 export * from './Powerup';
@@ -18,4 +20,5 @@ export * from './SmallExplosion';
 export * from './Spawn';
 export * from './SteelWall';
 export * from './Tank';
+export * from './Title';
 export * from './WallDestroyer';

@@ -40,7 +40,10 @@ export class Text<T> {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
   }
 
-  public build(textOffset = new Vector(0, 0)): T[] {
+  public build(): T[] {
+    // TODO: text offset can be passed from outside, but it won't work now
+    // because external offset is scaled, but internal calculated offset is not
+    const textOffset = new Vector(0, 0);
     const items = this.buildLinesFromText(this.text, textOffset);
     return items;
   }
@@ -184,7 +187,11 @@ export class Text<T> {
   }
 
   private getWordSeparatorWidth(): number {
-    return this.font.getCharacterWidth();
+    const { letterSpacing } = this.options;
+    const characterWidth = this.font.getCharacterWidth();
+    const separatorWidth = characterWidth + letterSpacing * 2;
+
+    return separatorWidth;
   }
 
   private splitTextToLines(text: string): string[] {

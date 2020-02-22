@@ -1,10 +1,10 @@
 import {
+  Alignment,
   Animation,
   GameObject,
   Rect,
   Sprite,
   SpriteRenderer,
-  SpriteAlignment,
   Subject,
 } from './../core';
 
@@ -26,7 +26,7 @@ export class Explosion extends GameObject {
       { delay: 4, loop: false },
     );
 
-    this.renderer.alignment = SpriteAlignment.Center;
+    this.renderer.alignment = Alignment.MiddleCenter;
   }
 
   public update(): void {

@@ -1,12 +1,12 @@
+import { Alignment } from '../Alignment';
 import { GameObject } from '../GameObject';
 import { Rect } from '../Rect';
 import { Sprite } from '../Sprite';
-import { SpriteAlignment } from '../SpriteAlignment';
 
 import { Renderer } from './Renderer';
 
 export class SpriteRenderer extends Renderer {
-  public alignment: SpriteAlignment = SpriteAlignment.Stretch;
+  public alignment: Alignment = Alignment.Stretch;
   public sprite: Sprite = null;
 
   constructor(sprite: Sprite = null) {
@@ -30,16 +30,16 @@ export class SpriteRenderer extends Renderer {
     const objectRect = objectBox.toRect();
 
     let targetRect = objectRect;
-    if (this.alignment === SpriteAlignment.Stretch) {
+    if (this.alignment === Alignment.Stretch) {
       targetRect = objectRect;
-    } else if (this.alignment === SpriteAlignment.TopLeft) {
+    } else if (this.alignment === Alignment.TopLeft) {
       targetRect = new Rect(
         objectRect.x,
         objectRect.y,
         this.sprite.targetRect.width,
         this.sprite.targetRect.height,
       );
-    } else if (this.alignment === SpriteAlignment.Center) {
+    } else if (this.alignment === Alignment.MiddleCenter) {
       targetRect = new Rect(
         objectRect.x + objectRect.width / 2 - this.sprite.targetRect.width / 2,
         objectRect.y +

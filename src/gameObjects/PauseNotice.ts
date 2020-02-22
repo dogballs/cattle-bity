@@ -1,5 +1,5 @@
-import { Animation, GameObject, Sprite, SpriteRenderer } from '../../core';
-import { SpriteFactory } from '../../sprite/SpriteFactory';
+import { Animation, GameObject, Sprite, SpriteRenderer } from '../core';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class PauseNotice extends GameObject {
   public ignorePause = true;

@@ -1,10 +1,10 @@
 import {
+  Alignment,
   Animation,
   GameObject,
   GameObjectUpdateArgs,
   Rotation,
   Sprite,
-  SpriteAlignment,
   SpriteRenderer,
   Subject,
   Timer,
@@ -13,7 +13,7 @@ import {
   TankAttributes,
   TankBehavior,
   TankDeathReason,
-  TankSkin,
+  TankSkinAnimation,
 } from '../tank';
 import { Tag } from '../Tag';
 import * as config from '../config';
@@ -30,7 +30,7 @@ export enum TankState {
 export class Tank extends GameObject {
   public attributes: TankAttributes;
   public behavior: TankBehavior;
-  public skin: TankSkin;
+  public skinAnimation: TankSkinAnimation;
   public collider = true;
   public tags = [Tag.Tank];
   public bullets: Bullet[] = [];
@@ -46,16 +46,16 @@ export class Tank extends GameObject {
     height: number,
     attributes: TankAttributes,
     behavior: TankBehavior,
-    skin: TankSkin,
+    skinAnimation: TankSkinAnimation,
   ) {
     super(width, height);
 
     this.attributes = attributes;
     this.behavior = behavior;
-    this.skin = skin;
+    this.skinAnimation = skinAnimation;
 
-    this.renderer.alignment = SpriteAlignment.Center;
-    this.renderer.sprite = this.skin.getCurrentFrame();
+    this.renderer.alignment = Alignment.MiddleCenter;
+    this.renderer.sprite = this.skinAnimation.getCurrentFrame();
 
     this.shieldTimer.done.addListener(this.handleShieldTimer);
   }
@@ -65,9 +65,9 @@ export class Tank extends GameObject {
 
     this.behavior.update(this, updateArgs);
 
-    this.skin.update(this);
+    this.skinAnimation.update(this);
 
-    this.renderer.sprite = this.skin.getCurrentFrame();
+    this.renderer.sprite = this.skinAnimation.getCurrentFrame();
   }
 
   public collide(target: GameObject): void {

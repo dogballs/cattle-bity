@@ -1,5 +1,5 @@
-import { GameObject, SpriteRenderer } from '../../core';
-import { SpriteFactory } from '../../sprite/SpriteFactory';
+import { GameObject, SpriteRenderer } from '../core';
+import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class EnemyCounter extends GameObject {
   // TODO: can only display 20 items as in original game there can only be

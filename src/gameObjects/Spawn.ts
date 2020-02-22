@@ -1,9 +1,9 @@
 import {
+  Alignment,
   Animation,
   GameObject,
   Rect,
   Sprite,
-  SpriteAlignment,
   SpriteRenderer,
   Subject,
 } from '../core';
@@ -28,7 +28,7 @@ export class Spawn extends GameObject {
       { delay: 3, loop: 3 },
     );
 
-    this.renderer.alignment = SpriteAlignment.Center;
+    this.renderer.alignment = Alignment.MiddleCenter;
   }
 
   public update(): void {
