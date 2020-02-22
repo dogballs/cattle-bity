@@ -6,7 +6,7 @@ export interface SceneUpdateArgs {
 }
 
 export abstract class Scene {
-  public readonly root;
+  public readonly root: GameObject;
 
   constructor(width?: number, height?: number) {
     this.root = new GameObject(width, height);

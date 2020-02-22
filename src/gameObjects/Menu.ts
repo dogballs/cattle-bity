@@ -18,7 +18,7 @@ import { MenuSelector } from './MenuSelector';
 import * as fontJSON from '../../data/fonts/sprite-font.json';
 
 const MENU_ITEMS = ['1 PLAYER', '2 PLAYERS', 'CONSTRUCTION'];
-const MENU_ITEM_HEIGHT = 52;
+const MENU_ITEM_HEIGHT = 60;
 
 export class Menu extends GameObject {
   public selected = new Subject<number>();
@@ -50,7 +50,6 @@ export class Menu extends GameObject {
     });
 
     this.selector = new MenuSelector(MENU_ITEM_HEIGHT);
-    this.add(this.selector);
   }
 
   public update(updateArgs: GameObjectUpdateArgs): void {
@@ -67,6 +66,10 @@ export class Menu extends GameObject {
     if (input.isDown(KeyboardKey.Space)) {
       this.selected.notify(this.selectedIndex);
     }
+  }
+
+  public showSelector(): void {
+    this.add(this.selector);
   }
 
   private updateSelector(): void {
