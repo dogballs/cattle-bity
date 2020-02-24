@@ -1,25 +1,10 @@
-import {
-  ArrayUtils,
-  GameObject,
-  RectFont,
-  RectFontConfig,
-  Text,
-} from '../core';
-import { RectFontConfigSchema } from '../font';
+import { ArrayUtils, GameObject, GameObjectUpdateArgs, Text } from '../core';
 import { TerrainFactory, TerrainType } from '../terrain';
-import { ConfigParser } from '../ConfigParser';
 import * as config from '../config';
 
-// TODO: use loader
-import * as fontJSON from '../../data/fonts/rect-font.json';
-
 export class GameOverScene extends GameObject {
-  public setup(): void {
-    const fontConfig = ConfigParser.parse<RectFontConfig>(
-      fontJSON,
-      RectFontConfigSchema,
-    );
-    const font = new RectFont(fontConfig);
+  public setup({ rectFontLoader }: GameObjectUpdateArgs): void {
+    const font = rectFontLoader.load('primary');
     const text = new Text('GAME\nOVER', font, {
       lineSpacing: 6,
       scale: config.TILE_SIZE_SMALL,
@@ -36,5 +21,11 @@ export class GameOverScene extends GameObject {
     textGroup.setCenter(this.getChildrenCenter());
     textGroup.position.addY(-32);
     this.add(textGroup);
+  }
+
+  public update(updateArgs: GameObjectUpdateArgs): void {
+    this.traverseDescedants((child) => {
+      child.invokeUpdate(updateArgs);
+    });
   }
 }

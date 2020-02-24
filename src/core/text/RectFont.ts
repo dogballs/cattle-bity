@@ -3,15 +3,13 @@ import { Vector } from '../Vector';
 
 import { Font } from './Font';
 
-export type RectFontConfigCharacter = string[][];
-
 export interface RectFontConfig {
   fillSymbol: string;
   emptySymbol: string;
   characterWidth: number;
   characterHeight: number;
   characterSet: string;
-  characters: RectFontConfigCharacter[];
+  characters: string[][];
 }
 
 export class RectFont extends Font<Rect[]> {

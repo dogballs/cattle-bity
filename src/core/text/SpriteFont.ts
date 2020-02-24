@@ -6,6 +6,7 @@ import { Vector } from '../Vector';
 import { Font } from './Font';
 
 export interface SpriteFontConfig {
+  file: string;
   characterSet: string;
   characterWidth: number;
   characterHeight: number;

@@ -1,6 +1,7 @@
 import * as Joi from '@hapi/joi';
 
 export const SpriteFontConfigSchema = Joi.object({
+  file: Joi.string().required(),
   characterSet: Joi.string().required(),
   characterWidth: Joi.number().required(),
   characterHeight: Joi.number().required(),

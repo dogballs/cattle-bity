@@ -8,8 +8,10 @@ import {
   State,
   Vector,
   AudioLoader,
-  TextureLoader,
+  RectFontLoader,
+  SpriteFontLoader,
   SpriteLoader,
+  TextureLoader,
 } from './core';
 
 import * as config from './config';
@@ -19,6 +21,8 @@ import { LevelScene } from './scenes';
 
 import * as audioManifest from '../data/audio/audio.manifest.json';
 import * as spriteManifest from '../data/graphics/sprite.manifest.json';
+import * as spriteFontConfig from '../data/fonts/sprite-font.json';
+import * as rectFontConfig from '../data/fonts/rect-font.json';
 
 const gameRenderer = new GameRenderer({
   // debug: true,
@@ -32,7 +36,14 @@ input.listen();
 
 const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
 const textureLoader = new TextureLoader(config.GRAPHICS_BASE_PATH);
+
+const spriteFontLoader = new SpriteFontLoader(textureLoader);
+spriteFontLoader.register('primary', spriteFontConfig);
+
 const spriteLoader = new SpriteLoader(textureLoader, spriteManifest);
+
+const rectFontLoader = new RectFontLoader();
+rectFontLoader.register('primary', rectFontConfig);
 
 // const debug = new DebugController(spawner);
 
@@ -59,7 +70,10 @@ debugInspector.click.addListener((position: Vector) => {
   console.log(intersections);
 });
 
+// TODO: make async, preload everything, and then start the game
 audioLoader.preloadAll();
+rectFontLoader.preloadAll();
+spriteFontLoader.preloadAll();
 spriteLoader.preloadAll();
 
 const gameState = new State<GameState>(GameState.Playing);
@@ -70,6 +84,8 @@ const updateArgs: GameObjectUpdateArgs = {
   gameState,
   input,
   audioLoader,
+  rectFontLoader,
+  spriteFontLoader,
   spriteLoader,
   textureLoader,
 };

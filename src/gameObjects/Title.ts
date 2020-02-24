@@ -1,27 +1,20 @@
 import {
   ArrayUtils,
   GameObject,
-  RectFont,
-  RectFontConfig,
+  GameObjectUpdateArgs,
   Text,
   TextAlignment,
 } from '../core';
-import { RectFontConfigSchema } from '../font';
 import { TerrainFactory, TerrainType } from '../terrain';
-import { ConfigParser } from '../ConfigParser';
 import * as config from '../config';
-
-import * as fontJSON from '../../data/fonts/rect-font.json';
 
 export class Title extends GameObject {
   constructor() {
-    super();
+    super(752, 272);
+  }
 
-    const fontConfig = ConfigParser.parse<RectFontConfig>(
-      fontJSON,
-      RectFontConfigSchema,
-    );
-    const font = new RectFont(fontConfig);
+  protected setup({ rectFontLoader }: GameObjectUpdateArgs): void {
+    const font = rectFontLoader.load('primary');
     const text = new Text('BATTLE\nCITY', font, {
       alignment: TextAlignment.Center,
       lineSpacing: 3,
@@ -33,8 +26,6 @@ export class Title extends GameObject {
       TerrainType.MenuBrick,
       ArrayUtils.flatten(rects),
     );
-
-    this.size.set(text.getWidth(), text.getHeight());
 
     this.add(...tiles);
   }

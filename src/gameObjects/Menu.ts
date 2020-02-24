@@ -3,18 +3,12 @@ import {
   GameObject,
   GameObjectUpdateArgs,
   KeyboardKey,
-  SpriteFont,
-  SpriteFontConfig,
   SpriteTextRenderer,
   Subject,
   Text,
 } from '../core';
-import { SpriteFontConfigSchema } from '../font';
-import { ConfigParser } from '../ConfigParser';
 
 import { MenuSelector } from './MenuSelector';
-
-import * as fontJSON from '../../data/fonts/sprite-font.json';
 
 const MENU_ITEMS = ['1 PLAYER', '2 PLAYERS', 'CONSTRUCTION'];
 const MENU_ITEM_HEIGHT = 60;
@@ -29,16 +23,11 @@ export class Menu extends GameObject {
   }
 
   public showSelector(): void {
-    this.add(this.selector);
+    this.selector.visible = true;
   }
 
-  protected setup({ textureLoader }: GameObjectUpdateArgs): void {
-    const fontConfig = ConfigParser.parse<SpriteFontConfig>(
-      fontJSON,
-      SpriteFontConfigSchema,
-    );
-    const texture = textureLoader.load('data/fonts/sprite-font.png', true);
-    const font = new SpriteFont(fontConfig, texture);
+  protected setup({ spriteFontLoader }: GameObjectUpdateArgs): void {
+    const font = spriteFontLoader.load('primary');
 
     MENU_ITEMS.forEach((menuItemText, index) => {
       const text = new Text(menuItemText, font, {
@@ -55,6 +44,8 @@ export class Menu extends GameObject {
     });
 
     this.selector = new MenuSelector(MENU_ITEM_HEIGHT);
+    this.selector.visible = false;
+    this.add(this.selector);
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {

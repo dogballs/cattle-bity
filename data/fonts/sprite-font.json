@@ -1,4 +1,5 @@
 {
+  "file": "data/fonts/sprite-font.png",
   "characterSet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
   "characterWidth": 7,
   "characterHeight": 7,

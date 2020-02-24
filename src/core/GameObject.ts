@@ -7,13 +7,21 @@ import { Size } from './Size';
 import { State } from './State';
 import { Vector } from './Vector';
 
-import { AudioLoader, SpriteLoader, TextureLoader } from './loaders';
+import {
+  AudioLoader,
+  RectFontLoader,
+  SpriteFontLoader,
+  SpriteLoader,
+  TextureLoader,
+} from './loaders';
 import { Renderer } from './renderers';
 
 export interface GameObjectUpdateArgs {
   input?: KeyboardInput;
   gameState?: State<GameState>;
   audioLoader?: AudioLoader;
+  rectFontLoader?: RectFontLoader;
+  spriteFontLoader?: SpriteFontLoader;
   spriteLoader?: SpriteLoader;
   textureLoader?: TextureLoader;
 }

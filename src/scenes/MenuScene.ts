@@ -17,13 +17,13 @@ enum State {
 export class MenuScene extends GameObject {
   private group: GameObject;
   private menu: Menu;
-  private state: State = State.Sliding;
+  private state: State = State.Ready;
 
   public setup(): void {
     this.renderer = new RectRenderer(config.BACKGROUND_COLOR);
 
     this.group = new GameObject(this.size.width, this.size.height);
-    this.group.position.setY(this.size.height);
+    // this.group.position.setY(this.size.height);
 
     const title = new Title();
     title.setCenter(this.getChildrenCenter());
