@@ -1,10 +1,10 @@
+export * from './loaders';
 export * from './renderers';
 export * from './text';
+export * from './utils';
 
 export * from './Alignment';
 export * from './Animation';
-export * from './AudioLoader';
-export * from './AudioSource';
 export * from './BoundingBox';
 export * from './Collision';
 export * from './CollisionDetector';
@@ -18,10 +18,10 @@ export * from './Node';
 export * from './Rect';
 export * from './Rotation';
 export * from './Size';
+export * from './Sound';
 export * from './Sprite';
 export * from './State';
 export * from './Subject';
 export * from './Texture';
-export * from './TextureLoader';
 export * from './Timer';
 export * from './Vector';

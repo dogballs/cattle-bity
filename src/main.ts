@@ -1,19 +1,24 @@
 import {
   GameLoop,
   GameObject,
+  GameObjectUpdateArgs,
   GameRenderer,
   GameState,
   KeyboardInput,
   State,
   Vector,
+  AudioLoader,
+  TextureLoader,
+  SpriteLoader,
 } from './core';
 
 import * as config from './config';
 
-import { AudioManager } from './audio/AudioManager';
 import { DebugInspector } from './debug';
-
 import { LevelScene } from './scenes';
+
+import * as audioManifest from '../data/audio/audio.manifest.json';
+import * as spriteManifest from '../data/graphics/sprite.manifest.json';
 
 const gameRenderer = new GameRenderer({
   // debug: true,
@@ -25,9 +30,14 @@ document.body.appendChild(gameRenderer.domElement);
 const input = new KeyboardInput();
 input.listen();
 
+const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
+const textureLoader = new TextureLoader(config.GRAPHICS_BASE_PATH);
+const spriteLoader = new SpriteLoader(textureLoader, spriteManifest);
+
 // const debug = new DebugController(spawner);
 
 const currentScene = new LevelScene();
+// const currentScene = new MenuScene(config.CANVAS_WIDTH, config.CANVAS_HEIGHT);
 // const currentScene: Scene = new StageSelectionScene(
 //   config.CANVAS_WIDTH,
 //   config.CANVAS_HEIGHT,
@@ -41,7 +51,7 @@ const debugInspector = new DebugInspector(gameRenderer.domElement);
 debugInspector.listen();
 debugInspector.click.addListener((position: Vector) => {
   const intersections: GameObject[] = [];
-  currentScene.root.traverse((child) => {
+  currentScene.traverseDescedants((child) => {
     if (child.getWorldBoundingBox().contains(position)) {
       intersections.push(child);
     }
@@ -49,19 +59,28 @@ debugInspector.click.addListener((position: Vector) => {
   console.log(intersections);
 });
 
-AudioManager.preloadAll();
+audioLoader.preloadAll();
+spriteLoader.preloadAll();
 
 const gameState = new State<GameState>(GameState.Playing);
 
-currentScene.setup();
+// currentScene.setup();
+
+const updateArgs: GameObjectUpdateArgs = {
+  gameState,
+  input,
+  audioLoader,
+  spriteLoader,
+  textureLoader,
+};
 
 const gameLoop = new GameLoop({
   onTick: (): void => {
     input.update();
 
-    currentScene.update({ gameState, input });
+    currentScene.invokeUpdate(updateArgs);
 
-    gameRenderer.render(currentScene.root);
+    gameRenderer.render(currentScene);
 
     gameState.tick();
   },

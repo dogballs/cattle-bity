@@ -8,3 +8,4 @@ export * from './TankParty';
 export * from './TankSkinAnimation';
 export * from './TankSpriteFactory';
 export * from './TankTier';
+export * from './TankType';

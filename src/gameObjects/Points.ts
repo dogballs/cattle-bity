@@ -1,6 +1,10 @@
-import { GameObject, SpriteRenderer, Timer } from '../core';
+import {
+  GameObject,
+  GameObjectUpdateArgs,
+  SpriteRenderer,
+  Timer,
+} from '../core';
 import { PointsValue } from '../points';
-import { SpriteFactory } from '../sprite/SpriteFactory';
 
 const SPRITE_POINTS_PREFIX = 'points';
 const SPRITE_ID_SEPARATOR = '.';
@@ -15,14 +19,16 @@ export class Points extends GameObject {
 
     this.value = value;
 
-    const spriteId = this.getSpriteId(this.value);
-    this.renderer.sprite = SpriteFactory.asOne(spriteId);
-
     this.timer.reset(duration);
     this.timer.done.addListener(this.handleTimer);
   }
 
-  public update(): void {
+  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+    const spriteId = this.getSpriteId(this.value);
+    this.renderer.sprite = spriteLoader.load(spriteId);
+  }
+
+  protected update(): void {
     this.timer.tick();
   }
 

@@ -1,4 +1,5 @@
 import {
+  ArrayUtils,
   GameObject,
   RectFont,
   RectFontConfig,
@@ -7,7 +8,6 @@ import {
 } from '../core';
 import { RectFontConfigSchema } from '../font';
 import { TerrainFactory, TerrainType } from '../terrain';
-import { ArrayUtils } from '../utils';
 import { ConfigParser } from '../ConfigParser';
 import * as config from '../config';
 

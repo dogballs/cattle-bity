@@ -1,4 +1,12 @@
-import { GameObject, Rotation, Subject, Timer, Vector } from './core';
+import {
+  AudioLoader,
+  GameObject,
+  RandomUtils,
+  Rotation,
+  Subject,
+  Timer,
+  Vector,
+} from './core';
 import {
   Base,
   EnemyBasicTank,
@@ -10,11 +18,9 @@ import {
   Spawn,
 } from './gameObjects';
 import { MapConfig, MapConfigSpawnEnemyListItem } from './map';
-import { AudioManager } from './audio/AudioManager';
 import { PointsValue } from './points';
 import { PowerupFactory } from './powerups';
 import { TankDeathReason, TankTier } from './tank';
-import { RandomUtils } from './utils';
 
 import * as config from './config';
 
@@ -32,6 +38,7 @@ export class Spawner {
   public readonly mapConfig: MapConfig;
   public readonly field: GameObject;
   public readonly base: Base;
+  private readonly audioLoader: AudioLoader;
 
   public playerTank: PlayerTank;
 
@@ -47,10 +54,16 @@ export class Spawner {
   private powerupTimer = new Timer();
   private activePowerup: GameObject = null;
 
-  constructor(mapConfig: MapConfig, field: GameObject, base: Base) {
+  constructor(
+    mapConfig: MapConfig,
+    field: GameObject,
+    base: Base,
+    audioLoader: AudioLoader,
+  ) {
     this.mapConfig = mapConfig;
     this.field = field;
     this.base = base;
+    this.audioLoader = audioLoader;
 
     this.enemyList = mapConfig.spawn.enemy.list.slice(
       0,
@@ -151,7 +164,7 @@ export class Spawner {
         explosion.setCenterFrom(tank);
         tank.replaceSelf(explosion);
 
-        AudioManager.load('explosion.player').play();
+        this.audioLoader.load('explosion.player').play();
         timer.reset(config.PLAYER_SPAWN_DELAY);
       });
       tank.activateShield(config.SHIELD_SPAWN_DURATION);
@@ -186,7 +199,7 @@ export class Spawner {
       tank.died.addListener((event) => {
         // TODO: grenade explosion explodes multiple enemies, should trigger
         // single audio
-        AudioManager.load('explosion.enemy').play();
+        this.audioLoader.load('explosion.enemy').play();
 
         this.aliveEnemyCount = Math.max(0, this.aliveEnemyCount - 1);
         if (!this.enemyTimer.isActive()) {
@@ -258,7 +271,7 @@ export class Spawner {
 
     this.powerupTimer.reset(config.POWERUP_DURATION);
 
-    AudioManager.load('powerup.spawn').play();
+    this.audioLoader.load('powerup.spawn').play();
   }
 
   private createEnemyTankPoints(tank: EnemyTank): Points {
@@ -268,7 +281,7 @@ export class Spawner {
   }
 
   private getEnemyTankPointsValue(tank: EnemyTank): PointsValue {
-    switch (tank.attributes.tier) {
+    switch (tank.type.tier) {
       case TankTier.A:
         return PointsValue.V100;
       case TankTier.B:

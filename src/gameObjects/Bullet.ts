@@ -1,6 +1,12 @@
-import { GameObject, Rotation, SpriteRenderer, Subject } from '../core';
-import { AudioManager } from '../audio/AudioManager';
-import { SpriteFactory, MapNameToSprite } from '../sprite/SpriteFactory';
+import {
+  GameObject,
+  GameObjectUpdateArgs,
+  Rotation,
+  Sound,
+  Sprite,
+  SpriteRenderer,
+  Subject,
+} from '../core';
 import { Tag } from '../Tag';
 
 import { SmallExplosion } from './SmallExplosion';
@@ -14,7 +20,9 @@ export class Bullet extends GameObject {
   public tags = [Tag.Bullet];
   public died = new Subject();
   public renderer = new SpriteRenderer();
-  private spriteMap: MapNameToSprite;
+  private spriteMap: Map<Rotation, Sprite> = new Map();
+  private hitBrickSound: Sound;
+  private hitSteelSound: Sound;
 
   constructor(speed: number, tankDamage: number, wallDamage: number) {
     super(12, 16);
@@ -22,16 +30,19 @@ export class Bullet extends GameObject {
     this.speed = speed;
     this.tankDamage = tankDamage;
     this.wallDamage = wallDamage;
-
-    this.spriteMap = SpriteFactory.asMap({
-      [Rotation.Up]: 'bullet.up',
-      [Rotation.Down]: 'bullet.down',
-      [Rotation.Left]: 'bullet.left',
-      [Rotation.Right]: 'bullet.right',
-    });
   }
 
-  public update(): void {
+  protected setup({ audioLoader, spriteLoader }: GameObjectUpdateArgs): void {
+    this.hitBrickSound = audioLoader.load('hit.brick');
+    this.hitSteelSound = audioLoader.load('hit.steel');
+
+    this.spriteMap.set(Rotation.Up, spriteLoader.load('bullet.up'));
+    this.spriteMap.set(Rotation.Down, spriteLoader.load('bullet.down'));
+    this.spriteMap.set(Rotation.Left, spriteLoader.load('bullet.left'));
+    this.spriteMap.set(Rotation.Right, spriteLoader.load('bullet.right'));
+  }
+
+  protected update(): void {
     if (this.rotation === Rotation.Up) {
       this.position.y -= this.speed;
     } else if (this.rotation === Rotation.Down) {
@@ -42,10 +53,10 @@ export class Bullet extends GameObject {
       this.position.x += this.speed;
     }
 
-    this.renderer.sprite = this.spriteMap[this.rotation];
+    this.renderer.sprite = this.spriteMap.get(this.rotation);
   }
 
-  public collide(target: GameObject): void {
+  protected collide(target: GameObject): void {
     if (target.tags.includes(Tag.Bullet)) {
       const bullet = target as Bullet;
 
@@ -118,14 +129,14 @@ export class Bullet extends GameObject {
       // triggered
       // Only player bullets make sound
       if (this.tags.includes(Tag.Player)) {
-        AudioManager.load('hit.brick').play();
+        this.hitBrickSound.play();
       }
     } else if (isSteelWall || isBorderWall) {
       // TODO: when tank is grade 4, it can destroy steel walls, and in that
       // case they make the same sound as brick walls
       // Only player bullets make sound
       if (this.tags.includes(Tag.Player)) {
-        AudioManager.load('hit.steel').play();
+        this.hitSteelSound.play();
       }
     }
   }

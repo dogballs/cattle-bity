@@ -1,0 +1,12 @@
+{
+  "fire": { "file": "fire.wav" },
+  "hit.steel": { "file": "hit-steel.wav" },
+  "hit.brick": { "file": "hit-brick.wav" },
+  "tank.idle": { "file": "tank-idle.wav" },
+  "tank.move": { "file": "tank-move.wav" },
+  "pause": { "file": "pause.wav" },
+  "powerup.spawn": { "file": "powerup-appear.wav" },
+  "powerup.pickup": { "file": "powerup-pickup.wav" },
+  "explosion.player": { "file": "player-explosion.wav" },
+  "explosion.enemy": { "file": "enemy-explosion.wav" }
+}

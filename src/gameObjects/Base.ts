@@ -35,7 +35,13 @@ export class Base extends GameObject {
     this.defenceTimer.done.addListener(this.handleDefenceTimer);
   }
 
-  public update(): void {
+  public activateDefence(duration: number): void {
+    this.resetFading();
+    this.setWalls(TerrainType.Steel);
+    this.defenceTimer.reset(duration);
+  }
+
+  protected update(): void {
     this.defenceTimer.tick();
 
     // TODO: fading logic seems a bit ugly
@@ -55,12 +61,6 @@ export class Base extends GameObject {
         this.setWalls(fadeWallType);
       }
     }
-  }
-
-  public activateDefence(duration: number): void {
-    this.resetFading();
-    this.setWalls(TerrainType.Steel);
-    this.defenceTimer.reset(duration);
   }
 
   private resetFading(): void {

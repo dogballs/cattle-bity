@@ -9,6 +9,8 @@ export enum LogLevel {
 }
 
 export class Logger {
+  public static Level = LogLevel;
+
   public readonly tag: string;
   public level: LogLevel;
 

@@ -1,27 +1,23 @@
-import { Rect, Rotation, Sprite } from '../core';
-import { SpriteFactory } from '../sprite/SpriteFactory';
+import { Rect, Rotation, Sprite, SpriteLoader } from '../core';
 
-import { TankColor } from './TankColor';
-import { TankParty } from './TankParty';
-import { TankTier } from './TankTier';
+import { TankType } from './TankType';
 
 const SPRITE_TANK_PREFIX = 'tank';
 const SPRITE_ID_SEPARATOR = '.';
 
 export class TankSpriteFactory {
   public static create(
-    party: TankParty,
-    color: TankColor,
-    tier: TankTier,
+    spriteLoader: SpriteLoader,
+    type: TankType,
     targetRect: Rect,
     rotation: Rotation,
     frameNumber = 1,
   ): Sprite {
     const parts = [
       SPRITE_TANK_PREFIX,
-      party.toString(),
-      color.toString(),
-      tier.toString(),
+      type.party.toString(),
+      type.color.toString(),
+      type.tier.toString(),
       rotation.toString(),
       frameNumber.toString(),
     ];
@@ -38,7 +34,7 @@ export class TankSpriteFactory {
       );
     }
 
-    const sprite = SpriteFactory.asOne(spriteId, rotatedRect);
+    const sprite = spriteLoader.load(spriteId, rotatedRect);
 
     return sprite;
   }

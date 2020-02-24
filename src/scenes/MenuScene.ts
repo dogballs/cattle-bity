@@ -1,8 +1,11 @@
-import { GameObject, KeyboardKey, RectRenderer } from '../core';
+import {
+  GameObject,
+  GameObjectUpdateArgs,
+  KeyboardKey,
+  RectRenderer,
+} from '../core';
 import { Menu, Title } from '../gameObjects';
 import * as config from '../config';
-
-import { Scene, SceneUpdateArgs } from './Scene';
 
 const SLIDE_SPEED = 4;
 
@@ -11,32 +14,32 @@ enum State {
   Ready,
 }
 
-export class MenuScene extends Scene {
+export class MenuScene extends GameObject {
   private group: GameObject;
   private menu: Menu;
   private state: State = State.Sliding;
 
   public setup(): void {
-    this.root.renderer = new RectRenderer(config.BACKGROUND_COLOR);
+    this.renderer = new RectRenderer(config.BACKGROUND_COLOR);
 
-    this.group = new GameObject(this.root.size.width, this.root.size.height);
-    this.group.position.setY(this.root.size.height);
+    this.group = new GameObject(this.size.width, this.size.height);
+    this.group.position.setY(this.size.height);
 
     const title = new Title();
-    title.setCenter(this.root.getChildrenCenter());
+    title.setCenter(this.getChildrenCenter());
     title.position.setY(160);
     this.group.add(title);
 
     this.menu = new Menu();
-    this.menu.setCenter(this.root.getChildrenCenter());
+    this.menu.setCenter(this.getChildrenCenter());
     this.menu.position.setY(512);
     this.menu.selected.addListener(this.handleMenuSelected);
     this.group.add(this.menu);
 
-    this.root.add(this.group);
+    this.add(this.group);
   }
 
-  public update(updateArgs: SceneUpdateArgs): void {
+  public update(updateArgs: GameObjectUpdateArgs): void {
     const { input } = updateArgs;
 
     if (this.state === State.Sliding) {
@@ -51,13 +54,15 @@ export class MenuScene extends Scene {
         this.state = State.Ready;
         this.menu.showSelector();
       } else {
-        this.group.update(updateArgs);
+        this.traverseDescedants((child) => {
+          child.invokeUpdate(updateArgs);
+        });
       }
       return;
     }
 
-    this.root.traverse((child) => {
-      child.update(updateArgs);
+    this.traverseDescedants((child) => {
+      child.invokeUpdate(updateArgs);
     });
   }
 

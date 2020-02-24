@@ -1,13 +1,13 @@
 import { GameObject, GameObjectUpdateArgs, SpriteRenderer } from '../core';
 
-export class GameOverNotice extends GameObject {
+export class EnemyCounterItem extends GameObject {
   public readonly renderer = new SpriteRenderer();
 
   constructor() {
-    super(124, 60);
+    super(32, 32);
   }
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
-    this.renderer.sprite = spriteLoader.load('ui.gameOver');
+    this.renderer.sprite = spriteLoader.load('ui.enemy');
   }
 }

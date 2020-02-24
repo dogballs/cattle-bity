@@ -1,5 +1,4 @@
 import { GameObjectUpdateArgs, GameState } from '../core';
-import { TankAttributes, TankBehavior, TankSkinAnimation } from '../tank';
 import { Tag } from '../Tag';
 
 import { Tank } from './Tank';
@@ -8,15 +7,8 @@ export abstract class EnemyTank extends Tank {
   public tags = [Tag.Tank, Tag.Enemy];
   public hasDrop: boolean;
 
-  constructor(
-    width: number,
-    height: number,
-    attributes: TankAttributes,
-    behavior: TankBehavior,
-    skinAnimation: TankSkinAnimation,
-    hasDrop = false,
-  ) {
-    super(width, height, attributes, behavior, skinAnimation);
+  constructor(width: number, height: number, hasDrop = false) {
+    super(width, height);
 
     this.hasDrop = hasDrop;
     if (hasDrop) {
@@ -24,7 +16,7 @@ export abstract class EnemyTank extends Tank {
     }
   }
 
-  public update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameObjectUpdateArgs): void {
     const { gameState } = updateArgs;
 
     if (gameState.hasChangedTo(GameState.Paused)) {

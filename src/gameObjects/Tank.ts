@@ -14,6 +14,7 @@ import {
   TankBehavior,
   TankDeathReason,
   TankSkinAnimation,
+  TankType,
 } from '../tank';
 import { Tag } from '../Tag';
 import * as config from '../config';
@@ -28,6 +29,7 @@ export enum TankState {
 }
 
 export class Tank extends GameObject {
+  public type: TankType;
   public attributes: TankAttributes;
   public behavior: TankBehavior;
   public skinAnimation: TankSkinAnimation;
@@ -41,26 +43,19 @@ export class Tank extends GameObject {
   protected shieldTimer = new Timer();
   protected animation: Animation<Sprite>;
 
-  constructor(
-    width: number,
-    height: number,
-    attributes: TankAttributes,
-    behavior: TankBehavior,
-    skinAnimation: TankSkinAnimation,
-  ) {
+  constructor(width: number, height: number) {
     super(width, height);
 
-    this.attributes = attributes;
-    this.behavior = behavior;
-    this.skinAnimation = skinAnimation;
-
     this.renderer.alignment = Alignment.MiddleCenter;
-    this.renderer.sprite = this.skinAnimation.getCurrentFrame();
 
     this.shieldTimer.done.addListener(this.handleShieldTimer);
   }
 
-  public update(updateArgs: GameObjectUpdateArgs): void {
+  protected setup(updateArgs: GameObjectUpdateArgs): void {
+    this.behavior.setup(this, updateArgs);
+  }
+
+  protected update(updateArgs: GameObjectUpdateArgs): void {
     this.shieldTimer.tick();
 
     this.behavior.update(this, updateArgs);
@@ -70,7 +65,7 @@ export class Tank extends GameObject {
     this.renderer.sprite = this.skinAnimation.getCurrentFrame();
   }
 
-  public collide(target: GameObject): void {
+  protected collide(target: GameObject): void {
     if (target.tags.includes(Tag.BlockMove)) {
       const targetBox = target.getWorldBoundingBox();
       const { width, height } = this.getComputedSize();

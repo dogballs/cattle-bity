@@ -1,5 +1,10 @@
-import { Animation, GameObject, Sprite, SpriteRenderer } from '../core';
-import { SpriteFactory } from '../sprite/SpriteFactory';
+import {
+  Animation,
+  GameObject,
+  GameObjectUpdateArgs,
+  Sprite,
+  SpriteRenderer,
+} from '../core';
 
 export class PauseNotice extends GameObject {
   public ignorePause = true;
@@ -8,19 +13,22 @@ export class PauseNotice extends GameObject {
 
   constructor() {
     super(156, 28);
+  }
 
-    this.animation = new Animation([SpriteFactory.asOne('ui.pause'), null], {
+  public restart(): void {
+    this.animation.reset();
+  }
+
+  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+    // Null as a second frame adds a blink effect
+    this.animation = new Animation([spriteLoader.load('ui.pause'), null], {
       delay: 16,
       loop: true,
     });
   }
 
-  public update(): void {
+  protected update(): void {
     this.animation.animate();
     this.renderer.sprite = this.animation.getCurrentFrame();
-  }
-
-  public restart(): void {
-    this.animation.reset();
   }
 }

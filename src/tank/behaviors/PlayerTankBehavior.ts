@@ -1,14 +1,18 @@
-import { GameObjectUpdateArgs, KeyboardKey, Rotation } from '../../core';
+import { GameObjectUpdateArgs, KeyboardKey, Rotation, Sound } from '../../core';
 import { Tank, TankState } from '../../gameObjects';
-import { AudioManager } from '../../audio/AudioManager';
 
 import { TankBehavior } from './TankBehavior';
 
 export class PlayerTankBehavior extends TankBehavior {
-  // TODO: Is it ok in here?
-  private fireAudio = AudioManager.load('fire');
-  private moveAudio = AudioManager.load('tankMove');
-  private idleAudio = AudioManager.load('tankIdle');
+  private fireSound: Sound;
+  private moveSound: Sound;
+  private idleSound: Sound;
+
+  public setup(tank: Tank, { audioLoader }: GameObjectUpdateArgs): void {
+    this.fireSound = audioLoader.load('fire');
+    this.moveSound = audioLoader.load('tank.move');
+    this.idleSound = audioLoader.load('tank.idle');
+  }
 
   public update(tank: Tank, { input }: GameObjectUpdateArgs): void {
     if (input.isHoldLast(KeyboardKey.W)) {
@@ -33,22 +37,22 @@ export class PlayerTankBehavior extends TankBehavior {
 
     if (input.isHoldAny(moveKeys)) {
       if (tank.state !== TankState.Moving) {
-        this.idleAudio.stop();
-        this.moveAudio.playLoop();
+        this.idleSound.stop();
+        this.moveSound.playLoop();
       }
       tank.move();
     }
 
     if (input.isNotHoldAll(moveKeys) && tank.state !== TankState.Idle) {
       tank.idle();
-      this.moveAudio.stop();
-      this.idleAudio.playLoop();
+      this.moveSound.stop();
+      this.idleSound.playLoop();
     }
 
     if (input.isDown(KeyboardKey.Space)) {
       const hasFired = tank.fire();
       if (hasFired) {
-        this.fireAudio.play();
+        this.fireSound.play();
       }
     }
   }

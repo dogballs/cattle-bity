@@ -1,30 +1,32 @@
-import { Rect } from '../core';
+import { GameObjectUpdateArgs, Rect } from '../core';
 import {
   DumbAiTankBehavior,
   TankAttributesFactory,
   TankSkinAnimation,
-  TankColor,
-  TankTier,
-  TankParty,
+  TankType,
 } from '../tank';
 
 import { EnemyTank } from './EnemyTank';
 
 export class EnemyBasicTank extends EnemyTank {
+  public readonly type = TankType.EnemyDefaultA;
+
   constructor(hasDrop = false) {
-    const attributes = TankAttributesFactory.create(
-      TankParty.Enemy,
-      TankTier.A,
-    );
-    const behavior = new DumbAiTankBehavior();
-    const skin = new TankSkinAnimation(
-      TankParty.Enemy,
-      TankColor.Default,
-      TankTier.A,
+    super(64, 64, hasDrop);
+  }
+
+  protected setup(updateArgs: GameObjectUpdateArgs): void {
+    const { spriteLoader } = updateArgs;
+
+    this.attributes = TankAttributesFactory.create(this.type);
+    this.behavior = new DumbAiTankBehavior();
+    this.skinAnimation = new TankSkinAnimation(
+      spriteLoader,
+      this.type,
       new Rect(0, 0, 52, 60),
-      hasDrop,
+      this.hasDrop,
     );
 
-    super(64, 64, attributes, behavior, skin, hasDrop);
+    super.setup(updateArgs);
   }
 }

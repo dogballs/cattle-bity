@@ -1,4 +1,4 @@
-export class AudioSource {
+export class Sound {
   public readonly audioElement: HTMLAudioElement;
 
   constructor(audioElement: HTMLAudioElement) {

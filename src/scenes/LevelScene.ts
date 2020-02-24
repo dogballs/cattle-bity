@@ -1,6 +1,8 @@
 import {
+  AudioLoader,
   CollisionDetector,
   GameObject,
+  GameObjectUpdateArgs,
   GameState,
   KeyboardKey,
   Rect,
@@ -9,34 +11,39 @@ import { Base, Border, EnemyCounter, PauseNotice } from '../gameObjects';
 import { DebugGrid } from '../debug';
 import { MapConfig, MapConfigSchema } from '../map';
 import { TerrainFactory } from '../terrain';
-import { AudioManager } from '../audio/AudioManager';
 import { ConfigParser } from '../ConfigParser';
 import { Spawner } from '../Spawner';
 import * as config from '../config';
 
 import * as mapJSON from '../../data/maps/stage1.json';
 
-import { Scene, SceneUpdateArgs } from './Scene';
-
-export class LevelScene extends Scene {
+export class LevelScene extends GameObject {
+  private audioLoader: AudioLoader;
   private field: GameObject;
   private base: Base;
   private spawner: Spawner;
   private enemyCounter: EnemyCounter;
   private pauseNotice: PauseNotice;
 
-  public setup(): void {
+  protected setup({ audioLoader }: GameObjectUpdateArgs): void {
+    this.audioLoader = audioLoader;
+
     const mapConfig = ConfigParser.parse<MapConfig>(mapJSON, MapConfigSchema);
 
-    this.root.add(new Border());
+    this.add(new Border());
 
     this.field = this.createField();
-    this.root.add(this.field);
+    this.add(this.field);
 
     this.base = this.createBase();
     this.field.add(this.base);
 
-    this.spawner = new Spawner(mapConfig, this.field, this.base);
+    this.spawner = new Spawner(
+      mapConfig,
+      this.field,
+      this.base,
+      this.audioLoader,
+    );
     this.spawner.enemySpawned.addListener(this.handleEnemySpawned);
 
     const terrainTiles = [];
@@ -54,12 +61,12 @@ export class LevelScene extends Scene {
 
     this.enemyCounter = this.createEnemyCounter();
     this.enemyCounter.updateCount(this.spawner.getUnspawnedEnemiesCount());
-    this.root.add(this.enemyCounter);
+    this.add(this.enemyCounter);
 
     this.pauseNotice = this.createPauseNotice(this.field);
   }
 
-  public update(updateArgs: SceneUpdateArgs): void {
+  protected update(updateArgs: GameObjectUpdateArgs): void {
     const { gameState, input } = updateArgs;
 
     if (input.isDown(KeyboardKey.Enter)) {
@@ -78,15 +85,15 @@ export class LevelScene extends Scene {
     }
 
     // Update all objects on the scene
-    this.root.traverse((child) => {
+    this.traverseDescedants((child) => {
       const shouldUpdate = gameState.is(GameState.Playing) || child.ignorePause;
       if (shouldUpdate) {
         // TODO: abstract out input from tank
-        child.update({ input, gameState });
+        child.invokeUpdate(updateArgs);
       }
     });
 
-    const nodes = this.root.flatten();
+    const nodes = this.flatten();
 
     // Nodes that initiate collision
     const activeNodes = nodes.filter((node) => node.collider);
@@ -94,19 +101,19 @@ export class LevelScene extends Scene {
     // Detect and handle collisions of all objects on the scene
     const collisions = CollisionDetector.intersectObjects(activeNodes, nodes);
     collisions.forEach((collision) => {
-      collision.source.collide(collision.target);
+      collision.source.invokeCollide(collision.target);
     });
   }
 
   private activatePause(): void {
-    AudioManager.pauseAll();
-    AudioManager.load('pause').play();
+    this.audioLoader.pauseAll();
+    this.audioLoader.load('pause').play();
     this.pauseNotice.restart();
     this.field.add(this.pauseNotice);
   }
 
   private deactivatePause(): void {
-    AudioManager.resumeAll();
+    this.audioLoader.resumeAll();
     this.field.remove(this.pauseNotice);
   }
 

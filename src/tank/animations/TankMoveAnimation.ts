@@ -1,33 +1,30 @@
-import { Animation, Rotation, Rect, Sprite } from '../../core';
+import { Animation, Rotation, Rect, Sprite, SpriteLoader } from '../../core';
 
 import { TankColor } from '../TankColor';
-import { TankParty } from '../TankParty';
-import { TankTier } from '../TankTier';
+import { TankType } from '../TankType';
 import { TankSpriteFactory } from '../TankSpriteFactory';
 
 export class TankMoveAnimation extends Animation<Sprite> {
   constructor(
-    party: TankParty,
-    color: TankColor,
-    tier: TankTier,
+    spriteLoader: SpriteLoader,
+    type: TankType,
     targetRect: Rect,
     rotation: Rotation,
     hasDrop = false,
   ) {
     const frames = [
-      TankSpriteFactory.create(party, color, tier, targetRect, rotation, 1),
-      TankSpriteFactory.create(party, color, tier, targetRect, rotation, 2),
-      TankSpriteFactory.create(party, color, tier, targetRect, rotation, 1),
-      TankSpriteFactory.create(party, color, tier, targetRect, rotation, 2),
+      TankSpriteFactory.create(spriteLoader, type, targetRect, rotation, 1),
+      TankSpriteFactory.create(spriteLoader, type, targetRect, rotation, 2),
+      TankSpriteFactory.create(spriteLoader, type, targetRect, rotation, 1),
+      TankSpriteFactory.create(spriteLoader, type, targetRect, rotation, 2),
     ];
 
     if (hasDrop) {
-      const dropColor = TankColor.Danger;
+      const dropType = type.clone().setColor(TankColor.Danger);
       frames.push(
         TankSpriteFactory.create(
-          party,
-          dropColor,
-          tier,
+          spriteLoader,
+          dropType,
           targetRect,
           rotation,
           1,
@@ -35,9 +32,8 @@ export class TankMoveAnimation extends Animation<Sprite> {
       );
       frames.push(
         TankSpriteFactory.create(
-          party,
-          dropColor,
-          tier,
+          spriteLoader,
+          dropType,
           targetRect,
           rotation,
           2,
@@ -45,9 +41,8 @@ export class TankMoveAnimation extends Animation<Sprite> {
       );
       frames.push(
         TankSpriteFactory.create(
-          party,
-          dropColor,
-          tier,
+          spriteLoader,
+          dropType,
           targetRect,
           rotation,
           1,
@@ -55,9 +50,8 @@ export class TankMoveAnimation extends Animation<Sprite> {
       );
       frames.push(
         TankSpriteFactory.create(
-          party,
-          dropColor,
-          tier,
+          spriteLoader,
+          dropType,
           targetRect,
           rotation,
           2,

@@ -1,5 +1,5 @@
+import { RandomUtils } from '../core';
 import { Powerup } from '../gameObjects';
-import { RandomUtils } from '../utils';
 
 import { PowerupAction } from './PowerupAction';
 import { PowerupType } from './PowerupType';
@@ -16,11 +16,11 @@ interface PowerupDescription {
   pickupAudioId: string;
 }
 
-const map = new Map<PowerupType, PowerupDescription>();
-
 // TODO: is it ok? Action class is created when file is loaded and single
 // instance is used for all powerups of that type
 // TODO: move configuration to separate file
+
+const map = new Map<PowerupType, PowerupDescription>();
 
 map.set(PowerupType.BaseDefence, {
   action: new BaseDefencePowerupAction(),

@@ -1,6 +1,5 @@
-import { Logger, LogLevel, Rotation, Timer, Vector } from '../../core';
+import { Logger, RandomUtils, Rotation, Timer, Vector } from '../../core';
 import { Tank } from '../../gameObjects';
-import { RandomUtils } from '../../utils';
 import * as config from '../../config';
 
 import { TankBehavior } from './TankBehavior';
@@ -25,7 +24,7 @@ export class DumbAiTankBehavior extends TankBehavior {
   private lastPosition = new Vector(-1, -1);
   private thinkTimer = new Timer();
   private fireTimer = new Timer();
-  private log = new Logger(DumbAiTankBehavior.name, LogLevel.Info);
+  private log = new Logger(DumbAiTankBehavior.name, Logger.Level.Info);
 
   public update(tank: Tank): void {
     if (this.fireTimer.isDone()) {

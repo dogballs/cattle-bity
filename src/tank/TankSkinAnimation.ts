@@ -1,20 +1,16 @@
-import { Animation, Rotation, Rect, Sprite } from '../core';
+import { Animation, Rotation, Rect, Sprite, SpriteLoader } from '../core';
 import { Tank, TankState } from '../gameObjects';
 
 import { TankIdleAnimation, TankMoveAnimation } from './animations';
 
-import { TankColor } from './TankColor';
-import { TankTier } from './TankTier';
-import { TankParty } from './TankParty';
+import { TankType } from './TankType';
 
 // TODO: Remake to factory?
 
 type AnimationMap = Map<Rotation, Animation<Sprite>>;
 
 export class TankSkinAnimation {
-  public readonly party: TankParty;
-  public readonly color: TankColor;
-  public readonly tier: TankTier;
+  public readonly type: TankType;
   public readonly targetRect: Rect;
   public readonly hasDrop: boolean;
 
@@ -26,24 +22,20 @@ export class TankSkinAnimation {
   protected currentAnimationMap: AnimationMap;
 
   constructor(
-    party: TankParty,
-    color: TankColor,
-    tier: TankTier,
+    spriteLoader: SpriteLoader,
+    type: TankType,
     targetRect: Rect,
     hasDrop = false,
   ) {
-    this.party = party;
-    this.color = color;
-    this.tier = tier;
+    this.type = type;
     this.targetRect = targetRect;
     this.hasDrop = hasDrop;
 
     this.idleAnimationMap.set(
       Rotation.Up,
       new TankIdleAnimation(
-        party,
-        color,
-        tier,
+        spriteLoader,
+        type,
         targetRect,
         Rotation.Up,
         hasDrop,
@@ -52,9 +44,8 @@ export class TankSkinAnimation {
     this.idleAnimationMap.set(
       Rotation.Down,
       new TankIdleAnimation(
-        party,
-        color,
-        tier,
+        spriteLoader,
+        type,
         targetRect,
         Rotation.Down,
         hasDrop,
@@ -63,9 +54,8 @@ export class TankSkinAnimation {
     this.idleAnimationMap.set(
       Rotation.Left,
       new TankIdleAnimation(
-        party,
-        color,
-        tier,
+        spriteLoader,
+        type,
         targetRect,
         Rotation.Left,
         hasDrop,
@@ -74,9 +64,8 @@ export class TankSkinAnimation {
     this.idleAnimationMap.set(
       Rotation.Right,
       new TankIdleAnimation(
-        party,
-        color,
-        tier,
+        spriteLoader,
+        type,
         targetRect,
         Rotation.Right,
         hasDrop,
@@ -86,9 +75,8 @@ export class TankSkinAnimation {
     this.moveAnimationMap.set(
       Rotation.Up,
       new TankMoveAnimation(
-        party,
-        color,
-        tier,
+        spriteLoader,
+        type,
         targetRect,
         Rotation.Up,
         hasDrop,
@@ -97,9 +85,8 @@ export class TankSkinAnimation {
     this.moveAnimationMap.set(
       Rotation.Down,
       new TankMoveAnimation(
-        party,
-        color,
-        tier,
+        spriteLoader,
+        type,
         targetRect,
         Rotation.Down,
         hasDrop,
@@ -108,9 +95,8 @@ export class TankSkinAnimation {
     this.moveAnimationMap.set(
       Rotation.Left,
       new TankMoveAnimation(
-        party,
-        color,
-        tier,
+        spriteLoader,
+        type,
         targetRect,
         Rotation.Left,
         hasDrop,
@@ -119,9 +105,8 @@ export class TankSkinAnimation {
     this.moveAnimationMap.set(
       Rotation.Right,
       new TankMoveAnimation(
-        party,
-        color,
-        tier,
+        spriteLoader,
+        type,
         targetRect,
         Rotation.Right,
         hasDrop,

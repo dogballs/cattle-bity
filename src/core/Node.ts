@@ -70,6 +70,14 @@ export class Node {
     return this;
   }
 
+  public traverseDescedants(callback: (node: this) => void): this {
+    this.children.forEach((child) => {
+      child.traverse(callback);
+    });
+
+    return this;
+  }
+
   public traverseAncestors(callback: (node: this) => void): this {
     const parent = this.parent;
 

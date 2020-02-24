@@ -1,28 +1,33 @@
-import { GameObject, Sprite, SpriteRenderer } from '../core';
-import { SpriteFactory } from '../sprite/SpriteFactory';
+import {
+  GameObject,
+  GameObjectUpdateArgs,
+  Sprite,
+  SpriteRenderer,
+} from '../core';
 import { Tag } from '../Tag';
 
 export class BrickWall extends GameObject {
   public readonly tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
   public readonly renderer = new SpriteRenderer();
-  private readonly sprites: Sprite[];
+  private isMenu = false;
+  private sprites: Sprite[];
 
   constructor(isMenu = false) {
     super(16, 16);
 
+    this.isMenu = isMenu;
+  }
+
+  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     let spriteIds = ['wall.brick.1', 'wall.brick.2'];
-    if (isMenu) {
+    if (this.isMenu) {
       spriteIds = ['menu.brick.1', 'menu.brick.2'];
     }
 
-    this.sprites = SpriteFactory.asList(spriteIds);
+    this.sprites = spriteLoader.loadList(spriteIds);
   }
 
-  public update(): void {
-    this.renderer.sprite = this.getSpriteByPosition();
-  }
-
-  protected onAdded(): void {
+  protected update(): void {
     this.renderer.sprite = this.getSpriteByPosition();
   }
 

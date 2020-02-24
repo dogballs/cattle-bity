@@ -8,7 +8,6 @@ import {
   SpriteTextRenderer,
   Subject,
   Text,
-  TextureLoader,
 } from '../core';
 import { SpriteFontConfigSchema } from '../font';
 import { ConfigParser } from '../ConfigParser';
@@ -22,17 +21,23 @@ const MENU_ITEM_HEIGHT = 60;
 
 export class Menu extends GameObject {
   public selected = new Subject<number>();
-  private readonly selector: MenuSelector;
+  private selector: MenuSelector;
   private selectedIndex = 0;
 
   constructor() {
     super(480, MENU_ITEM_HEIGHT * MENU_ITEMS.length);
+  }
 
+  public showSelector(): void {
+    this.add(this.selector);
+  }
+
+  protected setup({ textureLoader }: GameObjectUpdateArgs): void {
     const fontConfig = ConfigParser.parse<SpriteFontConfig>(
       fontJSON,
       SpriteFontConfigSchema,
     );
-    const texture = TextureLoader.load('data/fonts/sprite-font.png');
+    const texture = textureLoader.load('data/fonts/sprite-font.png', true);
     const font = new SpriteFont(fontConfig, texture);
 
     MENU_ITEMS.forEach((menuItemText, index) => {
@@ -52,7 +57,7 @@ export class Menu extends GameObject {
     this.selector = new MenuSelector(MENU_ITEM_HEIGHT);
   }
 
-  public update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameObjectUpdateArgs): void {
     const { input } = updateArgs;
 
     if (input.isDown(KeyboardKey.S)) {
@@ -66,10 +71,6 @@ export class Menu extends GameObject {
     if (input.isDown(KeyboardKey.Space)) {
       this.selected.notify(this.selectedIndex);
     }
-  }
-
-  public showSelector(): void {
-    this.add(this.selector);
   }
 
   private updateSelector(): void {

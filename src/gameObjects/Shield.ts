@@ -7,8 +7,6 @@ import {
   SpriteRenderer,
 } from '../core';
 
-import { SpriteFactory } from '../sprite/SpriteFactory';
-
 export class Shield extends GameObject {
   public ignorePause = true;
   public renderer = new SpriteRenderer();
@@ -16,14 +14,16 @@ export class Shield extends GameObject {
 
   constructor() {
     super(64, 64);
+  }
 
+  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     this.animation = new Animation(
-      SpriteFactory.asList(['shield.1', 'shield.2']),
+      spriteLoader.loadList(['shield.1', 'shield.2']),
       { delay: 3, loop: true },
     );
   }
 
-  public update({ gameState }: GameObjectUpdateArgs): void {
+  protected update({ gameState }: GameObjectUpdateArgs): void {
     // Shield is not displayed during a pause
     if (gameState.hasChangedTo(GameState.Paused)) {
       this.visible = false;

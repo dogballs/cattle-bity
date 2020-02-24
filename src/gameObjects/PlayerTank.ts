@@ -1,91 +1,76 @@
-import { Rect } from '../core';
+import { Rect, GameObjectUpdateArgs } from '../core';
 import {
   PlayerTankBehavior,
   TankSkinAnimation,
-  TankColor,
   TankTier,
-  TankParty,
+  TankType,
   TankAttributesFactory,
 } from '../tank';
 import { Tag } from '../Tag';
 
 import { Tank } from './Tank';
 
-const MAX_TIER = 4;
-
 export class PlayerTank extends Tank {
-  public tier: number;
+  public readonly tags = [Tag.Tank, Tag.Player];
+  public readonly type = TankType.PlayerPrimaryA;
+  private tierSkinAnimations = new Map<TankTier, TankSkinAnimation>();
 
   constructor() {
-    const attributes = TankAttributesFactory.create(
-      TankParty.Player,
+    super(64, 64);
+  }
+
+  protected setup(updateArgs: GameObjectUpdateArgs): void {
+    const { spriteLoader } = updateArgs;
+
+    this.attributes = TankAttributesFactory.create(this.type);
+    this.behavior = new PlayerTankBehavior();
+
+    this.tierSkinAnimations.set(
       TankTier.A,
+      new TankSkinAnimation(
+        spriteLoader,
+        TankType.PlayerPrimaryA,
+        new Rect(0, 0, 52, 52),
+      ),
     );
-    const behavior = new PlayerTankBehavior();
-    const skinAnimation = new TankSkinAnimation(
-      TankParty.Player,
-      TankColor.Primary,
-      TankTier.A,
-      new Rect(0, 0, 52, 52),
+    this.tierSkinAnimations.set(
+      TankTier.B,
+      new TankSkinAnimation(
+        spriteLoader,
+        TankType.PlayerPrimaryB,
+        new Rect(0, 0, 52, 64),
+      ),
+    );
+    this.tierSkinAnimations.set(
+      TankTier.C,
+      new TankSkinAnimation(
+        spriteLoader,
+        TankType.PlayerPrimaryC,
+        new Rect(0, 0, 52, 60),
+      ),
+    );
+    this.tierSkinAnimations.set(
+      TankTier.D,
+      new TankSkinAnimation(
+        spriteLoader,
+        TankType.PlayerPrimaryD,
+        new Rect(0, 0, 52, 60),
+      ),
     );
 
-    super(64, 64, attributes, behavior, skinAnimation);
+    this.skinAnimation = this.tierSkinAnimations.get(this.type.tier);
 
-    this.tags = [Tag.Tank, Tag.Player];
-    this.tier = 1;
+    super.setup(updateArgs);
   }
 
   public upgrade(): void {
-    if (this.tier >= MAX_TIER) {
+    if (this.type.isMaxTier()) {
       return;
     }
 
-    this.tier += 1;
+    this.type.increaseTier();
 
-    if (this.tier === 1) {
-      this.attributes = TankAttributesFactory.create(
-        TankParty.Player,
-        TankTier.A,
-      );
-      this.skinAnimation = new TankSkinAnimation(
-        TankParty.Player,
-        TankColor.Primary,
-        TankTier.A,
-        new Rect(0, 0, 52, 52),
-      );
-    } else if (this.tier === 2) {
-      this.attributes = TankAttributesFactory.create(
-        TankParty.Player,
-        TankTier.B,
-      );
-      this.skinAnimation = new TankSkinAnimation(
-        TankParty.Player,
-        TankColor.Primary,
-        TankTier.B,
-        new Rect(0, 0, 52, 64),
-      );
-    } else if (this.tier === 3) {
-      this.attributes = TankAttributesFactory.create(
-        TankParty.Player,
-        TankTier.C,
-      );
-      this.skinAnimation = new TankSkinAnimation(
-        TankParty.Player,
-        TankColor.Primary,
-        TankTier.C,
-        new Rect(0, 0, 52, 60),
-      );
-    } else if (this.tier === 4) {
-      this.attributes = TankAttributesFactory.create(
-        TankParty.Player,
-        TankTier.D,
-      );
-      this.skinAnimation = new TankSkinAnimation(
-        TankParty.Player,
-        TankColor.Primary,
-        TankTier.D,
-        new Rect(0, 0, 52, 60),
-      );
-    }
+    this.attributes = TankAttributesFactory.create(this.type);
+    this.skinAnimation = this.tierSkinAnimations.get(this.type.tier);
   }
 }

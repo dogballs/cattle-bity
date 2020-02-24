@@ -1,7 +1,12 @@
-import { GameObject, SpriteRenderer, Subject } from '../core';
+import {
+  GameObject,
+  GameObjectUpdateArgs,
+  Sound,
+  Sprite,
+  SpriteRenderer,
+  Subject,
+} from '../core';
 import { Bullet, Explosion } from '../gameObjects';
-import { AudioManager } from '../audio/AudioManager';
-import { SpriteFactory } from '../sprite/SpriteFactory';
 import { Tag } from '../Tag';
 
 export class BaseHeart extends GameObject {
@@ -11,12 +16,12 @@ export class BaseHeart extends GameObject {
   public renderer = new SpriteRenderer();
   public readonly died = new Subject();
   private isDead = false;
-  private explosionSound = AudioManager.load('explosion.player');
+  private aliveSprite: Sprite;
+  private deadSprite: Sprite;
+  private explosionSound: Sound;
 
   constructor() {
     super(64, 64);
-
-    this.renderer.sprite = SpriteFactory.asOne('base.heart.alive');
   }
 
   public explode(): void {
@@ -30,14 +35,23 @@ export class BaseHeart extends GameObject {
     explosion.setCenter(this.getChildrenCenter());
     this.add(explosion);
 
-    this.renderer.sprite = SpriteFactory.asOne('base.heart.dead');
+    this.renderer.sprite = this.deadSprite;
 
     this.explosionSound.play();
 
     this.died.notify();
   }
 
-  public collide(target: GameObject): void {
+  protected setup({ audioLoader, spriteLoader }: GameObjectUpdateArgs): void {
+    this.aliveSprite = spriteLoader.load('base.heart.alive');
+    this.deadSprite = spriteLoader.load('base.heart.dead');
+
+    this.explosionSound = audioLoader.load('explosion.player');
+
+    this.renderer.sprite = this.aliveSprite;
+  }
+
+  protected collide(target: GameObject): void {
     // If dead, don't collide with bullets, but they can still pass through
     if (this.isDead) {
       return;

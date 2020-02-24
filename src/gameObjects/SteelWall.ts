@@ -1,15 +1,15 @@
+import { GameObject, GameObjectUpdateArgs, SpriteRenderer } from '../core';
 import { Tag } from '../Tag';
-
-import { GameObject, Sprite, SpriteRenderer } from '../core';
-import { SpriteFactory } from '../sprite/SpriteFactory';
 
 export class SteelWall extends GameObject {
   public tags = [Tag.Wall, Tag.Steel, Tag.BlockMove];
-  private readonly sprites: Sprite[];
+  public readonly renderer = new SpriteRenderer();
 
   constructor() {
     super(32, 32);
+  }
 
-    this.renderer = new SpriteRenderer(SpriteFactory.asOne('wall.steel'));
+  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+    this.renderer.sprite = spriteLoader.load('wall.steel');
   }
 }

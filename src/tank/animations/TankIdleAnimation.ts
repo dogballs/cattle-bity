@@ -1,15 +1,13 @@
-import { Animation, Rotation, Rect, Sprite } from '../../core';
+import { Animation, Rotation, Rect, Sprite, SpriteLoader } from '../../core';
 
 import { TankColor } from '../TankColor';
-import { TankParty } from '../TankParty';
-import { TankTier } from '../TankTier';
+import { TankType } from '../TankType';
 import { TankSpriteFactory } from '../TankSpriteFactory';
 
 export class TankIdleAnimation extends Animation<Sprite> {
   constructor(
-    party: TankParty,
-    color: TankColor,
-    tier: TankTier,
+    spriteLoader: SpriteLoader,
+    type: TankType,
     targetRect: Rect,
     rotation: Rotation,
     hasDrop = false,
@@ -18,9 +16,8 @@ export class TankIdleAnimation extends Animation<Sprite> {
 
     const frames = [
       TankSpriteFactory.create(
-        party,
-        color,
-        tier,
+        spriteLoader,
+        type,
         targetRect,
         rotation,
         frameNumber,
@@ -28,12 +25,11 @@ export class TankIdleAnimation extends Animation<Sprite> {
     ];
 
     if (hasDrop) {
-      const dropColor = TankColor.Danger;
+      const dropType = type.clone().setColor(TankColor.Danger);
       frames.push(
         TankSpriteFactory.create(
-          party,
-          dropColor,
-          tier,
+          spriteLoader,
+          dropType,
           targetRect,
           rotation,
           frameNumber,

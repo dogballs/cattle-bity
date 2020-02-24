@@ -2,5 +2,9 @@ import { GameObjectUpdateArgs } from '../../core';
 import { Tank } from '../../gameObjects';
 
 export abstract class TankBehavior {
-  abstract update(tank: Tank, updateArgs?: GameObjectUpdateArgs): void;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public setup(tank: Tank, updateArgs?: GameObjectUpdateArgs): void {
+    // Virtual
+  }
+  public abstract update(tank: Tank, updateArgs?: GameObjectUpdateArgs): void;
 }

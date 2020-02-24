@@ -1,13 +1,12 @@
 import {
   Animation,
-  AudioSource,
   GameObject,
+  GameObjectUpdateArgs,
+  Sound,
   Sprite,
   SpriteRenderer,
   Subject,
 } from '../core';
-import { AudioManager } from '../audio/AudioManager';
-import { SpriteFactory } from '../sprite/SpriteFactory';
 import { Tag } from '../Tag';
 import { PowerupAction } from '../powerups';
 
@@ -22,7 +21,9 @@ export class Powerup extends GameObject {
   // Action to perform when picked up
   public readonly action: PowerupAction;
 
-  public readonly pickupSound: AudioSource;
+  private spriteId: string;
+  private pickupSoundId: string;
+  private pickupSound: Sound;
 
   public renderer = new SpriteRenderer();
   private animation: Animation<Sprite>;
@@ -31,24 +32,27 @@ export class Powerup extends GameObject {
     super(64, 64);
 
     this.action = action;
+    this.spriteId = spriteId;
+    this.pickupSoundId = pickupSoundId;
+  }
 
-    // TODO: should resource be loaded in constructor?
-    this.pickupSound = AudioManager.load(pickupSoundId);
+  protected setup({ audioLoader, spriteLoader }: GameObjectUpdateArgs): void {
+    this.pickupSound = audioLoader.load(this.pickupSoundId);
 
     // Null as a second frame adds a blink effect
-    const frames = [SpriteFactory.asOne(spriteId), null];
+    const frames = [spriteLoader.load(this.spriteId), null];
     this.animation = new Animation(frames, {
       delay: 7,
       loop: true,
     });
   }
 
-  public update(): void {
+  protected update(): void {
     this.animation.animate();
     this.renderer.sprite = this.animation.getCurrentFrame();
   }
 
-  public collide(target: GameObject): void {
+  protected collide(target: GameObject): void {
     if (target.tags.includes(Tag.Player)) {
       this.removeSelf();
       this.picked.notify();

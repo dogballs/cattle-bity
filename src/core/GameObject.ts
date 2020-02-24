@@ -7,16 +7,21 @@ import { Size } from './Size';
 import { State } from './State';
 import { Vector } from './Vector';
 
+import { AudioLoader, SpriteLoader, TextureLoader } from './loaders';
 import { Renderer } from './renderers';
 
 export interface GameObjectUpdateArgs {
   input?: KeyboardInput;
   gameState?: State<GameState>;
+  audioLoader?: AudioLoader;
+  spriteLoader?: SpriteLoader;
+  textureLoader?: TextureLoader;
 }
 
 export class GameObject extends Node {
   public collider = false;
   public ignorePause = false;
+  public needsSetup = true;
   public visible = true;
   public size: Size;
   public renderer: Renderer = null;
@@ -148,17 +153,40 @@ export class GameObject extends Node {
     return has;
   }
 
+  public invokeUpdate(args: GameObjectUpdateArgs): void {
+    if (this.needsSetup === true) {
+      this.needsSetup = false;
+      this.setup(args);
+    }
+
+    this.update(args);
+  }
+
+  public invokeCollide(target: GameObject): void {
+    // Can't collide if not setup yet
+    if (this.needsSetup === true) {
+      return;
+    }
+
+    this.collide(target);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected setup(args: GameObjectUpdateArgs): void {
+    return undefined;
+  }
+
   /**
    * Will be called on each game loop iteration
    * @param {GameObjectUpdateArgs}
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public update(args: GameObjectUpdateArgs): void {
+  protected update(args: GameObjectUpdateArgs): void {
     return undefined;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public collide(target: GameObject): void {
+  protected collide(target: GameObject): void {
     return undefined;
   }
 }
