@@ -4,27 +4,29 @@ import {
   Sprite,
   SpriteRenderer,
 } from '../core';
+import { TerrainType } from '../terrain';
 import { Tag } from '../Tag';
 
 export class BrickWall extends GameObject {
   public readonly tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
   public readonly renderer = new SpriteRenderer();
-  private isMenu = false;
+  private readonly type;
   private sprites: Sprite[];
 
-  constructor(isMenu = false) {
+  constructor(type: TerrainType = TerrainType.Brick) {
     super(16, 16);
 
-    this.isMenu = isMenu;
+    this.type = type;
   }
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     let spriteIds = ['wall.brick.1', 'wall.brick.2'];
-    if (this.isMenu) {
+    if (this.type === TerrainType.MenuBrick) {
       spriteIds = ['menu.brick.1', 'menu.brick.2'];
     }
 
     this.sprites = spriteLoader.loadList(spriteIds);
+    this.renderer.sprite = this.getSpriteByPosition();
   }
 
   protected update(): void {

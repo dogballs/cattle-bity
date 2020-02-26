@@ -66,6 +66,13 @@ export class Vector {
     return this;
   }
 
+  public mult(v: Vector): this {
+    this.x *= v.x;
+    this.y *= v.y;
+
+    return this;
+  }
+
   public multScalar(s: number): this {
     this.x *= s;
     this.y *= s;

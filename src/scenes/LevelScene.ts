@@ -7,45 +7,40 @@ import {
   KeyboardKey,
   Rect,
 } from '../core';
-import { Base, Border, EnemyCounter, PauseNotice } from '../gameObjects';
-import { DebugGrid } from '../debug';
+import { Border, LevelInfo, Field, PauseNotice } from '../gameObjects';
 import { MapConfig, MapConfigSchema } from '../map';
 import { TerrainFactory } from '../terrain';
 import { ConfigParser } from '../ConfigParser';
 import { Spawner } from '../Spawner';
 import * as config from '../config';
 
-import * as mapJSON from '../../data/maps/stage1.json';
+import * as mapJSON from '../../data/maps/original/01.json';
 
 export class LevelScene extends GameObject {
   private audioLoader: AudioLoader;
-  private field: GameObject;
-  private base: Base;
+  private info = new LevelInfo();
+  private field = new Field();
+  private pauseNotice = new PauseNotice();
   private spawner: Spawner;
-  private enemyCounter: EnemyCounter;
-  private pauseNotice: PauseNotice;
 
   protected setup({ audioLoader }: GameObjectUpdateArgs): void {
     this.audioLoader = audioLoader;
 
-    const mapConfig = ConfigParser.parse<MapConfig>(mapJSON, MapConfigSchema);
-
     this.add(new Border());
 
-    this.field = this.createField();
     this.add(this.field);
-
-    this.base = this.createBase();
-    this.field.add(this.base);
-
-    this.spawner = new Spawner(
-      mapConfig,
-      this.field,
-      this.base,
-      this.audioLoader,
+    this.field.position.set(
+      config.BORDER_LEFT_WIDTH,
+      config.BORDER_TOP_BOTTOM_HEIGHT,
     );
-    this.spawner.enemySpawned.addListener(this.handleEnemySpawned);
 
+    this.info.position.set(
+      config.BORDER_LEFT_WIDTH + config.FIELD_SIZE + 32,
+      config.BORDER_TOP_BOTTOM_HEIGHT + 32,
+    );
+    this.add(this.info);
+
+    const mapConfig = ConfigParser.parse<MapConfig>(mapJSON, MapConfigSchema);
     const terrainTiles = [];
     mapConfig.terrain.regions.forEach((region) => {
       const regionRect = new Rect(
@@ -59,11 +54,20 @@ export class LevelScene extends GameObject {
     });
     this.field.add(...terrainTiles);
 
-    this.enemyCounter = this.createEnemyCounter();
-    this.enemyCounter.updateCount(this.spawner.getUnspawnedEnemiesCount());
-    this.add(this.enemyCounter);
+    this.spawner = new Spawner(
+      mapConfig,
+      this.field,
+      this.field.base,
+      this.audioLoader,
+    );
+    this.spawner.enemySpawned.addListener(this.handleEnemySpawned);
 
-    this.pauseNotice = this.createPauseNotice(this.field);
+    this.info.setEnemyCount(this.spawner.getUnspawnedEnemiesCount());
+
+    this.pauseNotice.setCenter(this.field.getChildrenCenter());
+    this.pauseNotice.position.y += 18;
+
+    this.field.base.died.addListener(this.handleBaseDied);
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
@@ -122,52 +126,6 @@ export class LevelScene extends GameObject {
   };
 
   private handleEnemySpawned = (): void => {
-    this.enemyCounter.updateCount(this.spawner.getUnspawnedEnemiesCount());
+    this.info.setEnemyCount(this.spawner.getUnspawnedEnemiesCount());
   };
-
-  private createField(): GameObject {
-    const field = new GameObject(config.FIELD_SIZE, config.FIELD_SIZE);
-    field.position.set(
-      config.BORDER_LEFT_WIDTH,
-      config.BORDER_TOP_BOTTOM_HEIGHT,
-    );
-    return field;
-  }
-
-  private createBase(): Base {
-    const base = new Base();
-    base.position.set(352, 736);
-    base.died.addListener(this.handleBaseDied);
-    return base;
-  }
-
-  private createEnemyCounter(): EnemyCounter {
-    const enemyCounter = new EnemyCounter();
-    enemyCounter.position.set(
-      config.BORDER_LEFT_WIDTH + config.FIELD_SIZE + 32,
-      config.BORDER_TOP_BOTTOM_HEIGHT + 32,
-    );
-    return enemyCounter;
-  }
-
-  private createPauseNotice(field: GameObject): PauseNotice {
-    const pauseNotice = new PauseNotice();
-    pauseNotice.setCenter(field.getChildrenCenter());
-    pauseNotice.position.y += 18;
-    return pauseNotice;
-  }
-
-  private createDebugGrid(): DebugGrid {
-    const debugGrid = new DebugGrid(
-      config.FIELD_SIZE,
-      config.FIELD_SIZE,
-      config.TILE_SIZE_SMALL,
-      'rgba(255,255,255,0.3)',
-    );
-    debugGrid.position.set(
-      config.BORDER_LEFT_WIDTH,
-      config.BORDER_TOP_BOTTOM_HEIGHT,
-    );
-    return debugGrid;
-  }
 }

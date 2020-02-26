@@ -35,9 +35,30 @@ export class SpriteFontLoader {
     return font;
   }
 
+  public async loadAsync(id: string): Promise<SpriteFont> {
+    return new Promise((resolve) => {
+      const font = this.load(id);
+      if (font.texture.isLoaded()) {
+        resolve(font);
+      } else {
+        font.texture.loaded.addListenerOnce(() => {
+          resolve(font);
+        });
+      }
+    });
+  }
+
   public preloadAll(): void {
     this.registered.forEach((config, id) => {
       this.load(id);
     });
+  }
+
+  public async preloadAllAsync(): Promise<void> {
+    await Promise.all(
+      Array.from(this.registered).map(([id]) => {
+        return this.loadAsync(id);
+      }),
+    );
   }
 }

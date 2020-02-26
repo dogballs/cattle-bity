@@ -1,8 +1,16 @@
+import { Subject } from './Subject';
+
 export class Sound {
+  public readonly loaded = new Subject();
   public readonly audioElement: HTMLAudioElement;
 
   constructor(audioElement: HTMLAudioElement) {
     this.audioElement = audioElement;
+    this.audioElement.addEventListener('loadeddata', this.handleLoaded);
+  }
+
+  public isLoaded(): boolean {
+    return this.audioElement.readyState === 4;
   }
 
   public play(): void {
@@ -38,4 +46,9 @@ export class Sound {
       this.audioElement.currentTime > 0
     );
   }
+
+  private handleLoaded = (): void => {
+    this.loaded.notify();
+    this.audioElement.removeEventListener('loadeddata', this.handleLoaded);
+  };
 }

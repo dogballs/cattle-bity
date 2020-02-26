@@ -1,6 +1,8 @@
+import { Size } from '../Size';
 import { Vector } from '../Vector';
 
 import { Font } from './Font';
+import { NullFont } from './NullFont';
 
 // TODO: scale might belong to font
 
@@ -30,14 +32,35 @@ export class Text<T> {
   public static LINE_SEPARATOR = TEXT_LINE_SEPARATOR;
   public static WORD_SEPARATOR = TEXT_WORD_SEPARATOR;
 
-  public text = '';
-  public readonly font: Font<T>;
-  public readonly options: TextOptions;
+  private text = '';
+  private font: Font<T> = new NullFont();
+  private options: TextOptions;
 
-  constructor(text = '', font: Font<T>, options: TextOptions = {}) {
+  constructor(text = '', options: TextOptions = {}) {
     this.text = text;
-    this.font = font;
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
+  }
+
+  public setText(text: string): this {
+    this.text = text;
+
+    return this;
+  }
+
+  public setFont(font: Font<T>): this {
+    this.font = font;
+
+    return this;
+  }
+
+  public setOptions(options: TextOptions = {}): this {
+    this.options = Object.assign({}, this.options, options);
+
+    return this;
+  }
+
+  public getFont(): Font<T> {
+    return this.font;
   }
 
   public build(): T[] {
@@ -68,6 +91,11 @@ export class Text<T> {
     const linesHeight = charactersHeight + spacingHeight;
 
     return linesHeight;
+  }
+
+  public getSize(): Size {
+    const size = new Size(this.getWidth(), this.getHeight());
+    return size;
   }
 
   private buildLinesFromText(text: string, textOffset = new Vector(0, 0)): T[] {

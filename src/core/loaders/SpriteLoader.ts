@@ -35,6 +35,19 @@ export class SpriteLoader {
     return sprite;
   }
 
+  public async loadAsync(id: string, targetRect = new Rect()): Promise<Sprite> {
+    return new Promise((resolve) => {
+      const sprite = this.load(id, targetRect);
+      if (sprite.texture.isLoaded()) {
+        resolve(sprite);
+      } else {
+        sprite.texture.loaded.addListenerOnce(() => {
+          resolve(sprite);
+        });
+      }
+    });
+  }
+
   public loadList(ids: string[]): Sprite[] {
     const sprites = ids.map((id) => {
       const sprite = this.load(id);
@@ -49,5 +62,13 @@ export class SpriteLoader {
     Object.keys(this.manifest).forEach((id) => {
       this.load(id);
     });
+  }
+
+  public async preloadAllAsync(): Promise<void> {
+    await Promise.all(
+      Object.keys(this.manifest).map((id) => {
+        return this.loadAsync(id);
+      }),
+    );
   }
 }

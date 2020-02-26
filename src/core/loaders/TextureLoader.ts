@@ -4,9 +4,9 @@ import { Texture } from '../Texture';
 import { PathUtils } from '../utils';
 
 export class TextureLoader {
-  private cache: Map<string, Texture> = new Map();
+  private loaded: Map<string, Texture> = new Map();
   private basePath = '';
-  protected log = new Logger(TextureLoader.name, Logger.Level.Debug);
+  protected log = new Logger(TextureLoader.name, Logger.Level.None);
 
   constructor(basePath = '') {
     this.basePath = basePath;
@@ -18,21 +18,35 @@ export class TextureLoader {
       fullPath = PathUtils.join(this.basePath, path);
     }
 
-    if (this.cache.has(fullPath)) {
-      return this.cache.get(fullPath);
+    if (this.loaded.has(fullPath)) {
+      return this.loaded.get(fullPath);
     }
 
-    const texture = new Texture();
-
     const image = new Image();
-    image.addEventListener('load', () => {
+
+    const texture = new Texture(image);
+
+    texture.loaded.addListenerOnce(() => {
       this.log.debug('Loaded "%s"', fullPath);
-      texture.imageElement = image;
     });
+
     image.src = fullPath;
 
-    this.cache.set(fullPath, texture);
+    this.loaded.set(fullPath, texture);
 
     return texture;
+  }
+
+  public async loadAsync(path: string, isAbsolute = false): Promise<Texture> {
+    return new Promise((resolve) => {
+      const texture = this.load(path, isAbsolute);
+      if (texture.isLoaded()) {
+        resolve(texture);
+      } else {
+        texture.loaded.addListenerOnce(() => {
+          resolve(texture);
+        });
+      }
+    });
   }
 }

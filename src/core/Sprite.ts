@@ -11,7 +11,7 @@ export class Sprite {
   public targetRect: Rect;
 
   constructor(
-    texture: Texture = new Texture(),
+    texture: Texture,
     sourceRect: Rect = new Rect(),
     targetRect: Rect = new Rect(),
   ) {
@@ -20,7 +20,7 @@ export class Sprite {
     this.targetRect = targetRect;
   }
 
-  public isTextureReady(): boolean {
-    return this.texture.imageElement !== null;
+  public isTextureLoaded(): boolean {
+    return this.texture.isLoaded();
   }
 }

@@ -21,8 +21,8 @@ export class SpriteRenderer extends Renderer {
       return;
     }
 
-    // Image element for sprite is not available
-    if (!this.sprite.isTextureReady()) {
+    // Texture is not yet available
+    if (!this.sprite.isTextureLoaded()) {
       return;
     }
 

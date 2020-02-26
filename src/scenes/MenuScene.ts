@@ -4,7 +4,7 @@ import {
   KeyboardKey,
   RectRenderer,
 } from '../core';
-import { Menu, Title } from '../gameObjects';
+import { Menu, MenuHeading } from '../gameObjects';
 import * as config from '../config';
 
 const SLIDE_SPEED = 4;
@@ -15,22 +15,22 @@ enum State {
 }
 
 export class MenuScene extends GameObject {
-  private group: GameObject;
-  private menu: Menu;
-  private state: State = State.Ready;
+  private heading = new MenuHeading();
+  private group = new GameObject();
+  private menu = new Menu();
+  private state: State = State.Sliding;
 
-  public setup(): void {
+  protected setup(): void {
     this.renderer = new RectRenderer(config.BACKGROUND_COLOR);
 
-    this.group = new GameObject(this.size.width, this.size.height);
-    // this.group.position.setY(this.size.height);
+    this.group.size.copy(this.size);
+    this.group.position.setY(this.size.height);
+    this.group.add(this.heading);
 
-    const title = new Title();
-    title.setCenter(this.getChildrenCenter());
-    title.position.setY(160);
-    this.group.add(title);
+    this.heading.pivot.setX(0.5);
+    this.heading.setCenter(this.getChildrenCenter());
+    this.heading.position.setY(160);
 
-    this.menu = new Menu();
     this.menu.setCenter(this.getChildrenCenter());
     this.menu.position.setY(512);
     this.menu.selected.addListener(this.handleMenuSelected);
@@ -39,7 +39,7 @@ export class MenuScene extends GameObject {
     this.add(this.group);
   }
 
-  public update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameObjectUpdateArgs): void {
     const { input } = updateArgs;
 
     if (this.state === State.Sliding) {

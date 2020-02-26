@@ -14,13 +14,21 @@ export class Base extends GameObject {
   public readonly died = new Subject();
   private readonly heart = new BaseHeart();
   private readonly defenceTimer = new Timer();
-  private readonly fadeAnimation: Animation<TerrainType>;
+  private fadeAnimation: Animation<TerrainType>;
   private isFading = false;
   private lastFadeWallType: TerrainType = TerrainType.Steel;
 
   constructor() {
     super(128, 96);
+  }
 
+  public activateDefence(duration: number): void {
+    this.resetFading();
+    this.setWalls(TerrainType.Steel);
+    this.defenceTimer.reset(duration);
+  }
+
+  protected setup(): void {
     this.heart.position.set(32, 32);
     this.heart.died.addListener(this.died.notify);
     this.add(this.heart);
@@ -33,12 +41,6 @@ export class Base extends GameObject {
     });
 
     this.defenceTimer.done.addListener(this.handleDefenceTimer);
-  }
-
-  public activateDefence(duration: number): void {
-    this.resetFading();
-    this.setWalls(TerrainType.Steel);
-    this.defenceTimer.reset(duration);
   }
 
   protected update(): void {

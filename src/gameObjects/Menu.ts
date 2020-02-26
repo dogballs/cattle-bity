@@ -1,21 +1,19 @@
 import {
-  Alignment,
   GameObject,
   GameObjectUpdateArgs,
   KeyboardKey,
-  SpriteTextRenderer,
   Subject,
-  Text,
 } from '../core';
 
 import { MenuSelector } from './MenuSelector';
+import { SpriteTextNode } from './SpriteTextNode';
 
 const MENU_ITEMS = ['1 PLAYER', '2 PLAYERS', 'CONSTRUCTION'];
 const MENU_ITEM_HEIGHT = 60;
 
 export class Menu extends GameObject {
   public selected = new Subject<number>();
-  private selector: MenuSelector;
+  private selector = new MenuSelector(MENU_ITEM_HEIGHT);
   private selectedIndex = 0;
 
   constructor() {
@@ -26,24 +24,16 @@ export class Menu extends GameObject {
     this.selector.visible = true;
   }
 
-  protected setup({ spriteFontLoader }: GameObjectUpdateArgs): void {
-    const font = spriteFontLoader.load('primary');
-
+  protected setup(): void {
     MENU_ITEMS.forEach((menuItemText, index) => {
-      const text = new Text(menuItemText, font, {
+      const menuItem = new SpriteTextNode('primary', menuItemText, {
         scale: 4,
       });
-      const textRenderer = new SpriteTextRenderer(text);
-      textRenderer.alignment = Alignment.MiddleLeft;
-
-      const menuItem = new GameObject(text.getWidth(), MENU_ITEM_HEIGHT);
-      menuItem.renderer = textRenderer;
-      menuItem.position.set(96, index * MENU_ITEM_HEIGHT);
+      menuItem.position.set(96, index * MENU_ITEM_HEIGHT + 16);
 
       this.add(menuItem);
     });
 
-    this.selector = new MenuSelector(MENU_ITEM_HEIGHT);
     this.selector.visible = false;
     this.add(this.selector);
   }

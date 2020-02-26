@@ -9,9 +9,7 @@ import {
 import { BorderWall } from './BorderWall';
 
 export class Border extends GameObject {
-  constructor() {
-    super();
-
+  protected setup(): void {
     const topBorder = new BorderWall(
       BORDER_LEFT_WIDTH + FIELD_SIZE + BORDER_RIGHT_WIDTH,
       BORDER_TOP_BOTTOM_HEIGHT,

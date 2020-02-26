@@ -11,7 +11,9 @@ export class RectFontLoader {
   public load(id: string): RectFont {
     const config = this.registered.get(id);
     if (config === undefined) {
-      throw new Error(`Rect font "${id} not registered`);
+      const error = new Error(`Rect font "${id} not registered`);
+
+      throw error;
     }
 
     if (this.loaded.has(id)) {

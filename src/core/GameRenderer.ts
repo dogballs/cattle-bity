@@ -42,13 +42,7 @@ export class GameRenderer {
   }
 
   protected renderGameObject(gameObject: GameObject): void {
-    // Even if current object does not have renderer, we should still render
-    // children
-    if (gameObject.renderer !== null) {
-      if (gameObject.renderer.visible === false) {
-        return;
-      }
-
+    if (gameObject.renderer !== null && gameObject.visible) {
       gameObject.renderer.render(this.domElement, gameObject);
     }
 
@@ -56,9 +50,11 @@ export class GameRenderer {
       this.renderGameObjectDebugFrame(gameObject);
     }
 
-    gameObject.children.forEach((child) => {
-      this.renderGameObject(child);
-    });
+    if (gameObject.visible === true) {
+      gameObject.children.forEach((child) => {
+        this.renderGameObject(child);
+      });
+    }
   }
 
   // TODO: debug should not be a part of game renderer

@@ -1,10 +1,11 @@
 import test from 'ava';
 
 import { Animation } from './Animation';
-import { Sprite } from './Sprite';
+
+class Mock {}
 
 test('default', (t) => {
-  const frames = [new Sprite(), new Sprite(), new Sprite()];
+  const frames = [new Mock(), new Mock(), new Mock()];
   const animation = new Animation(frames);
 
   animation.animate();
@@ -29,7 +30,7 @@ test('default', (t) => {
 });
 
 test('infinite loop', (t) => {
-  const frames = [new Sprite(), new Sprite()];
+  const frames = [new Mock(), new Mock()];
   const animation = new Animation(frames, { loop: true });
 
   animation.animate();
@@ -59,7 +60,7 @@ test('infinite loop', (t) => {
 });
 
 test('finite loop', (t) => {
-  const frames = [new Sprite(), new Sprite()];
+  const frames = [new Mock(), new Mock()];
   const animation = new Animation(frames, { loop: 2 });
 
   animation.animate();
@@ -89,7 +90,7 @@ test('finite loop', (t) => {
 });
 
 test('delay', (t) => {
-  const frames = [new Sprite(), new Sprite()];
+  const frames = [new Mock(), new Mock()];
   const animation = new Animation(frames, { delay: 2 });
 
   animation.animate();
@@ -129,7 +130,7 @@ test('delay', (t) => {
 });
 
 test('infinite loop delay', (t) => {
-  const frames = [new Sprite(), new Sprite()];
+  const frames = [new Mock(), new Mock()];
   const animation = new Animation(frames, { delay: 1, loop: true });
 
   animation.animate();
@@ -159,7 +160,7 @@ test('infinite loop delay', (t) => {
 });
 
 test('finite loop delay', (t) => {
-  const frames = [new Sprite(), new Sprite()];
+  const frames = [new Mock(), new Mock()];
   const animation = new Animation(frames, { delay: 1, loop: 2 });
 
   animation.animate();

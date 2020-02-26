@@ -38,7 +38,7 @@ export class Node {
     return this;
   }
 
-  public remove(childToRemove: this): this {
+  public remove(childToRemove: Node): this {
     this.children = this.children.filter((child) => child !== childToRemove);
 
     return this;

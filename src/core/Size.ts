@@ -16,6 +16,25 @@ export class Size {
     return this;
   }
 
+  public setWidth(width: number): this {
+    this.width = width;
+
+    return this;
+  }
+
+  public setHeight(height: number): this {
+    this.height = height;
+
+    return this;
+  }
+
+  public copy(size: Size): this {
+    this.width = size.width;
+    this.height = size.height;
+
+    return this;
+  }
+
   public flip(): this {
     const tmp = this.width;
     this.width = this.height;

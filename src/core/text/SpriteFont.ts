@@ -16,13 +16,11 @@ export interface SpriteFontConfig {
   verticalSpacing: number;
 }
 
-export class SpriteFont extends Font<Sprite> {
+export class SpriteFont implements Font<Sprite> {
   public readonly config: SpriteFontConfig;
   public readonly texture: Texture;
 
   constructor(config: SpriteFontConfig, texture: Texture) {
-    super();
-
     this.config = config;
     this.texture = texture;
   }

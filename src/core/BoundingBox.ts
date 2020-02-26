@@ -1,4 +1,5 @@
 import { Rect } from './Rect';
+import { Size } from './Size';
 import { Vector } from './Vector';
 
 export class BoundingBox {
@@ -21,6 +22,14 @@ export class BoundingBox {
       .clone()
       .add(this.max)
       .divideScalar(2);
+  }
+
+  public getSize(): Size {
+    const width = this.max.x - this.min.x;
+    const height = this.max.y - this.min.y;
+    const size = new Size(width, height);
+
+    return size;
   }
 
   public toRect(): Rect {

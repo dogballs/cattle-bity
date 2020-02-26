@@ -12,12 +12,10 @@ export interface RectFontConfig {
   characters: string[][];
 }
 
-export class RectFont extends Font<Rect[]> {
+export class RectFont implements Font<Rect[]> {
   public readonly config: RectFontConfig;
 
   constructor(config: RectFontConfig) {
-    super();
-
     this.config = config;
   }
 

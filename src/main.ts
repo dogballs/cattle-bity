@@ -5,6 +5,7 @@ import {
   GameRenderer,
   GameState,
   KeyboardInput,
+  Logger,
   State,
   Vector,
   AudioLoader,
@@ -17,12 +18,19 @@ import {
 import * as config from './config';
 
 import { DebugInspector } from './debug';
-import { LevelScene } from './scenes';
+import {
+  LevelScene,
+  // GameOverScene,
+  // MenuScene,
+  // StageSelectionScene,
+} from './scenes';
 
 import * as audioManifest from '../data/audio/audio.manifest.json';
 import * as spriteManifest from '../data/graphics/sprite.manifest.json';
 import * as spriteFontConfig from '../data/fonts/sprite-font.json';
 import * as rectFontConfig from '../data/fonts/rect-font.json';
+
+const log = new Logger('main', Logger.Level.Debug);
 
 const gameRenderer = new GameRenderer({
   // debug: true,
@@ -49,7 +57,7 @@ rectFontLoader.register('primary', rectFontConfig);
 
 const currentScene = new LevelScene();
 // const currentScene = new MenuScene(config.CANVAS_WIDTH, config.CANVAS_HEIGHT);
-// const currentScene: Scene = new StageSelectionScene(
+// const currentScene = new StageSelectionScene(
 //   config.CANVAS_WIDTH,
 //   config.CANVAS_HEIGHT,
 // );
@@ -70,15 +78,7 @@ debugInspector.click.addListener((position: Vector) => {
   console.log(intersections);
 });
 
-// TODO: make async, preload everything, and then start the game
-audioLoader.preloadAll();
-rectFontLoader.preloadAll();
-spriteFontLoader.preloadAll();
-spriteLoader.preloadAll();
-
 const gameState = new State<GameState>(GameState.Playing);
-
-// currentScene.setup();
 
 const updateArgs: GameObjectUpdateArgs = {
   gameState,
@@ -90,19 +90,39 @@ const updateArgs: GameObjectUpdateArgs = {
   textureLoader,
 };
 
-const gameLoop = new GameLoop({
-  onTick: (): void => {
-    input.update();
+const gameLoop = new GameLoop();
+gameLoop.tick.addListener(() => {
+  input.update();
 
-    currentScene.invokeUpdate(updateArgs);
+  currentScene.invokeUpdate(updateArgs);
 
-    gameRenderer.render(currentScene);
+  gameRenderer.render(currentScene);
 
-    gameState.tick();
-  },
+  gameState.tick();
 });
 
-gameLoop.start();
+async function main(): Promise<void> {
+  log.time('Audio preload');
+  await audioLoader.preloadAllAsync();
+  log.timeEnd('Audio preload');
+
+  log.time('Rect font preload');
+  await rectFontLoader.preloadAll();
+  log.timeEnd('Rect font preload');
+
+  log.time('Sprite font preload');
+  await spriteFontLoader.preloadAllAsync();
+  log.timeEnd('Sprite font preload');
+
+  log.time('Sprites preload');
+  await spriteLoader.preloadAllAsync();
+  log.timeEnd('Sprites preload');
+
+  gameLoop.start();
+  // gameLoop.next();
+}
+
+main();
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore

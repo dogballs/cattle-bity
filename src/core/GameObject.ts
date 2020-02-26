@@ -29,13 +29,19 @@ export interface GameObjectUpdateArgs {
 export class GameObject extends Node {
   public collider = false;
   public ignorePause = false;
-  public needsSetup = true;
   public visible = true;
   public size: Size;
   public renderer: Renderer = null;
-  public position: Vector = new Vector();
+  // TODO: move pivot, position and rotation to transform object and
+  // base it on scene graph
+  public pivot = new Vector(0, 0);
+  public position = new Vector(0, 0);
+  // TODO: use rotation in scalar
   public rotation: Rotation = Rotation.Up;
+
   public tags: string[] = [];
+
+  private needsSetup = true;
 
   constructor(width = 0, height = 0) {
     super();
@@ -68,16 +74,27 @@ export class GameObject extends Node {
 
   public getWorldBoundingBox(): BoundingBox {
     const worldPosition = this.getWorldPosition();
-    const { width, height } = this.getComputedSize();
+    const size = this.getComputedSize();
+
+    const worldPivotOffset = this.getPivotOffset();
+    this.traverseAncestors((parent) => {
+      worldPivotOffset.add(parent.getPivotOffset());
+    });
 
     // Top-left point of the object
-    // const min = worldPosition.clone().add(centerOffset);
-    const min = worldPosition.clone();
+    const min = worldPosition.clone().sub(worldPivotOffset);
 
     // Bottom-right point of the object
-    const max = min.clone().add(new Vector(width, height));
+    const max = min.clone().add(size.toVector());
 
     return new BoundingBox(min, max);
+  }
+
+  public getPivotOffset(): Vector {
+    const size = this.getComputedSize();
+    const offset = this.pivot.clone().mult(size.toVector());
+
+    return offset;
   }
 
   public getWorldPosition(): Vector {
@@ -159,6 +176,15 @@ export class GameObject extends Node {
     });
 
     return has;
+  }
+
+  public invokeSetup(args: GameObjectUpdateArgs): void {
+    if (this.needsSetup === false) {
+      return;
+    }
+
+    this.needsSetup = false;
+    this.setup(args);
   }
 
   public invokeUpdate(args: GameObjectUpdateArgs): void {
