@@ -1,9 +1,5 @@
-import {
-  GameObject,
-  GameObjectUpdateArgs,
-  KeyboardKey,
-  Subject,
-} from '../core';
+import { GameObject, GameObjectUpdateArgs, Subject } from '../core';
+import { InputControl } from '../input';
 
 import { MenuSelector } from './MenuSelector';
 import { SpriteTextNode } from './SpriteTextNode';
@@ -41,15 +37,12 @@ export class Menu extends GameObject {
   protected update(updateArgs: GameObjectUpdateArgs): void {
     const { input } = updateArgs;
 
-    if (input.isDown(KeyboardKey.S)) {
+    if (input.isDown(InputControl.Select)) {
       this.selectNext();
-      this.updateSelector();
-    } else if (input.isDown(KeyboardKey.W)) {
-      this.selectPrev();
       this.updateSelector();
     }
 
-    if (input.isDown(KeyboardKey.Space)) {
+    if (input.isDown(InputControl.Start)) {
       this.selected.notify(this.selectedIndex);
     }
   }

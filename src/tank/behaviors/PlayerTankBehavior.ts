@@ -1,7 +1,22 @@
-import { GameObjectUpdateArgs, KeyboardKey, Rotation, Sound } from '../../core';
+import { GameObjectUpdateArgs, Rotation, Sound } from '../../core';
 import { Tank, TankState } from '../../gameObjects';
+import { InputControl } from '../../input';
 
 import { TankBehavior } from './TankBehavior';
+
+const MOVE_CONTROLS = [
+  InputControl.Up,
+  InputControl.Down,
+  InputControl.Left,
+  InputControl.Right,
+];
+
+const FIRE_CONTROLS = [
+  InputControl.A,
+  InputControl.B,
+  InputControl.TurboA,
+  InputControl.TurboB,
+];
 
 export class PlayerTankBehavior extends TankBehavior {
   private fireSound: Sound;
@@ -15,27 +30,20 @@ export class PlayerTankBehavior extends TankBehavior {
   }
 
   public update(tank: Tank, { input }: GameObjectUpdateArgs): void {
-    if (input.isHoldLast(KeyboardKey.W)) {
+    if (input.isHoldLast(InputControl.Up)) {
       tank.rotate(Rotation.Up);
     }
-    if (input.isHoldLast(KeyboardKey.S)) {
+    if (input.isHoldLast(InputControl.Down)) {
       tank.rotate(Rotation.Down);
     }
-    if (input.isHoldLast(KeyboardKey.A)) {
+    if (input.isHoldLast(InputControl.Left)) {
       tank.rotate(Rotation.Left);
     }
-    if (input.isHoldLast(KeyboardKey.D)) {
+    if (input.isHoldLast(InputControl.Right)) {
       tank.rotate(Rotation.Right);
     }
 
-    const moveKeys = [
-      KeyboardKey.W,
-      KeyboardKey.A,
-      KeyboardKey.S,
-      KeyboardKey.D,
-    ];
-
-    if (input.isHoldAny(moveKeys)) {
+    if (input.isHoldAny(MOVE_CONTROLS)) {
       if (tank.state !== TankState.Moving) {
         this.idleSound.stop();
         this.moveSound.playLoop();
@@ -43,13 +51,13 @@ export class PlayerTankBehavior extends TankBehavior {
       tank.move();
     }
 
-    if (input.isNotHoldAll(moveKeys) && tank.state !== TankState.Idle) {
+    if (input.isNotHoldAll(MOVE_CONTROLS) && tank.state !== TankState.Idle) {
       tank.idle();
       this.moveSound.stop();
       this.idleSound.playLoop();
     }
 
-    if (input.isDown(KeyboardKey.Space)) {
+    if (input.isDownAny(FIRE_CONTROLS)) {
       const hasFired = tank.fire();
       if (hasFired) {
         this.fireSound.play();

@@ -1,5 +1,12 @@
-import { GameLoop, GameObject, GameRenderer, KeyboardInput } from './core';
+import {
+  GameLoop,
+  GameObject,
+  GameRenderer,
+  Input,
+  KeyboardInputDevice,
+} from './core';
 import { Border, EditorBrush, EditorBrushType } from './gameObjects';
+import { KeyboardInputMap } from './input';
 import { MapConfig } from './map';
 import { TerrainType } from './terrain';
 import * as config from './config';
@@ -11,8 +18,12 @@ const gameRenderer = new GameRenderer({
 });
 document.body.appendChild(gameRenderer.domElement);
 
-const input = new KeyboardInput();
-input.listen();
+const inputDevice = new KeyboardInputDevice();
+const inputMap = KeyboardInputMap;
+const input = new Input();
+input.setDevice(inputDevice);
+input.setMap(inputMap);
+inputDevice.listen();
 
 const scene = new GameObject();
 

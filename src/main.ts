@@ -4,7 +4,8 @@ import {
   GameObjectUpdateArgs,
   GameRenderer,
   GameState,
-  KeyboardInput,
+  Input,
+  KeyboardInputDevice,
   Logger,
   State,
   Vector,
@@ -18,6 +19,7 @@ import {
 import * as config from './config';
 
 import { DebugInspector } from './debug';
+import { KeyboardInputMap } from './input';
 import {
   LevelScene,
   // GameOverScene,
@@ -39,8 +41,12 @@ const gameRenderer = new GameRenderer({
 });
 document.body.appendChild(gameRenderer.domElement);
 
-const input = new KeyboardInput();
-input.listen();
+const inputDevice = new KeyboardInputDevice();
+const inputMap = KeyboardInputMap;
+const input = new Input();
+input.setDevice(inputDevice);
+input.setMap(inputMap);
+inputDevice.listen();
 
 const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
 const textureLoader = new TextureLoader(config.GRAPHICS_BASE_PATH);

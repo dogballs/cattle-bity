@@ -2,11 +2,11 @@ import {
   BoundingBox,
   Size,
   GameObject,
-  KeyboardInput,
-  KeyboardKey,
+  GameObjectUpdateArgs,
   RectRenderer,
   Subject,
 } from '../core';
+import { InputControl } from '../input';
 
 export enum EditorBrushSize {
   Small = 0,
@@ -31,24 +31,24 @@ export class EditorBrush extends GameObject {
     this.size = this.getBrushSize();
   }
 
-  public update({ input }: { input: KeyboardInput }): void {
+  public update({ input }: GameObjectUpdateArgs): void {
     const { size } = this;
 
-    if (input.isDown(KeyboardKey.ArrowUp)) {
+    if (input.isDown(InputControl.Up)) {
       this.position.y -= size.height;
-    } else if (input.isDown(KeyboardKey.ArrowDown)) {
+    } else if (input.isDown(InputControl.Down)) {
       this.position.y += size.height;
-    } else if (input.isDown(KeyboardKey.ArrowLeft)) {
+    } else if (input.isDown(InputControl.Left)) {
       this.position.x -= size.width;
-    } else if (input.isDown(KeyboardKey.ArrowRight)) {
+    } else if (input.isDown(InputControl.Right)) {
       this.position.x += size.height;
     }
 
-    if (input.isDown(KeyboardKey.B)) {
+    if (input.isDown(InputControl.A)) {
       this.switchToNextBrushSize();
     }
 
-    if (input.isDown(KeyboardKey.Space)) {
+    if (input.isDown(InputControl.B)) {
       this.draw.notify({
         brushType: this.brushType,
         box: this.getBoundingBox(),

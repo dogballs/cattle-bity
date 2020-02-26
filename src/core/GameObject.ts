@@ -1,12 +1,12 @@
 import { BoundingBox } from './BoundingBox';
 import { GameState } from './GameState';
-import { KeyboardInput } from './KeyboardInput';
 import { Node } from './Node';
 import { Rotation } from './Rotation';
 import { Size } from './Size';
 import { State } from './State';
 import { Vector } from './Vector';
 
+import { Input } from './input';
 import {
   AudioLoader,
   RectFontLoader,
@@ -17,7 +17,7 @@ import {
 import { Renderer } from './renderers';
 
 export interface GameObjectUpdateArgs {
-  input?: KeyboardInput;
+  input?: Input;
   gameState?: State<GameState>;
   audioLoader?: AudioLoader;
   rectFontLoader?: RectFontLoader;

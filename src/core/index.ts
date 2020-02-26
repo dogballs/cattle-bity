@@ -1,3 +1,4 @@
+export * from './input';
 export * from './loaders';
 export * from './renderers';
 export * from './text';
@@ -12,7 +13,6 @@ export * from './GameLoop';
 export * from './GameObject';
 export * from './GameRenderer';
 export * from './GameState';
-export * from './KeyboardInput';
 export * from './Logger';
 export * from './Node';
 export * from './Rect';

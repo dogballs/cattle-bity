@@ -1,5 +1,8 @@
+import { InputDevice } from './InputDevice';
+
 export enum KeyboardKey {
   Enter = 13,
+  RShift = 16,
   Space = 32,
   ArrowLeft = 37,
   ArrowUp = 38,
@@ -12,16 +15,18 @@ export enum KeyboardKey {
   S = 83,
   T = 84,
   W = 87,
+  X = 88,
+  Z = 90,
 }
 
 export type KeyboardKeyCode = KeyboardKey | number;
 
-export class KeyboardInput {
-  protected listenedDownKeyCodes: KeyboardKeyCode[] = [];
+export class KeyboardInputDevice implements InputDevice {
+  private listenedDownKeyCodes: KeyboardKeyCode[] = [];
 
-  protected downKeyCodes: KeyboardKeyCode[] = [];
-  protected holdKeyCodes: KeyboardKeyCode[] = [];
-  protected upKeyCodes: KeyboardKeyCode[] = [];
+  private downKeyCodes: KeyboardKeyCode[] = [];
+  private holdKeyCodes: KeyboardKeyCode[] = [];
+  private upKeyCodes: KeyboardKeyCode[] = [];
 
   public listen(): void {
     document.addEventListener('keydown', this.handleWindowKeyDown);
@@ -63,31 +68,19 @@ export class KeyboardInput {
     this.upKeyCodes = [...oldDownKeyCodes, ...oldHoldKeyCodes];
   }
 
-  public isDown(keyCode: KeyboardKeyCode): boolean {
-    return this.downKeyCodes.includes(keyCode);
+  public getDownCodes(): KeyboardKeyCode[] {
+    return this.downKeyCodes;
   }
 
-  public isHold(keyCode: KeyboardKeyCode): boolean {
-    return this.holdKeyCodes.includes(keyCode);
+  public getHoldCodes(): KeyboardKeyCode[] {
+    return this.holdKeyCodes;
   }
 
-  public isHoldAny(keyCodes: KeyboardKeyCode[]): boolean {
-    return this.holdKeyCodes.some((keyCode) => keyCodes.includes(keyCode));
+  public getUpCodes(): KeyboardKeyCode[] {
+    return this.upKeyCodes;
   }
 
-  public isNotHoldAll(keyCodes: KeyboardKeyCode[]): boolean {
-    return this.holdKeyCodes.every((keyCode) => !keyCodes.includes(keyCode));
-  }
-
-  public isHoldLast(keyCode: KeyboardKeyCode): boolean {
-    return this.holdKeyCodes[this.holdKeyCodes.length - 1] === keyCode;
-  }
-
-  public isUp(keyCode: KeyboardKeyCode): boolean {
-    return this.upKeyCodes.includes(keyCode);
-  }
-
-  protected handleWindowKeyDown = (ev): void => {
+  private handleWindowKeyDown = (ev): void => {
     const { keyCode } = ev;
 
     if (!this.listenedDownKeyCodes.includes(keyCode)) {
@@ -95,7 +88,7 @@ export class KeyboardInput {
     }
   };
 
-  protected handleWindowKeyUp = (ev): void => {
+  private handleWindowKeyUp = (ev): void => {
     const { keyCode } = ev;
 
     const index = this.listenedDownKeyCodes.indexOf(keyCode);

@@ -1,10 +1,6 @@
-import {
-  GameObject,
-  GameObjectUpdateArgs,
-  KeyboardInput,
-  KeyboardKey,
-  Timer,
-} from '../core';
+import { GameObject, GameObjectUpdateArgs, Input, Timer } from '../core';
+import { InputControl } from '../input';
+
 import { SpriteTextNode } from './SpriteTextNode';
 
 // TODO: turbo button throttle is faster
@@ -31,20 +27,21 @@ export class LevelSelector extends GameObject {
   }
 
   protected update({ input }: GameObjectUpdateArgs): void {
-    this.throttleInput(input, KeyboardKey.W, this.selectPrev);
-    this.throttleInput(input, KeyboardKey.S, this.selectNext);
+    this.throttleInput(input, InputControl.A, this.selectNext);
+    this.throttleInput(input, InputControl.B, this.selectPrev);
   }
 
+  // TODO: if hold together
   private throttleInput(
-    input: KeyboardInput,
-    key: KeyboardKey,
+    input: Input,
+    control: InputControl,
     selectCallback: () => void,
   ): void {
-    if (input.isDown(key) || input.isUp(key)) {
+    if (input.isDown(control) || input.isUp(control)) {
       this.throttle.stop();
     }
 
-    if (input.isHold(key)) {
+    if (input.isHold(control)) {
       if (this.throttle.isDone()) {
         selectCallback();
         this.throttle.reset(INPUT_THROTTLE);
