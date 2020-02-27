@@ -62,9 +62,18 @@ export class Input {
     return isNotHoldAll;
   }
 
-  public isHoldLast(control: number): boolean {
+  public isHoldFirst(control: number): boolean {
+    const targetCode = this.unmap(control);
     const codes = this.device.getHoldCodes();
-    const isHoldLast = codes[codes.length - 1] === this.unmap(control);
+    const isHoldFirst = codes[0] === targetCode;
+
+    return isHoldFirst;
+  }
+
+  public isHoldLast(control: number): boolean {
+    const targetCode = this.unmap(control);
+    const codes = this.device.getHoldCodes();
+    const isHoldLast = codes[codes.length - 1] === targetCode;
 
     return isHoldLast;
   }

@@ -3,6 +3,7 @@ export * from './BrickWall';
 export * from './Border';
 export * from './BorderWall';
 export * from './Bullet';
+export * from './Curtain';
 export * from './EditorBrush';
 export * from './EnemyBasicTank';
 export * from './LevelInfo';

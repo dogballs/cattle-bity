@@ -3,15 +3,15 @@ import { InputControl } from '../input';
 
 import { SpriteTextNode } from './SpriteTextNode';
 
-// TODO: turbo button throttle is faster
-const INPUT_THROTTLE = 7;
+const SLOW_HOLD_DELAY = 7;
+const FAST_HOLD_DELAY = 1;
 
 export class LevelSelector extends GameObject {
   private level = 1;
   private minLevel = 1;
   private maxLevel = 1;
   private text = new SpriteTextNode('primary', '', { scale: 4 });
-  private throttle = new Timer();
+  private holdThrottle = new Timer();
 
   constructor(minLevel = 1, maxLevel = 1) {
     super();
@@ -27,26 +27,38 @@ export class LevelSelector extends GameObject {
   }
 
   protected update({ input }: GameObjectUpdateArgs): void {
-    this.throttleInput(input, InputControl.A, this.selectNext);
-    this.throttleInput(input, InputControl.B, this.selectPrev);
+    this.throttleInput(input, InputControl.A, this.selectNext, SLOW_HOLD_DELAY);
+    this.throttleInput(input, InputControl.B, this.selectPrev, SLOW_HOLD_DELAY);
+    this.throttleInput(
+      input,
+      InputControl.TurboA,
+      this.selectNext,
+      FAST_HOLD_DELAY,
+    );
+    this.throttleInput(
+      input,
+      InputControl.TurboB,
+      this.selectPrev,
+      FAST_HOLD_DELAY,
+    );
   }
 
-  // TODO: if hold together
   private throttleInput(
     input: Input,
     control: InputControl,
     selectCallback: () => void,
+    delay: number,
   ): void {
     if (input.isDown(control) || input.isUp(control)) {
-      this.throttle.stop();
+      this.holdThrottle.stop();
     }
 
-    if (input.isHold(control)) {
-      if (this.throttle.isDone()) {
+    if (input.isHoldFirst(control)) {
+      if (this.holdThrottle.isDone()) {
         selectCallback();
-        this.throttle.reset(INPUT_THROTTLE);
+        this.holdThrottle.reset(delay);
       }
-      this.throttle.tick();
+      this.holdThrottle.tick();
     }
   }
 
