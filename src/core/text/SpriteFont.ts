@@ -16,13 +16,27 @@ export interface SpriteFontConfig {
   verticalSpacing: number;
 }
 
+export interface SpriteFontOptions {
+  scale?: number | Vector;
+}
+
+const DEFAULT_OPTIONS = {
+  scale: 1,
+};
+
 export class SpriteFont implements Font<Sprite> {
   public readonly config: SpriteFontConfig;
   public readonly texture: Texture;
+  public readonly options: SpriteFontOptions;
 
-  constructor(config: SpriteFontConfig, texture: Texture) {
+  constructor(
+    config: SpriteFontConfig,
+    texture: Texture,
+    options: SpriteFontOptions = {},
+  ) {
     this.config = config;
     this.texture = texture;
+    this.options = Object.assign({}, DEFAULT_OPTIONS, options);
   }
 
   public buildCharacter(
@@ -64,6 +78,16 @@ export class SpriteFont implements Font<Sprite> {
     const sprite = new Sprite(this.texture, sourceRect, targetRect);
 
     return sprite;
+  }
+
+  public getScale(): Vector {
+    const { scale } = this.options;
+
+    if (typeof scale === 'number') {
+      return new Vector(scale, scale);
+    }
+
+    return scale;
   }
 
   public getCharacterWidth(): number {

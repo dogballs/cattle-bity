@@ -26,10 +26,10 @@ export class Curtain extends GameObject {
     const initialHeight = isOpen ? 0 : this.targetHeight;
 
     this.topPart = new GameObject(width, initialHeight);
-    this.topPart.renderer = new RectRenderer(config.BACKGROUND_COLOR);
+    this.topPart.renderer = new RectRenderer(config.COLOR_GRAY);
 
     this.bottomPart = new GameObject(width, initialHeight);
-    this.bottomPart.renderer = new RectRenderer(config.BACKGROUND_COLOR);
+    this.bottomPart.renderer = new RectRenderer(config.COLOR_GRAY);
     this.bottomPart.pivot.set(0, 1);
     this.bottomPart.position.setY(height);
   }

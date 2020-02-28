@@ -21,15 +21,15 @@ export class MenuScene extends GameObject {
   private state: State = State.Sliding;
 
   protected setup(): void {
-    this.renderer = new RectRenderer(config.BACKGROUND_COLOR);
+    this.renderer = new RectRenderer(config.COLOR_BLACK);
 
     this.group.size.copy(this.size);
     this.group.position.setY(this.size.height);
-    this.group.add(this.heading);
 
     this.heading.pivot.setX(0.5);
     this.heading.setCenter(this.getChildrenCenter());
     this.heading.position.setY(160);
+    this.group.add(this.heading);
 
     this.menu.setCenter(this.getChildrenCenter());
     this.menu.position.setY(512);

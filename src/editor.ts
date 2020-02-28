@@ -16,7 +16,7 @@ const gameRenderer = new GameRenderer({
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
-document.body.appendChild(gameRenderer.domElement);
+document.body.appendChild(gameRenderer.getElement());
 
 const inputDevice = new KeyboardInputDevice();
 const inputMap = KeyboardInputMap;

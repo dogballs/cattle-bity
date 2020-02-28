@@ -3,7 +3,7 @@ import { GameObject } from '../core';
 import { SpriteText } from './SpriteText';
 
 export class ScoreTablePointCounter extends GameObject {
-  private pointsText = new SpriteText('PTS', { scale: 4 });
+  private pointsText = new SpriteText('PTS');
 
   constructor() {
     super(352, 28);

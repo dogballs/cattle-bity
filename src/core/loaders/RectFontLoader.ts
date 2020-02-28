@@ -1,16 +1,26 @@
-import { RectFont, RectFontConfig } from '../text';
+import { RectFont, RectFontConfig, RectFontOptions } from '../text';
+
+interface RegisteredItem {
+  config: RectFontConfig;
+  options: RectFontOptions;
+}
 
 export class RectFontLoader {
-  private registered = new Map<string, RectFontConfig>();
+  private registered = new Map<string, RegisteredItem>();
   private loaded = new Map<string, RectFont>();
 
-  public register(id: string, config: RectFontConfig): void {
-    this.registered.set(id, config);
+  public register(
+    id: string,
+    config: RectFontConfig,
+    options: RectFontOptions = {},
+  ): void {
+    const item = { config, options };
+    this.registered.set(id, item);
   }
 
   public load(id: string): RectFont {
-    const config = this.registered.get(id);
-    if (config === undefined) {
+    const item = this.registered.get(id);
+    if (item === undefined) {
       const error = new Error(`Rect font "${id} not registered`);
 
       throw error;
@@ -20,7 +30,8 @@ export class RectFontLoader {
       return this.loaded.get(id);
     }
 
-    const font = new RectFont(config);
+    const { config, options: defaultOptions } = item;
+    const font = new RectFont(config, defaultOptions);
 
     this.loaded.set(id, font);
 

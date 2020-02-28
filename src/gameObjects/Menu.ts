@@ -23,7 +23,7 @@ export class Menu extends GameObject {
   protected setup(): void {
     MENU_ITEMS.forEach((menuItemText, index) => {
       const menuItem = new SpriteText(menuItemText, {
-        scale: 4,
+        color: '#fff',
       });
       menuItem.position.set(96, index * MENU_ITEM_HEIGHT + 16);
 

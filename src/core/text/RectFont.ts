@@ -12,11 +12,21 @@ export interface RectFontConfig {
   characters: string[][];
 }
 
+export interface RectFontOptions {
+  scale?: number | Vector;
+}
+
+const DEFAULT_OPTIONS = {
+  scale: 1,
+};
+
 export class RectFont implements Font<Rect[]> {
   public readonly config: RectFontConfig;
+  public readonly options: RectFontOptions;
 
-  constructor(config: RectFontConfig) {
+  constructor(config: RectFontConfig, options: RectFontOptions = {}) {
     this.config = config;
+    this.options = Object.assign({}, DEFAULT_OPTIONS, options);
   }
 
   public buildCharacter(
@@ -50,6 +60,16 @@ export class RectFont implements Font<Rect[]> {
     });
 
     return rects;
+  }
+
+  public getScale(): Vector {
+    const { scale } = this.options;
+
+    if (typeof scale === 'number') {
+      return new Vector(scale, scale);
+    }
+
+    return scale;
   }
 
   public getCharacterWidth(): number {

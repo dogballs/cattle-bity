@@ -17,7 +17,6 @@ import {
 } from './core';
 
 import * as config from './config';
-import * as constants from './constants';
 
 import { DebugInspector } from './debug';
 import { KeyboardInputMap } from './input';
@@ -37,11 +36,11 @@ import * as rectFontConfig from '../data/fonts/rect-font.json';
 const log = new Logger('main', Logger.Level.Debug);
 
 const gameRenderer = new GameRenderer({
-  debug: true,
+  // debug: true,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
-document.body.appendChild(gameRenderer.domElement);
+document.body.appendChild(gameRenderer.getElement());
 
 const inputDevice = new KeyboardInputDevice();
 const inputMap = KeyboardInputMap;
@@ -54,14 +53,18 @@ const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
 const textureLoader = new TextureLoader(config.GRAPHICS_BASE_PATH);
 
 const spriteFontLoader = new SpriteFontLoader(textureLoader);
-spriteFontLoader.register(constants.PRIMARY_SPRITE_FONT_ID, spriteFontConfig);
+spriteFontLoader.register(config.PRIMARY_SPRITE_FONT_ID, spriteFontConfig, {
+  scale: 4,
+});
 
 const spriteLoader = new SpriteLoader(textureLoader, spriteManifest, {
   scale: 4,
 });
 
 const rectFontLoader = new RectFontLoader();
-rectFontLoader.register(constants.PRIMARY_RECT_FONT_ID, rectFontConfig);
+rectFontLoader.register(config.PRIMARY_RECT_FONT_ID, rectFontConfig, {
+  scale: config.TILE_SIZE_SMALL,
+});
 
 // const debug = new DebugController(spawner);
 
@@ -77,7 +80,7 @@ const currentScene = new LevelScene();
 // );
 // const currentScene = new ScoreScene(config.CANVAS_WIDTH, config.CANVAS_HEIGHT);
 
-const debugInspector = new DebugInspector(gameRenderer.domElement);
+const debugInspector = new DebugInspector(gameRenderer.getElement());
 debugInspector.listen();
 debugInspector.click.addListener((position: Vector) => {
   const intersections: GameObject[] = [];

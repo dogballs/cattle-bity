@@ -3,11 +3,11 @@ import { ScoreTable, SpriteText } from '../gameObjects';
 import * as config from '../config';
 
 export class ScoreScene extends GameObject {
-  private levelTitle = new SpriteText('STAGE 1', { scale: 4 });
+  private levelTitle = new SpriteText('STAGE 1', { color: config.COLOR_WHITE });
   private scoreTable = new ScoreTable();
 
   protected setup(): void {
-    this.renderer = new RectRenderer(config.BACKGROUND_COLOR);
+    this.renderer = new RectRenderer(config.COLOR_BLACK);
 
     this.levelTitle.pivot.set(0.5, 0);
     this.levelTitle.setCenter(this.getChildrenCenter());

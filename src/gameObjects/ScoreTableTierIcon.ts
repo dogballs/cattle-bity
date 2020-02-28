@@ -11,12 +11,15 @@ import {
   TankTier,
   TankType,
 } from '../tank';
+import * as config from '../config';
 
 import { SpriteText } from './SpriteText';
 
 export class ScoreTableTierIcon extends GameObject {
   private tier: TankTier;
-  private leftIcon = new SpriteText('←', { scale: 4 });
+  private leftIcon = new SpriteText('←', {
+    color: config.COLOR_WHITE,
+  });
   private tank = new GameObject(64, 64);
 
   constructor(tier: TankTier) {

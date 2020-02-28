@@ -1,23 +1,33 @@
-import { SpriteFont, SpriteFontConfig } from '../text';
+import { SpriteFont, SpriteFontConfig, SpriteFontOptions } from '../text';
 
 import { TextureLoader } from './TextureLoader';
 
+interface RegisterItem {
+  config: SpriteFontConfig;
+  options: SpriteFontOptions;
+}
+
 export class SpriteFontLoader {
   private readonly textureLoader: TextureLoader;
-  private registered = new Map<string, SpriteFontConfig>();
+  private registered = new Map<string, RegisterItem>();
   private loaded = new Map<string, SpriteFont>();
 
   constructor(textureLoader: TextureLoader) {
     this.textureLoader = textureLoader;
   }
 
-  public register(id: string, config: SpriteFontConfig): void {
-    this.registered.set(id, config);
+  public register(
+    id: string,
+    config: SpriteFontConfig,
+    options: SpriteFontOptions = {},
+  ): void {
+    const item = { config, options };
+    this.registered.set(id, item);
   }
 
   public load(id: string): SpriteFont {
-    const config = this.registered.get(id);
-    if (config === undefined) {
+    const item = this.registered.get(id);
+    if (item === undefined) {
       throw new Error(`Sprite font "${id} not registered`);
     }
 
@@ -25,10 +35,12 @@ export class SpriteFontLoader {
       return this.loaded.get(id);
     }
 
+    const { config, options: defaultOptions } = item;
+
     // TODO: paths
     const texture = this.textureLoader.load(config.file, true);
 
-    const font = new SpriteFont(config, texture);
+    const font = new SpriteFont(config, texture, defaultOptions);
 
     this.loaded.set(id, font);
 

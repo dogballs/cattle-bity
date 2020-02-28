@@ -6,20 +6,31 @@ import {
   Text,
   TextOptions,
 } from '../core';
-import * as constants from '../constants';
+import * as config from '../config';
+
+interface SpriteTextOptions extends TextOptions {
+  color?: string;
+}
+
+const DEFAULT_OPTIONS = {
+  color: null,
+};
 
 export class SpriteText extends GameObject {
   public renderer = new SpriteTextRenderer();
   private readonly text: Text<Sprite>;
 
-  constructor(text = '', options: TextOptions = {}) {
+  constructor(text = '', argOptions: SpriteTextOptions = {}) {
     super();
 
+    const options = Object.assign({}, DEFAULT_OPTIONS, argOptions);
+
+    this.renderer.color = options.color;
     this.text = new Text(text, options);
   }
 
   protected setup({ spriteFontLoader }: GameObjectUpdateArgs): void {
-    const font = spriteFontLoader.load(constants.PRIMARY_SPRITE_FONT_ID);
+    const font = spriteFontLoader.load(config.PRIMARY_SPRITE_FONT_ID);
     this.text.setFont(font);
 
     this.size.copy(this.text.getSize());

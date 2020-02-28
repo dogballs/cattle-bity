@@ -10,7 +10,7 @@ export class LevelSelector extends GameObject {
   private level = 1;
   private minLevel = 1;
   private maxLevel = 1;
-  private text = new SpriteText('', { scale: 4 });
+  private text = new SpriteText('');
   private holdThrottle = new Timer();
 
   constructor(minLevel = 1, maxLevel = 1) {

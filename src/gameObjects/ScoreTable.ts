@@ -2,6 +2,7 @@ import { GameObject } from '../core';
 import { PointsRecord } from '../points';
 import { PowerupType } from '../powerups';
 import { TankTier } from '../tank';
+import * as config from '../config';
 
 import { ScoreTablePointCounter } from './ScoreTablePointCounter';
 import { ScoreTableTierIcon } from './ScoreTableTierIcon';
@@ -17,27 +18,28 @@ export class ScoreTable extends GameObject {
   private iconD = new ScoreTableTierIcon(TankTier.D);
 
   private counter = new ScoreTablePointCounter();
-  private title = new SpriteText('Ⅰ-PLAYER', { scale: 4 });
+  private title = new SpriteText('Ⅰ-PLAYER', { color: config.COLOR_RED });
+  private totalPoints = new SpriteText('1300', { color: config.COLOR_YELLOW });
+
+  private pointsA = new SpriteText('880', { color: config.COLOR_WHITE });
+  private pointsB = new SpriteText('0', { color: config.COLOR_WHITE });
+  private pointsC = new SpriteText('0', { color: config.COLOR_WHITE });
+  private pointsD = new SpriteText('0', { color: config.COLOR_WHITE });
+
+  private pointsTextA = new SpriteText('PTS', { color: config.COLOR_WHITE });
+  private pointsTextB = new SpriteText('PTS', { color: config.COLOR_WHITE });
+  private pointsTextC = new SpriteText('PTS', { color: config.COLOR_WHITE });
+  private pointsTextD = new SpriteText('PTS', { color: config.COLOR_WHITE });
+
+  private killsA = new SpriteText('0', { color: config.COLOR_WHITE });
+  private killsB = new SpriteText('0', { color: config.COLOR_WHITE });
+  private killsC = new SpriteText('0', { color: config.COLOR_WHITE });
+  private killsD = new SpriteText('0', { color: config.COLOR_WHITE });
+
   private underline = new ScoreTableUnderline();
 
-  private pointsA = new SpriteText('880', { scale: 4 });
-  private pointsB = new SpriteText('0', { scale: 4 });
-  private pointsC = new SpriteText('0', { scale: 4 });
-  private pointsD = new SpriteText('0', { scale: 4 });
-
-  private pointsTextA = new SpriteText('PTS', { scale: 4 });
-  private pointsTextB = new SpriteText('PTS', { scale: 4 });
-  private pointsTextC = new SpriteText('PTS', { scale: 4 });
-  private pointsTextD = new SpriteText('PTS', { scale: 4 });
-
-  private killsA = new SpriteText('0', { scale: 4 });
-  private killsB = new SpriteText('0', { scale: 4 });
-  private killsC = new SpriteText('0', { scale: 4 });
-  private killsD = new SpriteText('0', { scale: 4 });
-
-  private totalTitle = new SpriteText('TOTAL', { scale: 4 });
-  private totalPoints = new SpriteText('1300', { scale: 4 });
-  private totalKills = new SpriteText('8', { scale: 4 });
+  private totalTitle = new SpriteText('TOTAL', { color: config.COLOR_WHITE });
+  private totalKills = new SpriteText('8', { color: config.COLOR_WHITE });
 
   constructor() {
     super(832, 544);

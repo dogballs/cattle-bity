@@ -13,22 +13,29 @@ const DEFAULT_OPTIONS = {
 };
 
 export class GameRenderer {
-  public readonly domElement: HTMLCanvasElement;
-  public readonly options: GameRendererOptions;
-  protected readonly context: CanvasRenderingContext2D;
+  private readonly canvas: HTMLCanvasElement;
+  private readonly options: GameRendererOptions;
+  private readonly context: CanvasRenderingContext2D;
+  private readonly offscreenCanvas: OffscreenCanvas;
 
   constructor(options: GameRendererOptions = {}) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
 
-    this.domElement = document.createElement('canvas');
-    this.domElement.width = options.width;
-    this.domElement.height = options.height;
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = options.width;
+    this.canvas.height = options.height;
 
-    this.context = this.domElement.getContext('2d');
+    this.offscreenCanvas = new OffscreenCanvas(options.width, options.height);
+
+    this.context = this.canvas.getContext('2d');
+  }
+
+  public getElement(): HTMLCanvasElement {
+    return this.canvas;
   }
 
   public clear(): void {
-    this.context.clearRect(0, 0, this.domElement.width, this.domElement.height);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   public render(root: GameObject): void {
@@ -38,12 +45,15 @@ export class GameRenderer {
     // Should be reset every time after clearing.
     this.context.imageSmoothingEnabled = false;
 
+    const offscreenContext = this.offscreenCanvas.getContext('2d');
+    offscreenContext.imageSmoothingEnabled = false;
+
     this.renderGameObject(root);
   }
 
-  protected renderGameObject(gameObject: GameObject): void {
+  private renderGameObject(gameObject: GameObject): void {
     if (gameObject.renderer !== null && gameObject.visible) {
-      gameObject.renderer.render(this.domElement, gameObject);
+      gameObject.renderer.render(this.canvas, gameObject, this.offscreenCanvas);
     }
 
     if (this.options.debug) {
@@ -58,7 +68,7 @@ export class GameRenderer {
   }
 
   // TODO: debug should not be a part of game renderer
-  protected renderGameObjectDebugFrame(gameObject: GameObject): void {
+  private renderGameObjectDebugFrame(gameObject: GameObject): void {
     const { min, max } = gameObject.getWorldBoundingBox();
 
     this.context.beginPath();

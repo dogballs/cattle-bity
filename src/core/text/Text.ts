@@ -4,8 +4,6 @@ import { Vector } from '../Vector';
 import { Font } from './Font';
 import { NullFont } from './NullFont';
 
-// TODO: scale might belong to font
-
 export enum TextAlignment {
   Left,
   Center,
@@ -15,14 +13,12 @@ export interface TextOptions {
   alignment?: TextAlignment;
   letterSpacing?: number;
   lineSpacing?: number;
-  scale?: Vector | number;
 }
 
 const DEFAULT_OPTIONS = {
   alignment: TextAlignment.Left,
   letterSpacing: 1,
   lineSpacing: 1,
-  scale: 1,
 };
 
 const TEXT_LINE_SEPARATOR = '\n';
@@ -73,7 +69,7 @@ export class Text<T> {
 
   public getWidth(): number {
     const unscaledWidth = this.getUnscaledTextWidth(this.text);
-    const scale = this.getScale();
+    const scale = this.font.getScale();
     const width = unscaledWidth * scale.x;
 
     return width;
@@ -84,7 +80,7 @@ export class Text<T> {
 
     const lines = this.splitTextToLines(this.text);
     const characterHeight = this.font.getCharacterHeight();
-    const scale = this.getScale();
+    const scale = this.font.getScale();
 
     const charactersHeight = lines.length * characterHeight * scale.y;
     const spacingHeight = (lines.length - 1) * lineSpacing * scale.y;
@@ -154,7 +150,7 @@ export class Text<T> {
   ): T[] {
     const wordItems: T[] = [];
 
-    const scale = this.getScale();
+    const scale = this.font.getScale();
     const characters = this.splitWordToCharacters(word);
 
     characters.forEach((character, index) => {
@@ -235,15 +231,5 @@ export class Text<T> {
   private splitWordToCharacters(word: string): string[] {
     const characters = Array.from(word);
     return characters;
-  }
-
-  private getScale(): Vector {
-    const { scale } = this.options;
-
-    if (typeof scale === 'number') {
-      return new Vector(scale, scale);
-    }
-
-    return scale;
   }
 }
