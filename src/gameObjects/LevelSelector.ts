@@ -1,7 +1,7 @@
 import { GameObject, GameObjectUpdateArgs, Input, Timer } from '../core';
 import { InputControl } from '../input';
 
-import { SpriteTextNode } from './SpriteTextNode';
+import { SpriteText } from './SpriteText';
 
 const SLOW_HOLD_DELAY = 7;
 const FAST_HOLD_DELAY = 1;
@@ -10,7 +10,7 @@ export class LevelSelector extends GameObject {
   private level = 1;
   private minLevel = 1;
   private maxLevel = 1;
-  private text = new SpriteTextNode('primary', '', { scale: 4 });
+  private text = new SpriteText('', { scale: 4 });
   private holdThrottle = new Timer();
 
   constructor(minLevel = 1, maxLevel = 1) {

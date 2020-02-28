@@ -196,6 +196,40 @@
     "file": "sprite.png",
     "rect": [241, 97, 15, 13]
   },
+
+  "tank.enemy.default.d.up.1": {
+    "file": "sprite.png",
+    "rect": [129, 112, 13, 15]
+  },
+  "tank.enemy.default.d.up.2": {
+    "file": "sprite.png",
+    "rect": [145, 112, 13, 15]
+  },
+  "tank.enemy.default.d.down.1": {
+    "file": "sprite.png",
+    "rect": [193, 112, 13, 15]
+  },
+  "tank.enemy.default.d.down.2": {
+    "file": "sprite.png",
+    "rect": [209, 112, 13, 15]
+  },
+  "tank.enemy.default.d.left.1": {
+    "file": "sprite.png",
+    "rect": [160, 113, 15, 13]
+  },
+  "tank.enemy.default.d.left.2": {
+    "file": "sprite.png",
+    "rect": [176, 113, 15, 13]
+  },
+  "tank.enemy.default.d.right.1": {
+    "file": "sprite.png",
+    "rect": [224, 113, 15, 13]
+  },
+  "tank.enemy.default.d.right.2": {
+    "file": "sprite.png",
+    "rect": [240, 113, 15, 13]
+  },
+
   "tank.enemy.danger.c.up.1": {
     "file": "sprite.png",
     "rect": [129, 224, 13, 15]

@@ -7,27 +7,21 @@ import {
   TextOptions,
 } from '../core';
 import { TerrainFactory, TerrainType } from '../terrain';
+import * as constants from '../constants';
 
-export class TerrainTextNode extends GameObject {
-  private readonly fontId: string;
+export class TerrainText extends GameObject {
   private terrainType: TerrainType;
   private text: Text<Rect[]>;
 
-  constructor(
-    fontId: string,
-    message = '',
-    terrainType: TerrainType,
-    options: TextOptions = {},
-  ) {
+  constructor(text = '', terrainType: TerrainType, options: TextOptions = {}) {
     super();
 
-    this.fontId = fontId;
-    this.text = new Text(message, options);
+    this.text = new Text(text, options);
     this.terrainType = terrainType;
   }
 
   protected setup({ rectFontLoader }: GameObjectUpdateArgs): void {
-    const font = rectFontLoader.load(this.fontId);
+    const font = rectFontLoader.load(constants.PRIMARY_RECT_FONT_ID);
 
     this.text.setFont(font);
     this.size.copy(this.text.getSize());

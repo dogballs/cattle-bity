@@ -1,10 +1,11 @@
-import { TerrainTextNode } from './TerrainTextNode';
 import { TerrainType } from '../terrain';
 import * as config from '../config';
 
-export class GameOverHeading extends TerrainTextNode {
+import { TerrainText } from './TerrainText';
+
+export class GameOverHeading extends TerrainText {
   constructor() {
-    super('primary', 'GAME\nOVER', TerrainType.Brick, {
+    super('GAME\nOVER', TerrainType.Brick, {
       lineSpacing: 6,
       scale: config.TILE_SIZE_SMALL,
     });

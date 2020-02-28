@@ -17,6 +17,7 @@ import {
 } from './core';
 
 import * as config from './config';
+import * as constants from './constants';
 
 import { DebugInspector } from './debug';
 import { KeyboardInputMap } from './input';
@@ -25,6 +26,7 @@ import {
   // GameOverScene,
   // MenuScene,
   // StageSelectionScene,
+  // ScoreScene,
 } from './scenes';
 
 import * as audioManifest from '../data/audio/audio.manifest.json';
@@ -52,12 +54,12 @@ const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
 const textureLoader = new TextureLoader(config.GRAPHICS_BASE_PATH);
 
 const spriteFontLoader = new SpriteFontLoader(textureLoader);
-spriteFontLoader.register('primary', spriteFontConfig);
+spriteFontLoader.register(constants.PRIMARY_SPRITE_FONT_ID, spriteFontConfig);
 
 const spriteLoader = new SpriteLoader(textureLoader, spriteManifest);
 
 const rectFontLoader = new RectFontLoader();
-rectFontLoader.register('primary', rectFontConfig);
+rectFontLoader.register(constants.PRIMARY_RECT_FONT_ID, rectFontConfig);
 
 // const debug = new DebugController(spawner);
 
@@ -71,6 +73,7 @@ const currentScene = new LevelScene();
 //   config.CANVAS_WIDTH,
 //   config.CANVAS_HEIGHT,
 // );
+// const currentScene = new ScoreScene(config.CANVAS_WIDTH, config.CANVAS_HEIGHT);
 
 const debugInspector = new DebugInspector(gameRenderer.domElement);
 debugInspector.listen();

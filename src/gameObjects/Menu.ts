@@ -2,7 +2,7 @@ import { GameObject, GameObjectUpdateArgs, Subject } from '../core';
 import { InputControl } from '../input';
 
 import { MenuSelector } from './MenuSelector';
-import { SpriteTextNode } from './SpriteTextNode';
+import { SpriteText } from './SpriteText';
 
 const MENU_ITEMS = ['1 PLAYER', '2 PLAYERS', 'CONSTRUCTION'];
 const MENU_ITEM_HEIGHT = 60;
@@ -22,7 +22,7 @@ export class Menu extends GameObject {
 
   protected setup(): void {
     MENU_ITEMS.forEach((menuItemText, index) => {
-      const menuItem = new SpriteTextNode('primary', menuItemText, {
+      const menuItem = new SpriteText(menuItemText, {
         scale: 4,
       });
       menuItem.position.set(96, index * MENU_ITEM_HEIGHT + 16);

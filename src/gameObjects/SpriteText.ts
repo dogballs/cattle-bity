@@ -6,21 +6,20 @@ import {
   Text,
   TextOptions,
 } from '../core';
+import * as constants from '../constants';
 
-export class SpriteTextNode extends GameObject {
+export class SpriteText extends GameObject {
   public renderer = new SpriteTextRenderer();
   private readonly text: Text<Sprite>;
-  private readonly fontId: string;
 
-  constructor(fontId: string, message = '', options: TextOptions = {}) {
+  constructor(text = '', options: TextOptions = {}) {
     super();
 
-    this.fontId = fontId;
-    this.text = new Text(message, options);
+    this.text = new Text(text, options);
   }
 
   protected setup({ spriteFontLoader }: GameObjectUpdateArgs): void {
-    const font = spriteFontLoader.load(this.fontId);
+    const font = spriteFontLoader.load(constants.PRIMARY_SPRITE_FONT_ID);
     this.text.setFont(font);
 
     this.size.copy(this.text.getSize());
@@ -28,8 +27,8 @@ export class SpriteTextNode extends GameObject {
     this.renderer.text = this.text;
   }
 
-  public setText(message: string): void {
-    this.text.setText(message);
+  public setText(text: string): void {
+    this.text.setText(text);
     this.size.copy(this.text.getSize());
   }
 }
