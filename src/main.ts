@@ -37,7 +37,7 @@ import * as rectFontConfig from '../data/fonts/rect-font.json';
 const log = new Logger('main', Logger.Level.Debug);
 
 const gameRenderer = new GameRenderer({
-  // debug: true,
+  debug: true,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
@@ -56,7 +56,9 @@ const textureLoader = new TextureLoader(config.GRAPHICS_BASE_PATH);
 const spriteFontLoader = new SpriteFontLoader(textureLoader);
 spriteFontLoader.register(constants.PRIMARY_SPRITE_FONT_ID, spriteFontConfig);
 
-const spriteLoader = new SpriteLoader(textureLoader, spriteManifest);
+const spriteLoader = new SpriteLoader(textureLoader, spriteManifest, {
+  scale: 4,
+});
 
 const rectFontLoader = new RectFontLoader();
 rectFontLoader.register(constants.PRIMARY_RECT_FONT_ID, rectFontConfig);

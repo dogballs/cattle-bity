@@ -4,9 +4,9 @@ import {
   GameObject,
   GameObjectUpdateArgs,
   GameState,
-  KeyboardKey,
   Rect,
 } from '../core';
+import { InputControl } from '../input';
 import { Border, LevelInfo, Field, PauseNotice } from '../gameObjects';
 import { MapConfig, MapConfigSchema } from '../map';
 import { TerrainFactory } from '../terrain';
@@ -66,6 +66,8 @@ export class LevelScene extends GameObject {
 
     this.pauseNotice.setCenter(this.field.getChildrenCenter());
     this.pauseNotice.position.y += 18;
+    this.pauseNotice.visible = false;
+    this.add(this.pauseNotice);
 
     this.field.base.died.addListener(this.handleBaseDied);
   }
@@ -73,7 +75,7 @@ export class LevelScene extends GameObject {
   protected update(updateArgs: GameObjectUpdateArgs): void {
     const { gameState, input } = updateArgs;
 
-    if (input.isDown(KeyboardKey.Enter)) {
+    if (input.isDown(InputControl.Start)) {
       if (gameState.is(GameState.Playing)) {
         gameState.set(GameState.Paused);
         this.activatePause();
@@ -112,13 +114,14 @@ export class LevelScene extends GameObject {
   private activatePause(): void {
     this.audioLoader.pauseAll();
     this.audioLoader.load('pause').play();
+    this.pauseNotice.visible = true;
     this.pauseNotice.restart();
     this.field.add(this.pauseNotice);
   }
 
   private deactivatePause(): void {
     this.audioLoader.resumeAll();
-    this.field.remove(this.pauseNotice);
+    this.pauseNotice.visible = false;
   }
 
   private handleBaseDied = (): void => {

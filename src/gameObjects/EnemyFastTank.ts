@@ -1,4 +1,4 @@
-import { GameObjectUpdateArgs, Rect } from '../core';
+import { GameObjectUpdateArgs } from '../core';
 import {
   DumbAiTankBehavior,
   TankAttributesFactory,
@@ -23,7 +23,6 @@ export class EnemyFastTank extends EnemyTank {
     this.skinAnimation = new TankSkinAnimation(
       spriteLoader,
       this.type,
-      new Rect(0, 0, 52, 60),
       this.hasDrop,
     );
 

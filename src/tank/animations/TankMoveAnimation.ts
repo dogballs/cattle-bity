@@ -1,62 +1,34 @@
-import { Animation, Rotation, Rect, Sprite, SpriteLoader } from '../../core';
+import { Animation, Rotation, Sprite, SpriteLoader } from '../../core';
 
 import { TankColor } from '../TankColor';
 import { TankType } from '../TankType';
-import { TankSpriteFactory } from '../TankSpriteFactory';
+import { TankSpriteId } from '../TankSpriteId';
 
 export class TankMoveAnimation extends Animation<Sprite> {
   constructor(
     spriteLoader: SpriteLoader,
     type: TankType,
-    targetRect: Rect,
     rotation: Rotation,
     hasDrop = false,
   ) {
-    const frames = [
-      TankSpriteFactory.create(spriteLoader, type, targetRect, rotation, 1),
-      TankSpriteFactory.create(spriteLoader, type, targetRect, rotation, 2),
-      TankSpriteFactory.create(spriteLoader, type, targetRect, rotation, 1),
-      TankSpriteFactory.create(spriteLoader, type, targetRect, rotation, 2),
-    ];
+    const frames = spriteLoader.loadList([
+      TankSpriteId.create(type, rotation, 1),
+      TankSpriteId.create(type, rotation, 2),
+      TankSpriteId.create(type, rotation, 1),
+      TankSpriteId.create(type, rotation, 2),
+    ]);
 
     if (hasDrop) {
       const dropType = type.clone().setColor(TankColor.Danger);
-      frames.push(
-        TankSpriteFactory.create(
-          spriteLoader,
-          dropType,
-          targetRect,
-          rotation,
-          1,
-        ),
-      );
-      frames.push(
-        TankSpriteFactory.create(
-          spriteLoader,
-          dropType,
-          targetRect,
-          rotation,
-          2,
-        ),
-      );
-      frames.push(
-        TankSpriteFactory.create(
-          spriteLoader,
-          dropType,
-          targetRect,
-          rotation,
-          1,
-        ),
-      );
-      frames.push(
-        TankSpriteFactory.create(
-          spriteLoader,
-          dropType,
-          targetRect,
-          rotation,
-          2,
-        ),
-      );
+
+      const dropFrames = spriteLoader.loadList([
+        TankSpriteId.create(dropType, rotation, 1),
+        TankSpriteId.create(dropType, rotation, 2),
+        TankSpriteId.create(dropType, rotation, 1),
+        TankSpriteId.create(dropType, rotation, 2),
+      ]);
+
+      frames.push(...dropFrames);
     }
 
     super(frames, { delay: 1, loop: true });

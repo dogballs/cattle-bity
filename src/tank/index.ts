@@ -6,6 +6,6 @@ export * from './TankColor';
 export * from './TankDeathReason';
 export * from './TankParty';
 export * from './TankSkinAnimation';
-export * from './TankSpriteFactory';
+export * from './TankSpriteId';
 export * from './TankTier';
 export * from './TankType';

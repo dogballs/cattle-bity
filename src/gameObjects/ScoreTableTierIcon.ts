@@ -1,16 +1,15 @@
 import {
   GameObject,
   GameObjectUpdateArgs,
-  Rect,
   Rotation,
   SpriteRenderer,
 } from '../core';
 import {
   TankColor,
   TankParty,
+  TankSpriteId,
   TankTier,
   TankType,
-  TankSpriteFactory,
 } from '../tank';
 
 import { SpriteText } from './SpriteText';
@@ -28,12 +27,8 @@ export class ScoreTableTierIcon extends GameObject {
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     const type = new TankType(TankParty.Enemy, TankColor.Default, this.tier);
-    const sprite = TankSpriteFactory.create(
-      spriteLoader,
-      type,
-      new Rect(0, 0, 64, 64), // TODO: use native sprite size
-      Rotation.Up,
-    );
+    const spriteId = TankSpriteId.create(type, Rotation.Up);
+    const sprite = spriteLoader.load(spriteId);
 
     const renderer = new SpriteRenderer();
     renderer.sprite = sprite;

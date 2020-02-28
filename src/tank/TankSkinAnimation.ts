@@ -1,4 +1,4 @@
-import { Animation, Rotation, Rect, Sprite, SpriteLoader } from '../core';
+import { Animation, Rotation, Sprite, SpriteLoader } from '../core';
 import { Tank, TankState } from '../gameObjects';
 
 import { TankIdleAnimation, TankMoveAnimation } from './animations';
@@ -11,7 +11,6 @@ type AnimationMap = Map<Rotation, Animation<Sprite>>;
 
 export class TankSkinAnimation {
   public readonly type: TankType;
-  public readonly targetRect: Rect;
   public readonly hasDrop: boolean;
 
   protected rotation: Rotation = Rotation.Up;
@@ -21,96 +20,42 @@ export class TankSkinAnimation {
   protected readonly idleAnimationMap: AnimationMap = new Map();
   protected currentAnimationMap: AnimationMap;
 
-  constructor(
-    spriteLoader: SpriteLoader,
-    type: TankType,
-    targetRect: Rect,
-    hasDrop = false,
-  ) {
+  constructor(spriteLoader: SpriteLoader, type: TankType, hasDrop = false) {
     this.type = type;
-    this.targetRect = targetRect;
     this.hasDrop = hasDrop;
 
     this.idleAnimationMap.set(
       Rotation.Up,
-      new TankIdleAnimation(
-        spriteLoader,
-        type,
-        targetRect,
-        Rotation.Up,
-        hasDrop,
-      ),
+      new TankIdleAnimation(spriteLoader, type, Rotation.Up, hasDrop),
     );
     this.idleAnimationMap.set(
       Rotation.Down,
-      new TankIdleAnimation(
-        spriteLoader,
-        type,
-        targetRect,
-        Rotation.Down,
-        hasDrop,
-      ),
+      new TankIdleAnimation(spriteLoader, type, Rotation.Down, hasDrop),
     );
     this.idleAnimationMap.set(
       Rotation.Left,
-      new TankIdleAnimation(
-        spriteLoader,
-        type,
-        targetRect,
-        Rotation.Left,
-        hasDrop,
-      ),
+      new TankIdleAnimation(spriteLoader, type, Rotation.Left, hasDrop),
     );
     this.idleAnimationMap.set(
       Rotation.Right,
-      new TankIdleAnimation(
-        spriteLoader,
-        type,
-        targetRect,
-        Rotation.Right,
-        hasDrop,
-      ),
+      new TankIdleAnimation(spriteLoader, type, Rotation.Right, hasDrop),
     );
 
     this.moveAnimationMap.set(
       Rotation.Up,
-      new TankMoveAnimation(
-        spriteLoader,
-        type,
-        targetRect,
-        Rotation.Up,
-        hasDrop,
-      ),
+      new TankMoveAnimation(spriteLoader, type, Rotation.Up, hasDrop),
     );
     this.moveAnimationMap.set(
       Rotation.Down,
-      new TankMoveAnimation(
-        spriteLoader,
-        type,
-        targetRect,
-        Rotation.Down,
-        hasDrop,
-      ),
+      new TankMoveAnimation(spriteLoader, type, Rotation.Down, hasDrop),
     );
     this.moveAnimationMap.set(
       Rotation.Left,
-      new TankMoveAnimation(
-        spriteLoader,
-        type,
-        targetRect,
-        Rotation.Left,
-        hasDrop,
-      ),
+      new TankMoveAnimation(spriteLoader, type, Rotation.Left, hasDrop),
     );
     this.moveAnimationMap.set(
       Rotation.Right,
-      new TankMoveAnimation(
-        spriteLoader,
-        type,
-        targetRect,
-        Rotation.Right,
-        hasDrop,
-      ),
+      new TankMoveAnimation(spriteLoader, type, Rotation.Right, hasDrop),
     );
 
     this.currentAnimationMap = this.idleAnimationMap;

@@ -3,7 +3,6 @@ import {
   Animation,
   GameObject,
   GameObjectUpdateArgs,
-  Rect,
   Sprite,
   SpriteRenderer,
   Subject,
@@ -22,10 +21,7 @@ export class Explosion extends GameObject {
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     this.animation = new Animation(
-      [
-        spriteLoader.load('explosion.large.1', new Rect(0, 0, 124, 108)),
-        spriteLoader.load('explosion.large.2', new Rect(0, 0, 136, 128)),
-      ],
+      spriteLoader.loadList(['explosion.large.1', 'explosion.large.2']),
       { delay: 4, loop: false },
     );
   }

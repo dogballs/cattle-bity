@@ -12,16 +12,30 @@ interface SpriteManifest {
   [id: string]: SpriteManifestItem;
 }
 
+interface SpriteLoaderOptions {
+  scale?: number;
+}
+
+const DEFAULT_OPTIONS = {
+  scale: 1,
+};
+
 export class SpriteLoader {
   private readonly textureLoader: TextureLoader;
   private readonly manifest: SpriteManifest;
+  private readonly options: SpriteLoaderOptions;
 
-  constructor(textureLoader: TextureLoader, manifest: SpriteManifest) {
+  constructor(
+    textureLoader: TextureLoader,
+    manifest: SpriteManifest,
+    options: SpriteLoaderOptions = {},
+  ) {
     this.textureLoader = textureLoader;
     this.manifest = manifest;
+    this.options = Object.assign({}, DEFAULT_OPTIONS, options);
   }
 
-  public load(id: string, targetRect = new Rect()): Sprite {
+  public load(id: string, argTargetRect?: Rect): Sprite {
     const item = this.manifest[id];
     if (item === undefined) {
       throw new Error(`Invalid sprite id = "${id}"`);
@@ -30,6 +44,16 @@ export class SpriteLoader {
     const { file: fileName, rect: sourceRectValues } = item;
     const texture = this.textureLoader.load(fileName);
     const sourceRect = new Rect(...sourceRectValues);
+
+    const defaultTargetRect = new Rect(
+      0,
+      0,
+      sourceRect.width * this.options.scale,
+      sourceRect.height * this.options.scale,
+    );
+
+    const targetRect = argTargetRect ?? defaultTargetRect;
+
     const sprite = new Sprite(texture, sourceRect, targetRect);
 
     return sprite;

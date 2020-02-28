@@ -6,7 +6,7 @@ import { Sprite } from '../Sprite';
 import { Renderer } from './Renderer';
 
 export class SpriteRenderer extends Renderer {
-  public alignment: Alignment = Alignment.Stretch;
+  public alignment: Alignment = Alignment.MiddleCenter;
   public sprite: Sprite = null;
 
   constructor(sprite: Sprite = null) {

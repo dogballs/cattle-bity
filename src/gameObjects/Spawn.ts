@@ -3,7 +3,6 @@ import {
   Animation,
   GameObject,
   GameObjectUpdateArgs,
-  Rect,
   Sprite,
   SpriteRenderer,
   Subject,
@@ -22,12 +21,7 @@ export class Spawn extends GameObject {
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     this.animation = new Animation(
-      [
-        spriteLoader.load('spawn.1', new Rect(0, 0, 36, 36)),
-        spriteLoader.load('spawn.2', new Rect(0, 0, 44, 44)),
-        spriteLoader.load('spawn.3', new Rect(0, 0, 52, 52)),
-        spriteLoader.load('spawn.4', new Rect(0, 0, 60, 60)),
-      ],
+      spriteLoader.loadList(['spawn.1', 'spawn.2', 'spawn.3', 'spawn.4']),
       { delay: 3, loop: 3 },
     );
   }

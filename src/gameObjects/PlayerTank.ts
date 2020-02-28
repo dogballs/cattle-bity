@@ -1,4 +1,4 @@
-import { Rect, GameObjectUpdateArgs } from '../core';
+import { GameObjectUpdateArgs } from '../core';
 import {
   PlayerTankBehavior,
   TankSkinAnimation,
@@ -27,35 +27,19 @@ export class PlayerTank extends Tank {
 
     this.tierSkinAnimations.set(
       TankTier.A,
-      new TankSkinAnimation(
-        spriteLoader,
-        TankType.PlayerPrimaryA,
-        new Rect(0, 0, 52, 52),
-      ),
+      new TankSkinAnimation(spriteLoader, TankType.PlayerPrimaryA),
     );
     this.tierSkinAnimations.set(
       TankTier.B,
-      new TankSkinAnimation(
-        spriteLoader,
-        TankType.PlayerPrimaryB,
-        new Rect(0, 0, 52, 64),
-      ),
+      new TankSkinAnimation(spriteLoader, TankType.PlayerPrimaryB),
     );
     this.tierSkinAnimations.set(
       TankTier.C,
-      new TankSkinAnimation(
-        spriteLoader,
-        TankType.PlayerPrimaryC,
-        new Rect(0, 0, 52, 60),
-      ),
+      new TankSkinAnimation(spriteLoader, TankType.PlayerPrimaryC),
     );
     this.tierSkinAnimations.set(
       TankTier.D,
-      new TankSkinAnimation(
-        spriteLoader,
-        TankType.PlayerPrimaryD,
-        new Rect(0, 0, 52, 60),
-      ),
+      new TankSkinAnimation(spriteLoader, TankType.PlayerPrimaryD),
     );
 
     this.skinAnimation = this.tierSkinAnimations.get(this.type.tier);

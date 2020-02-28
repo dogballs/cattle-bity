@@ -3,7 +3,6 @@ import {
   Animation,
   GameObject,
   GameObjectUpdateArgs,
-  Rect,
   Rotation,
   Sprite,
   SpriteRenderer,
@@ -24,7 +23,6 @@ export class MenuSelector extends GameObject {
     this.animation = new TankMoveAnimation(
       spriteLoader,
       TankType.PlayerPrimaryA,
-      new Rect(0, 0, 52, 52),
       Rotation.Right,
     );
     this.renderer.sprite = this.animation.getCurrentFrame();
