@@ -1,173 +1,158 @@
-import { GameObject } from '../core';
+import { GameObject, Timer } from '../core';
 import { PointsRecord } from '../points';
 import { PowerupType } from '../powerups';
 import { TankTier } from '../tank';
 import * as config from '../config';
 
-import { ScoreTablePointCounter } from './ScoreTablePointCounter';
+import { ScoreTableCounter } from './ScoreTableCounter';
 import { ScoreTableTierIcon } from './ScoreTableTierIcon';
 import { ScoreTableUnderline } from './ScoreTableUnderline';
 import { SpriteText } from './SpriteText';
 
+enum State {
+  Idle,
+  Transitioning,
+  Counting,
+  Done,
+}
+
+const TIERS = [TankTier.A, TankTier.B, TankTier.C, TankTier.D];
+const TRANSITION_DELAY = 8;
+
 export class ScoreTable extends GameObject {
-  private points = new PointsRecord();
+  private record = new PointsRecord();
 
-  private iconA = new ScoreTableTierIcon(TankTier.A);
-  private iconB = new ScoreTableTierIcon(TankTier.B);
-  private iconC = new ScoreTableTierIcon(TankTier.C);
-  private iconD = new ScoreTableTierIcon(TankTier.D);
-
-  private counter = new ScoreTablePointCounter();
-  private title = new SpriteText('Ⅰ-PLAYER', { color: config.COLOR_RED });
-  private totalPoints = new SpriteText('1300', { color: config.COLOR_YELLOW });
-
-  private pointsA = new SpriteText('880', { color: config.COLOR_WHITE });
-  private pointsB = new SpriteText('0', { color: config.COLOR_WHITE });
-  private pointsC = new SpriteText('0', { color: config.COLOR_WHITE });
-  private pointsD = new SpriteText('0', { color: config.COLOR_WHITE });
-
-  private pointsTextA = new SpriteText('PTS', { color: config.COLOR_WHITE });
-  private pointsTextB = new SpriteText('PTS', { color: config.COLOR_WHITE });
-  private pointsTextC = new SpriteText('PTS', { color: config.COLOR_WHITE });
-  private pointsTextD = new SpriteText('PTS', { color: config.COLOR_WHITE });
-
-  private killsA = new SpriteText('0', { color: config.COLOR_WHITE });
-  private killsB = new SpriteText('0', { color: config.COLOR_WHITE });
-  private killsC = new SpriteText('0', { color: config.COLOR_WHITE });
-  private killsD = new SpriteText('0', { color: config.COLOR_WHITE });
-
+  private playerLabel = new SpriteText('Ⅰ-PLAYER', { color: config.COLOR_RED });
   private underline = new ScoreTableUnderline();
-
-  private totalTitle = new SpriteText('TOTAL', { color: config.COLOR_WHITE });
-  private totalKills = new SpriteText('8', { color: config.COLOR_WHITE });
+  private totalPoints = new SpriteText('', { color: config.COLOR_YELLOW });
+  private totalLabel = new SpriteText('TOTAL', { color: config.COLOR_WHITE });
+  private totalKills = new SpriteText('', { color: config.COLOR_WHITE });
+  private counters: ScoreTableCounter[] = [];
+  private currentCounterIndex = 0;
+  private state = State.Idle;
+  private transitionTimer = new Timer();
 
   constructor() {
     super(832, 544);
 
-    this.points.addKill(TankTier.A);
-    this.points.addKill(TankTier.A);
-    this.points.addKill(TankTier.A);
-    this.points.addKill(TankTier.A);
-    this.points.addKill(TankTier.A);
-    this.points.addKill(TankTier.A);
-    this.points.addKill(TankTier.A);
-    this.points.addKill(TankTier.A);
-    this.points.addKill(TankTier.B);
-    this.points.addKill(TankTier.B);
-    this.points.addKill(TankTier.C);
-    this.points.addKill(TankTier.C);
-    this.points.addKill(TankTier.C);
-    this.points.addKill(TankTier.D);
-    this.points.addKill(TankTier.D);
-    this.points.addKill(TankTier.D);
-    this.points.addKill(TankTier.D);
+    this.record.addKill(TankTier.A);
+    this.record.addKill(TankTier.A);
+    this.record.addKill(TankTier.A);
+    this.record.addKill(TankTier.A);
+    this.record.addKill(TankTier.A);
+    this.record.addKill(TankTier.A);
+    this.record.addKill(TankTier.A);
+    this.record.addKill(TankTier.A);
+    this.record.addKill(TankTier.B);
+    this.record.addKill(TankTier.B);
+    this.record.addKill(TankTier.C);
+    this.record.addKill(TankTier.C);
+    this.record.addKill(TankTier.C);
+    this.record.addKill(TankTier.D);
+    this.record.addKill(TankTier.D);
+    this.record.addKill(TankTier.D);
+    this.record.addKill(TankTier.D);
 
-    this.points.addPowerup(PowerupType.BaseDefence);
-    this.points.addPowerup(PowerupType.BaseDefence);
-    this.points.addPowerup(PowerupType.BaseDefence);
+    this.record.addPowerup(PowerupType.BaseDefence);
+    this.record.addPowerup(PowerupType.BaseDefence);
+    this.record.addPowerup(PowerupType.BaseDefence);
   }
 
   protected setup(): void {
-    this.title.position.set(256, 0);
-    this.title.pivot.setX(1);
-    this.add(this.title);
+    this.playerLabel.position.set(256, 0);
+    this.playerLabel.pivot.setX(1);
+    this.add(this.playerLabel);
 
-    this.totalPoints.setText(this.points.getTotal().toString());
+    this.totalPoints.setText(this.record.getTotalPoints().toString());
     this.totalPoints.position.set(256, 64);
     this.totalPoints.pivot.set(1, 0);
     this.add(this.totalPoints);
 
-    this.iconA.setCenter(this.getChildrenCenter());
-    this.iconA.position.setY(136);
-    this.add(this.iconA);
+    TIERS.forEach((tier, index) => {
+      const icon = new ScoreTableTierIcon(tier);
+      icon.setCenter(this.getChildrenCenter());
+      icon.position.setY(136 + 100 * index);
+      this.add(icon);
 
-    this.iconB.setCenter(this.getChildrenCenter());
-    this.iconB.position.setY(236);
-    this.add(this.iconB);
+      const cost = this.record.getTierKillCost(tier);
+      const kills = this.record.getTierKillCount(tier);
 
-    this.iconC.setCenter(this.getChildrenCenter());
-    this.iconC.position.setY(336);
-    this.add(this.iconC);
-
-    this.iconD.setCenter(this.getChildrenCenter());
-    this.iconD.position.setY(436);
-    this.add(this.iconD);
-
-    this.pointsA.setText(this.points.getTierTotal(TankTier.A).toString());
-    this.pointsA.position.set(128, 152);
-    this.pointsA.pivot.set(1, 0);
-    this.add(this.pointsA);
-
-    this.pointsB.setText(this.points.getTierTotal(TankTier.B).toString());
-    this.pointsB.position.set(128, 252);
-    this.pointsB.pivot.set(1, 0);
-    this.add(this.pointsB);
-
-    this.pointsC.setText(this.points.getTierTotal(TankTier.C).toString());
-    this.pointsC.position.set(128, 352);
-    this.pointsC.pivot.set(1, 0);
-    this.add(this.pointsC);
-
-    this.pointsD.setText(this.points.getTierTotal(TankTier.D).toString());
-    this.pointsD.position.set(128, 452);
-    this.pointsD.pivot.set(1, 0);
-    this.add(this.pointsD);
-
-    this.pointsTextA.position.set(256, 152);
-    this.pointsTextA.pivot.set(1, 0);
-    this.add(this.pointsTextA);
-
-    this.pointsTextB.position.set(256, 252);
-    this.pointsTextB.pivot.set(1, 0);
-    this.add(this.pointsTextB);
-
-    this.pointsTextC.position.set(256, 352);
-    this.pointsTextC.pivot.set(1, 0);
-    this.add(this.pointsTextC);
-
-    this.pointsTextD.position.set(256, 452);
-    this.pointsTextD.pivot.set(1, 0);
-    this.add(this.pointsTextD);
-
-    this.killsA.setText(
-      this.points.getKillCountByPowerup(TankTier.A).toString(),
-    );
-    this.killsA.position.set(344, 152);
-    this.killsA.pivot.set(1, 0);
-    this.add(this.killsA);
-
-    this.killsB.setText(
-      this.points.getKillCountByPowerup(TankTier.B).toString(),
-    );
-    this.killsB.position.set(344, 252);
-    this.killsB.pivot.set(1, 0);
-    this.add(this.killsB);
-
-    this.killsC.setText(
-      this.points.getKillCountByPowerup(TankTier.C).toString(),
-    );
-    this.killsC.position.set(344, 352);
-    this.killsC.pivot.set(1, 0);
-    this.add(this.killsC);
-
-    this.killsD.setText(
-      this.points.getKillCountByPowerup(TankTier.D).toString(),
-    );
-    this.killsD.position.set(344, 452);
-    this.killsD.pivot.set(1, 0);
-    this.add(this.killsD);
+      const counter = new ScoreTableCounter(kills, cost);
+      counter.position.set(4, 152 + 100 * index);
+      this.counters.push(counter);
+      this.add(counter);
+    });
 
     this.underline.setCenter(this.getChildrenCenter());
     this.underline.position.setY(504);
     this.add(this.underline);
 
-    this.totalTitle.position.set(256, 516);
-    this.totalTitle.pivot.set(1, 0);
-    this.add(this.totalTitle);
+    this.totalLabel.position.set(256, 516);
+    this.totalLabel.pivot.set(1, 0);
+    this.add(this.totalLabel);
 
-    this.totalKills.setText(this.points.getKillCount().toString());
-    this.totalKills.position.set(344, 516);
+    this.totalKills.position.set(348, 516);
     this.totalKills.pivot.set(1, 0);
     this.add(this.totalKills);
+
+    this.start();
+  }
+
+  protected update(): void {
+    if (this.state === State.Idle || this.state === State.Done) {
+      return;
+    }
+
+    if (this.state === State.Transitioning) {
+      if (this.transitionTimer.isDone()) {
+        if (this.allCountersDone()) {
+          this.totalKills.setText(this.record.getKillTotalCount().toString());
+          this.state = State.Done;
+          return;
+        }
+
+        const counter = this.getCurrentCounter();
+        counter.start();
+        this.state = State.Counting;
+      }
+
+      this.transitionTimer.tick();
+      return;
+    }
+
+    if (this.state === State.Counting) {
+      const counter = this.getCurrentCounter();
+      if (counter.isDone()) {
+        if (this.hasNextCounter()) {
+          this.currentCounterIndex += 1;
+        }
+
+        this.state = State.Transitioning;
+        this.transitionTimer.reset(TRANSITION_DELAY);
+        return;
+      }
+    }
+  }
+
+  private start(): void {
+    if (this.state !== State.Idle) {
+      return;
+    }
+
+    this.state = State.Transitioning;
+    this.transitionTimer.reset(TRANSITION_DELAY);
+  }
+
+  private getCurrentCounter(): ScoreTableCounter {
+    return this.counters[this.currentCounterIndex];
+  }
+
+  private hasNextCounter(): boolean {
+    return this.currentCounterIndex < this.counters.length - 1;
+  }
+
+  private allCountersDone(): boolean {
+    const lastCounter = this.counters[this.counters.length - 1];
+    return lastCounter.isDone();
   }
 }

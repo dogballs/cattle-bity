@@ -26,7 +26,7 @@ export class PointsRecord {
     return this;
   }
 
-  public getKillCost(tier: TankTier): number {
+  public getTierKillCost(tier: TankTier): number {
     return TANK_POINTS_MAP[tier];
   }
 
@@ -34,49 +34,49 @@ export class PointsRecord {
     return POWERUP_POINTS;
   }
 
-  public getKillCount(): number {
+  public getKillTotalCount(): number {
     return this.kills.length;
   }
 
-  public getKillCountByPowerup(tierToFind: TankTier): number {
+  public getTierKillCount(tierToFind: TankTier): number {
     const kills = this.kills.filter((tier) => tier === tierToFind);
     const count = kills.length;
 
     return count;
   }
 
-  public getTierTotal(tierToFind: TankTier): number {
+  public getTierPoints(tierToFind: TankTier): number {
     let total = 0;
 
     this.kills.forEach((tier) => {
       if (tier !== tierToFind) {
         return;
       }
-      total += this.getKillCost(tier);
+      total += this.getTierKillCost(tier);
     });
 
     return total;
   }
 
-  public getKillTotal(): number {
+  public getKillTotalPoints(): number {
     let total = 0;
 
     this.kills.forEach((tier) => {
-      total += this.getKillCost(tier);
+      total += this.getTierKillCost(tier);
     });
 
     return total;
   }
 
-  public getPowerupTotal(): number {
+  public getPowerupTotalPoints(): number {
     const total = this.powerups.length * this.getPowerupCost();
 
     return total;
   }
 
-  public getTotal(): number {
-    const killTotal = this.getKillTotal();
-    const powerupTotal = this.getPowerupTotal();
+  public getTotalPoints(): number {
+    const killTotal = this.getKillTotalPoints();
+    const powerupTotal = this.getPowerupTotalPoints();
 
     const total = killTotal + powerupTotal;
 

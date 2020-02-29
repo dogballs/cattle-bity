@@ -36,7 +36,7 @@ import * as rectFontConfig from '../data/fonts/rect-font.json';
 const log = new Logger('main', Logger.Level.Debug);
 
 const gameRenderer = new GameRenderer({
-  // debug: true,
+  debug: true,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });

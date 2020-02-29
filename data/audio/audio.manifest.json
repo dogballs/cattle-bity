@@ -8,5 +8,6 @@
   "powerup.spawn": { "file": "powerup-appear.wav" },
   "powerup.pickup": { "file": "powerup-pickup.wav" },
   "explosion.player": { "file": "player-explosion.wav" },
-  "explosion.enemy": { "file": "enemy-explosion.wav" }
+  "explosion.enemy": { "file": "enemy-explosion.wav" },
+  "score": { "file": "score.wav" }
 }
