@@ -178,15 +178,6 @@ export class GameObject extends Node {
     return has;
   }
 
-  public invokeSetup(args: GameObjectUpdateArgs): void {
-    if (this.needsSetup === false) {
-      return;
-    }
-
-    this.needsSetup = false;
-    this.setup(args);
-  }
-
   public invokeUpdate(args: GameObjectUpdateArgs): void {
     if (this.needsSetup === true) {
       this.needsSetup = false;

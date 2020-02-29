@@ -1,25 +1,25 @@
 import { GameObject } from '../core';
 import { PowerupFactory, PowerupType } from '../powerups';
 
-import { Spawner } from '../Spawner';
+import { Level } from '../level';
 
 export class DebugController {
-  protected readonly spawner: Spawner;
+  protected readonly level: Level;
 
-  constructor(spawner: Spawner) {
-    this.spawner = spawner;
+  constructor(level: Level) {
+    this.level = level;
   }
 
   public activatePowerup(type: PowerupType): void {
     const powerup = PowerupFactory.create(type);
-    powerup.action.execute(this.spawner.playerTank, powerup, this.spawner.base);
+    powerup.action.execute(this.level.playerTank, powerup, this.level.base);
   }
 
   public playerTankFire(): void {
-    this.spawner.playerTank.fire();
+    this.level.playerTank.fire();
   }
 
   public findByTag(tags: string | string[]): GameObject[] {
-    return this.spawner.field.getChildrenWithTag(tags);
+    return this.level.field.getChildrenWithTag(tags);
   }
 }

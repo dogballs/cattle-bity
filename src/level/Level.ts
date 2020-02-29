@@ -6,7 +6,7 @@ import {
   Subject,
   Timer,
   Vector,
-} from './core';
+} from '../core';
 import {
   Base,
   EnemyBasicTank,
@@ -16,13 +16,13 @@ import {
   PlayerTank,
   Points,
   Spawn,
-} from './gameObjects';
-import { MapConfig, MapConfigSpawnEnemyListItem } from './map';
-import { PointsValue } from './points';
-import { PowerupFactory } from './powerups';
-import { TankDeathReason, TankTier } from './tank';
+} from '../gameObjects';
+import { MapConfig, MapConfigSpawnEnemyListItem } from '../map';
+import { PointsValue } from '../points';
+import { PowerupFactory } from '../powerups';
+import { TankDeathReason, TankTier } from '../tank';
 
-import * as config from './config';
+import * as config from '../config';
 
 const DEFAULT_ENEMY_LOCATIONS = [
   new Vector(384, 0),
@@ -32,7 +32,7 @@ const DEFAULT_ENEMY_LOCATIONS = [
 
 const DEFAULT_PLAYER_LOCATIONS = [new Vector(256, 768)];
 
-export class Spawner {
+export class Level {
   public readonly enemySpawned = new Subject();
 
   public readonly mapConfig: MapConfig;

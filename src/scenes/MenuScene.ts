@@ -1,11 +1,10 @@
-import {
-  GameObject,
-  GameObjectUpdateArgs,
-  KeyboardKey,
-  RectRenderer,
-} from '../core';
+import { GameObject, GameObjectUpdateArgs, RectRenderer } from '../core';
 import { Menu, MenuHeading } from '../gameObjects';
+import { InputControl } from '../input';
 import * as config from '../config';
+
+import { Scene } from './Scene';
+import { SceneType } from './SceneType';
 
 const SLIDE_SPEED = 4;
 
@@ -14,29 +13,29 @@ enum State {
   Ready,
 }
 
-export class MenuScene extends GameObject {
+export class MenuScene extends Scene {
   private heading = new MenuHeading();
   private group = new GameObject();
   private menu = new Menu();
   private state: State = State.Sliding;
 
   protected setup(): void {
-    this.renderer = new RectRenderer(config.COLOR_BLACK);
+    this.root.renderer = new RectRenderer(config.COLOR_BLACK);
 
-    this.group.size.copy(this.size);
-    this.group.position.setY(this.size.height);
+    this.group.size.copy(this.root.size);
+    this.group.position.setY(this.root.size.height);
 
     this.heading.pivot.setX(0.5);
-    this.heading.setCenter(this.getChildrenCenter());
+    this.heading.setCenter(this.root.getChildrenCenter());
     this.heading.position.setY(160);
     this.group.add(this.heading);
 
-    this.menu.setCenter(this.getChildrenCenter());
+    this.menu.setCenter(this.root.getChildrenCenter());
     this.menu.position.setY(512);
     this.menu.selected.addListener(this.handleMenuSelected);
     this.group.add(this.menu);
 
-    this.add(this.group);
+    this.root.add(this.group);
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
@@ -46,7 +45,10 @@ export class MenuScene extends GameObject {
       this.group.position.y -= SLIDE_SPEED;
 
       const hasReachedTop = this.group.position.y <= 0;
-      const isSkipped = input.isDown(KeyboardKey.Space);
+      const isSkipped = input.isDownAny([
+        InputControl.Select,
+        InputControl.Start,
+      ]);
       const isReady = hasReachedTop || isSkipped;
 
       if (isReady) {
@@ -54,19 +56,21 @@ export class MenuScene extends GameObject {
         this.state = State.Ready;
         this.menu.showSelector();
       } else {
-        this.traverseDescedants((child) => {
+        this.root.traverseDescedants((child) => {
           child.invokeUpdate(updateArgs);
         });
       }
       return;
     }
 
-    this.traverseDescedants((child) => {
+    this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });
   }
 
   private handleMenuSelected = (selectedIndex): void => {
-    console.log({ selectedIndex });
+    if (selectedIndex === 0) {
+      this.transition(SceneType.LevelSelection);
+    }
   };
 }

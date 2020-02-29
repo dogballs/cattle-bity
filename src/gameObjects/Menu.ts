@@ -4,7 +4,7 @@ import { InputControl } from '../input';
 import { MenuSelector } from './MenuSelector';
 import { SpriteText } from './SpriteText';
 
-const MENU_ITEMS = ['1 PLAYER', '2 PLAYERS', 'CONSTRUCTION'];
+const MENU_ITEMS = ['1 PLAYER'];
 const MENU_ITEM_HEIGHT = 60;
 
 export class Menu extends GameObject {

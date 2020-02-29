@@ -1,32 +1,37 @@
-import { GameObject, GameObjectUpdateArgs } from '../core';
+import { GameObjectUpdateArgs } from '../core';
 import { Curtain, LevelSelector } from '../gameObjects';
+
+import { Scene } from './Scene';
+import { SceneType } from './SceneType';
 
 const MIN_LEVEL_NUMBER = 1;
 const MAX_LEVEL_NUMBER = 35;
 
-export class StageSelectionScene extends GameObject {
+export class StageSelectionScene extends Scene {
   private selector = new LevelSelector(MIN_LEVEL_NUMBER, MAX_LEVEL_NUMBER);
   private curtain: Curtain;
 
-  constructor(width: number, height: number) {
-    super(width, height);
-
-    this.curtain = new Curtain(width, height, true);
-  }
-
   protected setup({}: GameObjectUpdateArgs): void {
-    // TODO: order is important, z-index
-    this.add(this.curtain);
+    this.curtain = new Curtain(this.root.size.width, this.root.size.height);
 
-    this.selector.setCenter(this.getChildrenCenter());
-    this.add(this.selector);
+    // TODO: order is important, z-index
+    this.root.add(this.curtain);
+
+    this.selector.setCenter(this.root.getChildrenCenter());
+    this.selector.selected.addListener(this.handleLevelSelected);
+    this.root.add(this.selector);
 
     this.curtain.close();
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
-    this.traverseDescedants((child) => {
+    this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });
   }
+
+  private handleLevelSelected = (level: number): void => {
+    console.log({ level });
+    this.transition(SceneType.Level);
+  };
 }

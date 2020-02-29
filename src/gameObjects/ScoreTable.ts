@@ -1,4 +1,4 @@
-import { GameObject, Timer } from '../core';
+import { GameObject, Subject, Timer } from '../core';
 import { PointsRecord } from '../points';
 import { PowerupType } from '../powerups';
 import { TankTier } from '../tank';
@@ -20,8 +20,8 @@ const TIERS = [TankTier.A, TankTier.B, TankTier.C, TankTier.D];
 const TRANSITION_DELAY = 8;
 
 export class ScoreTable extends GameObject {
+  public done = new Subject();
   private record = new PointsRecord();
-
   private playerLabel = new SpriteText('Ⅰ-PLAYER', { color: config.COLOR_RED });
   private underline = new ScoreTableUnderline();
   private totalPoints = new SpriteText('', { color: config.COLOR_YELLOW });
@@ -94,8 +94,6 @@ export class ScoreTable extends GameObject {
     this.totalKills.position.set(348, 516);
     this.totalKills.pivot.set(1, 0);
     this.add(this.totalKills);
-
-    this.start();
   }
 
   protected update(): void {
@@ -108,6 +106,7 @@ export class ScoreTable extends GameObject {
         if (this.allCountersDone()) {
           this.totalKills.setText(this.record.getKillTotalCount().toString());
           this.state = State.Done;
+          this.done.notify();
           return;
         }
 
@@ -134,7 +133,7 @@ export class ScoreTable extends GameObject {
     }
   }
 
-  private start(): void {
+  public start(): void {
     if (this.state !== State.Idle) {
       return;
     }

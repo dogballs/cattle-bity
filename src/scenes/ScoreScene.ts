@@ -1,29 +1,36 @@
-import { GameObject, GameObjectUpdateArgs, RectRenderer } from '../core';
+import { GameObjectUpdateArgs, RectRenderer } from '../core';
 import { ScoreTable, SpriteText } from '../gameObjects';
 import * as config from '../config';
 
-export class ScoreScene extends GameObject {
+import { Scene } from './Scene';
+import { SceneType } from './SceneType';
+
+export class ScoreScene extends Scene {
   private levelTitle = new SpriteText('STAGE 1', { color: config.COLOR_WHITE });
   private scoreTable = new ScoreTable();
 
   protected setup(): void {
-    this.renderer = new RectRenderer(config.COLOR_BLACK);
+    this.root.renderer = new RectRenderer(config.COLOR_BLACK);
 
     this.levelTitle.pivot.set(0.5, 0);
-    this.levelTitle.setCenter(this.getChildrenCenter());
+    this.levelTitle.setCenter(this.root.getChildrenCenter());
     this.levelTitle.position.setY(128);
-    this.add(this.levelTitle);
+    this.root.add(this.levelTitle);
 
-    // this.scoreTable.position.set(352, 192);
+    this.scoreTable.setCenter(this.root.getChildrenCenter());
+    this.scoreTable.done.addListener(this.handleDone);
+    this.root.add(this.scoreTable);
 
-    this.scoreTable.setCenter(this.getChildrenCenter());
-    // this.scoreTable.pivot.set(0.5, 0.5);
-    this.add(this.scoreTable);
+    this.scoreTable.start();
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
-    this.traverseDescedants((child) => {
+    this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });
   }
+
+  private handleDone = (): void => {
+    this.transition(SceneType.GameOver);
+  };
 }

@@ -1,4 +1,10 @@
-import { GameObject, GameObjectUpdateArgs, Input, Timer } from '../core';
+import {
+  GameObject,
+  GameObjectUpdateArgs,
+  Input,
+  Subject,
+  Timer,
+} from '../core';
 import { InputControl } from '../input';
 
 import { SpriteText } from './SpriteText';
@@ -7,6 +13,7 @@ const SLOW_HOLD_DELAY = 7;
 const FAST_HOLD_DELAY = 1;
 
 export class LevelSelector extends GameObject {
+  public selected = new Subject<number>();
   private level = 1;
   private minLevel = 1;
   private maxLevel = 1;
@@ -27,6 +34,11 @@ export class LevelSelector extends GameObject {
   }
 
   protected update({ input }: GameObjectUpdateArgs): void {
+    if (input.isDown(InputControl.Start)) {
+      this.selected.notify(this.level);
+      return;
+    }
+
     this.throttleInput(input, InputControl.A, this.selectNext, SLOW_HOLD_DELAY);
     this.throttleInput(input, InputControl.B, this.selectPrev, SLOW_HOLD_DELAY);
     this.throttleInput(

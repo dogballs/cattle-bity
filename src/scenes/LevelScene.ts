@@ -1,7 +1,6 @@
 import {
   AudioLoader,
   CollisionDetector,
-  GameObject,
   GameObjectUpdateArgs,
   GameState,
   Rect,
@@ -11,24 +10,27 @@ import { Border, LevelInfo, Field, PauseNotice } from '../gameObjects';
 import { MapConfig, MapConfigSchema } from '../map';
 import { TerrainFactory } from '../terrain';
 import { ConfigParser } from '../ConfigParser';
-import { Spawner } from '../Spawner';
+import { Level } from '../level';
 import * as config from '../config';
 
 import * as mapJSON from '../../data/maps/original/01.json';
 
-export class LevelScene extends GameObject {
+import { Scene } from './Scene';
+import { SceneType } from './SceneType';
+
+export class LevelScene extends Scene {
   private audioLoader: AudioLoader;
   private info = new LevelInfo();
   private field = new Field();
   private pauseNotice = new PauseNotice();
-  private spawner: Spawner;
+  private level: Level;
 
   protected setup({ audioLoader }: GameObjectUpdateArgs): void {
     this.audioLoader = audioLoader;
 
-    this.add(new Border());
+    this.root.add(new Border());
 
-    this.add(this.field);
+    this.root.add(this.field);
     this.field.position.set(
       config.BORDER_LEFT_WIDTH,
       config.BORDER_TOP_BOTTOM_HEIGHT,
@@ -38,7 +40,7 @@ export class LevelScene extends GameObject {
       config.BORDER_LEFT_WIDTH + config.FIELD_SIZE + 32,
       config.BORDER_TOP_BOTTOM_HEIGHT + 32,
     );
-    this.add(this.info);
+    this.root.add(this.info);
 
     const mapConfig = ConfigParser.parse<MapConfig>(mapJSON, MapConfigSchema);
     const terrainTiles = [];
@@ -54,20 +56,20 @@ export class LevelScene extends GameObject {
     });
     this.field.add(...terrainTiles);
 
-    this.spawner = new Spawner(
+    this.level = new Level(
       mapConfig,
       this.field,
       this.field.base,
       this.audioLoader,
     );
-    this.spawner.enemySpawned.addListener(this.handleEnemySpawned);
+    this.level.enemySpawned.addListener(this.handleEnemySpawned);
 
-    this.info.setEnemyCount(this.spawner.getUnspawnedEnemiesCount());
+    this.info.setEnemyCount(this.level.getUnspawnedEnemiesCount());
 
     this.pauseNotice.setCenter(this.field.getChildrenCenter());
     this.pauseNotice.position.y += 18;
     this.pauseNotice.visible = false;
-    this.add(this.pauseNotice);
+    this.root.add(this.pauseNotice);
 
     this.field.base.died.addListener(this.handleBaseDied);
   }
@@ -87,11 +89,11 @@ export class LevelScene extends GameObject {
 
     // TODO: enemies with drops are still animated
     if (!gameState.is(GameState.Paused)) {
-      this.spawner.update();
+      this.level.update();
     }
 
     // Update all objects on the scene
-    this.traverseDescedants((child) => {
+    this.root.traverseDescedants((child) => {
       const shouldUpdate = gameState.is(GameState.Playing) || child.ignorePause;
       if (shouldUpdate) {
         // TODO: abstract out input from tank
@@ -99,7 +101,7 @@ export class LevelScene extends GameObject {
       }
     });
 
-    const nodes = this.flatten();
+    const nodes = this.root.flatten();
 
     // Nodes that initiate collision
     const activeNodes = nodes.filter((node) => node.collider);
@@ -126,9 +128,10 @@ export class LevelScene extends GameObject {
 
   private handleBaseDied = (): void => {
     console.log('Game over! Reason: Base');
+    this.transition(SceneType.Score);
   };
 
   private handleEnemySpawned = (): void => {
-    this.info.setEnemyCount(this.spawner.getUnspawnedEnemiesCount());
+    this.info.setEnemyCount(this.level.getUnspawnedEnemiesCount());
   };
 }

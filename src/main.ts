@@ -22,10 +22,12 @@ import { DebugInspector } from './debug';
 import { KeyboardInputMap } from './input';
 import {
   LevelScene,
-  // GameOverScene,
-  // MenuScene,
-  // StageSelectionScene,
-  // ScoreScene,
+  GameOverScene,
+  MenuScene,
+  StageSelectionScene,
+  ScoreScene,
+  SceneManager,
+  SceneType,
 } from './scenes';
 
 import * as audioManifest from '../data/audio/audio.manifest.json';
@@ -36,7 +38,7 @@ import * as rectFontConfig from '../data/fonts/rect-font.json';
 const log = new Logger('main', Logger.Level.Debug);
 
 const gameRenderer = new GameRenderer({
-  debug: true,
+  // debug: true,
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
@@ -66,10 +68,18 @@ rectFontLoader.register(config.PRIMARY_RECT_FONT_ID, rectFontConfig, {
   scale: config.TILE_SIZE_SMALL,
 });
 
+const sceneManager = new SceneManager(SceneType.Menu);
+sceneManager.register(SceneType.Menu, MenuScene);
+sceneManager.register(SceneType.LevelSelection, StageSelectionScene);
+sceneManager.register(SceneType.Level, LevelScene);
+sceneManager.register(SceneType.Score, ScoreScene);
+sceneManager.register(SceneType.GameOver, GameOverScene);
+sceneManager.start();
+
 // const debug = new DebugController(spawner);
 
-const currentScene = new LevelScene();
-// const currentScene = new MenuScene(config.CANVAS_WIDTH, config.CANVAS_HEIGHT);
+// const currentScene = new LevelScene();
+// const currentScene = new MenuScene();
 // const currentScene = new StageSelectionScene(
 //   config.CANVAS_WIDTH,
 //   config.CANVAS_HEIGHT,
@@ -84,7 +94,9 @@ const debugInspector = new DebugInspector(gameRenderer.getElement());
 debugInspector.listen();
 debugInspector.click.addListener((position: Vector) => {
   const intersections: GameObject[] = [];
-  currentScene.traverseDescedants((child) => {
+
+  const scene = sceneManager.getScene();
+  scene.root.traverseDescedants((child) => {
     if (child.getWorldBoundingBox().contains(position)) {
       intersections.push(child);
     }
@@ -108,9 +120,10 @@ const gameLoop = new GameLoop();
 gameLoop.tick.addListener(() => {
   input.update();
 
-  currentScene.invokeUpdate(updateArgs);
+  const scene = sceneManager.getScene();
+  scene.invokeUpdate(updateArgs);
 
-  gameRenderer.render(currentScene);
+  gameRenderer.render(scene.root);
 
   gameState.tick();
 });
