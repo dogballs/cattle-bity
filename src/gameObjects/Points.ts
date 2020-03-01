@@ -1,9 +1,5 @@
-import {
-  GameObject,
-  GameObjectUpdateArgs,
-  SpriteRenderer,
-  Timer,
-} from '../core';
+import { GameObject, SpriteRenderer, Timer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { PointsValue } from '../points';
 
 const SPRITE_POINTS_PREFIX = 'points';

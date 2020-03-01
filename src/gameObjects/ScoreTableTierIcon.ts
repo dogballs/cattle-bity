@@ -1,9 +1,5 @@
-import {
-  GameObject,
-  GameObjectUpdateArgs,
-  Rotation,
-  SpriteRenderer,
-} from '../core';
+import { GameObject, Rotation, SpriteRenderer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import {
   TankColor,
   TankParty,

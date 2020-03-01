@@ -2,13 +2,13 @@ import {
   Alignment,
   Animation,
   GameObject,
-  GameObjectUpdateArgs,
   Rotation,
   Sprite,
   SpriteRenderer,
   Subject,
   Timer,
 } from '../core';
+import { GameObjectUpdateArgs, Tag } from '../game';
 import {
   TankAttributes,
   TankBehavior,
@@ -16,7 +16,6 @@ import {
   TankSkinAnimation,
   TankType,
 } from '../tank';
-import { Tag } from '../Tag';
 import * as config from '../config';
 
 import { Bullet } from './Bullet';
@@ -68,7 +67,7 @@ export class Tank extends GameObject {
   protected collide(target: GameObject): void {
     if (target.tags.includes(Tag.BlockMove)) {
       const targetBox = target.getWorldBoundingBox();
-      const { width, height } = this.getComputedSize();
+      const { width, height } = this.getBoundingBox().getSize();
       const worldPosition = this.getWorldPosition();
 
       // TODO: world positions are messy, but required to check for all walls
@@ -131,7 +130,7 @@ export class Tank extends GameObject {
       this.attributes.bulletWallDamage,
     );
 
-    const tankSize = this.getComputedSize();
+    const tankSize = this.getBoundingBox().getSize();
 
     // Position bullet where the gun is
 
@@ -140,7 +139,7 @@ export class Tank extends GameObject {
     bullet.setCenterFrom(this);
 
     // Get after rotation
-    const bulletSize = bullet.getComputedSize();
+    const bulletSize = bullet.getBoundingBox().getSize();
 
     if (this.rotation === Rotation.Up) {
       bullet.position.setY(this.position.y);

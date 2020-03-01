@@ -26,7 +26,7 @@ export const MapConfigSchema = Joi.object<MapConfig>({
           }),
         )
         .default([]),
-    }),
+    }).default(),
     player: Joi.object({
       locations: Joi.array()
         .items(

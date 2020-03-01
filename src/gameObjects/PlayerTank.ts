@@ -1,4 +1,4 @@
-import { GameObjectUpdateArgs } from '../core';
+import { GameObjectUpdateArgs, Tag } from '../game';
 import {
   PlayerTankBehavior,
   TankSkinAnimation,
@@ -6,7 +6,6 @@ import {
   TankType,
   TankAttributesFactory,
 } from '../tank';
-import { Tag } from '../Tag';
 
 import { Tank } from './Tank';
 

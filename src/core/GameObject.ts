@@ -1,34 +1,16 @@
 import { BoundingBox } from './BoundingBox';
-import { GameState } from './GameState';
 import { Node } from './Node';
 import { Rotation } from './Rotation';
 import { Size } from './Size';
-import { State } from './State';
 import { Vector } from './Vector';
 
-import { Input } from './input';
-import {
-  AudioLoader,
-  RectFontLoader,
-  SpriteFontLoader,
-  SpriteLoader,
-  TextureLoader,
-} from './loaders';
 import { Renderer } from './renderers';
 
-export interface GameObjectUpdateArgs {
-  input?: Input;
-  gameState?: State<GameState>;
-  audioLoader?: AudioLoader;
-  rectFontLoader?: RectFontLoader;
-  spriteFontLoader?: SpriteFontLoader;
-  spriteLoader?: SpriteLoader;
-  textureLoader?: TextureLoader;
-}
-
 export class GameObject extends Node {
+  // TODO: These two must go
   public collider = false;
   public ignorePause = false;
+
   public visible = true;
   public size: Size;
   public renderer: Renderer = null;
@@ -49,7 +31,8 @@ export class GameObject extends Node {
     this.size = new Size(width, height);
   }
 
-  public getComputedSize(): Size {
+  // TODO: use nice rotation
+  private getComputedSize(): Size {
     let { width, height } = this.size;
 
     if (this.rotation === Rotation.Right || this.rotation === Rotation.Left) {
@@ -107,7 +90,7 @@ export class GameObject extends Node {
     return worldPosition;
   }
 
-  public setWorldPosition(worldPosition: Vector): this {
+  public setWorldPosition(worldPosition: Vector): void {
     const localPosition = worldPosition.clone();
 
     this.traverseAncestors((parent) => {
@@ -115,36 +98,28 @@ export class GameObject extends Node {
     });
 
     this.position.copyFrom(localPosition);
-
-    return this;
   }
 
   public getCenter(): Vector {
     return this.getBoundingBox().getCenter();
   }
 
-  public setCenter(v: Vector): this {
+  public setCenter(v: Vector): void {
     const size = this.getComputedSize();
 
     this.position.copyFrom(v.sub(size.toVector().divideScalar(2)));
-
-    return this;
   }
 
-  public setCenterFrom(gameObject: GameObject): this {
+  public setCenterFrom(gameObject: GameObject): void {
     this.setCenter(gameObject.getCenter());
-
-    return this;
   }
 
   public getChildrenCenter(): Vector {
     return this.size.toVector().divideScalar(2);
   }
 
-  public rotate(rotation: Rotation): this {
+  public rotate(rotation: Rotation): void {
     this.rotation = rotation;
-
-    return this;
   }
 
   public getChildrenWithTag(argTags: string | string[]): GameObject[] {
@@ -178,13 +153,14 @@ export class GameObject extends Node {
     return has;
   }
 
-  public invokeUpdate(args: GameObjectUpdateArgs): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  public invokeUpdate(...args: any[]): void {
     if (this.needsSetup === true) {
       this.needsSetup = false;
-      this.setup(args);
+      this.setup(...args);
     }
 
-    this.update(args);
+    this.update(...args);
   }
 
   public invokeCollide(target: GameObject): void {
@@ -196,17 +172,13 @@ export class GameObject extends Node {
     this.collide(target);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected setup(args: GameObjectUpdateArgs): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  protected setup(...args: any[]): void {
     return undefined;
   }
 
-  /**
-   * Will be called on each game loop iteration
-   * @param {GameObjectUpdateArgs}
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected update(args: GameObjectUpdateArgs): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  protected update(...args: any[]): void {
     return undefined;
   }
 

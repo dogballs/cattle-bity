@@ -1,11 +1,5 @@
-import {
-  Animation,
-  GameObject,
-  GameObjectUpdateArgs,
-  GameState,
-  Sprite,
-  SpriteRenderer,
-} from '../core';
+import { Animation, GameObject, Sprite, SpriteRenderer } from '../core';
+import { GameObjectUpdateArgs, GameState } from '../game';
 
 export class Shield extends GameObject {
   public ignorePause = true;

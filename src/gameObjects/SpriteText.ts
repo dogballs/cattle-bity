@@ -1,11 +1,11 @@
 import {
   GameObject,
-  GameObjectUpdateArgs,
   Sprite,
   SpriteTextRenderer,
   Text,
   TextOptions,
 } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import * as config from '../config';
 
 interface SpriteTextOptions extends TextOptions {

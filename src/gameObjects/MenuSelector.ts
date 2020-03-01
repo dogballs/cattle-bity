@@ -2,11 +2,11 @@ import {
   Alignment,
   Animation,
   GameObject,
-  GameObjectUpdateArgs,
   Rotation,
   Sprite,
   SpriteRenderer,
 } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { TankType, TankMoveAnimation } from '../tank';
 
 export class MenuSelector extends GameObject {

@@ -1,11 +1,5 @@
-import {
-  BoundingBox,
-  Size,
-  GameObject,
-  GameObjectUpdateArgs,
-  RectRenderer,
-  Subject,
-} from '../core';
+import { BoundingBox, Size, GameObject, RectRenderer, Subject } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { InputControl } from '../input';
 
 export enum EditorBrushSize {

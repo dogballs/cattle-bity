@@ -60,24 +60,24 @@ brush.draw.addListener((event) => {
 field.add(brush);
 
 const gameLoop = new GameLoop();
-gameLoop.tick.addListener(() => {
-  input.update();
+// gameLoop.tick.addListener(() => {
+//   input.update();
 
-  // TODO
-  // const { walls } = MapFactory.create(mapConfig);
+//   // TODO
+//   // const { walls } = MapFactory.create(mapConfig);
 
-  // const nodes = [...walls, brush];
-  const nodes = [brush];
+//   // const nodes = [...walls, brush];
+//   const nodes = [brush];
 
-  nodes.forEach((node) => {
-    node.update({ input });
-  });
+//   nodes.forEach((node) => {
+//     node.update({ input });
+//   });
 
-  field.clear();
-  field.add(...nodes);
+//   field.clear();
+//   field.add(...nodes);
 
-  gameRenderer.render(scene);
-});
+//   gameRenderer.render(scene);
+// });
 
 gameLoop.start();
 

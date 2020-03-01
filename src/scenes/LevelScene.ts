@@ -1,80 +1,70 @@
-import {
-  AudioLoader,
-  CollisionDetector,
-  GameObjectUpdateArgs,
-  GameState,
-  Rect,
-} from '../core';
+import { AudioLoader, CollisionDetector, Rect } from '../core';
+import { GameObjectUpdateArgs, GameState } from '../game';
 import { InputControl } from '../input';
-import { Border, LevelInfo, Field, PauseNotice } from '../gameObjects';
-import { MapConfig, MapConfigSchema } from '../map';
+import {
+  Border,
+  Curtain,
+  LevelInfo,
+  LevelTitle,
+  Field,
+  PauseNotice,
+} from '../gameObjects';
+import { MapConfig } from '../map';
 import { TerrainFactory } from '../terrain';
-import { ConfigParser } from '../ConfigParser';
 import { Level } from '../level';
 import * as config from '../config';
-
-import * as mapJSON from '../../data/maps/original/01.json';
 
 import { Scene } from './Scene';
 import { SceneType } from './SceneType';
 
+enum State {
+  Idle,
+  Loading,
+  Playing,
+}
+
 export class LevelScene extends Scene {
+  private state = State.Idle;
   private audioLoader: AudioLoader;
+  private curtain: Curtain;
+  private title: LevelTitle;
   private info = new LevelInfo();
   private field = new Field();
   private pauseNotice = new PauseNotice();
   private level: Level;
 
-  protected setup({ audioLoader }: GameObjectUpdateArgs): void {
+  protected setup({
+    audioLoader,
+    mapLoader,
+    session,
+  }: GameObjectUpdateArgs): void {
     this.audioLoader = audioLoader;
 
-    this.root.add(new Border());
+    this.state = State.Loading;
+    mapLoader.loadAsync(session.levelNumber).then(this.handleMapLoaded);
 
-    this.root.add(this.field);
-    this.field.position.set(
-      config.BORDER_LEFT_WIDTH,
-      config.BORDER_TOP_BOTTOM_HEIGHT,
+    // TODO: add them last order is important
+    this.curtain = new Curtain(
+      this.root.size.width,
+      this.root.size.height,
+      false,
     );
+    this.root.add(this.curtain);
 
-    this.info.position.set(
-      config.BORDER_LEFT_WIDTH + config.FIELD_SIZE + 32,
-      config.BORDER_TOP_BOTTOM_HEIGHT + 32,
-    );
-    this.root.add(this.info);
-
-    const mapConfig = ConfigParser.parse<MapConfig>(mapJSON, MapConfigSchema);
-    const terrainTiles = [];
-    mapConfig.terrain.regions.forEach((region) => {
-      const regionRect = new Rect(
-        region.x,
-        region.y,
-        region.width,
-        region.height,
-      );
-      const tiles = TerrainFactory.createFromRegion(region.type, regionRect);
-      terrainTiles.push(...tiles);
-    });
-    this.field.add(...terrainTiles);
-
-    this.level = new Level(
-      mapConfig,
-      this.field,
-      this.field.base,
-      this.audioLoader,
-    );
-    this.level.enemySpawned.addListener(this.handleEnemySpawned);
-
-    this.info.setEnemyCount(this.level.getUnspawnedEnemiesCount());
-
-    this.pauseNotice.setCenter(this.field.getChildrenCenter());
-    this.pauseNotice.position.y += 18;
-    this.pauseNotice.visible = false;
-    this.root.add(this.pauseNotice);
-
-    this.field.base.died.addListener(this.handleBaseDied);
+    this.title = new LevelTitle(session.levelNumber);
+    this.title.setCenter(this.root.getChildrenCenter());
+    this.title.pivot.set(0.5, 0.5);
+    this.root.add(this.title);
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
+    if (this.state !== State.Playing) {
+      this.root.traverseDescedants((child) => {
+        child.invokeUpdate(updateArgs);
+      });
+      return;
+    }
+
     const { gameState, input } = updateArgs;
 
     if (input.isDown(InputControl.Start)) {
@@ -96,7 +86,6 @@ export class LevelScene extends Scene {
     this.root.traverseDescedants((child) => {
       const shouldUpdate = gameState.is(GameState.Playing) || child.ignorePause;
       if (shouldUpdate) {
-        // TODO: abstract out input from tank
         child.invokeUpdate(updateArgs);
       }
     });
@@ -112,6 +101,55 @@ export class LevelScene extends Scene {
       collision.source.invokeCollide(collision.target);
     });
   }
+
+  private handleMapLoaded = (mapConfig: MapConfig): void => {
+    this.root.add(new Border());
+
+    this.root.add(this.field);
+    this.field.position.set(
+      config.BORDER_LEFT_WIDTH,
+      config.BORDER_TOP_BOTTOM_HEIGHT,
+    );
+
+    this.info.position.set(
+      config.BORDER_LEFT_WIDTH + config.FIELD_SIZE + 32,
+      config.BORDER_TOP_BOTTOM_HEIGHT + 32,
+    );
+    this.root.add(this.info);
+
+    this.pauseNotice.setCenter(this.field.getChildrenCenter());
+    this.pauseNotice.position.y += 18;
+    this.pauseNotice.visible = false;
+    this.root.add(this.pauseNotice);
+
+    const terrainTiles = [];
+    mapConfig.terrain.regions.forEach((region) => {
+      const regionRect = new Rect(
+        region.x,
+        region.y,
+        region.width,
+        region.height,
+      );
+      const tiles = TerrainFactory.createFromRegion(region.type, regionRect);
+      terrainTiles.push(...tiles);
+    });
+    this.field.add(...terrainTiles);
+    this.level = new Level(
+      mapConfig,
+      this.field,
+      this.field.base,
+      this.audioLoader,
+    );
+
+    this.level.enemySpawned.addListener(this.handleEnemySpawned);
+    this.info.setEnemyCount(this.level.getUnspawnedEnemiesCount());
+    this.field.base.died.addListener(this.handleBaseDied);
+
+    this.title.visible = false;
+    this.curtain.open();
+
+    this.state = State.Playing;
+  };
 
   private activatePause(): void {
     this.audioLoader.pauseAll();

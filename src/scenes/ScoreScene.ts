@@ -1,4 +1,5 @@
-import { GameObjectUpdateArgs, RectRenderer } from '../core';
+import { RectRenderer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { ScoreTable, SpriteText } from '../gameObjects';
 import * as config from '../config';
 

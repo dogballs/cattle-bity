@@ -1,4 +1,5 @@
-import { GameObjectUpdateArgs, Rotation, Sound } from '../../core';
+import { Rotation, Sound } from '../../core';
+import { GameObjectUpdateArgs } from '../../game';
 import { Tank, TankState } from '../../gameObjects';
 import { InputControl } from '../../input';
 

@@ -1,13 +1,12 @@
 import {
   Animation,
   GameObject,
-  GameObjectUpdateArgs,
   Sound,
   Sprite,
   SpriteRenderer,
   Subject,
 } from '../core';
-import { Tag } from '../Tag';
+import { GameObjectUpdateArgs, Tag } from '../game';
 import { PowerupAction } from '../powerups';
 
 export class Powerup extends GameObject {

@@ -1,4 +1,4 @@
-import { GameObjectUpdateArgs } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import {
   DumbAiTankBehavior,
   TankAttributesFactory,

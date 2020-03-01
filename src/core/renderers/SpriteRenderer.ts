@@ -1,5 +1,5 @@
 import { Alignment } from '../Alignment';
-import { GameObject } from '../GameObject';
+import { BoundingBox } from '../BoundingBox';
 import { Rect } from '../Rect';
 import { Sprite } from '../Sprite';
 
@@ -15,7 +15,7 @@ export class SpriteRenderer extends Renderer {
     this.sprite = sprite;
   }
 
-  public render(canvas: HTMLCanvasElement, gameObject: GameObject): void {
+  public render(canvas: HTMLCanvasElement, box: BoundingBox): void {
     // Simply no sprite object provided
     if (this.sprite === null) {
       return;
@@ -26,8 +26,7 @@ export class SpriteRenderer extends Renderer {
       return;
     }
 
-    const objectBox = gameObject.getWorldBoundingBox();
-    const objectRect = objectBox.toRect();
+    const objectRect = box.toRect();
 
     let targetRect = objectRect;
     if (this.alignment === Alignment.Stretch) {

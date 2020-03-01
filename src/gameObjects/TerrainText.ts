@@ -1,11 +1,5 @@
-import {
-  ArrayUtils,
-  GameObject,
-  GameObjectUpdateArgs,
-  Rect,
-  Text,
-  TextOptions,
-} from '../core';
+import { ArrayUtils, GameObject, Rect, Text, TextOptions } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { TerrainFactory, TerrainType } from '../terrain';
 import * as config from '../config';
 

@@ -1,13 +1,6 @@
-import {
-  GameObject,
-  GameObjectUpdateArgs,
-  Sound,
-  Sprite,
-  SpriteRenderer,
-  Subject,
-} from '../core';
+import { GameObject, Sound, Sprite, SpriteRenderer, Subject } from '../core';
+import { GameObjectUpdateArgs, Tag } from '../game';
 import { Bullet, Explosion } from '../gameObjects';
-import { Tag } from '../Tag';
 
 export class BaseHeart extends GameObject {
   public collider = true;

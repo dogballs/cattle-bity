@@ -1,2 +1,2 @@
 export * from './MapConfig';
-export * from './MapConfigSchema';
+export * from './MapLoader';

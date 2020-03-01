@@ -7,6 +7,7 @@ export * from './Curtain';
 export * from './EditorBrush';
 export * from './EnemyBasicTank';
 export * from './LevelInfo';
+export * from './LevelTitle';
 export * from './EnemyFastTank';
 export * from './EnemyTank';
 export * from './Explosion';

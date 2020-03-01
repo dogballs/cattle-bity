@@ -1,4 +1,4 @@
-import { GameObjectUpdateArgs } from '../../core';
+import { GameObjectUpdateArgs } from '../../game';
 import { Tank } from '../../gameObjects';
 
 export abstract class TankBehavior {

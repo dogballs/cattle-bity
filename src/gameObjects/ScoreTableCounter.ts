@@ -1,4 +1,5 @@
-import { GameObject, GameObjectUpdateArgs, Sound, Timer } from '../core';
+import { GameObject, Sound, Timer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import * as config from '../config';
 
 import { SpriteText } from './SpriteText';

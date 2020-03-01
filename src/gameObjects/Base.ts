@@ -1,6 +1,6 @@
 import { Animation, GameObject, Rect, Subject, Timer } from '../core';
+import { Tag } from '../game';
 import { TerrainFactory, TerrainType } from '../terrain';
-import { Tag } from '../Tag';
 
 import { BaseHeart } from './BaseHeart';
 

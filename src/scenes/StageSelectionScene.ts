@@ -1,18 +1,20 @@
-import { GameObjectUpdateArgs } from '../core';
+import { GameObjectUpdateArgs, Session } from '../game';
 import { Curtain, LevelSelector } from '../gameObjects';
 
 import { Scene } from './Scene';
 import { SceneType } from './SceneType';
 
-const MIN_LEVEL_NUMBER = 1;
-const MAX_LEVEL_NUMBER = 35;
-
 export class StageSelectionScene extends Scene {
-  private selector = new LevelSelector(MIN_LEVEL_NUMBER, MAX_LEVEL_NUMBER);
   private curtain: Curtain;
+  private selector: LevelSelector;
+  private session: Session;
 
-  protected setup({}: GameObjectUpdateArgs): void {
+  protected setup({ mapLoader, session }: GameObjectUpdateArgs): void {
+    this.session = session;
+
     this.curtain = new Curtain(this.root.size.width, this.root.size.height);
+
+    this.selector = new LevelSelector(mapLoader.getItemsCount());
 
     // TODO: order is important, z-index
     this.root.add(this.curtain);
@@ -30,8 +32,8 @@ export class StageSelectionScene extends Scene {
     });
   }
 
-  private handleLevelSelected = (level: number): void => {
-    console.log({ level });
+  private handleLevelSelected = (levelNumber: number): void => {
+    this.session.setLevelNumber(levelNumber);
     this.transition(SceneType.Level);
   };
 }

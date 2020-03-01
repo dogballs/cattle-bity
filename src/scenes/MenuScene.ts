@@ -1,4 +1,5 @@
-import { GameObject, GameObjectUpdateArgs, RectRenderer } from '../core';
+import { GameObject, RectRenderer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { Menu, MenuHeading } from '../gameObjects';
 import { InputControl } from '../input';
 import * as config from '../config';

@@ -1,9 +1,7 @@
 import {
-  GameLoop,
   GameObject,
-  GameObjectUpdateArgs,
+  GameLoop,
   GameRenderer,
-  GameState,
   Input,
   KeyboardInputDevice,
   Logger,
@@ -15,11 +13,10 @@ import {
   SpriteLoader,
   TextureLoader,
 } from './core';
-
-import * as config from './config';
-
 import { DebugInspector } from './debug';
+import { GameObjectUpdateArgs, GameState, Session } from './game';
 import { KeyboardInputMap } from './input';
+import { MapLoader } from './map';
 import {
   LevelScene,
   GameOverScene,
@@ -30,10 +27,13 @@ import {
   SceneType,
 } from './scenes';
 
+import * as config from './config';
+
 import * as audioManifest from '../data/audio/audio.manifest.json';
 import * as spriteManifest from '../data/graphics/sprite.manifest.json';
 import * as spriteFontConfig from '../data/fonts/sprite-font.json';
 import * as rectFontConfig from '../data/fonts/rect-font.json';
+import * as mapManifest from '../data/maps/map.manifest.json';
 
 const log = new Logger('main', Logger.Level.Debug);
 
@@ -67,6 +67,8 @@ const rectFontLoader = new RectFontLoader();
 rectFontLoader.register(config.PRIMARY_RECT_FONT_ID, rectFontConfig, {
   scale: config.TILE_SIZE_SMALL,
 });
+
+const mapLoader = new MapLoader(mapManifest);
 
 const sceneManager = new SceneManager(SceneType.Menu);
 sceneManager.register(SceneType.Menu, MenuScene);
@@ -104,13 +106,17 @@ debugInspector.click.addListener((position: Vector) => {
   console.log(intersections);
 });
 
+const session = new Session();
+
 const gameState = new State<GameState>(GameState.Playing);
 
 const updateArgs: GameObjectUpdateArgs = {
-  gameState,
-  input,
   audioLoader,
+  input,
+  gameState,
+  mapLoader,
   rectFontLoader,
+  session,
   spriteFontLoader,
   spriteLoader,
   textureLoader,

@@ -12,7 +12,6 @@ export * from './CollisionDetector';
 export * from './GameLoop';
 export * from './GameObject';
 export * from './GameRenderer';
-export * from './GameState';
 export * from './Logger';
 export * from './Node';
 export * from './Rect';

@@ -1,6 +1,6 @@
+import { Tag } from '../../game';
 import { PlayerTank, EnemyTank } from '../../gameObjects';
 import { TankDeathReason } from '../../tank';
-import { Tag } from '../../Tag';
 
 import { PowerupAction } from '../PowerupAction';
 

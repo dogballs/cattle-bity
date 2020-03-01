@@ -1,4 +1,5 @@
-import { GameObject, GameObjectUpdateArgs, SpriteRenderer } from '../core';
+import { GameObject, SpriteRenderer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 
 export class EnemyCounterItem extends GameObject {
   public readonly renderer = new SpriteRenderer();

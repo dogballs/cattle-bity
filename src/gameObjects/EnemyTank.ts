@@ -1,5 +1,4 @@
-import { GameObjectUpdateArgs, GameState } from '../core';
-import { Tag } from '../Tag';
+import { GameObjectUpdateArgs, GameState, Tag } from '../game';
 
 import { Tank } from './Tank';
 

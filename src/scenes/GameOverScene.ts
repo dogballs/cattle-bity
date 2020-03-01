@@ -1,4 +1,5 @@
-import { GameObjectUpdateArgs, Timer } from '../core';
+import { Timer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { GameOverHeading } from '../gameObjects';
 
 import { Scene } from './Scene';

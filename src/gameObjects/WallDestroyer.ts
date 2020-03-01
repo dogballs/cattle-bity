@@ -1,5 +1,5 @@
 import { GameObject } from '../core';
-import { Tag } from '../Tag';
+import { Tag } from '../game';
 import * as config from '../config';
 
 const MAX_DAMAGE = 2;

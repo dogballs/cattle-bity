@@ -2,11 +2,11 @@ import {
   Alignment,
   Animation,
   GameObject,
-  GameObjectUpdateArgs,
   Sprite,
   SpriteRenderer,
   Subject,
-} from './../core';
+} from '../core';
+import { GameObjectUpdateArgs } from '../game';
 
 export class SmallExplosion extends GameObject {
   public readonly renderer = new SpriteRenderer();

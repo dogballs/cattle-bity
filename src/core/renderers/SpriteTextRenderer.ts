@@ -1,4 +1,4 @@
-import { GameObject } from '../GameObject';
+import { BoundingBox } from '../BoundingBox';
 import { Sprite } from '../Sprite';
 import { SpriteFont, Text } from '../text';
 
@@ -17,7 +17,7 @@ export class SpriteTextRenderer extends Renderer {
 
   public render(
     canvas: HTMLCanvasElement,
-    gameObject: GameObject,
+    box: BoundingBox,
     offscreenCanvas: OffscreenCanvas,
   ): void {
     if (this.text === null) {
@@ -29,7 +29,7 @@ export class SpriteTextRenderer extends Renderer {
       return;
     }
 
-    const { min: worldPosition } = gameObject.getWorldBoundingBox();
+    const { min: worldPosition } = box;
 
     const sprites = this.text.build();
 

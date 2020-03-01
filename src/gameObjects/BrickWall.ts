@@ -1,11 +1,6 @@
-import {
-  GameObject,
-  GameObjectUpdateArgs,
-  Sprite,
-  SpriteRenderer,
-} from '../core';
+import { GameObject, Sprite, SpriteRenderer } from '../core';
+import { GameObjectUpdateArgs, Tag } from '../game';
 import { TerrainType } from '../terrain';
-import { Tag } from '../Tag';
 
 export class BrickWall extends GameObject {
   public readonly tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];

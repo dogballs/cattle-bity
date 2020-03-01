@@ -1,5 +1,5 @@
 import { GameObject, RectRenderer } from '../core';
-import { Tag } from '../Tag';
+import { Tag } from '../game';
 import * as config from '../config';
 
 export class BorderWall extends GameObject {

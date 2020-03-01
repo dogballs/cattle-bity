@@ -53,7 +53,11 @@ export class GameRenderer {
 
   private renderGameObject(gameObject: GameObject): void {
     if (gameObject.renderer !== null && gameObject.visible) {
-      gameObject.renderer.render(this.canvas, gameObject, this.offscreenCanvas);
+      gameObject.renderer.render(
+        this.canvas,
+        gameObject.getWorldBoundingBox(),
+        this.offscreenCanvas,
+      );
     }
 
     if (this.options.debug) {

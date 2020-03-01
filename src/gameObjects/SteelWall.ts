@@ -1,5 +1,5 @@
-import { GameObject, GameObjectUpdateArgs, SpriteRenderer } from '../core';
-import { Tag } from '../Tag';
+import { GameObject, SpriteRenderer } from '../core';
+import { GameObjectUpdateArgs, Tag } from '../game';
 
 export class SteelWall extends GameObject {
   public tags = [Tag.Wall, Tag.Steel, Tag.BlockMove];

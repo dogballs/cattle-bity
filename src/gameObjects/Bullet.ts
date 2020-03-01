@@ -1,13 +1,12 @@
 import {
   GameObject,
-  GameObjectUpdateArgs,
   Rotation,
   Sound,
   Sprite,
   SpriteRenderer,
   Subject,
 } from '../core';
-import { Tag } from '../Tag';
+import { GameObjectUpdateArgs, Tag } from '../game';
 
 import { SmallExplosion } from './SmallExplosion';
 import { WallDestroyer } from './WallDestroyer';
@@ -101,7 +100,7 @@ export class Bullet extends GameObject {
       // Adding to parent will influence in world position calculation
       this.parent.add(destroyer);
       const destroyerWorldPosition = destroyer.getWorldPosition();
-      const destroyerSize = destroyer.getComputedSize();
+      const destroyerSize = destroyer.getBoundingBox().getSize();
 
       if (this.rotation === Rotation.Up) {
         destroyer.setWorldPosition(

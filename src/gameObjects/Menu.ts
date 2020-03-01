@@ -1,4 +1,5 @@
-import { GameObject, GameObjectUpdateArgs, Subject } from '../core';
+import { GameObject, Subject } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { InputControl } from '../input';
 
 import { MenuSelector } from './MenuSelector';

@@ -1,41 +1,35 @@
-import {
-  GameObject,
-  GameObjectUpdateArgs,
-  Input,
-  Subject,
-  Timer,
-} from '../core';
+import { GameObject, Input, Subject, Timer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { InputControl } from '../input';
 
-import { SpriteText } from './SpriteText';
+import { LevelTitle } from './LevelTitle';
 
 const SLOW_HOLD_DELAY = 7;
 const FAST_HOLD_DELAY = 1;
 
 export class LevelSelector extends GameObject {
   public selected = new Subject<number>();
-  private level = 1;
+  private currentLevel = 1;
   private minLevel = 1;
-  private maxLevel = 1;
-  private text = new SpriteText('');
+  private maxLevel: number;
+  private title = new LevelTitle();
   private holdThrottle = new Timer();
 
-  constructor(minLevel = 1, maxLevel = 1) {
+  constructor(maxLevel = 1) {
     super();
 
-    this.minLevel = minLevel;
     this.maxLevel = maxLevel;
   }
 
   protected setup(): void {
-    this.text.pivot.set(0.5, 0.5);
-    this.add(this.text);
+    this.title.pivot.set(0.5, 0.5);
+    this.add(this.title);
     this.updateText();
   }
 
   protected update({ input }: GameObjectUpdateArgs): void {
     if (input.isDown(InputControl.Start)) {
-      this.selected.notify(this.level);
+      this.selected.notify(this.currentLevel);
       return;
     }
 
@@ -75,30 +69,24 @@ export class LevelSelector extends GameObject {
   }
 
   private selectNext = (): void => {
-    const nextLevel = this.level + 1;
+    const nextLevel = this.currentLevel + 1;
     if (nextLevel > this.maxLevel) {
       return;
     }
-    this.level = nextLevel;
+    this.currentLevel = nextLevel;
     this.updateText();
   };
 
   private selectPrev = (): void => {
-    const nextLevel = this.level - 1;
+    const nextLevel = this.currentLevel - 1;
     if (nextLevel < this.minLevel) {
       return;
     }
-    this.level = nextLevel;
+    this.currentLevel = nextLevel;
     this.updateText();
   };
 
   private updateText(): void {
-    this.text.setText(this.getLevelText());
-  }
-
-  private getLevelText(): string {
-    const numberText = this.level.toString().padStart(2, ' ');
-    const levelText = `STAGE ${numberText}`;
-    return levelText;
+    this.title.setLevelNumber(this.currentLevel);
   }
 }
