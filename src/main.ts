@@ -70,6 +70,8 @@ rectFontLoader.register(config.PRIMARY_RECT_FONT_ID, rectFontConfig, {
 
 const mapLoader = new MapLoader(mapManifest);
 
+const session = new Session();
+
 const sceneManager = new SceneManager(SceneType.Menu);
 sceneManager.register(SceneType.Menu, MenuScene);
 sceneManager.register(SceneType.LevelSelection, StageSelectionScene);
@@ -105,8 +107,6 @@ debugInspector.click.addListener((position: Vector) => {
   });
   console.log(intersections);
 });
-
-const session = new Session();
 
 const gameState = new State<GameState>(GameState.Playing);
 

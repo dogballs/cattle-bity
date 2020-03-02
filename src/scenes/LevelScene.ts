@@ -1,6 +1,6 @@
-import { AudioLoader, CollisionDetector, Rect } from '../core';
-import { GameObjectUpdateArgs, GameState } from '../game';
+import { AudioLoader, CollisionDetector, Rect, Timer } from '../core';
 import { InputControl } from '../input';
+import { GameObjectUpdateArgs, GameState, Session } from '../game';
 import {
   Border,
   Curtain,
@@ -12,6 +12,7 @@ import {
 import { MapConfig } from '../map';
 import { TerrainFactory } from '../terrain';
 import { Level } from '../level';
+import { PointsRecord } from '../points';
 import * as config from '../config';
 
 import { Scene } from './Scene';
@@ -20,18 +21,25 @@ import { SceneType } from './SceneType';
 enum State {
   Idle,
   Loading,
+  Starting,
   Playing,
 }
+
+const START_DELAY = 3 * config.FPS;
 
 export class LevelScene extends Scene {
   private state = State.Idle;
   private audioLoader: AudioLoader;
   private curtain: Curtain;
   private title: LevelTitle;
+  private level: Level;
+  private session: Session;
+  private startTimer = new Timer();
+
   private info = new LevelInfo();
   private field = new Field();
   private pauseNotice = new PauseNotice();
-  private level: Level;
+  private pointsRecord = new PointsRecord();
 
   protected setup({
     audioLoader,
@@ -39,11 +47,13 @@ export class LevelScene extends Scene {
     session,
   }: GameObjectUpdateArgs): void {
     this.audioLoader = audioLoader;
+    this.session = session;
 
     this.state = State.Loading;
-    mapLoader.loadAsync(session.levelNumber).then(this.handleMapLoaded);
+    mapLoader.loadAsync(session.getLevelNumber()).then(this.handleMapLoaded);
 
     // TODO: add them last order is important
+    // TODO: curtain is displayed on top of scenes? (transition between levels)
     this.curtain = new Curtain(
       this.root.size.width,
       this.root.size.height,
@@ -51,13 +61,21 @@ export class LevelScene extends Scene {
     );
     this.root.add(this.curtain);
 
-    this.title = new LevelTitle(session.levelNumber);
+    this.title = new LevelTitle(session.getLevelNumber());
     this.title.setCenter(this.root.getChildrenCenter());
     this.title.pivot.set(0.5, 0.5);
     this.root.add(this.title);
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
+    if (this.state === State.Starting) {
+      if (this.startTimer.isDone()) {
+        this.state = State.Playing;
+      }
+      this.startTimer.tick();
+      return;
+    }
+
     if (this.state !== State.Playing) {
       this.root.traverseDescedants((child) => {
         child.invokeUpdate(updateArgs);
@@ -139,16 +157,20 @@ export class LevelScene extends Scene {
       this.field,
       this.field.base,
       this.audioLoader,
+      this.session,
     );
 
     this.level.enemySpawned.addListener(this.handleEnemySpawned);
+    this.level.won.addListener(this.handleLevelWon);
+
     this.info.setEnemyCount(this.level.getUnspawnedEnemiesCount());
     this.field.base.died.addListener(this.handleBaseDied);
 
-    this.title.visible = false;
+    // this.title.visible = false;
     this.curtain.open();
 
-    this.state = State.Playing;
+    this.state = State.Starting;
+    this.startTimer.reset(START_DELAY);
   };
 
   private activatePause(): void {
@@ -165,11 +187,15 @@ export class LevelScene extends Scene {
   }
 
   private handleBaseDied = (): void => {
-    console.log('Game over! Reason: Base');
+    this.session.setGameOver();
     this.transition(SceneType.Score);
   };
 
   private handleEnemySpawned = (): void => {
     this.info.setEnemyCount(this.level.getUnspawnedEnemiesCount());
+  };
+
+  private handleLevelWon = (): void => {
+    this.transition(SceneType.Score);
   };
 }

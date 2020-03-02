@@ -1,3 +1,5 @@
+import { Subject } from './Subject';
+
 /**
  * Represents one node in a scene graph.
  * https://en.wikipedia.org/wiki/Scene_graph
@@ -5,6 +7,7 @@
 export class Node {
   public children: this[];
   public parent: this;
+  public added = new Subject();
 
   constructor() {
     this.children = [];
@@ -15,16 +18,12 @@ export class Node {
   public add(...childrenToAdd): this {
     childrenToAdd.forEach((childToAdd) => {
       childToAdd.parent = this;
-      childToAdd.onAdded();
+      childToAdd.added.notify();
 
       this.children.push(childToAdd);
     });
 
     return this;
-  }
-
-  protected onAdded(): void {
-    // To be implemented in child
   }
 
   public replaceSelf(replacement: Node): this {

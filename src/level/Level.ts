@@ -5,51 +5,53 @@ import {
   Rotation,
   Subject,
   Timer,
-  Vector,
 } from '../core';
+import { Session } from '../game';
 import {
   Base,
-  EnemyBasicTank,
-  EnemyFastTank,
   EnemyTank,
   Explosion,
   PlayerTank,
   Points,
   Spawn,
 } from '../gameObjects';
-import { MapConfig, MapConfigSpawnEnemyListItem } from '../map';
+import { MapConfig } from '../map';
 import { PointsValue } from '../points';
 import { PowerupFactory } from '../powerups';
+import {
+  EnemySpawner,
+  EnemySpawnerSpawnedEvent,
+  PlayerSpawner,
+  PlayerSpawnerSpawnedEvent,
+} from '../spawn';
 import { TankDeathReason, TankTier } from '../tank';
 
 import * as config from '../config';
 
-const DEFAULT_ENEMY_LOCATIONS = [
-  new Vector(384, 0),
-  new Vector(768, 0),
-  new Vector(0, 0),
-];
-
-const DEFAULT_PLAYER_LOCATIONS = [new Vector(256, 768)];
+enum State {
+  Playing,
+  PostWin,
+  Won,
+}
 
 export class Level {
   public readonly enemySpawned = new Subject();
+  public readonly won = new Subject();
 
   public readonly mapConfig: MapConfig;
   public readonly field: GameObject;
   public readonly base: Base;
-  private readonly audioLoader: AudioLoader;
-
   public playerTank: PlayerTank;
 
-  private enemyLocations: Vector[];
-  private enemyLocationIndex = 0;
-  private enemyList: MapConfigSpawnEnemyListItem[] = [];
-  private enemyTimer = new Timer();
-  private aliveEnemyCount = 0;
+  private readonly audioLoader: AudioLoader;
+  private readonly session: Session;
 
-  private playerLocations: Vector[];
-  private playerTimers: Timer[];
+  private state = State.Playing;
+
+  private enemySpawner: EnemySpawner;
+  private playerSpawner: PlayerSpawner;
+
+  private postWinTimer = new Timer(config.LEVEL_POST_WIN_DELAY);
 
   private powerupTimer = new Timer();
   private activePowerup: GameObject = null;
@@ -59,87 +61,42 @@ export class Level {
     field: GameObject,
     base: Base,
     audioLoader: AudioLoader,
+    session: Session,
   ) {
     this.mapConfig = mapConfig;
     this.field = field;
     this.base = base;
     this.audioLoader = audioLoader;
+    this.session = session;
 
-    this.enemyList = mapConfig.spawn.enemy.list.slice(
-      0,
-      config.ENEMY_MAX_TOTAL_COUNT,
-    );
+    this.playerSpawner = new PlayerSpawner(mapConfig.spawn.player);
+    this.playerSpawner.spawned.addListener(this.handlePlayerSpawned);
 
-    const configPlayerLocations = mapConfig.spawn.player.locations.map(
-      (location) => {
-        return new Vector(location.x, location.y);
-      },
-    );
-
-    this.playerLocations =
-      configPlayerLocations.length > 0
-        ? configPlayerLocations
-        : DEFAULT_PLAYER_LOCATIONS;
-
-    this.playerTimers = this.playerLocations.map((_, index) => {
-      const timer = new Timer(config.PLAYER_FIRST_SPAWN_DELAY);
-      timer.done.addListener(() => {
-        this.handlePlayerSpawnTimer(index);
-      });
-      return timer;
-    });
-
-    const configEnemyLocations = mapConfig.spawn.enemy.locations.map(
-      (location) => {
-        return new Vector(location.x, location.y);
-      },
-    );
-    this.enemyLocations =
-      configEnemyLocations.length > 0
-        ? configEnemyLocations
-        : DEFAULT_ENEMY_LOCATIONS;
-
-    this.enemyTimer.reset(config.ENEMY_FIRST_SPAWN_DELAY);
-    this.enemyTimer.done.addListener(this.handleEnemySpawnTimer);
+    this.enemySpawner = new EnemySpawner(mapConfig.spawn.enemy);
+    this.enemySpawner.spawned.addListener(this.handleEnemySpawned);
 
     this.powerupTimer.done.addListener(this.handlePowerupTimer);
+
+    this.postWinTimer.done.addListener(this.handlePostWinTimer);
   }
 
   public update(): void {
-    this.playerTimers.forEach((timer) => {
-      timer.tick();
-    });
+    if (this.state == State.Playing) {
+      this.playerSpawner.update();
+      this.enemySpawner.update();
+      this.powerupTimer.tick();
+      return;
+    }
 
-    this.enemyTimer.tick();
-
-    this.powerupTimer.tick();
+    // TODO: Player can kill base and pick powerups during this time
+    if (this.state === State.PostWin) {
+      this.postWinTimer.tick();
+    }
   }
 
   public getUnspawnedEnemiesCount(): number {
-    return this.enemyList.length;
+    return this.enemySpawner.getUnspawnedCount();
   }
-
-  private handlePlayerSpawnTimer = (index: number): void => {
-    this.spawnPlayer(index);
-  };
-
-  private handleEnemySpawnTimer = (): void => {
-    // Happens after max enemies spawn
-    if (this.aliveEnemyCount >= config.ENEMY_MAX_ALIVE_COUNT) {
-      this.enemyTimer.stop();
-      return;
-    }
-
-    // We won!
-    if (this.enemyList.length === 0) {
-      this.enemyTimer.stop();
-      return;
-    }
-
-    this.spawnEnemy();
-    this.aliveEnemyCount += 1;
-    this.enemyTimer.reset(config.ENEMY_SPAWN_DELAY);
-  };
 
   private handlePowerupTimer = (): void => {
     // Remove powerup after timer expires
@@ -150,14 +107,12 @@ export class Level {
     this.activePowerup = null;
   };
 
-  private spawnPlayer(index: number): void {
-    const location = this.playerLocations[index];
-    const timer = this.playerTimers[index];
+  private handlePlayerSpawned = (event: PlayerSpawnerSpawnedEvent): void => {
+    const { tank, position } = event;
 
     const spawn = new Spawn();
-    spawn.position.copyFrom(location);
+    spawn.position.copyFrom(position);
     spawn.completed.addListener(() => {
-      const tank = new PlayerTank();
       tank.setCenterFrom(spawn);
       tank.died.addListener(() => {
         const explosion = new Explosion();
@@ -165,7 +120,6 @@ export class Level {
         tank.replaceSelf(explosion);
 
         this.audioLoader.load('explosion.player').play();
-        timer.reset(config.PLAYER_SPAWN_DELAY);
       });
       tank.activateShield(config.SHIELD_SPAWN_DURATION);
 
@@ -174,37 +128,28 @@ export class Level {
       spawn.replaceSelf(tank);
     });
     this.field.add(spawn);
-  }
+  };
 
-  private spawnEnemy(): void {
-    const enemyConfig = this.enemyList.shift();
-    const { drop: hasDrop } = enemyConfig;
+  private handleEnemySpawned = (event: EnemySpawnerSpawnedEvent): void => {
+    const { tank, position } = event;
 
     // When new tank with powerup spawns - remove active powerup
-    if (hasDrop && this.activePowerup !== null) {
+    if (tank.hasDrop && this.activePowerup !== null) {
       this.powerupTimer.stop();
       this.activePowerup.removeSelf();
       this.activePowerup = null;
     }
 
-    const location = this.enemyLocations[this.enemyLocationIndex];
-
     // TODO: refactor this chain of subscriptions
     const spawn = new Spawn();
-    spawn.position.copyFrom(location);
+    spawn.position.copyFrom(position);
     spawn.completed.addListener(() => {
-      const tank = this.createEnemyTank(enemyConfig.tier, hasDrop) as EnemyTank;
       tank.rotate(Rotation.Down);
       tank.setCenterFrom(spawn);
       tank.died.addListener((event) => {
         // TODO: grenade explosion explodes multiple enemies, should trigger
         // single audio
         this.audioLoader.load('explosion.enemy').play();
-
-        this.aliveEnemyCount = Math.max(0, this.aliveEnemyCount - 1);
-        if (!this.enemyTimer.isActive()) {
-          this.enemyTimer.reset(config.ENEMY_SPAWN_DELAY);
-        }
 
         if (tank.hasDrop) {
           this.spawnPowerup();
@@ -222,19 +167,25 @@ export class Level {
             this.field.add(points);
           });
         }
+
+        if (this.enemySpawner.areAllDead()) {
+          this.state = State.PostWin;
+        }
+
+        this.session.addKillPoints(tank.type.tier);
       });
       spawn.replaceSelf(tank);
     });
 
     this.field.add(spawn);
 
-    this.enemyLocationIndex += 1;
-    if (this.enemyLocationIndex >= this.enemyLocations.length) {
-      this.enemyLocationIndex = 0;
-    }
-
     this.enemySpawned.notify();
-  }
+  };
+
+  private handlePostWinTimer = (): void => {
+    this.state = State.Won;
+    this.won.notify();
+  };
 
   private spawnPowerup(): void {
     // Override previous powerup with newly picked up one
@@ -263,6 +214,8 @@ export class Level {
       );
       points.setCenterFrom(powerup);
       this.field.add(points);
+
+      this.session.addPowerupPoints(powerup.type);
     });
 
     this.field.add(powerup);
@@ -292,16 +245,6 @@ export class Level {
         return PointsValue.V400;
       default:
         return 0;
-    }
-  }
-
-  private createEnemyTank(tier: TankTier, hasDrop = false): EnemyTank {
-    switch (tier) {
-      case TankTier.B:
-        return new EnemyFastTank(hasDrop);
-      case TankTier.A:
-      default:
-        return new EnemyBasicTank(hasDrop);
     }
   }
 }

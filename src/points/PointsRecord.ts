@@ -82,4 +82,9 @@ export class PointsRecord {
 
     return total;
   }
+
+  public reset(): void {
+    this.kills = [];
+    this.powerups = [];
+  }
 }

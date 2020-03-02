@@ -8,7 +8,7 @@ import {
 import { GameObjectUpdateArgs } from '../game';
 import * as config from '../config';
 
-interface SpriteTextOptions extends TextOptions {
+export interface SpriteTextOptions extends TextOptions {
   color?: string;
 }
 

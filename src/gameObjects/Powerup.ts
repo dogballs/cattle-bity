@@ -7,7 +7,7 @@ import {
   Subject,
 } from '../core';
 import { GameObjectUpdateArgs, Tag } from '../game';
-import { PowerupAction } from '../powerups';
+import { PowerupAction, PowerupType } from '../powerups';
 
 export class Powerup extends GameObject {
   public collider = true;
@@ -20,6 +20,8 @@ export class Powerup extends GameObject {
   // Action to perform when picked up
   public readonly action: PowerupAction;
 
+  public readonly type: PowerupType;
+
   private spriteId: string;
   private pickupSoundId: string;
   private pickupSound: Sound;
@@ -27,9 +29,15 @@ export class Powerup extends GameObject {
   public renderer = new SpriteRenderer();
   private animation: Animation<Sprite>;
 
-  constructor(action: PowerupAction, spriteId: string, pickupSoundId: string) {
+  constructor(
+    type: PowerupType,
+    action: PowerupAction,
+    spriteId: string,
+    pickupSoundId: string,
+  ) {
     super(64, 64);
 
+    this.type = type;
     this.action = action;
     this.spriteId = spriteId;
     this.pickupSoundId = pickupSoundId;

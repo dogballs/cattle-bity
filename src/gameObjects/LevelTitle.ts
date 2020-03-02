@@ -1,9 +1,9 @@
-import { SpriteText } from './SpriteText';
+import { SpriteText, SpriteTextOptions } from './SpriteText';
 
 export class LevelTitle extends SpriteText {
-  constructor(levelNumber = 0) {
+  constructor(levelNumber = 0, options: SpriteTextOptions = {}) {
     const text = LevelTitle.getLevelText(levelNumber);
-    super(text);
+    super(text, options);
   }
 
   public setLevelNumber(levelNumber: number): void {

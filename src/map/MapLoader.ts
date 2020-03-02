@@ -28,8 +28,6 @@ export class MapLoader {
 
     const { value, error } = MapConfigSchema.validate(data);
 
-    console.log({ value, error });
-
     if (error !== undefined) {
       throw error;
     }

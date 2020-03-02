@@ -1,6 +1,5 @@
 import { GameObject, Subject, Timer } from '../core';
 import { PointsRecord } from '../points';
-import { PowerupType } from '../powerups';
 import { TankTier } from '../tank';
 import * as config from '../config';
 
@@ -21,7 +20,7 @@ const TRANSITION_DELAY = 8;
 
 export class ScoreTable extends GameObject {
   public done = new Subject();
-  private record = new PointsRecord();
+  private record: PointsRecord;
   private playerLabel = new SpriteText('Ⅰ-PLAYER', { color: config.COLOR_RED });
   private underline = new ScoreTableUnderline();
   private totalPoints = new SpriteText('', { color: config.COLOR_YELLOW });
@@ -32,30 +31,10 @@ export class ScoreTable extends GameObject {
   private state = State.Idle;
   private transitionTimer = new Timer();
 
-  constructor() {
+  constructor(record: PointsRecord) {
     super(832, 544);
 
-    this.record.addKill(TankTier.A);
-    this.record.addKill(TankTier.A);
-    this.record.addKill(TankTier.A);
-    this.record.addKill(TankTier.A);
-    this.record.addKill(TankTier.A);
-    this.record.addKill(TankTier.A);
-    this.record.addKill(TankTier.A);
-    this.record.addKill(TankTier.A);
-    this.record.addKill(TankTier.B);
-    this.record.addKill(TankTier.B);
-    this.record.addKill(TankTier.C);
-    this.record.addKill(TankTier.C);
-    this.record.addKill(TankTier.C);
-    this.record.addKill(TankTier.D);
-    this.record.addKill(TankTier.D);
-    this.record.addKill(TankTier.D);
-    this.record.addKill(TankTier.D);
-
-    this.record.addPowerup(PowerupType.BaseDefence);
-    this.record.addPowerup(PowerupType.BaseDefence);
-    this.record.addPowerup(PowerupType.BaseDefence);
+    this.record = record;
   }
 
   protected setup(): void {

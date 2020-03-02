@@ -4,6 +4,7 @@ export * from './behaviors';
 export * from './TankAttributesFactory';
 export * from './TankColor';
 export * from './TankDeathReason';
+export * from './TankFactory';
 export * from './TankParty';
 export * from './TankSkinAnimation';
 export * from './TankSpriteId';

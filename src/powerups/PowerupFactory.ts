@@ -61,6 +61,7 @@ export class PowerupFactory {
     const description = map.get(type);
 
     const powerup = new Powerup(
+      type,
       description.action,
       description.spriteId,
       description.pickupAudioId,

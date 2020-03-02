@@ -33,7 +33,7 @@ export class StageSelectionScene extends Scene {
   }
 
   private handleLevelSelected = (levelNumber: number): void => {
-    this.session.setLevelNumber(levelNumber);
+    this.session.start(levelNumber);
     this.transition(SceneType.Level);
   };
 }
