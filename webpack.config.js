@@ -7,7 +7,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
     main: './src/main.ts',
-    editor: './src/editor.ts',
   },
 
   output: {
@@ -35,7 +34,6 @@ module.exports = {
     new CheckerPlugin(),
     new CopyWebpackPlugin([
       'index.html',
-      'editor.html',
       { from: 'data/', to: 'data/' },
       { from: 'styles/', to: 'styles/' },
     ]),

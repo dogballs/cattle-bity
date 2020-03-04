@@ -9,6 +9,7 @@ import {
 import { InputControl } from '../input';
 import { GameObjectUpdateArgs, GameState, Session } from '../game';
 import {
+  Base,
   Border,
   Curtain,
   EnemyTank,
@@ -61,6 +62,7 @@ export class LevelScene extends Scene {
   private playerTank: PlayerTank;
 
   private info = new LevelInfo();
+  private base = new Base();
   private field = new Field();
   private pauseNotice = new PauseNotice();
   private pointsRecord = new PointsRecord();
@@ -152,11 +154,15 @@ export class LevelScene extends Scene {
   private handleMapLoaded = (mapConfig: MapConfig): void => {
     this.root.add(new Border());
 
-    this.root.add(this.field);
     this.field.position.set(
       config.BORDER_LEFT_WIDTH,
       config.BORDER_TOP_BOTTOM_HEIGHT,
     );
+    this.root.add(this.field);
+
+    this.base.position.set(352, 736);
+    this.base.died.addListener(this.handleBaseDied);
+    this.field.add(this.base);
 
     this.info.position.set(
       config.BORDER_LEFT_WIDTH + config.FIELD_SIZE + 32,
@@ -181,8 +187,6 @@ export class LevelScene extends Scene {
       terrainTiles.push(...tiles);
     });
     this.field.add(...terrainTiles);
-
-    this.field.base.died.addListener(this.handleBaseDied);
 
     // this.title.visible = false;
     this.curtain.open();
@@ -309,7 +313,7 @@ export class LevelScene extends Scene {
     powerup.position.set(x, y);
 
     powerup.picked.addListener(() => {
-      powerup.action.execute(this.playerTank, powerup, this.field.base);
+      powerup.action.execute(this.playerTank, powerup, this.base);
 
       const points = new Points(
         PointsValue.V500,

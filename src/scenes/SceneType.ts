@@ -1,4 +1,5 @@
 export enum SceneType {
+  Editor = 'editor',
   Menu = 'menu',
   LevelSelection = 'level-selection',
   Level = 'level',

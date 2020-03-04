@@ -18,8 +18,9 @@ import { GameObjectUpdateArgs, GameState, Session } from './game';
 import { KeyboardInputMap } from './input';
 import { MapLoader } from './map';
 import {
-  LevelScene,
+  EditorScene,
   GameOverScene,
+  LevelScene,
   MenuScene,
   StageSelectionScene,
   ScoreScene,
@@ -73,11 +74,12 @@ const mapLoader = new MapLoader(mapManifest);
 const session = new Session();
 
 const sceneManager = new SceneManager(SceneType.Menu);
-sceneManager.register(SceneType.Menu, MenuScene);
-sceneManager.register(SceneType.LevelSelection, StageSelectionScene);
-sceneManager.register(SceneType.Level, LevelScene);
-sceneManager.register(SceneType.Score, ScoreScene);
+sceneManager.register(SceneType.Editor, EditorScene);
 sceneManager.register(SceneType.GameOver, GameOverScene);
+sceneManager.register(SceneType.Menu, MenuScene);
+sceneManager.register(SceneType.Level, LevelScene);
+sceneManager.register(SceneType.LevelSelection, StageSelectionScene);
+sceneManager.register(SceneType.Score, ScoreScene);
 sceneManager.start();
 
 const debugInspector = new DebugInspector(gameRenderer.getElement());

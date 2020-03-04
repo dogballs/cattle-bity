@@ -4,6 +4,14 @@ import * as config from '../config';
 
 import { TerrainType } from './TerrainType';
 
+export interface TerrainRegionConfig {
+  type: TerrainType;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export class TerrainFactory {
   public static createFromRegion(
     type: TerrainType,
@@ -50,5 +58,24 @@ export class TerrainFactory {
     });
 
     return allWalls;
+  }
+
+  public static createFromRegionConfigs(
+    regions: TerrainRegionConfig[],
+  ): GameObject[] {
+    const tiles = [];
+
+    regions.forEach((region) => {
+      const regionRect = new Rect(
+        region.x,
+        region.y,
+        region.width,
+        region.height,
+      );
+      const regionTiles = this.createFromRegion(region.type, regionRect);
+      tiles.push(...regionTiles);
+    });
+
+    return tiles;
   }
 }

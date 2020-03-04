@@ -33,13 +33,13 @@ export class SpriteText extends GameObject {
     const font = spriteFontLoader.load(config.PRIMARY_SPRITE_FONT_ID);
     this.text.setFont(font);
 
-    this.size.copy(this.text.getSize());
+    this.size.copyFrom(this.text.getSize());
 
     this.renderer.text = this.text;
   }
 
   public setText(text: string): void {
     this.text.setText(text);
-    this.size.copy(this.text.getSize());
+    this.size.copyFrom(this.text.getSize());
   }
 }

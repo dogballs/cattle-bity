@@ -25,7 +25,7 @@ export class MenuScene extends Scene {
 
     this.root.renderer = new RectRenderer(config.COLOR_BLACK);
 
-    this.group.size.copy(this.root.size);
+    this.group.size.copyFrom(this.root.size);
     this.group.position.setY(this.root.size.height);
 
     this.heading.pivot.setX(0.5);
@@ -74,6 +74,8 @@ export class MenuScene extends Scene {
   private handleMenuSelected = (selectedIndex): void => {
     if (selectedIndex === 0) {
       this.transition(SceneType.LevelSelection);
+    } else if (selectedIndex === 1) {
+      this.transition(SceneType.Editor);
     }
   };
 }

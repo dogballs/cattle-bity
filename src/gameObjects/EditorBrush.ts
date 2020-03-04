@@ -13,11 +13,16 @@ export enum EditorBrushType {
   SteelWall = 1,
 }
 
+export interface EditorBrushDrawEvent {
+  brushType: EditorBrushType;
+  box: BoundingBox;
+}
+
 export class EditorBrush extends GameObject {
   public brushSize: EditorBrushSize = EditorBrushSize.Large;
   public brushType: EditorBrushType = EditorBrushType.BrickWall;
   public renderer = new RectRenderer(null, 'red');
-  public draw = new Subject<{ brushType: EditorBrushType; box: BoundingBox }>();
+  public draw = new Subject<EditorBrushDrawEvent>();
 
   constructor() {
     super();

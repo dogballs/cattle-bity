@@ -28,7 +28,7 @@ export class Size {
     return this;
   }
 
-  public copy(size: Size): this {
+  public copyFrom(size: Size): this {
     this.width = size.width;
     this.height = size.height;
 

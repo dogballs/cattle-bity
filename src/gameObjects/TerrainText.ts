@@ -18,7 +18,7 @@ export class TerrainText extends GameObject {
     const font = rectFontLoader.load(config.PRIMARY_RECT_FONT_ID);
 
     this.text.setFont(font);
-    this.size.copy(this.text.getSize());
+    this.size.copyFrom(this.text.getSize());
 
     const rects = this.text.build();
     const tiles = TerrainFactory.createFromRegions(
