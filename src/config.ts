@@ -36,9 +36,10 @@ export const FREEZE_POWERUP_DURATION = 10 * FPS;
 export const POINTS_POWERUP_DURATION = 50;
 export const POINTS_ENEMY_TANK_DURATION = 10;
 
-export const LEVEL_POST_WIN_DELAY = 3 * FPS;
+export const LEVEL_END_DELAY = 3 * FPS;
+export const LEVEL_START_DELAY = 3 * FPS;
 
-export const PLAYER_INITIAL_LIVES = 3;
+export const PLAYER_INITIAL_LIVES = 2;
 export const PLAYER_EXTRA_LIVE_POINTS = 20000;
 
 export const COLOR_GRAY = '#636363';

@@ -80,20 +80,6 @@ sceneManager.register(SceneType.Score, ScoreScene);
 sceneManager.register(SceneType.GameOver, GameOverScene);
 sceneManager.start();
 
-// const debug = new DebugController(spawner);
-
-// const currentScene = new LevelScene();
-// const currentScene = new MenuScene();
-// const currentScene = new StageSelectionScene(
-//   config.CANVAS_WIDTH,
-//   config.CANVAS_HEIGHT,
-// );
-// const currentScene = new GameOverScene(
-//   config.CANVAS_WIDTH,
-//   config.CANVAS_HEIGHT,
-// );
-// const currentScene = new ScoreScene(config.CANVAS_WIDTH, config.CANVAS_HEIGHT);
-
 const debugInspector = new DebugInspector(gameRenderer.getElement());
 debugInspector.listen();
 debugInspector.click.addListener((position: Vector) => {
@@ -160,7 +146,3 @@ main();
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 window.gameLoop = gameLoop;
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-// window.debug = debug;

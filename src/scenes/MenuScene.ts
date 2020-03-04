@@ -20,7 +20,9 @@ export class MenuScene extends Scene {
   private menu = new Menu();
   private state: State = State.Sliding;
 
-  protected setup(): void {
+  protected setup({ session }: GameObjectUpdateArgs): void {
+    session.reset();
+
     this.root.renderer = new RectRenderer(config.COLOR_BLACK);
 
     this.group.size.copy(this.root.size);

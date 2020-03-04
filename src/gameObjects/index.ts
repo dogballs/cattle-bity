@@ -15,6 +15,7 @@ export * from './Field';
 export * from './GameOverHeading';
 export * from './GameOverNotice';
 export * from './LevelSelector';
+export * from './LivesCounter';
 export * from './Menu';
 export * from './MenuHeading';
 export * from './PauseNotice';

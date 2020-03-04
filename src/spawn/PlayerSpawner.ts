@@ -37,6 +37,10 @@ export class PlayerSpawner {
     this.timer.tick();
   }
 
+  public disable(): void {
+    this.timer.stop();
+  }
+
   private handleTimer = (): void => {
     this.spawn();
   };

@@ -1,18 +1,39 @@
-import { AudioLoader, CollisionDetector, Rect, Timer } from '../core';
+import {
+  AudioLoader,
+  CollisionDetector,
+  RandomUtils,
+  Rect,
+  Rotation,
+  Timer,
+} from '../core';
 import { InputControl } from '../input';
 import { GameObjectUpdateArgs, GameState, Session } from '../game';
 import {
   Border,
   Curtain,
+  EnemyTank,
+  Explosion,
   LevelInfo,
   LevelTitle,
   Field,
   PauseNotice,
+  PlayerTank,
+  Points,
+  Spawn,
 } from '../gameObjects';
 import { MapConfig } from '../map';
 import { TerrainFactory } from '../terrain';
-import { Level } from '../level';
-import { PointsRecord } from '../points';
+import { PointsRecord, PointsValue } from '../points';
+import {
+  EnemySpawner,
+  EnemySpawnerSpawnedEvent,
+  PlayerSpawner,
+  PlayerSpawnerSpawnedEvent,
+  PowerupSpawner,
+  PowerupSpawnerSpawnedEvent,
+} from '../spawn';
+import { TankDeathReason, TankTier } from '../tank';
+
 import * as config from '../config';
 
 import { Scene } from './Scene';
@@ -23,18 +44,21 @@ enum State {
   Loading,
   Starting,
   Playing,
+  Ending,
 }
-
-const START_DELAY = 3 * config.FPS;
 
 export class LevelScene extends Scene {
   private state = State.Idle;
   private audioLoader: AudioLoader;
   private curtain: Curtain;
   private title: LevelTitle;
-  private level: Level;
   private session: Session;
   private startTimer = new Timer();
+  private endTimer = new Timer();
+  private enemySpawner: EnemySpawner;
+  private playerSpawner: PlayerSpawner;
+  private powerupSpawner: PowerupSpawner;
+  private playerTank: PlayerTank;
 
   private info = new LevelInfo();
   private field = new Field();
@@ -65,21 +89,23 @@ export class LevelScene extends Scene {
     this.title.setCenter(this.root.getChildrenCenter());
     this.title.pivot.set(0.5, 0.5);
     this.root.add(this.title);
+
+    this.endTimer.done.addListener(this.handleEndTimer);
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
+    if (this.state === State.Loading) {
+      this.root.traverseDescedants((child) => {
+        child.invokeUpdate(updateArgs);
+      });
+      return;
+    }
+
     if (this.state === State.Starting) {
       if (this.startTimer.isDone()) {
         this.state = State.Playing;
       }
       this.startTimer.tick();
-      return;
-    }
-
-    if (this.state !== State.Playing) {
-      this.root.traverseDescedants((child) => {
-        child.invokeUpdate(updateArgs);
-      });
       return;
     }
 
@@ -97,7 +123,10 @@ export class LevelScene extends Scene {
 
     // TODO: enemies with drops are still animated
     if (!gameState.is(GameState.Paused)) {
-      this.level.update();
+      this.playerSpawner.update();
+      this.enemySpawner.update();
+      this.powerupSpawner.update();
+      this.endTimer.tick();
     }
 
     // Update all objects on the scene
@@ -152,25 +181,27 @@ export class LevelScene extends Scene {
       terrainTiles.push(...tiles);
     });
     this.field.add(...terrainTiles);
-    this.level = new Level(
-      mapConfig,
-      this.field,
-      this.field.base,
-      this.audioLoader,
-      this.session,
-    );
 
-    this.level.enemySpawned.addListener(this.handleEnemySpawned);
-    this.level.won.addListener(this.handleLevelWon);
-
-    this.info.setEnemyCount(this.level.getUnspawnedEnemiesCount());
     this.field.base.died.addListener(this.handleBaseDied);
 
     // this.title.visible = false;
     this.curtain.open();
 
     this.state = State.Starting;
-    this.startTimer.reset(START_DELAY);
+    this.startTimer.reset(config.LEVEL_START_DELAY);
+
+    this.playerSpawner = new PlayerSpawner(mapConfig.spawn.player);
+    this.playerSpawner.spawned.addListener(this.handlePlayerSpawned);
+
+    this.enemySpawner = new EnemySpawner(mapConfig.spawn.enemy);
+    this.enemySpawner.spawned.addListener(this.handleEnemySpawned);
+
+    this.powerupSpawner = new PowerupSpawner();
+    this.powerupSpawner.spawned.addListener(this.handlePowerupSpawned);
+
+    this.info.setEnemyCount(this.enemySpawner.getUnspawnedCount());
+
+    this.info.setLivesCount(this.session.getLivesCount());
   };
 
   private activatePause(): void {
@@ -186,16 +217,147 @@ export class LevelScene extends Scene {
     this.pauseNotice.visible = false;
   }
 
+  private handlePlayerSpawned = (event: PlayerSpawnerSpawnedEvent): void => {
+    const { tank, position } = event;
+
+    const spawn = new Spawn();
+    spawn.position.copyFrom(position);
+    spawn.completed.addListener(() => {
+      tank.setCenterFrom(spawn);
+      tank.died.addListener(() => {
+        const explosion = new Explosion();
+        explosion.setCenterFrom(tank);
+        tank.replaceSelf(explosion);
+
+        this.audioLoader.load('explosion.player').play();
+
+        this.session.removeLive();
+        if (this.session.isGameOver()) {
+          this.playerSpawner.disable();
+          this.end();
+        } else {
+          this.info.setLivesCount(this.session.getLivesCount());
+        }
+      });
+      tank.activateShield(config.SHIELD_SPAWN_DURATION);
+
+      this.playerTank = tank;
+
+      spawn.replaceSelf(tank);
+    });
+    this.field.add(spawn);
+  };
+
+  private handleEnemySpawned = (event: EnemySpawnerSpawnedEvent): void => {
+    const { tank, position } = event;
+
+    if (tank.hasDrop) {
+      this.powerupSpawner.unspawn();
+    }
+
+    // TODO: refactor this chain of subscriptions
+    const spawn = new Spawn();
+    spawn.position.copyFrom(position);
+    spawn.completed.addListener(() => {
+      tank.rotate(Rotation.Down);
+      tank.setCenterFrom(spawn);
+      tank.died.addListener((event) => {
+        // TODO: grenade explosion explodes multiple enemies, should trigger
+        // single audio
+        this.audioLoader.load('explosion.enemy').play();
+
+        if (tank.hasDrop) {
+          this.powerupSpawner.spawn();
+        }
+
+        const explosion = new Explosion();
+        explosion.setCenterFrom(tank);
+        tank.replaceSelf(explosion);
+
+        // Only player kills are awarded
+        if (event.reason === TankDeathReason.Bullet) {
+          explosion.done.addListenerOnce(() => {
+            const points = this.createEnemyTankPoints(tank);
+            points.setCenterFrom(tank);
+            this.field.add(points);
+          });
+        }
+
+        if (this.enemySpawner.areAllDead()) {
+          this.end();
+        }
+
+        this.session.addKillPoints(tank.type.tier);
+      });
+      spawn.replaceSelf(tank);
+    });
+
+    this.field.add(spawn);
+
+    this.info.setEnemyCount(this.enemySpawner.getUnspawnedCount());
+  };
+
+  private handlePowerupSpawned = (event: PowerupSpawnerSpawnedEvent): void => {
+    const { powerup } = event;
+
+    // TODO: Positioning should be smart
+    // - on a road
+    // - not spawn on top of base/tank/steel or water walls, etc
+    const x = RandomUtils.number(0, config.FIELD_SIZE - powerup.size.width);
+    const y = RandomUtils.number(0, config.FIELD_SIZE - powerup.size.height);
+
+    powerup.position.set(x, y);
+
+    powerup.picked.addListener(() => {
+      powerup.action.execute(this.playerTank, powerup, this.field.base);
+
+      const points = new Points(
+        PointsValue.V500,
+        config.POINTS_POWERUP_DURATION,
+      );
+      points.setCenterFrom(powerup);
+      this.field.add(points);
+
+      this.session.addPowerupPoints(powerup.type);
+    });
+
+    this.field.add(powerup);
+
+    this.audioLoader.load('powerup.spawn').play();
+  };
+
+  private createEnemyTankPoints(tank: EnemyTank): Points {
+    const value = this.getEnemyTankPointsValue(tank);
+    const points = new Points(value, config.POINTS_ENEMY_TANK_DURATION);
+    return points;
+  }
+
+  private getEnemyTankPointsValue(tank: EnemyTank): PointsValue {
+    switch (tank.type.tier) {
+      case TankTier.A:
+        return PointsValue.V100;
+      case TankTier.B:
+        return PointsValue.V200;
+      case TankTier.C:
+        return PointsValue.V300;
+      case TankTier.D:
+        return PointsValue.V400;
+      default:
+        return 0;
+    }
+  }
+
+  private end(): void {
+    this.state = State.Ending;
+    this.endTimer.reset(config.LEVEL_END_DELAY);
+  }
+
   private handleBaseDied = (): void => {
     this.session.setGameOver();
-    this.transition(SceneType.Score);
+    this.end();
   };
 
-  private handleEnemySpawned = (): void => {
-    this.info.setEnemyCount(this.level.getUnspawnedEnemiesCount());
-  };
-
-  private handleLevelWon = (): void => {
+  private handleEndTimer = (): void => {
     this.transition(SceneType.Score);
   };
 }

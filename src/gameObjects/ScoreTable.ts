@@ -1,6 +1,6 @@
 import { GameObject, Subject, Timer } from '../core';
 import { PointsRecord } from '../points';
-import { TankTier } from '../tank';
+import { TankTier } from '../tank/TankTier'; // TODO: circular dep?
 import * as config from '../config';
 
 import { ScoreTableCounter } from './ScoreTableCounter';

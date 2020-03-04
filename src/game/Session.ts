@@ -10,12 +10,16 @@ enum State {
 }
 
 export class Session {
-  private startLevelNumber = 0;
-  private currentLevelNumber = 0;
-  private levelPointsRecord = new PointsRecord();
-  private totalPoints = 0;
-  private lives = config.PLAYER_INITIAL_LIVES;
-  private state = State.Idle;
+  private startLevelNumber: number;
+  private currentLevelNumber: number;
+  private levelPointsRecord: PointsRecord;
+  private totalPoints: number;
+  private lives: number;
+  private state: State;
+
+  constructor() {
+    this.reset();
+  }
 
   public start(startLevelNumber: number): void {
     if (this.state !== State.Idle) {
@@ -25,6 +29,15 @@ export class Session {
     this.startLevelNumber = startLevelNumber;
     this.currentLevelNumber = startLevelNumber;
     this.state = State.Playing;
+  }
+
+  public reset(): void {
+    this.startLevelNumber = 1;
+    this.currentLevelNumber = 1;
+    this.levelPointsRecord = new PointsRecord();
+    this.totalPoints = 0;
+    this.lives = config.PLAYER_INITIAL_LIVES;
+    this.state = State.Idle;
   }
 
   public activateNextLevel(): void {
@@ -47,15 +60,27 @@ export class Session {
 
   // TODO: 20k points give extra live
 
-  public getLevelPointsRecord(): PointsRecord {
-    return this.levelPointsRecord;
-  }
-
   public addKillPoints(tier: TankTier): void {
     this.levelPointsRecord.addKill(tier);
   }
 
   public addPowerupPoints(type: PowerupType): void {
     this.levelPointsRecord.addPowerup(type);
+  }
+
+  public getLevelPointsRecord(): PointsRecord {
+    return this.levelPointsRecord;
+  }
+
+  public getLivesCount(): number {
+    return this.lives;
+  }
+
+  public removeLive(): void {
+    this.lives -= 1;
+
+    if (this.lives < 0) {
+      this.setGameOver();
+    }
   }
 }

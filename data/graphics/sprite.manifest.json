@@ -21,6 +21,7 @@
   "points.400": { "file": "sprite.png", "rect": [337, 164, 14, 7] },
   "points.500": { "file": "sprite.png", "rect": [353, 164, 14, 7] },
   "ui.enemy": { "file": "sprite.png", "rect": [320, 192, 8, 8] },
+  "ui.player": { "file": "sprite.png", "rect": [377, 144, 7, 8] },
   "ui.pause": { "file": "sprite.png", "rect": [289, 176, 39, 7] },
   "ui.gameOver": { "file": "sprite.png", "rect": [289, 184, 31, 15] },
   "shield.1": { "file": "sprite.png", "rect": [256, 144, 16, 16] },
@@ -36,6 +37,7 @@
   "menu.brick.1": { "file": "menu-brick.png", "rect": [0, 0, 4, 4] },
   "menu.brick.2": { "file": "menu-brick.png", "rect": [4, 0, 4, 4] },
   "wall.steel": { "file": "sprite.png", "rect": [256, 16, 8, 8] },
+  "flag": { "file": "sprite.png", "rect": [376, 184, 16, 15] },
   "tank.enemy.default.a.up.1": {
     "file": "sprite.png",
     "rect": [129, 64, 13, 15]
