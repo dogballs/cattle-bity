@@ -37,11 +37,11 @@ export class ScoreTableCounter extends GameObject {
     this.add(this.pointsLabel);
 
     this.pointsText.position.setX(124);
-    this.pointsText.pivot.setX(1);
+    this.pointsText.origin.setX(1);
     this.add(this.pointsText);
 
     this.killsText.position.setX(this.size.width);
-    this.killsText.pivot.setX(1);
+    this.killsText.origin.setX(1);
     this.add(this.killsText);
   }
 

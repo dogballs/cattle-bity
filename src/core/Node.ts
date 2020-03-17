@@ -1,5 +1,3 @@
-import { Subject } from './Subject';
-
 /**
  * Represents one node in a scene graph.
  * https://en.wikipedia.org/wiki/Scene_graph
@@ -7,7 +5,6 @@ import { Subject } from './Subject';
 export class Node {
   public children: this[];
   public parent: this;
-  public added = new Subject();
 
   constructor() {
     this.children = [];
@@ -16,12 +13,14 @@ export class Node {
 
   // TODO: figure out input type for a child
   public add(...childrenToAdd): this {
-    childrenToAdd.forEach((childToAdd) => {
-      childToAdd.parent = this;
-      childToAdd.added.notify();
+    for (const childToAdd of childrenToAdd) {
+      if (childToAdd.parent !== null) {
+        childToAdd.parent.remove(childToAdd);
+      }
 
+      childToAdd.parent = this;
       this.children.push(childToAdd);
-    });
+    }
 
     return this;
   }
@@ -37,8 +36,14 @@ export class Node {
     return this;
   }
 
-  public remove(childToRemove: Node): this {
-    this.children = this.children.filter((child) => child !== childToRemove);
+  public remove(childToRemove): this {
+    const index = this.children.indexOf(childToRemove);
+
+    if (index === -1) {
+      return this;
+    }
+
+    this.children.splice(index, 1);
 
     return this;
   }
@@ -53,7 +58,7 @@ export class Node {
     return this;
   }
 
-  public clear(): this {
+  public removeAllChildren(): this {
     this.children = [];
 
     return this;
@@ -62,28 +67,28 @@ export class Node {
   public traverse(callback: (node: this) => void): this {
     callback(this);
 
-    this.children.forEach((child) => {
+    for (const child of this.children) {
       child.traverse(callback);
-    });
+    }
 
     return this;
   }
 
   public traverseDescedants(callback: (node: this) => void): this {
-    this.children.forEach((child) => {
+    for (const child of this.children) {
       child.traverse(callback);
-    });
+    }
 
     return this;
   }
 
-  public traverseAncestors(callback: (node: this) => void): this {
+  public traverseParents(callback: (node: this) => void): this {
     const parent = this.parent;
 
     if (parent !== null) {
       callback(parent);
 
-      parent.traverseAncestors(callback);
+      parent.traverseParents(callback);
     }
 
     return this;

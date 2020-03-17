@@ -1,4 +1,4 @@
-import { Rotation } from '../core';
+import { Rotation } from '../game';
 
 import { TankType } from './TankType';
 
@@ -16,12 +16,27 @@ export class TankSpriteId {
       type.party.toString(),
       type.color.toString(),
       type.tier.toString(),
-      rotation.toString(),
+      this.getRotationString(rotation),
       frameNumber.toString(),
     ];
 
     const spriteId = parts.join(SPRITE_ID_SEPARATOR);
 
     return spriteId;
+  }
+
+  private static getRotationString(rotation: Rotation): string {
+    switch (rotation) {
+      case Rotation.Up:
+        return 'up';
+      case Rotation.Down:
+        return 'down';
+      case Rotation.Left:
+        return 'left';
+      case Rotation.Right:
+        return 'right';
+      default:
+        return 'unknown';
+    }
   }
 }

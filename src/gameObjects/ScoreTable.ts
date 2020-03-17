@@ -39,17 +39,17 @@ export class ScoreTable extends GameObject {
 
   protected setup(): void {
     this.playerLabel.position.set(256, 0);
-    this.playerLabel.pivot.setX(1);
+    this.playerLabel.origin.setX(1);
     this.add(this.playerLabel);
 
     this.totalPoints.setText(this.record.getTotalPoints().toString());
     this.totalPoints.position.set(256, 64);
-    this.totalPoints.pivot.set(1, 0);
+    this.totalPoints.origin.set(1, 0);
     this.add(this.totalPoints);
 
     TIERS.forEach((tier, index) => {
       const icon = new ScoreTableTierIcon(tier);
-      icon.setCenter(this.getChildrenCenter());
+      icon.setCenter(this.getSelfCenter());
       icon.position.setY(136 + 100 * index);
       this.add(icon);
 
@@ -62,16 +62,16 @@ export class ScoreTable extends GameObject {
       this.add(counter);
     });
 
-    this.underline.setCenter(this.getChildrenCenter());
+    this.underline.setCenter(this.getSelfCenter());
     this.underline.position.setY(504);
     this.add(this.underline);
 
     this.totalLabel.position.set(256, 516);
-    this.totalLabel.pivot.set(1, 0);
+    this.totalLabel.origin.set(1, 0);
     this.add(this.totalLabel);
 
     this.totalKills.position.set(348, 516);
-    this.totalKills.pivot.set(1, 0);
+    this.totalKills.origin.set(1, 0);
     this.add(this.totalKills);
   }
 

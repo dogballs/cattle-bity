@@ -12,8 +12,8 @@ export class GameOverScene extends Scene {
   protected setup(): void {
     this.timer.done.addListener(this.handleDone);
 
-    this.heading.pivot.set(0.5, 0.5);
-    this.heading.setCenter(this.root.getChildrenCenter());
+    this.heading.origin.set(0.5, 0.5);
+    this.heading.setCenter(this.root.getSelfCenter());
     this.heading.position.addY(-32);
     this.root.add(this.heading);
   }

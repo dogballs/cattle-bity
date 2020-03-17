@@ -29,13 +29,13 @@ export class ScoreScene extends Scene {
     this.levelTitle = new LevelTitle(this.session.getLevelNumber(), {
       color: config.COLOR_WHITE,
     });
-    this.levelTitle.pivot.set(0.5, 0);
-    this.levelTitle.setCenter(this.root.getChildrenCenter());
+    this.levelTitle.origin.set(0.5, 0);
+    this.levelTitle.setCenter(this.root.getSelfCenter());
     this.levelTitle.position.setY(128);
     this.root.add(this.levelTitle);
 
     this.scoreTable = new ScoreTable(this.session.getLevelPointsRecord());
-    this.scoreTable.setCenter(this.root.getChildrenCenter());
+    this.scoreTable.setCenter(this.root.getSelfCenter());
     this.scoreTable.done.addListener(this.handleDone);
     this.root.add(this.scoreTable);
 

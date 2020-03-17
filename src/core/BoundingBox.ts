@@ -7,7 +7,7 @@ export class BoundingBox {
   public max: Vector;
 
   /**
-   * Creates a rectangular box which captures entire object bounds
+   * Creates a rectangular box which captures entire object bounds (AABB)
    * @param  {Vector} min Top-left point of the box
    * @param  {Vector} max Bottom-right point of the box
    * @return {BoundingBox}
@@ -56,13 +56,39 @@ export class BoundingBox {
     return !isOutside;
   }
 
-  public contains(v: Vector): boolean {
+  public containsPoint(p: Vector): boolean {
     const isOutside =
-      this.max.x <= v.x ||
-      this.min.x >= v.x ||
-      this.max.y <= v.y ||
-      this.min.y >= v.y;
+      this.max.x <= p.x ||
+      this.min.x >= p.x ||
+      this.max.y <= p.y ||
+      this.min.y >= p.y;
 
     return !isOutside;
+  }
+
+  public fromPoints(points: Vector[]): this {
+    if (points.length === 0) {
+      return this;
+    }
+
+    this.min.copyFrom(points[0]);
+    this.max.copyFrom(points[0]);
+
+    for (const point of points) {
+      if (point.x < this.min.x) {
+        this.min.x = point.x;
+      }
+      if (point.x > this.max.x) {
+        this.max.x = point.x;
+      }
+      if (point.y < this.min.y) {
+        this.min.y = point.y;
+      }
+      if (point.y > this.max.y) {
+        this.max.y = point.y;
+      }
+    }
+
+    return this;
   }
 }

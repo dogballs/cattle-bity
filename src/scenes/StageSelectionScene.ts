@@ -19,7 +19,7 @@ export class StageSelectionScene extends Scene {
     // TODO: order is important, z-index
     this.root.add(this.curtain);
 
-    this.selector.setCenter(this.root.getChildrenCenter());
+    this.selector.setCenter(this.root.getSelfCenter());
     this.selector.selected.addListener(this.handleLevelSelected);
     this.root.add(this.selector);
 

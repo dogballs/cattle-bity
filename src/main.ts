@@ -26,6 +26,7 @@ import {
   ScoreScene,
   SceneManager,
   SceneType,
+  TestScene,
 } from './scenes';
 
 import * as config from './config';
@@ -80,6 +81,7 @@ sceneManager.register(SceneType.Menu, MenuScene);
 sceneManager.register(SceneType.Level, LevelScene);
 sceneManager.register(SceneType.LevelSelection, StageSelectionScene);
 sceneManager.register(SceneType.Score, ScoreScene);
+sceneManager.register(SceneType.Test, TestScene);
 sceneManager.start();
 
 const debugInspector = new DebugInspector(gameRenderer.getElement());
@@ -89,7 +91,7 @@ debugInspector.click.addListener((position: Vector) => {
 
   const scene = sceneManager.getScene();
   scene.root.traverseDescedants((child) => {
-    if (child.getWorldBoundingBox().contains(position)) {
+    if (child.getWorldBoundingBox().containsPoint(position)) {
       intersections.push(child);
     }
   });

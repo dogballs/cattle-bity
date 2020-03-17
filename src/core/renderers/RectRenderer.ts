@@ -1,4 +1,4 @@
-import { BoundingBox } from '../BoundingBox';
+import { GameObject } from '../GameObject';
 
 import { Renderer } from './Renderer';
 
@@ -13,17 +13,23 @@ export class RectRenderer extends Renderer {
     this.strokeColor = strokeColor;
   }
 
-  public render(canvas: HTMLCanvasElement, box: BoundingBox): void {
+  public render(canvas: HTMLCanvasElement, gameObject: GameObject): void {
     const context = canvas.getContext('2d');
 
-    const { min, max } = box;
+    // const { min, max } = gameObject.getWorldBoundingBox();
+
+    const points = gameObject.getWorldPoints();
+    if (points.length === 0) {
+      return;
+    }
+
+    const [firstPoint, ...restPoints] = points;
 
     context.beginPath();
-    context.moveTo(min.x, min.y);
-    context.lineTo(max.x, min.y);
-    context.lineTo(max.x, max.y);
-    context.lineTo(min.x, max.y);
-    context.lineTo(min.x, min.y);
+    context.moveTo(firstPoint.x, firstPoint.y);
+    for (const point of restPoints) {
+      context.lineTo(point.x, point.y);
+    }
     context.closePath();
 
     if (this.fillColor !== null) {

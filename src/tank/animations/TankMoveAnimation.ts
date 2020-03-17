@@ -1,4 +1,5 @@
-import { Animation, Rotation, Sprite, SpriteLoader } from '../../core';
+import { Animation, Sprite, SpriteLoader } from '../../core';
+import { Rotation } from '../../game';
 
 import { TankColor } from '../TankColor';
 import { TankType } from '../TankType';

@@ -79,7 +79,7 @@ export class EditorScene extends Scene {
       this.mapConfig.terrain.regions,
     );
 
-    this.map.clear();
+    this.map.removeAllChildren();
     this.map.add(...tiles);
   }
 }

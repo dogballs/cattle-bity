@@ -48,20 +48,18 @@ export class GameRenderer {
     const offscreenContext = this.offscreenCanvas.getContext('2d');
     offscreenContext.imageSmoothingEnabled = false;
 
+    root.updateWorldMatrix(false, true);
+
     this.renderGameObject(root);
   }
 
   private renderGameObject(gameObject: GameObject): void {
     if (gameObject.renderer !== null && gameObject.visible) {
-      gameObject.renderer.render(
-        this.canvas,
-        gameObject.getWorldBoundingBox(),
-        this.offscreenCanvas,
-      );
+      gameObject.renderer.render(this.canvas, gameObject, this.offscreenCanvas);
     }
 
     if (this.options.debug) {
-      this.renderGameObjectDebugFrame(gameObject);
+      this.renderGameObjectDebugBox(gameObject);
     }
 
     if (gameObject.visible === true) {
@@ -72,7 +70,7 @@ export class GameRenderer {
   }
 
   // TODO: debug should not be a part of game renderer
-  private renderGameObjectDebugFrame(gameObject: GameObject): void {
+  private renderGameObjectDebugBox(gameObject: GameObject): void {
     const { min, max } = gameObject.getWorldBoundingBox();
 
     this.context.beginPath();

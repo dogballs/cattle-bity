@@ -28,12 +28,12 @@ export class MenuScene extends Scene {
     this.group.size.copyFrom(this.root.size);
     this.group.position.setY(this.root.size.height);
 
-    this.heading.pivot.setX(0.5);
-    this.heading.setCenter(this.root.getChildrenCenter());
+    this.heading.origin.setX(0.5);
+    this.heading.setCenter(this.root.getSelfCenter());
     this.heading.position.setY(160);
     this.group.add(this.heading);
 
-    this.menu.setCenter(this.root.getChildrenCenter());
+    this.menu.setCenter(this.root.getSelfCenter());
     this.menu.position.setY(512);
     this.menu.selected.addListener(this.handleMenuSelected);
     this.group.add(this.menu);

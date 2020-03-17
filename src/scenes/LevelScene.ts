@@ -3,11 +3,10 @@ import {
   CollisionDetector,
   RandomUtils,
   Rect,
-  Rotation,
   Timer,
 } from '../core';
 import { InputControl } from '../input';
-import { GameObjectUpdateArgs, GameState, Session } from '../game';
+import { GameObjectUpdateArgs, GameState, Rotation, Session } from '../game';
 import {
   Base,
   Border,
@@ -88,8 +87,8 @@ export class LevelScene extends Scene {
     this.root.add(this.curtain);
 
     this.title = new LevelTitle(session.getLevelNumber());
-    this.title.setCenter(this.root.getChildrenCenter());
-    this.title.pivot.set(0.5, 0.5);
+    this.title.setCenter(this.root.getSelfCenter());
+    this.title.origin.set(0.5, 0.5);
     this.root.add(this.title);
 
     this.endTimer.done.addListener(this.handleEndTimer);
@@ -139,6 +138,8 @@ export class LevelScene extends Scene {
       }
     });
 
+    this.root.updateWorldMatrix(false, true);
+
     const nodes = this.root.flatten();
 
     // Nodes that initiate collision
@@ -170,7 +171,7 @@ export class LevelScene extends Scene {
     );
     this.root.add(this.info);
 
-    this.pauseNotice.setCenter(this.field.getChildrenCenter());
+    this.pauseNotice.setCenter(this.field.getSelfCenter());
     this.pauseNotice.position.y += 18;
     this.pauseNotice.visible = false;
     this.root.add(this.pauseNotice);
@@ -227,10 +228,10 @@ export class LevelScene extends Scene {
     const spawn = new Spawn();
     spawn.position.copyFrom(position);
     spawn.completed.addListener(() => {
-      tank.setCenterFrom(spawn);
+      tank.setCenter(spawn.getCenter());
       tank.died.addListener(() => {
         const explosion = new Explosion();
-        explosion.setCenterFrom(tank);
+        explosion.setCenter(tank.getCenter());
         tank.replaceSelf(explosion);
 
         this.audioLoader.load('explosion.player').play();
@@ -264,7 +265,7 @@ export class LevelScene extends Scene {
     spawn.position.copyFrom(position);
     spawn.completed.addListener(() => {
       tank.rotate(Rotation.Down);
-      tank.setCenterFrom(spawn);
+      tank.setCenter(spawn.getCenter());
       tank.died.addListener((event) => {
         // TODO: grenade explosion explodes multiple enemies, should trigger
         // single audio
@@ -275,14 +276,14 @@ export class LevelScene extends Scene {
         }
 
         const explosion = new Explosion();
-        explosion.setCenterFrom(tank);
+        explosion.setCenter(tank.getCenter());
         tank.replaceSelf(explosion);
 
         // Only player kills are awarded
         if (event.reason === TankDeathReason.Bullet) {
           explosion.done.addListenerOnce(() => {
             const points = this.createEnemyTankPoints(tank);
-            points.setCenterFrom(tank);
+            points.setCenter(tank.getCenter());
             this.field.add(points);
           });
         }
@@ -319,7 +320,7 @@ export class LevelScene extends Scene {
         PointsValue.V500,
         config.POINTS_POWERUP_DURATION,
       );
-      points.setCenterFrom(powerup);
+      points.setCenter(powerup.getCenter());
       this.field.add(points);
 
       this.session.addPowerupPoints(powerup.type);

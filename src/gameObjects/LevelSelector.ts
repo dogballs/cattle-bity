@@ -22,7 +22,7 @@ export class LevelSelector extends GameObject {
   }
 
   protected setup(): void {
-    this.title.pivot.set(0.5, 0.5);
+    this.title.origin.set(0.5, 0.5);
     this.add(this.title);
     this.updateText();
   }

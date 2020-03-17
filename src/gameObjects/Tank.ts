@@ -2,13 +2,12 @@ import {
   Alignment,
   Animation,
   GameObject,
-  Rotation,
   Sprite,
   SpriteRenderer,
   Subject,
   Timer,
 } from '../core';
-import { GameObjectUpdateArgs, Tag } from '../game';
+import { GameObjectUpdateArgs, Rotation, Tag } from '../game';
 import {
   TankAttributes,
   TankBehavior,
@@ -45,6 +44,8 @@ export class Tank extends GameObject {
   constructor(width: number, height: number) {
     super(width, height);
 
+    this.pivot.set(0.5, 0.5);
+
     this.renderer.alignment = Alignment.MiddleCenter;
 
     this.shieldTimer.done.addListener(this.handleShieldTimer);
@@ -66,27 +67,26 @@ export class Tank extends GameObject {
 
   protected collide(target: GameObject): void {
     if (target.tags.includes(Tag.BlockMove)) {
-      const targetBox = target.getWorldBoundingBox();
-      const { width, height } = this.getBoundingBox().getSize();
-      const worldPosition = this.getWorldPosition();
+      const tankWorldBox = this.getWorldBoundingBox();
+      const targetWorldBox = target.getWorldBoundingBox();
 
-      // TODO: world positions are messy, but required to check for all walls
-      // for whatever nesting levels.
-      // Fix tank position depending on what wall he hits, so the tank won't be
-      // able to pass thru the wall.
-      if (this.rotation === Rotation.Up) {
-        this.setWorldPosition(worldPosition.clone().setY(targetBox.max.y));
-      } else if (this.rotation === Rotation.Down) {
-        this.setWorldPosition(
-          worldPosition.clone().setY(targetBox.min.y - height),
-        );
-      } else if (this.rotation === Rotation.Left) {
-        this.setWorldPosition(worldPosition.clone().setX(targetBox.max.x));
-      } else if (this.rotation === Rotation.Right) {
-        this.setWorldPosition(
-          worldPosition.clone().setX(targetBox.min.x - width),
-        );
+      // TODO: rework after collisions, because now we are tied to axis
+      const rotation = this.getWorldRotation();
+
+      // Fix overlap during collision
+      if (rotation === Rotation.Up) {
+        this.translateY(tankWorldBox.min.y - targetWorldBox.max.y);
+      } else if (rotation === Rotation.Down) {
+        this.translateY(targetWorldBox.min.y - tankWorldBox.max.y);
+      } else if (rotation === Rotation.Left) {
+        this.translateY(tankWorldBox.min.x - targetWorldBox.max.x);
+      } else if (rotation === Rotation.Right) {
+        this.translateY(targetWorldBox.min.x - tankWorldBox.max.x);
       }
+
+      // If it collides with multiple brick at a time, each of them will
+      // invoke translation above, matrix is updated
+      this.updateWorldMatrix();
     }
 
     if (target.tags.includes(Tag.Bullet)) {
@@ -130,28 +130,15 @@ export class Tank extends GameObject {
       this.attributes.bulletWallDamage,
     );
 
-    const tankSize = this.getBoundingBox().getSize();
+    // First, add bullet inside a tank and position it at the north center
+    // of the tank (where the gun is). Bullet will inherit tank's rotation.
+    this.add(bullet);
+    bullet.updateWorldMatrix(true);
+    bullet.setCenter(this.getSelfCenter());
+    bullet.translateY(this.size.height / 2);
 
-    // Position bullet where the gun is
-
-    // TODO: order here matters
-    bullet.rotate(this.rotation);
-    bullet.setCenterFrom(this);
-
-    // Get after rotation
-    const bulletSize = bullet.getBoundingBox().getSize();
-
-    if (this.rotation === Rotation.Up) {
-      bullet.position.setY(this.position.y);
-    } else if (this.rotation === Rotation.Down) {
-      bullet.position.setY(
-        this.position.y + tankSize.height - bulletSize.height,
-      );
-    } else if (this.rotation === Rotation.Left) {
-      bullet.position.setX(this.position.x);
-    } else if (this.rotation === Rotation.Right) {
-      bullet.position.setX(this.position.x + tankSize.width - bulletSize.width);
-    }
+    // Then, detach bullet from a tank and move it to a field
+    this.parent.attach(bullet);
 
     if (this.tags.includes(Tag.Player)) {
       bullet.tags.push(Tag.Player);
@@ -167,8 +154,6 @@ export class Tank extends GameObject {
       });
     });
 
-    this.parent.add(bullet);
-
     return true;
   }
 
@@ -177,15 +162,7 @@ export class Tank extends GameObject {
       this.state = TankState.Moving;
     }
 
-    if (this.rotation === Rotation.Up) {
-      this.position.y -= this.attributes.moveSpeed;
-    } else if (this.rotation === Rotation.Down) {
-      this.position.y += this.attributes.moveSpeed;
-    } else if (this.rotation === Rotation.Right) {
-      this.position.x += this.attributes.moveSpeed;
-    } else if (this.rotation === Rotation.Left) {
-      this.position.x -= this.attributes.moveSpeed;
-    }
+    this.translateY(this.attributes.moveSpeed);
   }
 
   public idle(): void {
@@ -226,7 +203,7 @@ export class Tank extends GameObject {
     }
 
     this.shield = new Shield();
-    this.shield.setCenter(this.getChildrenCenter());
+    this.shield.setCenter(this.getSelfCenter());
 
     this.add(this.shield);
 

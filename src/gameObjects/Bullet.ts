@@ -1,12 +1,5 @@
-import {
-  GameObject,
-  Rotation,
-  Sound,
-  Sprite,
-  SpriteRenderer,
-  Subject,
-} from '../core';
-import { GameObjectUpdateArgs, Tag } from '../game';
+import { GameObject, Sound, Sprite, SpriteRenderer, Subject } from '../core';
+import { GameObjectUpdateArgs, Rotation, RotationMap, Tag } from '../game';
 
 import { SmallExplosion } from './SmallExplosion';
 import { WallDestroyer } from './WallDestroyer';
@@ -19,7 +12,7 @@ export class Bullet extends GameObject {
   public tags = [Tag.Bullet];
   public died = new Subject();
   public renderer = new SpriteRenderer();
-  private spriteMap: Map<Rotation, Sprite> = new Map();
+  private sprites: RotationMap<Sprite> = new RotationMap();
   private hitBrickSound: Sound;
   private hitSteelSound: Sound;
 
@@ -29,30 +22,25 @@ export class Bullet extends GameObject {
     this.speed = speed;
     this.tankDamage = tankDamage;
     this.wallDamage = wallDamage;
+
+    this.pivot.set(0.5, 0.5);
   }
 
   protected setup({ audioLoader, spriteLoader }: GameObjectUpdateArgs): void {
     this.hitBrickSound = audioLoader.load('hit.brick');
     this.hitSteelSound = audioLoader.load('hit.steel');
 
-    this.spriteMap.set(Rotation.Up, spriteLoader.load('bullet.up'));
-    this.spriteMap.set(Rotation.Down, spriteLoader.load('bullet.down'));
-    this.spriteMap.set(Rotation.Left, spriteLoader.load('bullet.left'));
-    this.spriteMap.set(Rotation.Right, spriteLoader.load('bullet.right'));
+    this.sprites.set(Rotation.Up, spriteLoader.load('bullet.up'));
+    this.sprites.set(Rotation.Down, spriteLoader.load('bullet.down'));
+    this.sprites.set(Rotation.Left, spriteLoader.load('bullet.left'));
+    this.sprites.set(Rotation.Right, spriteLoader.load('bullet.right'));
   }
 
   protected update(): void {
-    if (this.rotation === Rotation.Up) {
-      this.position.y -= this.speed;
-    } else if (this.rotation === Rotation.Down) {
-      this.position.y += this.speed;
-    } else if (this.rotation === Rotation.Left) {
-      this.position.x -= this.speed;
-    } else if (this.rotation === Rotation.Right) {
-      this.position.x += this.speed;
-    }
+    this.translateY(this.speed);
 
-    this.renderer.sprite = this.spriteMap.get(this.rotation);
+    const rotation = this.getWorldRotation();
+    this.renderer.sprite = this.sprites.get(rotation);
   }
 
   protected collide(target: GameObject): void {
@@ -84,45 +72,32 @@ export class Bullet extends GameObject {
       const wallWorldBox = target.getWorldBoundingBox();
 
       const destroyer = new WallDestroyer(this.wallDamage);
-      // TODO: order here matters
-      destroyer.rotate(this.rotation);
-      destroyer.setCenterFrom(this);
 
-      // At this point destroyer is aligned by at the main axis, i.e.
+      this.add(destroyer);
+      destroyer.updateWorldMatrix(true);
+      destroyer.setCenter(this.getSelfCenter());
+
+      // At this point destroyer is aligned by the main axis, i.e.
       // if bullet rotation is left/right - destroyer is aligned at "y";
       // if bullet rotation is up/down - destroyer is aligned at "x".
       // What is left is to fix counterpart axis.
 
-      // TODO: order matters
-      // TODO: these world positions are very messy, but are required to be
-      // able to hit bricks in base
+      destroyer.updateWorldMatrix();
+      const destroyerWorldBox = destroyer.getWorldBoundingBox();
 
-      // Adding to parent will influence in world position calculation
-      this.parent.add(destroyer);
-      const destroyerWorldPosition = destroyer.getWorldPosition();
-      const destroyerSize = destroyer.getBoundingBox().getSize();
-
-      if (this.rotation === Rotation.Up) {
-        destroyer.setWorldPosition(
-          destroyerWorldPosition
-            .clone()
-            .setY(wallWorldBox.max.y - destroyerSize.height),
-        );
-      } else if (this.rotation === Rotation.Down) {
-        destroyer.setWorldPosition(
-          destroyerWorldPosition.clone().setY(wallWorldBox.min.y),
-        );
-      } else if (this.rotation === Rotation.Left) {
-        destroyer.setWorldPosition(
-          destroyerWorldPosition
-            .clone()
-            .setX(wallWorldBox.max.x - destroyerSize.width),
-        );
-      } else if (this.rotation === Rotation.Right) {
-        destroyer.setWorldPosition(
-          destroyerWorldPosition.clone().setX(wallWorldBox.min.x),
-        );
+      const rotation = destroyer.getWorldRotation();
+      // TODO: rework after collisions, because now we are tied to axis
+      if (rotation === Rotation.Up) {
+        destroyer.translateY(destroyerWorldBox.max.y - wallWorldBox.max.y);
+      } else if (rotation === Rotation.Down) {
+        destroyer.translateY(wallWorldBox.min.y - destroyerWorldBox.min.y);
+      } else if (rotation === Rotation.Left) {
+        destroyer.translateY(destroyerWorldBox.max.x - wallWorldBox.max.x);
+      } else if (rotation === Rotation.Right) {
+        destroyer.translateY(wallWorldBox.min.x - destroyerWorldBox.min.x);
       }
+
+      this.parent.attach(destroyer);
 
       // TODO: it collides with multiple "bricks", multiple audio sources are
       // triggered
@@ -147,7 +122,7 @@ export class Bullet extends GameObject {
 
   public explode(): void {
     const explosion = new SmallExplosion();
-    explosion.setCenterFrom(this);
+    explosion.setCenter(this.getCenter());
     this.replaceSelf(explosion);
     this.died.notify();
   }

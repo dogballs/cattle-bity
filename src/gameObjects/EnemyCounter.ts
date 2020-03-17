@@ -17,15 +17,15 @@ export class EnemyCounter extends GameObject {
   public setCount(nextCount: number): void {
     this.count = nextCount;
 
-    this.clear();
-    this.append(nextCount);
+    this.removeAllChildren();
+    this.addItems(nextCount);
   }
 
   protected setup(): void {
-    this.append(this.count);
+    this.addItems(this.count);
   }
 
-  private append(count: number): void {
+  private addItems(count: number): void {
     for (let i = 0; i < count; i += 1) {
       const item = new EnemyCounterItem();
 

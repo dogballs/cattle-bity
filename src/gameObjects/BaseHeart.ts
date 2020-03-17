@@ -25,7 +25,7 @@ export class BaseHeart extends GameObject {
     this.isDead = true;
 
     const explosion = new Explosion();
-    explosion.setCenter(this.getChildrenCenter());
+    explosion.setCenter(this.getSelfCenter());
     this.add(explosion);
 
     this.renderer.sprite = this.deadSprite;

@@ -1,4 +1,5 @@
-import { Logger, RandomUtils, Rotation, Timer, Vector } from '../../core';
+import { Logger, RandomUtils, Timer, Vector } from '../../core';
+import { Rotation } from '../../game';
 import { Tank } from '../../gameObjects';
 import * as config from '../../config';
 

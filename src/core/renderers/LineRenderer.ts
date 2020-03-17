@@ -1,4 +1,4 @@
-import { BoundingBox } from '../BoundingBox';
+import { GameObject } from '../GameObject';
 import { Vector } from '../Vector';
 
 import { Renderer } from './Renderer';
@@ -7,14 +7,14 @@ export class LineRenderer extends Renderer {
   public positions: Vector[] = [];
   public strokeColor = '#000';
 
-  public render(canvas: HTMLCanvasElement, box: BoundingBox): void {
+  public render(canvas: HTMLCanvasElement, gameObject: GameObject): void {
     if (this.positions.length === 0) {
       return;
     }
 
     const context = canvas.getContext('2d');
 
-    const { min } = box;
+    const { min } = gameObject.getWorldBoundingBox();
 
     const [firstPosition, ...restPositions] = this.positions;
 

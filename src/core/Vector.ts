@@ -94,4 +94,8 @@ export class Vector {
   public clone(): Vector {
     return new Vector(this.x, this.y);
   }
+
+  public static fromArray(array: number[]): Vector {
+    return new Vector(array[0], array[1]);
+  }
 }

@@ -1,11 +1,9 @@
-import { BoundingBox } from '../BoundingBox';
+import { GameObject } from '../GameObject';
 
 export abstract class Renderer {
-  public visible = true;
-
   public abstract render(
     canvas: HTMLCanvasElement,
-    boundingBox: BoundingBox,
+    gameObject: GameObject,
     offscreenCanvas?: OffscreenCanvas,
   ): void;
 }

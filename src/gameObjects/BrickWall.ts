@@ -25,7 +25,7 @@ export class BrickWall extends GameObject {
   }
 
   protected update(): void {
-    this.renderer.sprite = this.getSpriteByPosition();
+    // this.renderer.sprite = this.getSpriteByPosition();
   }
 
   private getSpriteByPosition(): Sprite {

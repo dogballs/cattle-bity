@@ -1,5 +1,5 @@
-import { GameObject, Rotation, SpriteRenderer } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameObject, SpriteRenderer } from '../core';
+import { GameObjectUpdateArgs, Rotation } from '../game';
 import {
   TankColor,
   TankParty,
@@ -32,7 +32,7 @@ export class ScoreTableTierIcon extends GameObject {
     const renderer = new SpriteRenderer();
     renderer.sprite = sprite;
     this.tank.renderer = renderer;
-    this.tank.setCenter(this.getChildrenCenter());
+    this.tank.setCenter(this.getSelfCenter());
     this.add(this.tank);
 
     this.leftIcon.position.setY(16);
