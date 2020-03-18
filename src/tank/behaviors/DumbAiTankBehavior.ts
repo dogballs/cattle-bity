@@ -1,5 +1,5 @@
 import { Logger, RandomUtils, Timer, Vector } from '../../core';
-import { Rotation } from '../../game';
+import { GameObjectUpdateArgs, Rotation } from '../../game';
 import { Tank } from '../../gameObjects';
 import * as config from '../../config';
 
@@ -12,9 +12,9 @@ enum State {
   Firing,
 }
 
-const THINK_DURATION = 2;
+const THINK_DURATION = 0.33;
 const FIRE_MIN_DELAY = 0;
-const FIRE_MAX_DELAY = 60;
+const FIRE_MAX_DELAY = 1;
 const STUCK_FIRE_CHANCE = 30;
 const UNSTUCK_THINK_CHANCE = 5;
 
@@ -27,7 +27,7 @@ export class DumbAiTankBehavior extends TankBehavior {
   private fireTimer = new Timer();
   private log = new Logger(DumbAiTankBehavior.name, Logger.Level.Info);
 
-  public update(tank: Tank): void {
+  public update(tank: Tank, updateArgs: GameObjectUpdateArgs): void {
     if (this.fireTimer.isDone()) {
       const hasFired = tank.fire();
       if (hasFired) {
@@ -45,7 +45,7 @@ export class DumbAiTankBehavior extends TankBehavior {
       // Fire next bullet in some random interval
       this.attemptFire();
     } else {
-      this.fireTimer.tick();
+      this.fireTimer.update(updateArgs.deltaTime);
     }
 
     // Simply waiting to fire after tank decided to fire
@@ -69,14 +69,14 @@ export class DumbAiTankBehavior extends TankBehavior {
         const nextRotation = this.getRandomRotation();
         this.log.debug('I am done thinking. Rotating %s', nextRotation);
         tank.rotate(nextRotation);
-        tank.move();
+        tank.move(updateArgs.deltaTime);
         return;
       }
-      this.thinkTimer.tick();
+      this.thinkTimer.update(updateArgs.deltaTime);
       return;
     }
 
-    tank.move();
+    tank.move(updateArgs.deltaTime);
 
     // If tank can no longer move it his direction, he has to decide what to do
     // next.
@@ -102,8 +102,13 @@ export class DumbAiTankBehavior extends TankBehavior {
   }
 
   private attemptFire(): void {
-    const delay = RandomUtils.number(FIRE_MIN_DELAY, FIRE_MAX_DELAY);
-    this.log.debug('I will try to fire in %d ticks', delay);
+    // Convert seconds to milliseconds to use random integer func
+    const min = FIRE_MIN_DELAY * 1000;
+    const max = FIRE_MAX_DELAY * 1000;
+
+    const delay = RandomUtils.number(min, max) / 1000;
+
+    this.log.debug('I will try to fire in %f seconds', delay);
     this.fireTimer.reset(delay);
   }
 

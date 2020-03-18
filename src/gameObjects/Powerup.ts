@@ -49,13 +49,13 @@ export class Powerup extends GameObject {
     // Null as a second frame adds a blink effect
     const frames = [spriteLoader.load(this.spriteId), null];
     this.animation = new Animation(frames, {
-      delay: 7,
+      delay: 0.12,
       loop: true,
     });
   }
 
-  protected update(): void {
-    this.animation.animate();
+  protected update(updateArgs: GameObjectUpdateArgs): void {
+    this.animation.update(updateArgs.deltaTime);
     this.renderer.sprite = this.animation.getCurrentFrame();
   }
 

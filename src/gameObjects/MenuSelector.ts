@@ -27,8 +27,8 @@ export class MenuSelector extends GameObject {
     this.renderer.sprite = this.animation.getCurrentFrame();
   }
 
-  protected update(): void {
-    this.animation.animate();
+  protected update(updateArgs: GameObjectUpdateArgs): void {
+    this.animation.update(updateArgs.deltaTime);
     this.renderer.sprite = this.animation.getCurrentFrame();
   }
 }

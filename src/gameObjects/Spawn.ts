@@ -22,17 +22,17 @@ export class Spawn extends GameObject {
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     this.animation = new Animation(
       spriteLoader.loadList(['spawn.1', 'spawn.2', 'spawn.3', 'spawn.4']),
-      { delay: 3, loop: 3 },
+      { delay: 0.05, loop: 3 },
     );
   }
 
-  protected update(): void {
+  protected update({ deltaTime }: GameObjectUpdateArgs): void {
     if (this.animation.isComplete()) {
       this.completed.notify();
       return;
     }
 
-    this.animation.animate();
+    this.animation.update(deltaTime);
     this.renderer.sprite = this.animation.getCurrentFrame();
   }
 }

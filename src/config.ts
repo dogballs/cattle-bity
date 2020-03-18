@@ -17,28 +17,25 @@ export const CANVAS_HEIGHT = FIELD_SIZE + BORDER_TOP_BOTTOM_HEIGHT * 2;
 export const BRICK_TILE_SIZE = TILE_SIZE_SMALL;
 export const STEEL_TILE_SIZE = TILE_SIZE_MEDIUM;
 
-export const FPS = 60;
-
 export const PLAYER_FIRST_SPAWN_DELAY = 0;
 export const PLAYER_SPAWN_DELAY = 0;
-export const ENEMY_FIRST_SPAWN_DELAY = 10;
-export const ENEMY_SPAWN_DELAY = 3 * FPS;
+export const ENEMY_FIRST_SPAWN_DELAY = 0.16;
+export const ENEMY_SPAWN_DELAY = 3;
 
 export const ENEMY_MAX_TOTAL_COUNT = 20;
 export const ENEMY_MAX_ALIVE_COUNT = 4;
 
-export const POWERUP_DURATION = 30 * FPS;
-export const SHIELD_SPAWN_DURATION = 3.5 * FPS;
-export const SHIELD_POWERUP_DURATION = 10 * FPS;
-export const BASE_DEFENCE_POWERUP_DURATION = 17 * FPS;
-export const FREEZE_POWERUP_DURATION = 10 * FPS;
+export const POWERUP_DURATION = 30;
+export const SHIELD_SPAWN_DURATION = 3.5;
+export const SHIELD_POWERUP_DURATION = 10;
+export const BASE_DEFENCE_POWERUP_DURATION = 17;
+export const FREEZE_POWERUP_DURATION = 10;
 
-export const POINTS_POWERUP_DURATION = 50;
-export const POINTS_ENEMY_TANK_DURATION = 10;
+export const POINTS_POWERUP_DURATION = 0.8;
+export const POINTS_ENEMY_TANK_DURATION = 0.16;
 
-export const LEVEL_END_DELAY = 3 * FPS;
-// export const LEVEL_START_DELAY = 3 * FPS;
-export const LEVEL_START_DELAY = 0;
+export const LEVEL_END_DELAY = 3;
+export const LEVEL_START_DELAY = 3;
 
 export const PLAYER_INITIAL_LIVES = 2;
 export const PLAYER_EXTRA_LIVE_POINTS = 20000;

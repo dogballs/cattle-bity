@@ -6,7 +6,7 @@ import * as config from '../config';
 import { Scene } from './Scene';
 import { SceneType } from './SceneType';
 
-const POST_DELAY = 3 * config.FPS;
+const POST_DELAY = 3;
 
 enum State {
   Idle,
@@ -47,7 +47,7 @@ export class ScoreScene extends Scene {
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
     if (this.state === State.Post) {
-      this.postTimer.tick();
+      this.postTimer.update(updateArgs.deltaTime);
       return;
     }
 

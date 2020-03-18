@@ -28,6 +28,6 @@ export class TankIdleAnimation extends Animation<Sprite> {
       frames.push(...dropFrames);
     }
 
-    super(frames, { delay: 7, loop: true });
+    super(frames, { delay: 0.12, loop: true });
   }
 }

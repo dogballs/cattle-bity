@@ -16,8 +16,8 @@ export class PowerupSpawner {
     this.timer.done.addListener(this.handleTimer);
   }
 
-  public update(): void {
-    this.timer.tick();
+  public update(deltaTime: number): void {
+    this.timer.update(deltaTime);
   }
 
   public spawn(): void {

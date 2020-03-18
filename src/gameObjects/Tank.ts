@@ -56,11 +56,11 @@ export class Tank extends GameObject {
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
-    this.shieldTimer.tick();
+    this.shieldTimer.update(updateArgs.deltaTime);
 
     this.behavior.update(this, updateArgs);
 
-    this.skinAnimation.update(this);
+    this.skinAnimation.update(this, updateArgs.deltaTime);
 
     this.renderer.sprite = this.skinAnimation.getCurrentFrame();
   }
@@ -157,12 +157,12 @@ export class Tank extends GameObject {
     return true;
   }
 
-  public move(): void {
+  public move(deltaTime: number): void {
     if (this.state !== TankState.Moving) {
       this.state = TankState.Moving;
     }
 
-    this.translateY(this.attributes.moveSpeed);
+    this.translateY(this.attributes.moveSpeed * deltaTime);
   }
 
   public idle(): void {

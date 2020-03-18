@@ -30,7 +30,7 @@ export class GameRenderer {
     this.context = this.canvas.getContext('2d');
   }
 
-  public getElement(): HTMLCanvasElement {
+  public getDomElement(): HTMLCanvasElement {
     return this.canvas;
   }
 

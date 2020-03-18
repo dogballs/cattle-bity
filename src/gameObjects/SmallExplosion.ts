@@ -26,18 +26,18 @@ export class SmallExplosion extends GameObject {
         'explosion.small.2',
         'explosion.small.3',
       ]),
-      { delay: 3, loop: false },
+      { delay: 0.05, loop: false },
     );
   }
 
-  protected update(): void {
+  protected update(updateArgs: GameObjectUpdateArgs): void {
     if (this.animation.isComplete()) {
       this.removeSelf();
       this.done.notify();
       return;
     }
 
-    this.animation.animate();
+    this.animation.update(updateArgs.deltaTime);
     this.renderer.sprite = this.animation.getCurrentFrame();
   }
 }

@@ -17,56 +17,56 @@ const map = new Map<TankType, TankAttributes>();
 
 map.set(TankType.PlayerPrimaryA, {
   bulletMaxCount: 1,
-  bulletSpeed: 10,
+  bulletSpeed: 600,
   bulletTankDamage: 1,
   bulletWallDamage: 1,
   health: 1,
-  moveSpeed: 3,
+  moveSpeed: 180,
 });
 
 map.set(TankType.PlayerPrimaryB, {
   bulletMaxCount: 1,
-  bulletSpeed: 15,
+  bulletSpeed: 900,
   bulletTankDamage: 1,
   bulletWallDamage: 1,
   health: 1,
-  moveSpeed: 3,
+  moveSpeed: 180,
 });
 
 map.set(TankType.PlayerPrimaryC, {
   bulletMaxCount: 2,
-  bulletSpeed: 15,
+  bulletSpeed: 900,
   bulletTankDamage: 1,
   bulletWallDamage: 1,
   health: 1,
-  moveSpeed: 3,
+  moveSpeed: 180,
 });
 
 map.set(TankType.PlayerPrimaryD, {
   bulletMaxCount: 2,
-  bulletSpeed: 15,
+  bulletSpeed: 900,
   bulletTankDamage: 2,
   bulletWallDamage: 2,
   health: 1,
-  moveSpeed: 3,
+  moveSpeed: 180,
 });
 
 map.set(TankType.EnemyDefaultA, {
   bulletMaxCount: 1,
-  bulletSpeed: 10,
+  bulletSpeed: 600,
   bulletTankDamage: 1,
   bulletWallDamage: 1,
   health: 1,
-  moveSpeed: 2,
+  moveSpeed: 120,
 });
 
 map.set(TankType.EnemyDefaultB, {
   bulletMaxCount: 1,
-  bulletSpeed: 10,
+  bulletSpeed: 600,
   bulletTankDamage: 1,
   bulletWallDamage: 1,
   health: 1,
-  moveSpeed: 4,
+  moveSpeed: 240,
 });
 
 export class TankAttributesFactory {

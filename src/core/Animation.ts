@@ -1,24 +1,29 @@
+export interface AnimationOptions {
+  delay?: number;
+  fps?: number;
+  loop?: number | boolean;
+}
+
+const DEFAULT_OPTIONS = {
+  delay: 0,
+  // requestAnimationFrame is usually 60 fps
+  fps: 60,
+  loop: false,
+};
+
 export class Animation<T> {
-  private delay: number;
-  private frameIndex: number;
   private frames: T[];
-  private loop: boolean | number;
+  private options: AnimationOptions;
+  private frameIndex: number;
   private loopIndex: number;
-  private ticks = 0;
+  private time = 0;
 
-  constructor(
-    frames: T[] = [],
-    {
-      delay = 0,
-      loop = false,
-    }: { delay?: number; loop?: number | boolean } = {},
-  ) {
+  constructor(frames: T[] = [], options: AnimationOptions = {}) {
     this.frames = frames;
+
+    this.options = Object.assign({}, DEFAULT_OPTIONS, options);
+
     this.frameIndex = 0;
-
-    this.delay = delay;
-
-    this.loop = loop;
     this.loopIndex = 0;
   }
 
@@ -52,11 +57,14 @@ export class Animation<T> {
     return isComplete;
   }
 
-  public animate(): void {
+  /**
+   * @param {number} deltaTime time passed since last frame in seconds
+   */
+  public update(deltaTime: number): void {
     // Record when entire animation has started. First frame will be shown for
     // at least one tick
-    if (this.ticks === 0) {
-      this.ticks = 1;
+    if (this.time === 0) {
+      this.time = deltaTime;
       return;
     }
 
@@ -82,9 +90,9 @@ export class Animation<T> {
     }
 
     // Debounces animation to create a delay between frames.
-    // If enough ticks has not passed yet from the last animation - wait.
+    // If enough time has not passed yet from the last animation - wait.
     if (!this.isCurrentFrameComplete()) {
-      this.ticks += 1;
+      this.time += deltaTime;
       return;
     }
 
@@ -97,31 +105,31 @@ export class Animation<T> {
       this.loopIndex += 1;
     }
 
-    this.ticks += 1;
+    this.time += deltaTime;
   }
 
   public reset(): this {
     this.frameIndex = 0;
     this.loopIndex = 0;
-    this.ticks = 0;
+    this.time = 0;
 
     return this;
   }
 
   private isCurrentFrameComplete(): boolean {
     // By default each frame will have 1 tick guaranteed
-    const minFrameTicks = 1;
+    const minFrameTime = 1 / this.options.fps;
 
-    // Delay adds up to default min ticks
-    const singleFrameTicks = minFrameTicks + this.delay;
+    // Delay adds up to default min time
+    const singleFrameTime = minFrameTime + this.options.delay;
 
-    // Sum ticks for all frames including current in one cycle
-    const passedFrameTicks =
+    // Sum time for all frames including current in one cycle
+    const passedFramesTime =
       (this.loopIndex * this.frames.length + this.frameIndex + 1) *
-        singleFrameTicks -
-      1;
+        singleFrameTime -
+      minFrameTime;
 
-    const isComplete = this.ticks > passedFrameTicks;
+    const isComplete = this.time > passedFramesTime;
 
     return isComplete;
   }
@@ -131,18 +139,18 @@ export class Animation<T> {
   }
 
   private isLoopInfinite(): boolean {
-    return this.loop === true;
+    return this.options.loop === true;
   }
 
   private isLoopFinite(): boolean {
-    return typeof this.loop === 'number';
+    return typeof this.options.loop === 'number';
   }
 
   private isLoopDisabled(): boolean {
-    return this.loop === false;
+    return this.options.loop === false;
   }
 
   private isLastLoop(): boolean {
-    return this.loopIndex + 1 === this.loop;
+    return this.loopIndex + 1 === this.options.loop;
   }
 }

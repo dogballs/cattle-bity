@@ -4,8 +4,8 @@ import { InputControl } from '../input';
 
 import { LevelTitle } from './LevelTitle';
 
-const SLOW_HOLD_DELAY = 7;
-const FAST_HOLD_DELAY = 1;
+const SLOW_HOLD_DELAY = 0.12;
+const FAST_HOLD_DELAY = 0.016;
 
 export class LevelSelector extends GameObject {
   public selected = new Subject<number>();
@@ -27,22 +27,36 @@ export class LevelSelector extends GameObject {
     this.updateText();
   }
 
-  protected update({ input }: GameObjectUpdateArgs): void {
+  protected update({ deltaTime, input }: GameObjectUpdateArgs): void {
     if (input.isDown(InputControl.Start)) {
       this.selected.notify(this.currentLevel);
       return;
     }
 
-    this.throttleInput(input, InputControl.A, this.selectNext, SLOW_HOLD_DELAY);
-    this.throttleInput(input, InputControl.B, this.selectPrev, SLOW_HOLD_DELAY);
     this.throttleInput(
       input,
+      deltaTime,
+      InputControl.A,
+      this.selectNext,
+      SLOW_HOLD_DELAY,
+    );
+    this.throttleInput(
+      input,
+      deltaTime,
+      InputControl.B,
+      this.selectPrev,
+      SLOW_HOLD_DELAY,
+    );
+    this.throttleInput(
+      input,
+      deltaTime,
       InputControl.TurboA,
       this.selectNext,
       FAST_HOLD_DELAY,
     );
     this.throttleInput(
       input,
+      deltaTime,
       InputControl.TurboB,
       this.selectPrev,
       FAST_HOLD_DELAY,
@@ -51,6 +65,7 @@ export class LevelSelector extends GameObject {
 
   private throttleInput(
     input: Input,
+    deltaTime: number,
     control: InputControl,
     selectCallback: () => void,
     delay: number,
@@ -64,7 +79,7 @@ export class LevelSelector extends GameObject {
         selectCallback();
         this.holdThrottle.reset(delay);
       }
-      this.holdThrottle.tick();
+      this.holdThrottle.update(deltaTime);
     }
   }
 

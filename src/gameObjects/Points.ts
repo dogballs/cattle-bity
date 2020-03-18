@@ -24,8 +24,8 @@ export class Points extends GameObject {
     this.renderer.sprite = spriteLoader.load(spriteId);
   }
 
-  protected update(): void {
-    this.timer.tick();
+  protected update(updateArgs: GameObjectUpdateArgs): void {
+    this.timer.update(updateArgs.deltaTime);
   }
 
   private handleTimer = (): void => {

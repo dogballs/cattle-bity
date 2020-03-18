@@ -43,8 +43,8 @@ export class EnemySpawner {
     this.timer.done.addListener(this.handleTimer);
   }
 
-  public update(): void {
-    this.timer.tick();
+  public update(deltaTime: number): void {
+    this.timer.update(deltaTime);
   }
 
   public getUnspawnedCount(): number {

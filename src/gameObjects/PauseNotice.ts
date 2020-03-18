@@ -17,13 +17,13 @@ export class PauseNotice extends GameObject {
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     // Null as a second frame adds a blink effect
     this.animation = new Animation([spriteLoader.load('ui.pause'), null], {
-      delay: 16,
+      delay: 0.27,
       loop: true,
     });
   }
 
-  protected update(): void {
-    this.animation.animate();
+  protected update(updateArgs: GameObjectUpdateArgs): void {
+    this.animation.update(updateArgs.deltaTime);
     this.renderer.sprite = this.animation.getCurrentFrame();
   }
 }

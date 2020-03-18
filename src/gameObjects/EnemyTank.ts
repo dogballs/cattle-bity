@@ -16,14 +16,14 @@ export abstract class EnemyTank extends Tank {
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
-    const { gameState } = updateArgs;
+    const { deltaTime, gameState } = updateArgs;
 
     if (gameState.hasChangedTo(GameState.Paused)) {
       this.idle();
     }
 
     if (gameState.is(GameState.Paused)) {
-      this.skinAnimation.update(this);
+      this.skinAnimation.update(this, deltaTime);
       this.renderer.sprite = this.skinAnimation.getCurrentFrame();
       return;
     }

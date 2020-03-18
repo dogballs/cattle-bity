@@ -7,7 +7,7 @@ import * as config from '../config';
 import { Scene } from './Scene';
 import { SceneType } from './SceneType';
 
-const SLIDE_SPEED = 4;
+const SLIDE_SPEED = 240;
 
 enum State {
   Sliding,
@@ -42,10 +42,10 @@ export class MenuScene extends Scene {
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
-    const { input } = updateArgs;
+    const { deltaTime, input } = updateArgs;
 
     if (this.state === State.Sliding) {
-      this.group.position.y -= SLIDE_SPEED;
+      this.group.position.y -= SLIDE_SPEED * deltaTime;
 
       const hasReachedTop = this.group.position.y <= 0;
       const isSkipped = input.isDownAny([

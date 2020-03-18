@@ -1,4 +1,5 @@
 import { GameObject, Subject, Timer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import { PointsRecord } from '../points';
 import { TankTier } from '../tank/TankTier'; // TODO: circular dep?
 import * as config from '../config';
@@ -16,7 +17,7 @@ enum State {
 }
 
 const TIERS = [TankTier.A, TankTier.B, TankTier.C, TankTier.D];
-const TRANSITION_DELAY = 8;
+const TRANSITION_DELAY = 0.13;
 
 export class ScoreTable extends GameObject {
   public done = new Subject();
@@ -75,7 +76,7 @@ export class ScoreTable extends GameObject {
     this.add(this.totalKills);
   }
 
-  protected update(): void {
+  protected update(updateArgs: GameObjectUpdateArgs): void {
     if (this.state === State.Idle || this.state === State.Done) {
       return;
     }
@@ -94,7 +95,7 @@ export class ScoreTable extends GameObject {
         this.state = State.Counting;
       }
 
-      this.transitionTimer.tick();
+      this.transitionTimer.update(updateArgs.deltaTime);
       return;
     }
 

@@ -30,7 +30,7 @@ export class PlayerTankBehavior extends TankBehavior {
     this.idleSound = audioLoader.load('tank.idle');
   }
 
-  public update(tank: Tank, { input }: GameObjectUpdateArgs): void {
+  public update(tank: Tank, { deltaTime, input }: GameObjectUpdateArgs): void {
     if (input.isHoldLast(InputControl.Up)) {
       tank.rotate(Rotation.Up);
     }
@@ -49,7 +49,7 @@ export class PlayerTankBehavior extends TankBehavior {
         this.idleSound.stop();
         this.moveSound.playLoop();
       }
-      tank.move();
+      tank.move(deltaTime);
     }
 
     if (input.isNotHoldAll(MOVE_CONTROLS) && tank.state !== TankState.Idle) {

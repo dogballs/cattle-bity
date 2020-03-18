@@ -5,9 +5,11 @@ import { GameOverHeading } from '../gameObjects';
 import { Scene } from './Scene';
 import { SceneType } from './SceneType';
 
+const SCENE_DURATION = 3;
+
 export class GameOverScene extends Scene {
   private heading = new GameOverHeading();
-  private timer = new Timer(180);
+  private timer = new Timer(SCENE_DURATION);
 
   protected setup(): void {
     this.timer.done.addListener(this.handleDone);
@@ -23,7 +25,7 @@ export class GameOverScene extends Scene {
       child.invokeUpdate(updateArgs);
     });
 
-    this.timer.tick();
+    this.timer.update(updateArgs.deltaTime);
   }
 
   private handleDone = (): void => {

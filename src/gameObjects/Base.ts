@@ -1,5 +1,5 @@
 import { Animation, GameObject, Rect, Subject, Timer } from '../core';
-import { Tag } from '../game';
+import { GameObjectUpdateArgs, Tag } from '../game';
 import { TerrainFactory, TerrainType } from '../terrain';
 
 import { BaseHeart } from './BaseHeart';
@@ -36,15 +36,15 @@ export class Base extends GameObject {
     this.setWalls(TerrainType.Brick);
 
     this.fadeAnimation = new Animation([TerrainType.Brick, TerrainType.Steel], {
-      delay: 15,
+      delay: 0.25,
       loop: 7,
     });
 
     this.defenceTimer.done.addListener(this.handleDefenceTimer);
   }
 
-  protected update(): void {
-    this.defenceTimer.tick();
+  protected update(updateArgs: GameObjectUpdateArgs): void {
+    this.defenceTimer.update(updateArgs.deltaTime);
 
     // TODO: fading logic seems a bit ugly
 
@@ -55,7 +55,7 @@ export class Base extends GameObject {
         return;
       }
 
-      this.fadeAnimation.animate();
+      this.fadeAnimation.update(updateArgs.deltaTime);
 
       const fadeWallType = this.fadeAnimation.getCurrentFrame();
       if (this.lastFadeWallType !== fadeWallType) {

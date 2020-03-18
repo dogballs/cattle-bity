@@ -13,11 +13,11 @@ export class Shield extends GameObject {
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     this.animation = new Animation(
       spriteLoader.loadList(['shield.1', 'shield.2']),
-      { delay: 3, loop: true },
+      { delay: 0.05, loop: true },
     );
   }
 
-  protected update({ gameState }: GameObjectUpdateArgs): void {
+  protected update({ deltaTime, gameState }: GameObjectUpdateArgs): void {
     // Shield is not displayed during a pause
     if (gameState.hasChangedTo(GameState.Paused)) {
       this.visible = false;
@@ -29,7 +29,7 @@ export class Shield extends GameObject {
       return;
     }
 
-    this.animation.animate();
+    this.animation.update(deltaTime);
     this.renderer.sprite = this.animation.getCurrentFrame();
   }
 }

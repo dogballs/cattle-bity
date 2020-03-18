@@ -1,44 +1,43 @@
 import { Subject } from './Subject';
 
 export class Timer {
-  public ticks = -1;
   public done = new Subject();
+  public timeLeft = null;
 
-  constructor(ticks = -1) {
-    this.ticks = ticks;
+  constructor(timeLeft = null) {
+    this.timeLeft = timeLeft;
   }
 
-  public reset(ticks): this {
-    this.ticks = ticks;
+  public reset(timeLeft): this {
+    this.timeLeft = timeLeft;
 
     return this;
   }
 
   public stop(): this {
-    this.ticks = -1;
+    this.timeLeft = null;
 
     return this;
   }
 
-  public tick(): this {
+  public update(deltaTime: number): void {
     if (!this.isActive()) {
       return;
     }
 
-    this.ticks = this.ticks - 1;
+    this.timeLeft -= deltaTime;
 
-    if (this.ticks === -1) {
+    if (this.timeLeft < 0) {
+      this.timeLeft = null;
       this.done.notify();
     }
-
-    return this;
   }
 
   public isActive(): boolean {
-    return this.ticks > -1;
+    return this.timeLeft !== null;
   }
 
   public isDone(): boolean {
-    return this.ticks === -1;
+    return this.timeLeft === null;
   }
 }

@@ -1,4 +1,5 @@
 import { GameObject, RectRenderer } from '../core';
+import { GameObjectUpdateArgs } from '../game';
 import * as config from '../config';
 
 enum State {
@@ -8,7 +9,7 @@ enum State {
   Opening,
 }
 
-const HEIGHT_INCREMENT = 25;
+const SLIDE_SPEED = 1500;
 
 export class Curtain extends GameObject {
   private state: State;
@@ -39,21 +40,23 @@ export class Curtain extends GameObject {
     this.add(this.bottomPart);
   }
 
-  protected update(): void {
+  protected update(updateArgs: GameObjectUpdateArgs): void {
+    const { deltaTime } = updateArgs;
+
     if (this.state === State.Open || this.state === State.Closed) {
       return;
     }
 
     let nextHeight = this.topPart.size.height;
     if (this.state === State.Closing) {
-      nextHeight += HEIGHT_INCREMENT;
+      nextHeight += SLIDE_SPEED * deltaTime;
 
       if (nextHeight >= this.targetHeight) {
         nextHeight = this.targetHeight;
         this.state = State.Closed;
       }
     } else if (this.state === State.Opening) {
-      nextHeight -= HEIGHT_INCREMENT;
+      nextHeight -= SLIDE_SPEED * deltaTime;
 
       if (nextHeight <= 0) {
         nextHeight = 0;

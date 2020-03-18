@@ -1,5 +1,5 @@
 import { Vector } from '../../core';
-import { Rotation } from '../../game';
+import { GameObjectUpdateArgs, Rotation } from '../../game';
 import { Tank } from '../../gameObjects';
 
 import { TankBehavior } from './TankBehavior';
@@ -7,8 +7,8 @@ import { TankBehavior } from './TankBehavior';
 export class PatrolTankBehavior extends TankBehavior {
   private lastPosition: Vector = null;
 
-  public update(tank: Tank): void {
-    tank.move();
+  public update(tank: Tank, updateArgs: GameObjectUpdateArgs): void {
+    tank.move(updateArgs.deltaTime);
 
     if (this.lastPosition !== null && this.lastPosition.equals(tank.position)) {
       if (tank.rotation === Rotation.Up) {
@@ -20,7 +20,7 @@ export class PatrolTankBehavior extends TankBehavior {
       } else if (tank.rotation === Rotation.Right) {
         tank.rotate(Rotation.Left);
       }
-      tank.move();
+      tank.move(updateArgs.deltaTime);
       return;
     }
 

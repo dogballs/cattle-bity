@@ -32,6 +32,6 @@ export class TankMoveAnimation extends Animation<Sprite> {
       frames.push(...dropFrames);
     }
 
-    super(frames, { delay: 1, loop: true });
+    super(frames, { delay: 0.02, loop: true });
   }
 }

@@ -106,7 +106,7 @@ export class LevelScene extends Scene {
       if (this.startTimer.isDone()) {
         this.state = State.Playing;
       }
-      this.startTimer.tick();
+      this.startTimer.update(updateArgs.deltaTime);
       return;
     }
 
@@ -124,10 +124,10 @@ export class LevelScene extends Scene {
 
     // TODO: enemies with drops are still animated
     if (!gameState.is(GameState.Paused)) {
-      this.playerSpawner.update();
-      this.enemySpawner.update();
-      this.powerupSpawner.update();
-      this.endTimer.tick();
+      this.playerSpawner.update(updateArgs.deltaTime);
+      this.enemySpawner.update(updateArgs.deltaTime);
+      this.powerupSpawner.update(updateArgs.deltaTime);
+      this.endTimer.update(updateArgs.deltaTime);
     }
 
     // Update all objects on the scene

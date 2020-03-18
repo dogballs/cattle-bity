@@ -22,17 +22,17 @@ export class Explosion extends GameObject {
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     this.animation = new Animation(
       spriteLoader.loadList(['explosion.large.1', 'explosion.large.2']),
-      { delay: 4, loop: false },
+      { delay: 0.066, loop: false },
     );
   }
 
-  protected update(): void {
+  protected update(updateArgs: GameObjectUpdateArgs): void {
     if (this.animation.isComplete()) {
       this.removeSelf();
       this.done.notify();
       return;
     }
-    this.animation.animate();
+    this.animation.update(updateArgs.deltaTime);
     this.renderer.sprite = this.animation.getCurrentFrame();
   }
 }

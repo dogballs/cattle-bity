@@ -14,6 +14,7 @@ import { Session } from './Session';
 
 export interface GameObjectUpdateArgs {
   audioLoader: AudioLoader;
+  deltaTime: number;
   input: Input;
   gameState: State<GameState>;
   mapLoader: MapLoader;

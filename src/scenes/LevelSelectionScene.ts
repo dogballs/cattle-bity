@@ -4,7 +4,7 @@ import { Curtain, LevelSelector } from '../gameObjects';
 import { Scene } from './Scene';
 import { SceneType } from './SceneType';
 
-export class StageSelectionScene extends Scene {
+export class LevelSelectionScene extends Scene {
   private curtain: Curtain;
   private selector: LevelSelector;
   private session: Session;

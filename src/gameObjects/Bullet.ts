@@ -36,8 +36,8 @@ export class Bullet extends GameObject {
     this.sprites.set(Rotation.Right, spriteLoader.load('bullet.right'));
   }
 
-  protected update(): void {
-    this.translateY(this.speed);
+  protected update(updateArgs: GameObjectUpdateArgs): void {
+    this.translateY(this.speed * updateArgs.deltaTime);
 
     const rotation = this.getWorldRotation();
     this.renderer.sprite = this.sprites.get(rotation);

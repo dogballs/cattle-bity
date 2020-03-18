@@ -21,8 +21,8 @@ import {
   EditorScene,
   GameOverScene,
   LevelScene,
+  LevelSelectionScene,
   MenuScene,
-  StageSelectionScene,
   ScoreScene,
   SceneManager,
   SceneType,
@@ -44,7 +44,7 @@ const gameRenderer = new GameRenderer({
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
-document.body.appendChild(gameRenderer.getElement());
+document.body.appendChild(gameRenderer.getDomElement());
 
 const inputDevice = new KeyboardInputDevice();
 const inputMap = KeyboardInputMap;
@@ -77,14 +77,14 @@ const session = new Session();
 const sceneManager = new SceneManager(SceneType.Menu);
 sceneManager.register(SceneType.Editor, EditorScene);
 sceneManager.register(SceneType.GameOver, GameOverScene);
-sceneManager.register(SceneType.Menu, MenuScene);
 sceneManager.register(SceneType.Level, LevelScene);
-sceneManager.register(SceneType.LevelSelection, StageSelectionScene);
+sceneManager.register(SceneType.LevelSelection, LevelSelectionScene);
+sceneManager.register(SceneType.Menu, MenuScene);
 sceneManager.register(SceneType.Score, ScoreScene);
 sceneManager.register(SceneType.Test, TestScene);
 sceneManager.start();
 
-const debugInspector = new DebugInspector(gameRenderer.getElement());
+const debugInspector = new DebugInspector(gameRenderer.getDomElement());
 debugInspector.listen();
 debugInspector.click.addListener((position: Vector) => {
   const intersections: GameObject[] = [];
@@ -102,6 +102,7 @@ const gameState = new State<GameState>(GameState.Playing);
 
 const updateArgs: GameObjectUpdateArgs = {
   audioLoader,
+  deltaTime: 0,
   input,
   gameState,
   mapLoader,
@@ -113,8 +114,10 @@ const updateArgs: GameObjectUpdateArgs = {
 };
 
 const gameLoop = new GameLoop();
-gameLoop.tick.addListener(() => {
+gameLoop.tick.addListener((event) => {
   input.update();
+
+  updateArgs.deltaTime = event.deltaTime;
 
   const scene = sceneManager.getScene();
   scene.invokeUpdate(updateArgs);

@@ -9,7 +9,7 @@ enum State {
   Progress,
   Done,
 }
-const INCREMENT_DELAY = 3;
+const INCREMENT_DELAY = 0.05;
 
 export class ScoreTableCounter extends GameObject {
   private pointsLabel = new SpriteText('PTS', { color: config.COLOR_WHITE });
@@ -45,7 +45,7 @@ export class ScoreTableCounter extends GameObject {
     this.add(this.killsText);
   }
 
-  protected update(): void {
+  protected update(updateArgs: GameObjectUpdateArgs): void {
     if (this.state !== State.Progress) {
       return;
     }
@@ -64,7 +64,7 @@ export class ScoreTableCounter extends GameObject {
       this.timer.reset(INCREMENT_DELAY);
     }
 
-    this.timer.tick();
+    this.timer.update(updateArgs.deltaTime);
   }
 
   public start(): void {

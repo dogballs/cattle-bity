@@ -1,5 +1,5 @@
 import { Animation, Sprite, SpriteLoader } from '../core';
-import { Rotation } from '../game';
+import { Rotation, RotationMap } from '../game';
 import { Tank, TankState } from '../gameObjects';
 
 import { TankIdleAnimation, TankMoveAnimation } from './animations';
@@ -8,7 +8,7 @@ import { TankType } from './TankType';
 
 // TODO: Remake to factory?
 
-type AnimationMap = Map<Rotation, Animation<Sprite>>;
+type AnimationMap = RotationMap<Animation<Sprite>>;
 
 export class TankSkinAnimation {
   public readonly type: TankType;
@@ -17,8 +17,8 @@ export class TankSkinAnimation {
   protected rotation: Rotation = Rotation.Up;
   protected tankState: TankState = TankState.Uninitialized;
 
-  protected readonly moveAnimationMap: AnimationMap = new Map();
-  protected readonly idleAnimationMap: AnimationMap = new Map();
+  protected readonly moveAnimationMap: AnimationMap = new RotationMap();
+  protected readonly idleAnimationMap: AnimationMap = new RotationMap();
   protected currentAnimationMap: AnimationMap;
 
   constructor(spriteLoader: SpriteLoader, type: TankType, hasDrop = false) {
@@ -62,12 +62,12 @@ export class TankSkinAnimation {
     this.currentAnimationMap = this.idleAnimationMap;
   }
 
-  public update(tank: Tank): void {
+  public update(tank: Tank, deltaTime: number): void {
     this.rotation = tank.rotation;
 
     if (tank.state === this.tankState) {
       const animation = this.currentAnimationMap.get(this.rotation);
-      animation.animate();
+      animation.update(deltaTime);
       return;
     }
 
