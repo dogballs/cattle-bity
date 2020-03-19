@@ -2,8 +2,6 @@ import {
   GameObject,
   GameLoop,
   GameRenderer,
-  Input,
-  KeyboardInputDevice,
   Logger,
   State,
   Vector,
@@ -15,7 +13,7 @@ import {
 } from './core';
 import { DebugInspector } from './debug';
 import { GameObjectUpdateArgs, GameState, Session } from './game';
-import { KeyboardInputBinding } from './input';
+import { InputManager } from './input';
 import { MapLoader } from './map';
 import {
   EditorScene,
@@ -46,12 +44,20 @@ const gameRenderer = new GameRenderer({
 });
 document.body.appendChild(gameRenderer.getDomElement());
 
-const inputDevice = new KeyboardInputDevice();
-const inputBinding = KeyboardInputBinding;
-const input = new Input();
-input.setDevice(inputDevice);
-input.setBinding(inputBinding);
-inputDevice.listen();
+const inputManager = new InputManager();
+inputManager.listen();
+
+// const inputDevice = new KeyboardInputDevice();
+// const inputBinding = KeyboardInputBinding;
+// const input = new Input();
+// // input.setDevice(inputDevice);
+// input.setBinding(inputBinding);
+// inputDevice.listen();
+
+// const inputDeviceDetector = new InputDeviceDetector(input, [
+//   new KeyboardInputDevice(),
+//   new GamepadInputDevice(),
+// ]);
 
 const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
 const textureLoader = new TextureLoader(config.GRAPHICS_BASE_PATH);
@@ -103,7 +109,7 @@ const gameState = new State<GameState>(GameState.Playing);
 const updateArgs: GameObjectUpdateArgs = {
   audioLoader,
   deltaTime: 0,
-  input,
+  input: inputManager.getInput(),
   gameState,
   mapLoader,
   rectFontLoader,
@@ -115,7 +121,7 @@ const updateArgs: GameObjectUpdateArgs = {
 
 const gameLoop = new GameLoop();
 gameLoop.tick.addListener((event) => {
-  input.update();
+  inputManager.update();
 
   updateArgs.deltaTime = event.deltaTime;
 
