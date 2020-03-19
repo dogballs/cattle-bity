@@ -1,7 +1,7 @@
 import { GameObject, RectRenderer } from '../core';
 import { GameObjectUpdateArgs } from '../game';
 import { Menu, MenuHeading } from '../gameObjects';
-import { InputControl } from '../input';
+import { MenuInputContext } from '../input';
 import * as config from '../config';
 
 import { Scene } from './Scene';
@@ -48,10 +48,7 @@ export class MenuScene extends Scene {
       this.group.position.y -= SLIDE_SPEED * deltaTime;
 
       const hasReachedTop = this.group.position.y <= 0;
-      const isSkipped = input.isDownAny([
-        InputControl.Select,
-        InputControl.Start,
-      ]);
+      const isSkipped = input.isDownAny(MenuInputContext.Skip);
       const isReady = hasReachedTop || isSkipped;
 
       if (isReady) {

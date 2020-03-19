@@ -15,7 +15,7 @@ import {
 } from './core';
 import { DebugInspector } from './debug';
 import { GameObjectUpdateArgs, GameState, Session } from './game';
-import { KeyboardInputMap } from './input';
+import { KeyboardInputBinding } from './input';
 import { MapLoader } from './map';
 import {
   EditorScene,
@@ -47,10 +47,10 @@ const gameRenderer = new GameRenderer({
 document.body.appendChild(gameRenderer.getDomElement());
 
 const inputDevice = new KeyboardInputDevice();
-const inputMap = KeyboardInputMap;
+const inputBinding = KeyboardInputBinding;
 const input = new Input();
 input.setDevice(inputDevice);
-input.setMap(inputMap);
+input.setBinding(inputBinding);
 inputDevice.listen();
 
 const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);

@@ -1,22 +1,15 @@
 import { Sound } from '../../core';
 import { GameObjectUpdateArgs, Rotation } from '../../game';
 import { Tank, TankState } from '../../gameObjects';
-import { InputControl } from '../../input';
+import { LevelInputContext } from '../../input';
 
 import { TankBehavior } from './TankBehavior';
 
 const MOVE_CONTROLS = [
-  InputControl.Up,
-  InputControl.Down,
-  InputControl.Left,
-  InputControl.Right,
-];
-
-const FIRE_CONTROLS = [
-  InputControl.A,
-  InputControl.B,
-  InputControl.TurboA,
-  InputControl.TurboB,
+  ...LevelInputContext.MoveUp,
+  ...LevelInputContext.MoveDown,
+  ...LevelInputContext.MoveLeft,
+  ...LevelInputContext.MoveRight,
 ];
 
 export class PlayerTankBehavior extends TankBehavior {
@@ -31,16 +24,16 @@ export class PlayerTankBehavior extends TankBehavior {
   }
 
   public update(tank: Tank, { deltaTime, input }: GameObjectUpdateArgs): void {
-    if (input.isHoldLast(InputControl.Up)) {
+    if (input.isHoldLastAny(LevelInputContext.MoveUp)) {
       tank.rotate(Rotation.Up);
     }
-    if (input.isHoldLast(InputControl.Down)) {
+    if (input.isHoldLastAny(LevelInputContext.MoveDown)) {
       tank.rotate(Rotation.Down);
     }
-    if (input.isHoldLast(InputControl.Left)) {
+    if (input.isHoldLastAny(LevelInputContext.MoveLeft)) {
       tank.rotate(Rotation.Left);
     }
-    if (input.isHoldLast(InputControl.Right)) {
+    if (input.isHoldLastAny(LevelInputContext.MoveRight)) {
       tank.rotate(Rotation.Right);
     }
 
@@ -58,7 +51,7 @@ export class PlayerTankBehavior extends TankBehavior {
       this.idleSound.playLoop();
     }
 
-    if (input.isDownAny(FIRE_CONTROLS)) {
+    if (input.isDownAny(LevelInputContext.Fire)) {
       const hasFired = tank.fire();
       if (hasFired) {
         this.fireSound.play();

@@ -5,7 +5,7 @@ import {
   Rect,
   Timer,
 } from '../core';
-import { InputControl } from '../input';
+import { LevelInputContext } from '../input';
 import { GameObjectUpdateArgs, GameState, Rotation, Session } from '../game';
 import {
   Base,
@@ -112,7 +112,7 @@ export class LevelScene extends Scene {
 
     const { gameState, input } = updateArgs;
 
-    if (input.isDown(InputControl.Start)) {
+    if (input.isDownAny(LevelInputContext.Pause)) {
       if (gameState.is(GameState.Playing)) {
         gameState.set(GameState.Paused);
         this.activatePause();

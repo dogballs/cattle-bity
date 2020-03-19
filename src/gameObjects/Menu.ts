@@ -1,6 +1,6 @@
 import { GameObject, Subject } from '../core';
 import { GameObjectUpdateArgs } from '../game';
-import { InputControl } from '../input';
+import { MenuInputContext } from '../input';
 
 import { MenuSelector } from './MenuSelector';
 import { SpriteText } from './SpriteText';
@@ -38,12 +38,17 @@ export class Menu extends GameObject {
   protected update(updateArgs: GameObjectUpdateArgs): void {
     const { input } = updateArgs;
 
-    if (input.isDown(InputControl.Select)) {
+    if (input.isDownAny(MenuInputContext.Up)) {
+      this.selectPrev();
+      this.updateSelector();
+    }
+
+    if (input.isDownAny(MenuInputContext.Down)) {
       this.selectNext();
       this.updateSelector();
     }
 
-    if (input.isDown(InputControl.Start)) {
+    if (input.isDownAny(MenuInputContext.Select)) {
       this.selected.notify(this.selectedIndex);
     }
   }

@@ -1,6 +1,14 @@
-import { InputDevice } from './InputDevice';
+import { InputDevice } from '../InputDevice';
 
 export class NullInputDevice implements InputDevice {
+  public listen(): void {
+    // Do nothing
+  }
+
+  public unlisten(): void {
+    // Do nothing
+  }
+
   public update(): void {
     // Do nothing
   }

@@ -25,4 +25,3 @@ export * from './Texture';
 export * from './Timer';
 export * from './Transform';
 export * from './Vector';
-export * from './Vector3';

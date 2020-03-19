@@ -1,6 +1,6 @@
 import { GameObject, Input, Subject, Timer } from '../core';
 import { GameObjectUpdateArgs } from '../game';
-import { InputControl } from '../input';
+import { InputControl, LevelSelectionInputContext } from '../input';
 
 import { LevelTitle } from './LevelTitle';
 
@@ -28,7 +28,7 @@ export class LevelSelector extends GameObject {
   }
 
   protected update({ deltaTime, input }: GameObjectUpdateArgs): void {
-    if (input.isDown(InputControl.Start)) {
+    if (input.isDownAny(LevelSelectionInputContext.Select)) {
       this.selected.notify(this.currentLevel);
       return;
     }
@@ -36,28 +36,28 @@ export class LevelSelector extends GameObject {
     this.throttleInput(
       input,
       deltaTime,
-      InputControl.A,
+      LevelSelectionInputContext.Next,
       this.selectNext,
       SLOW_HOLD_DELAY,
     );
     this.throttleInput(
       input,
       deltaTime,
-      InputControl.B,
+      LevelSelectionInputContext.Prev,
       this.selectPrev,
       SLOW_HOLD_DELAY,
     );
     this.throttleInput(
       input,
       deltaTime,
-      InputControl.TurboA,
+      LevelSelectionInputContext.FastNext,
       this.selectNext,
       FAST_HOLD_DELAY,
     );
     this.throttleInput(
       input,
       deltaTime,
-      InputControl.TurboB,
+      LevelSelectionInputContext.FastPrev,
       this.selectPrev,
       FAST_HOLD_DELAY,
     );
@@ -66,15 +66,15 @@ export class LevelSelector extends GameObject {
   private throttleInput(
     input: Input,
     deltaTime: number,
-    control: InputControl,
+    controls: InputControl[],
     selectCallback: () => void,
     delay: number,
   ): void {
-    if (input.isDown(control) || input.isUp(control)) {
+    if (input.isDownAny(controls) || input.isUpAny(controls)) {
       this.holdThrottle.stop();
     }
 
-    if (input.isHoldFirst(control)) {
+    if (input.isHoldFirstAny(controls)) {
       if (this.holdThrottle.isDone()) {
         selectCallback();
         this.holdThrottle.reset(delay);

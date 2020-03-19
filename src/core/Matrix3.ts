@@ -1,5 +1,4 @@
 import { Vector } from './Vector';
-import { Vector3 } from './Vector3';
 
 import { MathUtils } from './utils';
 
@@ -46,21 +45,6 @@ export class Matrix3 {
     // Using row vector convention
     v.x = x * e[0] + y * e[3] + z * e[6];
     v.y = x * e[1] + y * e[4] + z * e[7];
-
-    return v;
-  }
-
-  public applyToVector3(v: Vector3): Vector3 {
-    const x = v.x;
-    const y = v.y;
-    const z = v.z;
-
-    const e = this.elements;
-
-    // Using row vector convention
-    v.x = x * e[0] + y * e[3] + z * e[6];
-    v.y = x * e[1] + y * e[4] + z * e[7];
-    v.z = x * e[2] + y * e[5] + z * e[8];
 
     return v;
   }

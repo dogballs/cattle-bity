@@ -33,18 +33,6 @@ export class GameObject extends Transform {
     return objects;
   }
 
-  public hasChildrenWithTag(tag: string): boolean {
-    let has = false;
-
-    this.traverse((object) => {
-      if (object.tags.includes(tag)) {
-        has = true;
-      }
-    });
-
-    return has;
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   public invokeUpdate(...args: any[]): void {
     if (this.needsSetup === true) {

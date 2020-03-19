@@ -1,9 +1,9 @@
-import { InputMap } from './InputMap';
+import { InputBinding } from './InputBinding';
 import { InputDevice } from './InputDevice';
-import { NullInputDevice } from './NullInputDevice';
+import { NullInputDevice } from './devices';
 
 export class Input {
-  private map: InputMap = {};
+  private binding: InputBinding = {};
   private device: InputDevice = new NullInputDevice();
 
   public setDevice(device: InputDevice): this {
@@ -12,8 +12,8 @@ export class Input {
     return this;
   }
 
-  public setMap(map: InputMap): this {
-    this.map = map;
+  public setBinding(binding: InputBinding): this {
+    this.binding = binding;
 
     return this;
   }
@@ -70,12 +70,30 @@ export class Input {
     return isHoldFirst;
   }
 
+  public isHoldFirstAny(controls: number[]): boolean {
+    const targetCodes = this.unmapList(controls);
+    const codes = this.device.getHoldCodes();
+    const firstCode = codes[0];
+    const isHoldFirstAny = targetCodes.includes(firstCode);
+
+    return isHoldFirstAny;
+  }
+
   public isHoldLast(control: number): boolean {
     const targetCode = this.unmap(control);
     const codes = this.device.getHoldCodes();
     const isHoldLast = codes[codes.length - 1] === targetCode;
 
     return isHoldLast;
+  }
+
+  public isHoldLastAny(controls: number[]): boolean {
+    const targetCodes = this.unmapList(controls);
+    const codes = this.device.getHoldCodes();
+    const lastCode = codes[codes.length - 1];
+    const isHoldLastAny = targetCodes.includes(lastCode);
+
+    return isHoldLastAny;
   }
 
   public isUp(control: number): boolean {
@@ -85,8 +103,16 @@ export class Input {
     return isUp;
   }
 
+  public isUpAny(controls: number[]): boolean {
+    const targetCodes = this.unmapList(controls);
+    const upCodes = this.device.getUpCodes();
+    const isUpAny = upCodes.some((code) => targetCodes.includes(code));
+
+    return isUpAny;
+  }
+
   private unmap(control: number): number {
-    return this.map[control];
+    return this.binding[control];
   }
 
   private unmapList(controls: number[]): number[] {
