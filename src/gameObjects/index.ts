@@ -1,3 +1,5 @@
+export * from './menu';
+
 export * from './Base';
 export * from './BrickWall';
 export * from './Border';
@@ -16,8 +18,7 @@ export * from './GameOverHeading';
 export * from './GameOverNotice';
 export * from './LevelSelector';
 export * from './LivesCounter';
-export * from './Menu';
-export * from './MenuHeading';
+export * from './MainHeading';
 export * from './PauseNotice';
 export * from './PlayerTank';
 export * from './Points';

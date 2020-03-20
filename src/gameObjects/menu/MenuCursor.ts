@@ -4,16 +4,16 @@ import {
   GameObject,
   Sprite,
   SpriteRenderer,
-} from '../core';
-import { GameObjectUpdateArgs, Rotation } from '../game';
-import { TankType, TankMoveAnimation } from '../tank';
+} from '../../core';
+import { GameObjectUpdateArgs, Rotation } from '../../game';
+import { TankType, TankMoveAnimation } from '../../tank';
 
-export class MenuSelector extends GameObject {
+export class MenuCursor extends GameObject {
   public readonly renderer = new SpriteRenderer();
   private animation: Animation<Sprite>;
 
-  constructor(height = 52) {
-    super(height, height);
+  constructor() {
+    super(60, 60);
 
     this.renderer.alignment = Alignment.MiddleCenter;
   }

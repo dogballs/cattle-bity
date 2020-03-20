@@ -10,6 +10,7 @@ enum State {
 }
 
 export class Session {
+  private seenIntro: boolean;
   private startLevelNumber: number;
   private currentLevelNumber: number;
   private levelPointsRecord: PointsRecord;
@@ -32,6 +33,7 @@ export class Session {
   }
 
   public reset(): void {
+    this.seenIntro = false;
     this.startLevelNumber = 1;
     this.currentLevelNumber = 1;
     this.levelPointsRecord = new PointsRecord();
@@ -82,5 +84,13 @@ export class Session {
     if (this.lives < 0) {
       this.setGameOver();
     }
+  }
+
+  public setSeenIntro(seenIntro: boolean): void {
+    this.seenIntro = seenIntro;
+  }
+
+  public haveSeenIntro(): boolean {
+    return this.seenIntro;
   }
 }

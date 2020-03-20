@@ -26,7 +26,7 @@ export class SceneManager {
 
   private transition(nextType: SceneType): void {
     if (!this.registered.has(nextType)) {
-      throw new Error(`Scene "${nextType}" not registered`);
+      throw new Error(`Scene not registered`);
     }
 
     const SceneClass = this.registered.get(nextType);

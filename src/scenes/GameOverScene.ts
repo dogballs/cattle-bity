@@ -11,7 +11,9 @@ export class GameOverScene extends Scene {
   private heading = new GameOverHeading();
   private timer = new Timer(SCENE_DURATION);
 
-  protected setup(): void {
+  protected setup({ session }: GameObjectUpdateArgs): void {
+    session.reset();
+
     this.timer.done.addListener(this.handleDone);
 
     this.heading.origin.set(0.5, 0.5);
@@ -29,6 +31,6 @@ export class GameOverScene extends Scene {
   }
 
   private handleDone = (): void => {
-    this.transition(SceneType.Menu);
+    this.transition(SceneType.MainMenu);
   };
 }

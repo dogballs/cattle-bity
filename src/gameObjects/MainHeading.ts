@@ -3,7 +3,7 @@ import { TerrainType } from '../terrain';
 
 import { TerrainText } from './TerrainText';
 
-export class MenuHeading extends TerrainText {
+export class MainHeading extends TerrainText {
   constructor() {
     super('BATTLE\nCITY', TerrainType.MenuBrick, {
       alignment: TextAlignment.Center,

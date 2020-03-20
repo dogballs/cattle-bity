@@ -18,12 +18,14 @@ import { MapLoader } from './map';
 import {
   EditorScene,
   GameOverScene,
+  KeybindingMenuScene,
   LevelScene,
   LevelSelectionScene,
-  MenuScene,
+  MainMenuScene,
   ScoreScene,
   SceneManager,
   SceneType,
+  SettingsMenuScene,
   TestScene,
 } from './scenes';
 
@@ -47,18 +49,6 @@ document.body.appendChild(gameRenderer.getDomElement());
 const inputManager = new InputManager();
 inputManager.listen();
 
-// const inputDevice = new KeyboardInputDevice();
-// const inputBinding = KeyboardInputBinding;
-// const input = new Input();
-// // input.setDevice(inputDevice);
-// input.setBinding(inputBinding);
-// inputDevice.listen();
-
-// const inputDeviceDetector = new InputDeviceDetector(input, [
-//   new KeyboardInputDevice(),
-//   new GamepadInputDevice(),
-// ]);
-
 const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
 const textureLoader = new TextureLoader(config.GRAPHICS_BASE_PATH);
 
@@ -80,12 +70,14 @@ const mapLoader = new MapLoader(mapManifest);
 
 const session = new Session();
 
-const sceneManager = new SceneManager(SceneType.Menu);
+const sceneManager = new SceneManager(SceneType.MainMenu);
 sceneManager.register(SceneType.Editor, EditorScene);
 sceneManager.register(SceneType.GameOver, GameOverScene);
+sceneManager.register(SceneType.KeybindingMenu, KeybindingMenuScene);
 sceneManager.register(SceneType.Level, LevelScene);
 sceneManager.register(SceneType.LevelSelection, LevelSelectionScene);
-sceneManager.register(SceneType.Menu, MenuScene);
+sceneManager.register(SceneType.MainMenu, MainMenuScene);
+sceneManager.register(SceneType.SettingsMenu, SettingsMenuScene);
 sceneManager.register(SceneType.Score, ScoreScene);
 sceneManager.register(SceneType.Test, TestScene);
 sceneManager.start();

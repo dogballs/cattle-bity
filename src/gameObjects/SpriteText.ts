@@ -1,5 +1,6 @@
 import {
   GameObject,
+  Size,
   Sprite,
   SpriteTextRenderer,
   Text,
@@ -41,5 +42,9 @@ export class SpriteText extends GameObject {
   public setText(text: string): void {
     this.text.setText(text);
     this.size.copyFrom(this.text.getSize());
+  }
+
+  public getTextSize(): Size {
+    return this.text.getSize();
   }
 }

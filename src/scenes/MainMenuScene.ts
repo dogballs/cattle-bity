@@ -1,6 +1,6 @@
 import { GameObject, RectRenderer } from '../core';
-import { GameObjectUpdateArgs } from '../game';
-import { Menu, MenuHeading } from '../gameObjects';
+import { GameObjectUpdateArgs, Session } from '../game';
+import { MainHeading, Menu, TextMenuItem } from '../gameObjects';
 import { MenuInputContext } from '../input';
 import * as config from '../config';
 
@@ -9,34 +9,47 @@ import { SceneType } from './SceneType';
 
 const SLIDE_SPEED = 240;
 
+const MENU_ITEMS = ['1 PLAYER', 'CONSTRUCTION', 'SETTINGS'];
+
 enum State {
   Sliding,
   Ready,
 }
 
-export class MenuScene extends Scene {
-  private heading = new MenuHeading();
+export class MainMenuScene extends Scene {
+  private heading = new MainHeading();
   private group = new GameObject();
   private menu = new Menu();
-  private state: State = State.Sliding;
+  private state: State = State.Ready;
+  private session: Session;
 
   protected setup({ session }: GameObjectUpdateArgs): void {
-    session.reset();
+    this.session = session;
 
     this.root.renderer = new RectRenderer(config.COLOR_BLACK);
 
     this.group.size.copyFrom(this.root.size);
-    this.group.position.setY(this.root.size.height);
 
     this.heading.origin.setX(0.5);
     this.heading.setCenter(this.root.getSelfCenter());
     this.heading.position.setY(160);
     this.group.add(this.heading);
 
+    const menuItems = MENU_ITEMS.map((text) => {
+      return new TextMenuItem(text, { color: config.COLOR_WHITE });
+    });
+
+    this.menu.setItems(menuItems);
     this.menu.setCenter(this.root.getSelfCenter());
     this.menu.position.setY(512);
     this.menu.selected.addListener(this.handleMenuSelected);
     this.group.add(this.menu);
+
+    if (!this.session.haveSeenIntro()) {
+      this.state = State.Sliding;
+      this.group.position.setY(this.root.size.height);
+      this.menu.hideCursor();
+    }
 
     this.root.add(this.group);
   }
@@ -54,7 +67,8 @@ export class MenuScene extends Scene {
       if (isReady) {
         this.group.position.y = 0;
         this.state = State.Ready;
-        this.menu.showSelector();
+        this.menu.showCursor();
+        this.session.setSeenIntro(true);
       } else {
         this.root.traverseDescedants((child) => {
           child.invokeUpdate(updateArgs);
@@ -69,10 +83,16 @@ export class MenuScene extends Scene {
   }
 
   private handleMenuSelected = (selectedIndex): void => {
-    if (selectedIndex === 0) {
-      this.transition(SceneType.LevelSelection);
-    } else if (selectedIndex === 1) {
-      this.transition(SceneType.Editor);
+    switch (selectedIndex) {
+      case 0:
+        this.transition(SceneType.LevelSelection);
+        break;
+      case 1:
+        this.transition(SceneType.Editor);
+        break;
+      case 2:
+        this.transition(SceneType.SettingsMenu);
+        break;
     }
   };
 }
