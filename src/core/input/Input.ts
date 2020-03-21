@@ -3,7 +3,7 @@ import { InputDevice } from './InputDevice';
 import { NullInputDevice } from './devices';
 
 export class Input {
-  private binding: InputBinding = {};
+  private binding: InputBinding = new InputBinding();
   private device: InputDevice = new NullInputDevice();
 
   public setDevice(device: InputDevice): this {
@@ -112,7 +112,7 @@ export class Input {
   }
 
   private unmap(control: number): number {
-    return this.binding[control];
+    return this.binding.get(control);
   }
 
   private unmapList(controls: number[]): number[] {

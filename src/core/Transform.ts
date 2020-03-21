@@ -142,6 +142,22 @@ export class Transform extends Node {
     this.position.set(v.x - size.width / 2, v.y - size.height / 2);
   }
 
+  public setCenterX(x: number): void {
+    this.updateMatrix();
+
+    const size = this.getBoundingBox().getSize();
+
+    this.position.setX(x - size.width / 2);
+  }
+
+  public setCenterY(y: number): void {
+    this.updateMatrix();
+
+    const size = this.getBoundingBox().getSize();
+
+    this.position.setY(y - size.height / 2);
+  }
+
   public getSelfCenter(): Vector {
     return this.size.toVector().divideScalar(2);
   }

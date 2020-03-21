@@ -12,9 +12,7 @@ export class SettingsMenuScene extends Scene {
   private menu = new Menu();
 
   protected setup(): void {
-    this.title.origin.setX(0.5);
-    this.title.setCenter(this.root.getSelfCenter());
-    this.title.position.setY(160);
+    this.title.position.set(112, 96);
     this.root.add(this.title);
 
     const menuItems = MENU_ITEMS.map((text) => {
@@ -22,8 +20,7 @@ export class SettingsMenuScene extends Scene {
     });
 
     this.menu.setItems(menuItems);
-    this.menu.setCenter(this.root.getSelfCenter());
-    this.menu.position.setY(256);
+    this.menu.position.set(16, 192);
     this.menu.selected.addListener(this.handleMenuSelected);
     this.root.add(this.menu);
   }

@@ -2,11 +2,15 @@ import { GamepadButtonCode, InputBinding } from '../../core';
 
 import { InputControl } from '../InputControl';
 
-export const GamepadInputBinding: InputBinding = {
-  [InputControl.Up]: GamepadButtonCode.Up,
-  [InputControl.Down]: GamepadButtonCode.Down,
-  [InputControl.Left]: GamepadButtonCode.Left,
-  [InputControl.Right]: GamepadButtonCode.Right,
-  [InputControl.Select]: GamepadButtonCode.Start,
-  [InputControl.PrimaryAction]: GamepadButtonCode.X,
-};
+export class GamepadInputBinding extends InputBinding {
+  constructor() {
+    super();
+
+    this.setDefault(InputControl.Up, GamepadButtonCode.Up);
+    this.setDefault(InputControl.Down, GamepadButtonCode.Down);
+    this.setDefault(InputControl.Left, GamepadButtonCode.Left);
+    this.setDefault(InputControl.Right, GamepadButtonCode.Right);
+    this.setDefault(InputControl.Select, GamepadButtonCode.Start);
+    this.setDefault(InputControl.PrimaryAction, GamepadButtonCode.X);
+  }
+}

@@ -102,6 +102,7 @@ const updateArgs: GameObjectUpdateArgs = {
   audioLoader,
   deltaTime: 0,
   input: inputManager.getInput(),
+  inputManager,
   gameState,
   mapLoader,
   rectFontLoader,

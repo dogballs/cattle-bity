@@ -20,10 +20,10 @@ const ITEM_OFFSET = 16;
 
 export class Menu extends GameObject {
   public selected = new Subject<number>();
-  private menuItems: MenuItem[] = [];
+  private items: MenuItem[] = [];
   private options: MenuOptions;
   private cursor: MenuCursor = new MenuCursor();
-  private focusedIndex: number;
+  private focusedIndex = -1;
 
   constructor(options: MenuOptions = {}) {
     super();
@@ -32,14 +32,15 @@ export class Menu extends GameObject {
     this.focusedIndex = this.options.initialIndex;
   }
 
-  public setItems(menuItems: MenuItem[]): void {
-    this.menuItems = menuItems;
-    this.size.set(480, menuItems.length * this.options.itemHeight);
+  public setItems(items: MenuItem[]): void {
+    this.items = items;
+    // TODO: dynamic width and height
+    this.size.set(480, items.length * this.options.itemHeight);
 
     this.removeAllChildren();
     this.focusedIndex = 0;
 
-    this.menuItems.forEach((menuItem, index) => {
+    this.items.forEach((menuItem, index) => {
       menuItem.position.set(
         CURSOR_OFFSET,
         index * this.options.itemHeight + ITEM_OFFSET,
@@ -74,35 +75,85 @@ export class Menu extends GameObject {
     }
 
     if (input.isDownAny(MenuInputContext.Select)) {
-      this.selected.notify(this.focusedIndex);
+      this.notifyItemSelected();
     }
 
-    this.menuItems.forEach((menuItem, index) => {
+    this.items.forEach((menuItem, index) => {
       if (index === this.focusedIndex) {
         menuItem.updateFocused(updateArgs);
-      } else {
-        menuItem.updateUnfocused(updateArgs);
       }
     });
   }
 
   private updateCursor(): void {
+    if (this.focusedIndex === -1) {
+      this.hideCursor();
+      return;
+    }
+
+    this.showCursor();
+
     this.cursor.position.setY(this.cursor.size.height * this.focusedIndex);
   }
 
-  private focusPrev(): void {
-    let nextIndex = this.focusedIndex - 1;
-    if (nextIndex < 0) {
-      nextIndex = this.menuItems.length - 1;
+  private notifyItemSelected(): void {
+    if (this.focusedIndex === -1) {
+      return;
     }
-    this.focusedIndex = nextIndex;
+
+    const focusedItem = this.items[this.focusedIndex];
+    focusedItem.selected.notify();
+
+    this.selected.notify(this.focusedIndex);
+  }
+
+  private focusPrev(): void {
+    this.focusedIndex = this.getPrevFocusableIndex();
   }
 
   private focusNext(): void {
-    let nextIndex = this.focusedIndex + 1;
-    if (nextIndex > this.menuItems.length - 1) {
-      nextIndex = 0;
+    this.focusedIndex = this.getNextFocusableIndex();
+  }
+
+  private getPrevFocusableIndex(): number {
+    if (!this.hasFocusableItems()) {
+      return -1;
     }
-    this.focusedIndex = nextIndex;
+
+    let prevIndex = this.focusedIndex;
+    let prevItem = null;
+
+    do {
+      prevIndex -= 1;
+      if (prevIndex < 0) {
+        prevIndex = this.items.length - 1;
+      }
+      prevItem = this.items[prevIndex];
+    } while (prevItem.focusable === false);
+
+    return prevIndex;
+  }
+
+  private getNextFocusableIndex(): number {
+    if (!this.hasFocusableItems()) {
+      return -1;
+    }
+
+    let nextIndex = this.focusedIndex;
+    let nextItem = null;
+
+    do {
+      nextIndex += 1;
+      if (nextIndex > this.items.length - 1) {
+        nextIndex = 0;
+      }
+      nextItem = this.items[nextIndex];
+    } while (nextItem.focusable === false);
+
+    return nextIndex;
+  }
+
+  private hasFocusableItems(): boolean {
+    return this.items.some((item) => item.focusable);
   }
 }

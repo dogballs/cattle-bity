@@ -2,11 +2,15 @@ import { InputBinding, KeyboardButtonCode } from '../../core';
 
 import { InputControl } from '../InputControl';
 
-export const KeyboardInputBinding: InputBinding = {
-  [InputControl.Up]: KeyboardButtonCode.Up,
-  [InputControl.Down]: KeyboardButtonCode.Down,
-  [InputControl.Left]: KeyboardButtonCode.Left,
-  [InputControl.Right]: KeyboardButtonCode.Right,
-  [InputControl.Select]: KeyboardButtonCode.Enter,
-  [InputControl.PrimaryAction]: KeyboardButtonCode.Z,
-};
+export class KeyboardInputBinding extends InputBinding {
+  constructor() {
+    super();
+
+    this.setDefault(InputControl.Up, KeyboardButtonCode.Up);
+    this.setDefault(InputControl.Down, KeyboardButtonCode.Down);
+    this.setDefault(InputControl.Left, KeyboardButtonCode.Left);
+    this.setDefault(InputControl.Right, KeyboardButtonCode.Right);
+    this.setDefault(InputControl.Select, KeyboardButtonCode.Enter);
+    this.setDefault(InputControl.PrimaryAction, KeyboardButtonCode.Z);
+  }
+}
