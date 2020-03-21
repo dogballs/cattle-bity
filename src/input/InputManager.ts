@@ -4,13 +4,15 @@ import {
   InputBinding,
   InputDevice,
   KeyboardInputDevice,
+  LocalStorage,
 } from '../core';
+import * as config from '../config';
+
 import { GamepadInputBinding, KeyboardInputBinding } from './bindings';
 import {
   GamepadButtonCodePresenter,
   KeyboardButtonCodePresenter,
 } from './presenters';
-
 import { InputButtonCodePresenter } from './InputButtonCodePresenter';
 import { InputDeviceType } from './InputDeviceType';
 
@@ -22,20 +24,14 @@ interface InputVariant {
 
 export class InputManager {
   private input: Input;
-
   private variants = new Map<InputDeviceType, InputVariant>();
-
-  // Order by priority, first is default
-  // private variants: InputVariant[] = [
-  //   { binding: new KeyboardInputBinding(), device: new KeyboardInputDevice() },
-  //   { binding: new GamepadInputBinding(), device: new GamepadInputDevice() },
-  // ];
-
   private currentVariant: InputVariant = null;
+  private storage = new LocalStorage(config.STORAGE_NAMESPACE);
 
   constructor() {
     this.input = new Input();
 
+    // Order by priority, first is default
     this.variants.set(InputDeviceType.Keyboard, {
       binding: new KeyboardInputBinding(),
       device: new KeyboardInputDevice(),
@@ -111,6 +107,34 @@ export class InputManager {
         return;
       }
     });
+  }
+
+  public loadAllBindings(): void {
+    this.storage.load();
+
+    this.variants.forEach((variant, type) => {
+      const { binding } = variant;
+
+      const key = this.getBindingStorageKey(type);
+
+      const json = this.storage.get(key);
+
+      binding.fromJSON(json);
+    });
+  }
+
+  public persistBinding(type: InputDeviceType): void {
+    const binding = this.getBinding(type);
+
+    const key = this.getBindingStorageKey(type);
+    const json = binding.toJSON();
+
+    this.storage.set(key, json);
+    this.storage.persist();
+  }
+
+  private getBindingStorageKey(type: InputDeviceType): string {
+    return `${config.STORAGE_KEY_BINDINGS}_${type.toString()}`;
   }
 
   private activateVariant(variant: InputVariant): void {

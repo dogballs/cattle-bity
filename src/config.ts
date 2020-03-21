@@ -49,3 +49,6 @@ export const COLOR_YELLOW = '#ffae0a';
 
 export const PRIMARY_SPRITE_FONT_ID = 'primary';
 export const PRIMARY_RECT_FONT_ID = 'primary';
+
+export const STORAGE_NAMESPACE = 'battle-city';
+export const STORAGE_KEY_BINDINGS = 'bindings';

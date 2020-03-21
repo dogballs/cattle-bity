@@ -125,6 +125,7 @@ export class KeybindingMenuScene extends Scene {
 
         binding.setCustom(this.selectedControl, code);
 
+        this.inputManager.persistBinding(this.selectedDeviceType);
         this.updateMenu();
         this.closeModal();
       }
@@ -199,6 +200,7 @@ export class KeybindingMenuScene extends Scene {
   private handleResetSelected = (): void => {
     const binding = this.getSelectedBinding();
     binding.resetAllToDefault();
+    this.inputManager.persistBinding(this.selectedDeviceType);
     this.updateMenu();
   };
 

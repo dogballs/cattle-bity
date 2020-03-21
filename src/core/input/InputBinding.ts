@@ -20,4 +20,41 @@ export class InputBinding {
   public resetAllToDefault(): void {
     this.custom.clear();
   }
+
+  public toJSON(): string {
+    const pairs = [];
+
+    // Save only custom bindings
+    this.custom.forEach((code, control) => {
+      pairs.push([control, code]);
+    });
+
+    const json = JSON.stringify(pairs);
+
+    return json;
+  }
+
+  public fromJSON(json: string): void {
+    let pairs = [];
+
+    try {
+      pairs = JSON.parse(json);
+    } catch (err) {
+      // Ignore parse error
+    }
+
+    if (!Array.isArray(pairs)) {
+      return;
+    }
+
+    pairs.forEach((pair) => {
+      if (!Array.isArray(pair)) {
+        return;
+      }
+
+      const [control, code] = pair;
+
+      this.custom.set(control, code);
+    });
+  }
 }

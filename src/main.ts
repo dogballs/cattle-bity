@@ -143,6 +143,10 @@ async function main(): Promise<void> {
   await spriteLoader.preloadAllAsync();
   log.timeEnd('Sprites preload');
 
+  log.time('Input bindings load');
+  inputManager.loadAllBindings();
+  log.timeEnd('Input bindings load');
+
   gameLoop.start();
   // gameLoop.next();
 }
