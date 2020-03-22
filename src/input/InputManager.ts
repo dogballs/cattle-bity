@@ -50,7 +50,7 @@ export class InputManager {
 
   public getBinding(type: InputDeviceType): InputBinding {
     if (!this.variants.has(type)) {
-      return undefined;
+      return null;
     }
 
     const { binding } = this.variants.get(type);
@@ -60,7 +60,7 @@ export class InputManager {
 
   public getDevice(type: InputDeviceType): InputDevice {
     if (!this.variants.has(type)) {
-      return undefined;
+      return null;
     }
 
     const { device } = this.variants.get(type);
@@ -70,7 +70,7 @@ export class InputManager {
 
   public getPresenter(type: InputDeviceType): InputButtonCodePresenter {
     if (!this.variants.has(type)) {
-      return undefined;
+      return null;
     }
 
     const { presenter } = this.variants.get(type);

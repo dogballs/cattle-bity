@@ -15,6 +15,7 @@ export class LocalStorage {
   }
 
   public load(): void {
+    // Returns null if key does no exist
     const json = window.localStorage.getItem(this.namespace);
 
     let data;
@@ -25,7 +26,7 @@ export class LocalStorage {
     }
 
     // In case there is something else stored in that namespace
-    if (typeof data !== 'object') {
+    if (typeof data !== 'object' || data === null) {
       data = {};
     }
 

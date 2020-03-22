@@ -1,5 +1,9 @@
 [![Build status](https://travis-ci.com/dogballs/battle-city.svg?branch=master)](https://travis-ci.com/dogballs/battle-city)
 
+### [Play latest web version](https://dogballs.github.io/battle-city/)
+
+## Development
+
 ### Getting started
 
 ```bash

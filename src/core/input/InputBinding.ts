@@ -17,6 +17,28 @@ export class InputBinding {
     return this.default.get(control);
   }
 
+  public getControl(codeToFind: number): number {
+    let foundControl = null;
+
+    this.custom.forEach((code, control) => {
+      if (foundControl === null && code === codeToFind) {
+        foundControl = control;
+        return;
+      }
+    });
+
+    if (foundControl === null) {
+      this.default.forEach((code, control) => {
+        if (foundControl === null && code === codeToFind) {
+          foundControl = control;
+          return;
+        }
+      });
+    }
+
+    return foundControl;
+  }
+
   public resetAllToDefault(): void {
     this.custom.clear();
   }

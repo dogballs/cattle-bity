@@ -61,8 +61,6 @@ export class KeybindingMenuScene extends Scene {
   protected setup(updateArgs: GameObjectUpdateArgs): void {
     this.inputManager = updateArgs.inputManager;
 
-    // this.title.origin.setX(0.5);
-    // this.title.setCenter(this.root.getSelfCenter());
     this.title.position.set(112, 96);
     this.root.add(this.title);
 
@@ -75,7 +73,7 @@ export class KeybindingMenuScene extends Scene {
     this.bindingItems = CONFIGURABLE_INPUT_CONTROLS.map((control) => {
       const item = new TextMenuItem('', { color: config.COLOR_WHITE });
       item.selected.addListener(() => {
-        this.openModel(control);
+        this.openModal(control);
       });
       return item;
     });
@@ -97,7 +95,6 @@ export class KeybindingMenuScene extends Scene {
 
     this.menu = new Menu();
     this.menu.setItems(menuItems);
-    // this.menu.setCenterX(this.root.getSelfCenter().x);
     this.menu.position.set(16, 192);
     this.root.add(this.menu);
 
@@ -115,17 +112,15 @@ export class KeybindingMenuScene extends Scene {
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
+    // Capture user input from currently selected device
     if (this.state === State.WaitingInput) {
       const device = this.getSelectedDevice();
       const codes = device.getDownCodes();
 
       if (codes.length > 0) {
         const code = codes[0];
-        const binding = this.getSelectedBinding();
 
-        binding.setCustom(this.selectedControl, code);
-
-        this.inputManager.persistBinding(this.selectedDeviceType);
+        this.updateBinding(this.selectedControl, code);
         this.updateMenu();
         this.closeModal();
       }
@@ -149,7 +144,7 @@ export class KeybindingMenuScene extends Scene {
     return this.inputManager.getPresenter(this.selectedDeviceType);
   }
 
-  private openModel(control: InputControl): void {
+  private openModal(control: InputControl): void {
     this.selectedControl = control;
     this.state = State.WaitingInput;
     this.modal.visible = true;
@@ -188,6 +183,24 @@ export class KeybindingMenuScene extends Scene {
 
       item.setText(text);
     });
+  }
+
+  private updateBinding(control: InputControl, newCode: number): void {
+    const binding = this.getSelectedBinding();
+
+    const currentCode = binding.get(control);
+
+    // Check if same key is already taken by another control.
+    // If so, we are going to swap values to avoid an issues of having
+    // same keys for same controls
+    const conflictControl = binding.getControl(newCode);
+    if (conflictControl !== null) {
+      binding.setCustom(conflictControl, currentCode);
+    }
+
+    binding.setCustom(control, newCode);
+
+    this.inputManager.persistBinding(this.selectedDeviceType);
   }
 
   private handleDeviceChanged = (
