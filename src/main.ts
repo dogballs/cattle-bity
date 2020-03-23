@@ -39,6 +39,8 @@ import * as mapManifest from '../data/maps/map.manifest.json';
 
 const log = new Logger('main', Logger.Level.Debug);
 
+console.log(process.env.NODE_ENV);
+
 const gameRenderer = new GameRenderer({
   // debug: true,
   height: config.CANVAS_HEIGHT,
@@ -153,6 +155,6 @@ async function main(): Promise<void> {
 
 main();
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-window.gameLoop = gameLoop;
+if (config.IS_DEV) {
+  window.gameLoop = gameLoop;
+}

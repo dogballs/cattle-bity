@@ -33,9 +33,8 @@ module.exports = {
   plugins: [
     new CheckerPlugin(),
     new CopyWebpackPlugin([
-      'index.html',
+      { from: 'public/' },
       { from: 'data/', to: 'data/' },
-      { from: 'styles/', to: 'styles/' },
     ]),
   ],
 
