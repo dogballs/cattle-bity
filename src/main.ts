@@ -1,3 +1,5 @@
+import * as Stats from 'stats.js';
+
 import {
   GameObject,
   GameLoop,
@@ -38,8 +40,6 @@ import * as rectFontConfig from '../data/fonts/rect-font.json';
 import * as mapManifest from '../data/maps/map.manifest.json';
 
 const log = new Logger('main', Logger.Level.Debug);
-
-console.log(process.env.NODE_ENV);
 
 const gameRenderer = new GameRenderer({
   // debug: true,
@@ -95,7 +95,7 @@ debugInspector.click.addListener((position: Vector) => {
       intersections.push(child);
     }
   });
-  console.log(intersections);
+  log.debug(intersections);
 });
 
 const gameState = new State<GameState>(GameState.Playing);
@@ -114,8 +114,16 @@ const updateArgs: GameObjectUpdateArgs = {
   textureLoader,
 };
 
+const stats = new Stats();
+
+if (config.IS_DEV) {
+  document.body.appendChild(stats.dom);
+}
+
 const gameLoop = new GameLoop();
 gameLoop.tick.addListener((event) => {
+  stats.begin();
+
   inputManager.update();
 
   updateArgs.deltaTime = event.deltaTime;
@@ -126,6 +134,8 @@ gameLoop.tick.addListener((event) => {
   gameRenderer.render(scene.root);
 
   gameState.tick();
+
+  stats.end();
 });
 
 async function main(): Promise<void> {

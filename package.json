@@ -12,6 +12,7 @@
     "@types/hapi__joi": "^16.0.12",
     "awesome-typescript-loader": "^5.2.1",
     "copy-webpack-plugin": "^5.1.1",
+    "stats.js": "^0.17.0",
     "typescript": "^3.7.4",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11"
