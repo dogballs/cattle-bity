@@ -1,4 +1,4 @@
-import { GameObject, SpriteRenderer, Timer } from '../core';
+import { GameObject, SpritePainter, Timer } from '../core';
 import { GameObjectUpdateArgs } from '../game';
 import { PointsValue } from '../points';
 
@@ -7,7 +7,7 @@ const SPRITE_ID_SEPARATOR = '.';
 
 export class Points extends GameObject {
   public readonly value: PointsValue;
-  public readonly renderer = new SpriteRenderer();
+  public readonly painter = new SpritePainter();
   private readonly timer = new Timer();
 
   constructor(value: PointsValue, duration: number) {
@@ -21,7 +21,7 @@ export class Points extends GameObject {
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
     const spriteId = this.getSpriteId(this.value);
-    this.renderer.sprite = spriteLoader.load(spriteId);
+    this.painter.sprite = spriteLoader.load(spriteId);
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {

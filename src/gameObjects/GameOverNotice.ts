@@ -1,14 +1,14 @@
-import { GameObject, SpriteRenderer } from '../core';
+import { GameObject, SpritePainter } from '../core';
 import { GameObjectUpdateArgs } from '../game';
 
 export class GameOverNotice extends GameObject {
-  public readonly renderer = new SpriteRenderer();
+  public readonly painter = new SpritePainter();
 
   constructor() {
     super(124, 60);
   }
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
-    this.renderer.sprite = spriteLoader.load('ui.gameOver');
+    this.painter.sprite = spriteLoader.load('ui.gameOver');
   }
 }

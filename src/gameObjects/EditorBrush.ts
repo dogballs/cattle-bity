@@ -1,4 +1,4 @@
-import { BoundingBox, Size, GameObject, RectRenderer, Subject } from '../core';
+import { BoundingBox, Size, GameObject, RectPainter, Subject } from '../core';
 import { GameObjectUpdateArgs } from '../game';
 import { EditorInputContext } from '../input';
 
@@ -21,7 +21,7 @@ export interface EditorBrushDrawEvent {
 export class EditorBrush extends GameObject {
   public brushSize: EditorBrushSize = EditorBrushSize.Large;
   public brushType: EditorBrushType = EditorBrushType.BrickWall;
-  public renderer = new RectRenderer(null, 'red');
+  public renderer = new RectPainter(null, 'red');
   public draw = new Subject<EditorBrushDrawEvent>();
 
   constructor() {

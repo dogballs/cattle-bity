@@ -1,4 +1,4 @@
-import { GameObject, SpriteRenderer } from '../core';
+import { GameObject, SpritePainter } from '../core';
 import { GameObjectUpdateArgs, Rotation } from '../game';
 import {
   TankColor,
@@ -29,9 +29,9 @@ export class ScoreTableTierIcon extends GameObject {
     const spriteId = TankSpriteId.create(type, Rotation.Up);
     const sprite = spriteLoader.load(spriteId);
 
-    const renderer = new SpriteRenderer();
-    renderer.sprite = sprite;
-    this.tank.renderer = renderer;
+    const painter = new SpritePainter();
+    painter.sprite = sprite;
+    this.tank.painter = painter;
     this.tank.setCenter(this.getSelfCenter());
     this.add(this.tank);
 

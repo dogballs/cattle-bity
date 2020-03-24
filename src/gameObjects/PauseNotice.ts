@@ -1,9 +1,9 @@
-import { Animation, GameObject, Sprite, SpriteRenderer } from '../core';
+import { Animation, GameObject, Sprite, SpritePainter } from '../core';
 import { GameObjectUpdateArgs } from '../game';
 
 export class PauseNotice extends GameObject {
   public ignorePause = true;
-  public readonly renderer = new SpriteRenderer();
+  public readonly painter = new SpritePainter();
   private animation: Animation<Sprite>;
 
   constructor() {
@@ -24,6 +24,6 @@ export class PauseNotice extends GameObject {
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
     this.animation.update(updateArgs.deltaTime);
-    this.renderer.sprite = this.animation.getCurrentFrame();
+    this.painter.sprite = this.animation.getCurrentFrame();
   }
 }

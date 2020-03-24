@@ -1,4 +1,4 @@
-import { GameObject, RectRenderer } from '../core';
+import { GameObject, RectPainter } from '../core';
 import { GameObjectUpdateArgs } from '../game';
 import * as config from '../config';
 
@@ -27,10 +27,10 @@ export class Curtain extends GameObject {
     const initialHeight = isOpen ? 0 : this.targetHeight;
 
     this.topPart = new GameObject(width, initialHeight);
-    this.topPart.renderer = new RectRenderer(config.COLOR_GRAY);
+    this.topPart.painter = new RectPainter(config.COLOR_GRAY);
 
     this.bottomPart = new GameObject(width, initialHeight);
-    this.bottomPart.renderer = new RectRenderer(config.COLOR_GRAY);
+    this.bottomPart.painter = new RectPainter(config.COLOR_GRAY);
     this.bottomPart.origin.set(0, 1);
     this.bottomPart.position.setY(height);
   }

@@ -1,9 +1,9 @@
-import { Animation, GameObject, Sprite, SpriteRenderer } from '../core';
+import { Animation, GameObject, Sprite, SpritePainter } from '../core';
 import { GameObjectUpdateArgs, GameState } from '../game';
 
 export class Shield extends GameObject {
   public ignorePause = true;
-  public renderer = new SpriteRenderer();
+  public painter = new SpritePainter();
   private animation: Animation<Sprite>;
 
   constructor() {
@@ -30,6 +30,6 @@ export class Shield extends GameObject {
     }
 
     this.animation.update(deltaTime);
-    this.renderer.sprite = this.animation.getCurrentFrame();
+    this.painter.sprite = this.animation.getCurrentFrame();
   }
 }

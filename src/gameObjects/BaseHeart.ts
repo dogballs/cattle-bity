@@ -1,4 +1,4 @@
-import { GameObject, Sound, Sprite, SpriteRenderer, Subject } from '../core';
+import { GameObject, Sound, Sprite, SpritePainter, Subject } from '../core';
 import { GameObjectUpdateArgs, Tag } from '../game';
 import { Bullet, Explosion } from '../gameObjects';
 
@@ -6,7 +6,7 @@ export class BaseHeart extends GameObject {
   public collider = true;
   // Tank can't move on top of it
   public tags = [Tag.BlockMove];
-  public renderer = new SpriteRenderer();
+  public painter = new SpritePainter();
   public readonly died = new Subject();
   private isDead = false;
   private aliveSprite: Sprite;
@@ -28,7 +28,7 @@ export class BaseHeart extends GameObject {
     explosion.setCenter(this.getSelfCenter());
     this.add(explosion);
 
-    this.renderer.sprite = this.deadSprite;
+    this.painter.sprite = this.deadSprite;
 
     this.explosionSound.play();
 
@@ -41,7 +41,7 @@ export class BaseHeart extends GameObject {
 
     this.explosionSound = audioLoader.load('explosion.player');
 
-    this.renderer.sprite = this.aliveSprite;
+    this.painter.sprite = this.aliveSprite;
   }
 
   protected collide(target: GameObject): void {

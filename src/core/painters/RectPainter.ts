@@ -1,8 +1,7 @@
 import { GameObject } from '../GameObject';
+import { Painter } from '../Painter';
 
-import { Renderer } from './Renderer';
-
-export class RectRenderer extends Renderer {
+export class RectPainter extends Painter {
   public fillColor: string = null;
   public strokeColor: string = null;
 
@@ -13,7 +12,7 @@ export class RectRenderer extends Renderer {
     this.strokeColor = strokeColor;
   }
 
-  public render(canvas: HTMLCanvasElement, gameObject: GameObject): void {
+  public paint(canvas: HTMLCanvasElement, gameObject: GameObject): void {
     const context = canvas.getContext('2d');
 
     // const { min, max } = gameObject.getWorldBoundingBox();

@@ -3,7 +3,7 @@ import {
   Animation,
   GameObject,
   Sprite,
-  SpriteRenderer,
+  SpritePainter,
   Subject,
   Timer,
 } from '../core';
@@ -37,7 +37,7 @@ export class Tank extends GameObject {
   public shield: Shield = null;
   public died = new Subject<{ reason: TankDeathReason }>();
   public state = TankState.Uninitialized;
-  public renderer: SpriteRenderer = new SpriteRenderer();
+  public painter: SpritePainter = new SpritePainter();
   protected shieldTimer = new Timer();
   protected animation: Animation<Sprite>;
 
@@ -46,7 +46,7 @@ export class Tank extends GameObject {
 
     this.pivot.set(0.5, 0.5);
 
-    this.renderer.alignment = Alignment.MiddleCenter;
+    this.painter.alignment = Alignment.MiddleCenter;
 
     this.shieldTimer.done.addListener(this.handleShieldTimer);
   }
@@ -62,7 +62,7 @@ export class Tank extends GameObject {
 
     this.skinAnimation.update(this, updateArgs.deltaTime);
 
-    this.renderer.sprite = this.skinAnimation.getCurrentFrame();
+    this.painter.sprite = this.skinAnimation.getCurrentFrame();
   }
 
   protected collide(target: GameObject): void {

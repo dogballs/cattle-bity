@@ -1,6 +1,5 @@
+import { Painter } from './Painter';
 import { Transform } from './Transform';
-
-import { Renderer } from './renderers';
 
 export class GameObject extends Transform {
   // TODO: These two must go
@@ -8,7 +7,9 @@ export class GameObject extends Transform {
   public ignorePause = false;
 
   public visible = true;
-  public renderer: Renderer = null;
+
+  // TODO: circular reference
+  public painter: Painter = null;
 
   public tags: string[] = [];
 

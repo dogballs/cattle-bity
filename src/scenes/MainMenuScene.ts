@@ -1,4 +1,4 @@
-import { GameObject, RectRenderer } from '../core';
+import { GameObject, RectPainter } from '../core';
 import { GameObjectUpdateArgs, Session } from '../game';
 import { MainHeading, Menu, TextMenuItem } from '../gameObjects';
 import { MenuInputContext } from '../input';
@@ -26,7 +26,7 @@ export class MainMenuScene extends Scene {
   protected setup({ session }: GameObjectUpdateArgs): void {
     this.session = session;
 
-    this.root.renderer = new RectRenderer(config.COLOR_BLACK);
+    this.root.painter = new RectPainter(config.COLOR_BLACK);
 
     this.group.size.copyFrom(this.root.size);
 

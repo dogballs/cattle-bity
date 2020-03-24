@@ -1,4 +1,4 @@
-import { RectRenderer, Timer } from '../core';
+import { RectPainter, Timer } from '../core';
 import { GameObjectUpdateArgs, Session } from '../game';
 import { LevelTitle, ScoreTable } from '../gameObjects';
 import * as config from '../config';
@@ -24,7 +24,7 @@ export class ScoreScene extends Scene {
   protected setup({ session }: GameObjectUpdateArgs): void {
     this.session = session;
 
-    this.root.renderer = new RectRenderer(config.COLOR_BLACK);
+    this.root.painter = new RectPainter(config.COLOR_BLACK);
 
     this.levelTitle = new LevelTitle(this.session.getLevelNumber(), {
       color: config.COLOR_WHITE,

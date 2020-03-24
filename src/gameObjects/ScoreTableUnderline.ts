@@ -1,7 +1,7 @@
-import { GameObject, RectRenderer } from '../core';
+import { GameObject, RectPainter } from '../core';
 
 export class ScoreTableUnderline extends GameObject {
-  public renderer = new RectRenderer('#fff');
+  public renderer = new RectPainter('#fff');
 
   constructor() {
     super(256, 8);

@@ -3,20 +3,20 @@ import {
   Animation,
   GameObject,
   Sprite,
-  SpriteRenderer,
+  SpritePainter,
   Subject,
 } from '../core';
 import { GameObjectUpdateArgs } from '../game';
 
 export class Spawn extends GameObject {
-  public renderer = new SpriteRenderer();
+  public painter = new SpritePainter();
   public completed = new Subject();
   private animation: Animation<Sprite>;
 
   constructor() {
     super(64, 64);
 
-    this.renderer.alignment = Alignment.MiddleCenter;
+    this.painter.alignment = Alignment.MiddleCenter;
   }
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
@@ -33,6 +33,6 @@ export class Spawn extends GameObject {
     }
 
     this.animation.update(deltaTime);
-    this.renderer.sprite = this.animation.getCurrentFrame();
+    this.painter.sprite = this.animation.getCurrentFrame();
   }
 }

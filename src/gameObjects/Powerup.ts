@@ -3,7 +3,7 @@ import {
   GameObject,
   Sound,
   Sprite,
-  SpriteRenderer,
+  SpritePainter,
   Subject,
 } from '../core';
 import { GameObjectUpdateArgs, Tag } from '../game';
@@ -26,7 +26,7 @@ export class Powerup extends GameObject {
   private pickupSoundId: string;
   private pickupSound: Sound;
 
-  public renderer = new SpriteRenderer();
+  public painter = new SpritePainter();
   private animation: Animation<Sprite>;
 
   constructor(
@@ -56,7 +56,7 @@ export class Powerup extends GameObject {
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
     this.animation.update(updateArgs.deltaTime);
-    this.renderer.sprite = this.animation.getCurrentFrame();
+    this.painter.sprite = this.animation.getCurrentFrame();
   }
 
   protected collide(target: GameObject): void {

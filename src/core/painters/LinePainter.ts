@@ -1,13 +1,12 @@
 import { GameObject } from '../GameObject';
+import { Painter } from '../Painter';
 import { Vector } from '../Vector';
 
-import { Renderer } from './Renderer';
-
-export class LineRenderer extends Renderer {
+export class LinePainter extends Painter {
   public positions: Vector[] = [];
   public strokeColor = '#000';
 
-  public render(canvas: HTMLCanvasElement, gameObject: GameObject): void {
+  public paint(canvas: HTMLCanvasElement, gameObject: GameObject): void {
     if (this.positions.length === 0) {
       return;
     }

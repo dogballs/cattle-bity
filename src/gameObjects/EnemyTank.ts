@@ -24,7 +24,7 @@ export abstract class EnemyTank extends Tank {
 
     if (gameState.is(GameState.Paused)) {
       this.skinAnimation.update(this, deltaTime);
-      this.renderer.sprite = this.skinAnimation.getCurrentFrame();
+      this.painter.sprite = this.skinAnimation.getCurrentFrame();
       return;
     }
 

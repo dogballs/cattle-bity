@@ -54,8 +54,8 @@ export class GameRenderer {
   }
 
   private renderGameObject(gameObject: GameObject): void {
-    if (gameObject.renderer !== null && gameObject.visible) {
-      gameObject.renderer.render(this.canvas, gameObject, this.offscreenCanvas);
+    if (gameObject.painter !== null && gameObject.visible) {
+      gameObject.painter.paint(this.canvas, gameObject, this.offscreenCanvas);
     }
 
     if (this.options.debug) {

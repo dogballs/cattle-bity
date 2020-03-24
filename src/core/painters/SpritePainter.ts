@@ -1,11 +1,10 @@
 import { Alignment } from '../Alignment';
 import { GameObject } from '../GameObject';
+import { Painter } from '../Painter';
 import { Rect } from '../Rect';
 import { Sprite } from '../Sprite';
 
-import { Renderer } from './Renderer';
-
-export class SpriteRenderer extends Renderer {
+export class SpritePainter extends Painter {
   public alignment: Alignment = Alignment.MiddleCenter;
   public sprite: Sprite = null;
 
@@ -15,7 +14,7 @@ export class SpriteRenderer extends Renderer {
     this.sprite = sprite;
   }
 
-  public render(canvas: HTMLCanvasElement, gameObject: GameObject): void {
+  public paint(canvas: HTMLCanvasElement, gameObject: GameObject): void {
     // Simply no sprite object provided
     if (this.sprite === null) {
       return;

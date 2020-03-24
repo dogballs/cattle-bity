@@ -3,19 +3,19 @@ import {
   Animation,
   GameObject,
   Sprite,
-  SpriteRenderer,
+  SpritePainter,
 } from '../../core';
 import { GameObjectUpdateArgs, Rotation } from '../../game';
 import { TankType, TankMoveAnimation } from '../../tank';
 
 export class MenuCursor extends GameObject {
-  public readonly renderer = new SpriteRenderer();
+  public readonly painter = new SpritePainter();
   private animation: Animation<Sprite>;
 
   constructor() {
     super(60, 60);
 
-    this.renderer.alignment = Alignment.MiddleCenter;
+    this.painter.alignment = Alignment.MiddleCenter;
   }
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
@@ -24,11 +24,11 @@ export class MenuCursor extends GameObject {
       TankType.PlayerPrimaryA,
       Rotation.Right,
     );
-    this.renderer.sprite = this.animation.getCurrentFrame();
+    this.painter.sprite = this.animation.getCurrentFrame();
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
     this.animation.update(updateArgs.deltaTime);
-    this.renderer.sprite = this.animation.getCurrentFrame();
+    this.painter.sprite = this.animation.getCurrentFrame();
   }
 }

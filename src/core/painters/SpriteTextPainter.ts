@@ -1,10 +1,9 @@
 import { GameObject } from '../GameObject';
+import { Painter } from '../Painter';
 import { Sprite } from '../Sprite';
 import { SpriteFont, Text } from '../text';
 
-import { Renderer } from './Renderer';
-
-export class SpriteTextRenderer extends Renderer {
+export class SpriteTextPainter extends Painter {
   public text: Text<Sprite> = null;
   public color: string = null;
 
@@ -15,7 +14,7 @@ export class SpriteTextRenderer extends Renderer {
     this.color = color;
   }
 
-  public render(
+  public paint(
     canvas: HTMLCanvasElement,
     gameObject: GameObject,
     offscreenCanvas: OffscreenCanvas,

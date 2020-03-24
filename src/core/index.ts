@@ -1,6 +1,6 @@
 export * from './input';
 export * from './loaders';
-export * from './renderers';
+export * from './painters';
 export * from './storage';
 export * from './text';
 export * from './utils';

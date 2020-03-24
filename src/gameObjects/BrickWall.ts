@@ -1,10 +1,10 @@
-import { GameObject, Sprite, SpriteRenderer } from '../core';
+import { GameObject, Sprite, SpritePainter } from '../core';
 import { GameObjectUpdateArgs, Tag } from '../game';
 import { TerrainType } from '../terrain';
 
 export class BrickWall extends GameObject {
   public readonly tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
-  public readonly renderer = new SpriteRenderer();
+  public readonly painter = new SpritePainter();
   private readonly type;
   private sprites: Sprite[];
 
@@ -21,11 +21,11 @@ export class BrickWall extends GameObject {
     }
 
     this.sprites = spriteLoader.loadList(spriteIds);
-    this.renderer.sprite = this.getSpriteByPosition();
+    this.painter.sprite = this.getSpriteByPosition();
   }
 
   protected update(): void {
-    // this.renderer.sprite = this.getSpriteByPosition();
+    // this.painter.sprite = this.getSpriteByPosition();
   }
 
   private getSpriteByPosition(): Sprite {

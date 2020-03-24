@@ -1,4 +1,4 @@
-import { GameObject, Sound, Sprite, SpriteRenderer, Subject } from '../core';
+import { GameObject, Sound, Sprite, SpritePainter, Subject } from '../core';
 import { GameObjectUpdateArgs, Rotation, RotationMap, Tag } from '../game';
 
 import { SmallExplosion } from './SmallExplosion';
@@ -11,7 +11,7 @@ export class Bullet extends GameObject {
   public speed: number;
   public tags = [Tag.Bullet];
   public died = new Subject();
-  public renderer = new SpriteRenderer();
+  public painter = new SpritePainter();
   private sprites: RotationMap<Sprite> = new RotationMap();
   private hitBrickSound: Sound;
   private hitSteelSound: Sound;
@@ -40,7 +40,7 @@ export class Bullet extends GameObject {
     this.translateY(this.speed * updateArgs.deltaTime);
 
     const rotation = this.getWorldRotation();
-    this.renderer.sprite = this.sprites.get(rotation);
+    this.painter.sprite = this.sprites.get(rotation);
   }
 
   protected collide(target: GameObject): void {

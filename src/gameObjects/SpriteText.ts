@@ -2,7 +2,7 @@ import {
   GameObject,
   Size,
   Sprite,
-  SpriteTextRenderer,
+  SpriteTextPainter,
   Text,
   TextOptions,
 } from '../core';
@@ -18,7 +18,7 @@ const DEFAULT_OPTIONS = {
 };
 
 export class SpriteText extends GameObject {
-  public renderer = new SpriteTextRenderer();
+  public painter = new SpriteTextPainter();
   private readonly text: Text<Sprite>;
 
   constructor(text = '', argOptions: SpriteTextOptions = {}) {
@@ -26,7 +26,7 @@ export class SpriteText extends GameObject {
 
     const options = Object.assign({}, DEFAULT_OPTIONS, argOptions);
 
-    this.renderer.color = options.color;
+    this.painter.color = options.color;
     this.text = new Text(text, options);
   }
 
@@ -36,7 +36,7 @@ export class SpriteText extends GameObject {
 
     this.size.copyFrom(this.text.getSize());
 
-    this.renderer.text = this.text;
+    this.painter.text = this.text;
   }
 
   public setText(text: string): void {

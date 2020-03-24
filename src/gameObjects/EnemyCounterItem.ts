@@ -1,14 +1,14 @@
-import { GameObject, SpriteRenderer } from '../core';
+import { GameObject, SpritePainter } from '../core';
 import { GameObjectUpdateArgs } from '../game';
 
 export class EnemyCounterItem extends GameObject {
-  public readonly renderer = new SpriteRenderer();
+  public readonly painter = new SpritePainter();
 
   constructor() {
     super(32, 32);
   }
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
-    this.renderer.sprite = spriteLoader.load('ui.enemy');
+    this.painter.sprite = spriteLoader.load('ui.enemy');
   }
 }
