@@ -21,8 +21,8 @@ export class SpriteRenderer extends Renderer {
       return;
     }
 
-    // Texture is not yet available
-    if (!this.sprite.isTextureLoaded()) {
+    // Image is not yet available
+    if (!this.sprite.isImageLoaded()) {
       return;
     }
 
@@ -52,7 +52,7 @@ export class SpriteRenderer extends Renderer {
     const context = canvas.getContext('2d');
 
     context.drawImage(
-      this.sprite.texture.imageElement,
+      this.sprite.image.imageElement,
       this.sprite.sourceRect.x,
       this.sprite.sourceRect.y,
       this.sprite.sourceRect.width,

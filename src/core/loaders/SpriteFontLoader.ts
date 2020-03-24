@@ -1,6 +1,6 @@
 import { SpriteFont, SpriteFontConfig, SpriteFontOptions } from '../text';
 
-import { TextureLoader } from './TextureLoader';
+import { ImageLoader } from './ImageLoader';
 
 interface RegisterItem {
   config: SpriteFontConfig;
@@ -8,12 +8,12 @@ interface RegisterItem {
 }
 
 export class SpriteFontLoader {
-  private readonly textureLoader: TextureLoader;
+  private readonly imageLoader: ImageLoader;
   private registered = new Map<string, RegisterItem>();
   private loaded = new Map<string, SpriteFont>();
 
-  constructor(textureLoader: TextureLoader) {
-    this.textureLoader = textureLoader;
+  constructor(imageLoader: ImageLoader) {
+    this.imageLoader = imageLoader;
   }
 
   public register(
@@ -38,9 +38,9 @@ export class SpriteFontLoader {
     const { config, options: defaultOptions } = item;
 
     // TODO: paths
-    const texture = this.textureLoader.load(config.file, true);
+    const image = this.imageLoader.load(config.file, true);
 
-    const font = new SpriteFont(config, texture, defaultOptions);
+    const font = new SpriteFont(config, image, defaultOptions);
 
     this.loaded.set(id, font);
 
@@ -50,10 +50,10 @@ export class SpriteFontLoader {
   public async loadAsync(id: string): Promise<SpriteFont> {
     return new Promise((resolve) => {
       const font = this.load(id);
-      if (font.texture.isLoaded()) {
+      if (font.image.isLoaded()) {
         resolve(font);
       } else {
-        font.texture.loaded.addListenerOnce(() => {
+        font.image.loaded.addListenerOnce(() => {
           resolve(font);
         });
       }

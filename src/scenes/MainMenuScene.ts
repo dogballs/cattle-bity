@@ -35,21 +35,21 @@ export class MainMenuScene extends Scene {
     this.heading.position.setY(160);
     this.group.add(this.heading);
 
-    const menuItems = MENU_ITEMS.map((text) => {
-      return new TextMenuItem(text, { color: config.COLOR_WHITE });
-    });
+    // const menuItems = MENU_ITEMS.map((text) => {
+    //   return new TextMenuItem(text, { color: config.COLOR_WHITE });
+    // });
 
-    this.menu.setItems(menuItems);
-    this.menu.setCenter(this.root.getSelfCenter());
-    this.menu.position.setY(512);
-    this.menu.selected.addListener(this.handleMenuSelected);
-    this.group.add(this.menu);
+    // this.menu.setItems(menuItems);
+    // this.menu.setCenter(this.root.getSelfCenter());
+    // this.menu.position.setY(512);
+    // this.menu.selected.addListener(this.handleMenuSelected);
+    // this.group.add(this.menu);
 
-    if (!this.session.haveSeenIntro()) {
-      this.state = State.Sliding;
-      this.group.position.setY(this.root.size.height);
-      this.menu.hideCursor();
-    }
+    // if (!this.session.haveSeenIntro()) {
+    //   this.state = State.Sliding;
+    //   this.group.position.setY(this.root.size.height);
+    //   this.menu.hideCursor();
+    // }
 
     this.root.add(this.group);
   }
@@ -67,7 +67,7 @@ export class MainMenuScene extends Scene {
       if (isReady) {
         this.group.position.y = 0;
         this.state = State.Ready;
-        this.menu.showCursor();
+        // this.menu.showCursor();
         this.session.setSeenIntro(true);
       } else {
         this.root.traverseDescedants((child) => {

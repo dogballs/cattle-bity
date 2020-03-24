@@ -2,10 +2,10 @@ import {
   Input,
   State,
   AudioLoader,
+  ImageLoader,
   RectFontLoader,
   SpriteFontLoader,
   SpriteLoader,
-  TextureLoader,
 } from '../core';
 import { InputManager } from '../input';
 import { MapLoader } from '../map';
@@ -16,6 +16,7 @@ import { Session } from './Session';
 export interface GameObjectUpdateArgs {
   audioLoader: AudioLoader;
   deltaTime: number;
+  imageLoader: ImageLoader;
   input: Input;
   inputManager: InputManager;
   gameState: State<GameState>;
@@ -24,5 +25,4 @@ export interface GameObjectUpdateArgs {
   session: Session;
   spriteFontLoader: SpriteFontLoader;
   spriteLoader: SpriteLoader;
-  textureLoader: TextureLoader;
 }

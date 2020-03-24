@@ -1,10 +1,10 @@
 import { Subject } from './Subject';
 /**
- * Texture represents entire image file, which might also be a sprite.
- * In case with sprites - one texture may be reused a number of times.
+ * Image represents entire image file, which might also be a spritesheet.
+ * In case with spritesheets - one image may be reused a number of times.
  * Should be used to create Sprites.
  */
-export class Texture {
+export class Image {
   public readonly loaded = new Subject();
   public readonly imageElement: HTMLImageElement;
 

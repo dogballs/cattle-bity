@@ -8,10 +8,10 @@ import {
   State,
   Vector,
   AudioLoader,
+  ImageLoader,
   RectFontLoader,
   SpriteFontLoader,
   SpriteLoader,
-  TextureLoader,
 } from './core';
 import { DebugInspector } from './debug';
 import { GameObjectUpdateArgs, GameState, Session } from './game';
@@ -52,14 +52,14 @@ const inputManager = new InputManager();
 inputManager.listen();
 
 const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
-const textureLoader = new TextureLoader(config.GRAPHICS_BASE_PATH);
+const imageLoader = new ImageLoader(config.GRAPHICS_BASE_PATH);
 
-const spriteFontLoader = new SpriteFontLoader(textureLoader);
+const spriteFontLoader = new SpriteFontLoader(imageLoader);
 spriteFontLoader.register(config.PRIMARY_SPRITE_FONT_ID, spriteFontConfig, {
   scale: 4,
 });
 
-const spriteLoader = new SpriteLoader(textureLoader, spriteManifest, {
+const spriteLoader = new SpriteLoader(imageLoader, spriteManifest, {
   scale: 4,
 });
 
@@ -103,6 +103,7 @@ const gameState = new State<GameState>(GameState.Playing);
 const updateArgs: GameObjectUpdateArgs = {
   audioLoader,
   deltaTime: 0,
+  imageLoader,
   input: inputManager.getInput(),
   inputManager,
   gameState,
@@ -111,7 +112,6 @@ const updateArgs: GameObjectUpdateArgs = {
   session,
   spriteFontLoader,
   spriteLoader,
-  textureLoader,
 };
 
 const stats = new Stats();

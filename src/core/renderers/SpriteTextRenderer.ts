@@ -25,7 +25,7 @@ export class SpriteTextRenderer extends Renderer {
     }
 
     const font = this.text.getFont() as SpriteFont;
-    if (font.texture.imageElement === null) {
+    if (font.image.imageElement === null) {
       return;
     }
 
@@ -38,7 +38,7 @@ export class SpriteTextRenderer extends Renderer {
     if (this.color === null) {
       sprites.forEach((sprite) => {
         context.drawImage(
-          sprite.texture.imageElement,
+          sprite.image.imageElement,
           sprite.sourceRect.x,
           sprite.sourceRect.y,
           sprite.sourceRect.width,
@@ -68,7 +68,7 @@ export class SpriteTextRenderer extends Renderer {
 
     sprites.forEach((sprite) => {
       offscreenContext.drawImage(
-        sprite.texture.imageElement,
+        sprite.image.imageElement,
         sprite.sourceRect.x,
         sprite.sourceRect.y,
         sprite.sourceRect.width,

@@ -1,7 +1,7 @@
 import { Rect } from '../Rect';
 import { Sprite } from '../Sprite';
 
-import { TextureLoader } from './TextureLoader';
+import { ImageLoader } from './ImageLoader';
 
 interface SpriteManifestItem {
   file: string;
@@ -21,16 +21,16 @@ const DEFAULT_OPTIONS = {
 };
 
 export class SpriteLoader {
-  private readonly textureLoader: TextureLoader;
+  private readonly imageLoader: ImageLoader;
   private readonly manifest: SpriteManifest;
   private readonly options: SpriteLoaderOptions;
 
   constructor(
-    textureLoader: TextureLoader,
+    imageLoader: ImageLoader,
     manifest: SpriteManifest,
     options: SpriteLoaderOptions = {},
   ) {
-    this.textureLoader = textureLoader;
+    this.imageLoader = imageLoader;
     this.manifest = manifest;
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
   }
@@ -42,7 +42,7 @@ export class SpriteLoader {
     }
 
     const { file: fileName, rect: sourceRectValues } = item;
-    const texture = this.textureLoader.load(fileName);
+    const image = this.imageLoader.load(fileName);
     const sourceRect = new Rect(...sourceRectValues);
 
     const defaultTargetRect = new Rect(
@@ -54,7 +54,7 @@ export class SpriteLoader {
 
     const targetRect = argTargetRect ?? defaultTargetRect;
 
-    const sprite = new Sprite(texture, sourceRect, targetRect);
+    const sprite = new Sprite(image, sourceRect, targetRect);
 
     return sprite;
   }
@@ -62,10 +62,10 @@ export class SpriteLoader {
   public async loadAsync(id: string, targetRect = new Rect()): Promise<Sprite> {
     return new Promise((resolve) => {
       const sprite = this.load(id, targetRect);
-      if (sprite.texture.isLoaded()) {
+      if (sprite.image.isLoaded()) {
         resolve(sprite);
       } else {
-        sprite.texture.loaded.addListenerOnce(() => {
+        sprite.image.loaded.addListenerOnce(() => {
           resolve(sprite);
         });
       }

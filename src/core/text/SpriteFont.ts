@@ -1,6 +1,6 @@
+import { Image } from '../Image';
 import { Rect } from '../Rect';
 import { Sprite } from '../Sprite';
-import { Texture } from '../Texture';
 import { Vector } from '../Vector';
 
 import { Font } from './Font';
@@ -26,16 +26,16 @@ const DEFAULT_OPTIONS = {
 
 export class SpriteFont implements Font<Sprite> {
   public readonly config: SpriteFontConfig;
-  public readonly texture: Texture;
+  public readonly image: Image;
   public readonly options: SpriteFontOptions;
 
   constructor(
     config: SpriteFontConfig,
-    texture: Texture,
+    image: Image,
     options: SpriteFontOptions = {},
   ) {
     this.config = config;
-    this.texture = texture;
+    this.image = image;
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
   }
 
@@ -75,7 +75,7 @@ export class SpriteFont implements Font<Sprite> {
 
     const targetRect = new Rect(targetX, targetY, targetWidth, targetHeight);
 
-    const sprite = new Sprite(this.texture, sourceRect, targetRect);
+    const sprite = new Sprite(this.image, sourceRect, targetRect);
 
     return sprite;
   }
