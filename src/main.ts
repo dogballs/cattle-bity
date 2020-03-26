@@ -55,9 +55,7 @@ const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
 const imageLoader = new ImageLoader(config.GRAPHICS_BASE_PATH);
 
 const spriteFontLoader = new SpriteFontLoader(imageLoader);
-spriteFontLoader.register(config.PRIMARY_SPRITE_FONT_ID, spriteFontConfig, {
-  scale: 4,
-});
+spriteFontLoader.register(config.PRIMARY_SPRITE_FONT_ID, spriteFontConfig);
 
 const spriteLoader = new SpriteLoader(imageLoader, spriteManifest, {
   scale: 4,

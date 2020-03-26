@@ -6,12 +6,13 @@ export class LinePainter extends Painter {
   public positions: Vector[] = [];
   public strokeColor = '#000';
 
-  public paint(canvas: HTMLCanvasElement, gameObject: GameObject): void {
+  public paint(
+    context: CanvasRenderingContext2D,
+    gameObject: GameObject,
+  ): void {
     if (this.positions.length === 0) {
       return;
     }
-
-    const context = canvas.getContext('2d');
 
     const { min } = gameObject.getWorldBoundingBox();
 

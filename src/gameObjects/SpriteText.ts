@@ -11,10 +11,12 @@ import * as config from '../config';
 
 export interface SpriteTextOptions extends TextOptions {
   color?: string;
+  letterSpacing?: number;
 }
 
 const DEFAULT_OPTIONS = {
   color: null,
+  letterSpacing: 4,
 };
 
 export class SpriteText extends GameObject {

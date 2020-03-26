@@ -15,9 +15,9 @@ export class SpriteTextPainter extends Painter {
   }
 
   public paint(
-    canvas: HTMLCanvasElement,
+    context: CanvasRenderingContext2D,
     gameObject: GameObject,
-    offscreenCanvas: OffscreenCanvas,
+    offscreenContext: OffscreenCanvasRenderingContext2D,
   ): void {
     if (this.text === null) {
       return;
@@ -31,8 +31,6 @@ export class SpriteTextPainter extends Painter {
     const { min: worldPosition } = gameObject.getWorldBoundingBox();
 
     const sprites = this.text.build();
-
-    const context = canvas.getContext('2d');
 
     if (this.color === null) {
       sprites.forEach((sprite) => {
@@ -51,16 +49,14 @@ export class SpriteTextPainter extends Painter {
       return;
     }
 
-    const offscreenContext = offscreenCanvas.getContext('2d');
-
     const textSize = this.text.getSize();
 
     offscreenContext.globalCompositeOperation = 'source-over';
     offscreenContext.clearRect(
       0,
       0,
-      offscreenCanvas.width,
-      offscreenCanvas.height,
+      offscreenContext.canvas.width,
+      offscreenContext.canvas.height,
     );
 
     offscreenContext.imageSmoothingEnabled = false;
@@ -87,7 +83,7 @@ export class SpriteTextPainter extends Painter {
     offscreenContext.fillRect(0, 0, textSize.width, textSize.height);
 
     context.drawImage(
-      offscreenCanvas,
+      offscreenContext.canvas,
       0,
       0,
       textSize.width,

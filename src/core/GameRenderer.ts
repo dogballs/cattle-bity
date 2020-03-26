@@ -17,6 +17,7 @@ export class GameRenderer {
   private readonly options: GameRendererOptions;
   private readonly context: CanvasRenderingContext2D;
   private readonly offscreenCanvas: OffscreenCanvas;
+  private readonly offscreenContext: OffscreenCanvasRenderingContext2D;
 
   constructor(options: GameRendererOptions = {}) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -25,9 +26,10 @@ export class GameRenderer {
     this.canvas.width = options.width;
     this.canvas.height = options.height;
 
-    this.offscreenCanvas = new OffscreenCanvas(options.width, options.height);
-
     this.context = this.canvas.getContext('2d');
+
+    this.offscreenCanvas = new OffscreenCanvas(options.width, options.height);
+    this.offscreenContext = this.offscreenCanvas.getContext('2d');
   }
 
   public getDomElement(): HTMLCanvasElement {
@@ -45,8 +47,7 @@ export class GameRenderer {
     // Should be reset every time after clearing.
     this.context.imageSmoothingEnabled = false;
 
-    const offscreenContext = this.offscreenCanvas.getContext('2d');
-    offscreenContext.imageSmoothingEnabled = false;
+    this.offscreenContext.imageSmoothingEnabled = false;
 
     root.updateWorldMatrix(false, true);
 
@@ -55,7 +56,7 @@ export class GameRenderer {
 
   private renderGameObject(gameObject: GameObject): void {
     if (gameObject.painter !== null && gameObject.visible) {
-      gameObject.painter.paint(this.canvas, gameObject, this.offscreenCanvas);
+      gameObject.painter.paint(this.context, gameObject, this.offscreenContext);
     }
 
     if (this.options.debug) {

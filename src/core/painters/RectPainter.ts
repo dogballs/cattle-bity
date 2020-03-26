@@ -12,9 +12,10 @@ export class RectPainter extends Painter {
     this.strokeColor = strokeColor;
   }
 
-  public paint(canvas: HTMLCanvasElement, gameObject: GameObject): void {
-    const context = canvas.getContext('2d');
-
+  public paint(
+    context: CanvasRenderingContext2D,
+    gameObject: GameObject,
+  ): void {
     // const { min, max } = gameObject.getWorldBoundingBox();
 
     const points = gameObject.getWorldPoints();

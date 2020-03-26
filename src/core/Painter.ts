@@ -2,8 +2,8 @@ import { GameObject } from './GameObject';
 
 export abstract class Painter {
   public abstract paint(
-    canvas: HTMLCanvasElement,
+    context: CanvasRenderingContext2D,
     gameObject: GameObject, // TODO: circular reference
-    offscreenCanvas?: OffscreenCanvas,
+    offscreenContext?: OffscreenCanvasRenderingContext2D,
   ): void;
 }

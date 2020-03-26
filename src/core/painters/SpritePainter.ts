@@ -14,7 +14,10 @@ export class SpritePainter extends Painter {
     this.sprite = sprite;
   }
 
-  public paint(canvas: HTMLCanvasElement, gameObject: GameObject): void {
+  public paint(
+    context: CanvasRenderingContext2D,
+    gameObject: GameObject,
+  ): void {
     // Simply no sprite object provided
     if (this.sprite === null) {
       return;
@@ -47,8 +50,6 @@ export class SpritePainter extends Painter {
         this.sprite.targetRect.height,
       );
     }
-
-    const context = canvas.getContext('2d');
 
     context.drawImage(
       this.sprite.image.imageElement,

@@ -1,7 +1,3 @@
-/**
- * Represents one node in a scene graph.
- * https://en.wikipedia.org/wiki/Scene_graph
- */
 export class Node {
   public children: this[];
   public parent: this;
