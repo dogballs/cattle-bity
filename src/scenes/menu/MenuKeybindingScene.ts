@@ -1,5 +1,5 @@
-import { InputBinding, InputDevice } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { InputBinding, InputDevice, Scene } from '../../core';
+import { GameObjectUpdateArgs } from '../../game';
 import {
   DividerMenuItem,
   InputButtonCaptureModal,
@@ -8,18 +8,15 @@ import {
   SelectorMenuItemChoice,
   SpriteText,
   TextMenuItem,
-} from '../gameObjects';
+} from '../../gameObjects';
 import {
   InputButtonCodePresenter,
   InputControl,
   InputControlPresenter,
   InputManager,
   InputDeviceType,
-} from '../input';
-import * as config from '../config';
-
-import { Scene } from './Scene';
-import { SceneType } from './SceneType';
+} from '../../input';
+import * as config from '../../config';
 
 const DEVICE_SELECTOR_CHOICES: SelectorMenuItemChoice<InputDeviceType>[] = [
   { value: InputDeviceType.Keyboard, text: 'KEYBOARD' },
@@ -40,7 +37,7 @@ enum State {
   WaitingInput,
 }
 
-export class KeybindingMenuScene extends Scene {
+export class MenuKeybindingScene extends Scene {
   private state = State.Navigation;
   private selectedDeviceType: InputDeviceType;
   private inputManager: InputManager;
@@ -218,6 +215,6 @@ export class KeybindingMenuScene extends Scene {
   };
 
   private handleBackSelected = (): void => {
-    this.transition(SceneType.SettingsMenu);
+    this.navigator.back();
   };
 }

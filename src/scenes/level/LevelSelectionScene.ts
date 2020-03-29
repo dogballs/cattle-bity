@@ -1,8 +1,8 @@
-import { GameObjectUpdateArgs, Session } from '../game';
-import { Curtain, LevelSelector } from '../gameObjects';
+import { Scene } from '../../core';
+import { GameObjectUpdateArgs, Session } from '../../game';
+import { Curtain, LevelSelector } from '../../gameObjects';
 
-import { Scene } from './Scene';
-import { SceneType } from './SceneType';
+import { GameSceneType } from '../GameSceneType';
 
 export class LevelSelectionScene extends Scene {
   private curtain: Curtain;
@@ -34,6 +34,6 @@ export class LevelSelectionScene extends Scene {
 
   private handleLevelSelected = (levelNumber: number): void => {
     this.session.start(levelNumber);
-    this.transition(SceneType.Level);
+    this.navigator.replace(GameSceneType.LevelPlay);
   };
 }

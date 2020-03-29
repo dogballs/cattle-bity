@@ -67,12 +67,16 @@ export class Logger {
    * Check if it is a string and append custom tag to it.
    */
   private composeArgs(message?: any, ...optionalParams: any[]): any[] {
-    let taggedMessage = this.tag;
+    const args = [];
+
     if (typeof message === 'string') {
-      taggedMessage = `${this.tag} ${message}`;
+      const taggedMessage = `${this.tag} ${message}`;
+      args.push(taggedMessage);
+    } else {
+      args.push(this.tag, message);
     }
 
-    const args = [taggedMessage, ...optionalParams];
+    args.push(...optionalParams);
 
     return args;
   }

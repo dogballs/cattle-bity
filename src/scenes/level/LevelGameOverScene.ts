@@ -1,13 +1,12 @@
-import { Timer } from '../core';
-import { GameObjectUpdateArgs } from '../game';
-import { GameOverHeading } from '../gameObjects';
+import { Scene, Timer } from '../../core';
+import { GameObjectUpdateArgs } from '../../game';
+import { GameOverHeading } from '../../gameObjects';
 
-import { Scene } from './Scene';
-import { SceneType } from './SceneType';
+import { GameSceneType } from '../GameSceneType';
 
 const SCENE_DURATION = 3;
 
-export class GameOverScene extends Scene {
+export class LevelGameOverScene extends Scene {
   private heading = new GameOverHeading();
   private timer = new Timer(SCENE_DURATION);
 
@@ -31,6 +30,6 @@ export class GameOverScene extends Scene {
   }
 
   private handleDone = (): void => {
-    this.transition(SceneType.MainMenu);
+    this.navigator.replace(GameSceneType.MenuMain);
   };
 }

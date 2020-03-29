@@ -17,19 +17,7 @@ import { DebugInspector } from './debug';
 import { GameObjectUpdateArgs, GameState, Session } from './game';
 import { InputManager } from './input';
 import { MapLoader } from './map';
-import {
-  EditorScene,
-  GameOverScene,
-  KeybindingMenuScene,
-  LevelScene,
-  LevelSelectionScene,
-  MainMenuScene,
-  ScoreScene,
-  SceneManager,
-  SceneType,
-  SettingsMenuScene,
-  TestScene,
-} from './scenes';
+import { GameSceneRouter, GameSceneType } from './scenes';
 
 import * as config from './config';
 
@@ -70,25 +58,16 @@ const mapLoader = new MapLoader(mapManifest);
 
 const session = new Session();
 
-const sceneManager = new SceneManager(SceneType.MainMenu);
-sceneManager.register(SceneType.Editor, EditorScene);
-sceneManager.register(SceneType.GameOver, GameOverScene);
-sceneManager.register(SceneType.KeybindingMenu, KeybindingMenuScene);
-sceneManager.register(SceneType.Level, LevelScene);
-sceneManager.register(SceneType.LevelSelection, LevelSelectionScene);
-sceneManager.register(SceneType.MainMenu, MainMenuScene);
-sceneManager.register(SceneType.SettingsMenu, SettingsMenuScene);
-sceneManager.register(SceneType.Score, ScoreScene);
-sceneManager.register(SceneType.Test, TestScene);
-sceneManager.start();
+const sceneRouter = new GameSceneRouter();
+sceneRouter.start(GameSceneType.MenuMain);
 
 const debugInspector = new DebugInspector(gameRenderer.getDomElement());
 debugInspector.listen();
 debugInspector.click.addListener((position: Vector) => {
   const intersections: GameObject[] = [];
 
-  const scene = sceneManager.getScene();
-  scene.root.traverseDescedants((child) => {
+  const scene = sceneRouter.getCurrentScene();
+  scene.getRoot().traverseDescedants((child) => {
     if (child.getWorldBoundingBox().containsPoint(position)) {
       intersections.push(child);
     }
@@ -126,10 +105,10 @@ gameLoop.tick.addListener((event) => {
 
   updateArgs.deltaTime = event.deltaTime;
 
-  const scene = sceneManager.getScene();
+  const scene = sceneRouter.getCurrentScene();
   scene.invokeUpdate(updateArgs);
 
-  gameRenderer.render(scene.root);
+  gameRenderer.render(scene.getRoot());
 
   gameState.tick();
 

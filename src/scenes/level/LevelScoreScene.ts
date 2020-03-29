@@ -1,10 +1,9 @@
-import { RectPainter, Timer } from '../core';
-import { GameObjectUpdateArgs, Session } from '../game';
-import { LevelTitle, ScoreTable } from '../gameObjects';
-import * as config from '../config';
+import { RectPainter, Scene, Timer } from '../../core';
+import { GameObjectUpdateArgs, Session } from '../../game';
+import { LevelTitle, ScoreTable } from '../../gameObjects';
+import * as config from '../../config';
 
-import { Scene } from './Scene';
-import { SceneType } from './SceneType';
+import { GameSceneType } from '../GameSceneType';
 
 const POST_DELAY = 3;
 
@@ -14,7 +13,7 @@ enum State {
   Post,
 }
 
-export class ScoreScene extends Scene {
+export class LevelScoreScene extends Scene {
   private session: Session;
   private levelTitle: LevelTitle;
   private scoreTable: ScoreTable;
@@ -63,11 +62,11 @@ export class ScoreScene extends Scene {
 
   private handlePost = (): void => {
     if (this.session.isGameOver()) {
-      this.transition(SceneType.GameOver);
+      this.navigator.replace(GameSceneType.LevelGameOver);
     } else {
       // TODO: what if completed final level
       this.session.activateNextLevel();
-      this.transition(SceneType.Level);
+      this.navigator.replace(GameSceneType.LevelPlay);
     }
   };
 }

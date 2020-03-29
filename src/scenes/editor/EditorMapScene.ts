@@ -1,19 +1,17 @@
-import { GameObject } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameObject, Scene } from '../../core';
+import { GameObjectUpdateArgs } from '../../game';
 import {
   Base,
   Border,
   EditorBrush,
   EditorBrushType,
   Field,
-} from '../gameObjects';
-import { MapConfig } from '../map';
-import { TerrainFactory, TerrainType } from '../terrain';
-import * as config from '../config';
+} from '../../gameObjects';
+import { MapConfig } from '../../map';
+import { TerrainFactory, TerrainType } from '../../terrain';
+import * as config from '../../config';
 
-import { Scene } from './Scene';
-
-export class EditorScene extends Scene {
+export class EditorMapScene extends Scene {
   private base: Base;
   private field: Field;
   private map: GameObject;

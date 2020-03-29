@@ -1,11 +1,10 @@
-import { GameObject, RectPainter } from '../core';
-import { GameObjectUpdateArgs, Session } from '../game';
-import { MainHeading, Menu, TextMenuItem } from '../gameObjects';
-import { MenuInputContext } from '../input';
-import * as config from '../config';
+import { GameObject, Scene } from '../../core';
+import { GameObjectUpdateArgs, Session } from '../../game';
+import { MainHeading, Menu, TextMenuItem } from '../../gameObjects';
+import { MenuInputContext } from '../../input';
+import * as config from '../../config';
 
-import { Scene } from './Scene';
-import { SceneType } from './SceneType';
+import { GameSceneType } from '../GameSceneType';
 
 const SLIDE_SPEED = 240;
 
@@ -16,7 +15,7 @@ enum State {
   Ready,
 }
 
-export class MainMenuScene extends Scene {
+export class MenuMainScene extends Scene {
   private heading = new MainHeading();
   private group = new GameObject();
   private menu = new Menu();
@@ -25,8 +24,6 @@ export class MainMenuScene extends Scene {
 
   protected setup({ session }: GameObjectUpdateArgs): void {
     this.session = session;
-
-    this.root.painter = new RectPainter(config.COLOR_BLACK);
 
     this.group.size.copyFrom(this.root.size);
 
@@ -85,13 +82,13 @@ export class MainMenuScene extends Scene {
   private handleMenuSelected = (selectedIndex): void => {
     switch (selectedIndex) {
       case 0:
-        this.transition(SceneType.LevelSelection);
+        this.navigator.replace(GameSceneType.LevelSelection);
         break;
       case 1:
-        this.transition(SceneType.Editor);
+        this.navigator.push(GameSceneType.EditorMap);
         break;
       case 2:
-        this.transition(SceneType.SettingsMenu);
+        this.navigator.push(GameSceneType.MenuSettings);
         break;
     }
   };

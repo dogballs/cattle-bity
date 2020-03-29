@@ -1,13 +1,13 @@
-import { GameObjectUpdateArgs } from '../game';
-import { Menu, SpriteText, TextMenuItem } from '../gameObjects';
-import * as config from '../config';
+import { Scene } from '../../core';
+import { GameObjectUpdateArgs } from '../../game';
+import { Menu, SpriteText, TextMenuItem } from '../../gameObjects';
+import * as config from '../../config';
 
-import { Scene } from './Scene';
-import { SceneType } from './SceneType';
+import { GameSceneType } from '../GameSceneType';
 
 const MENU_ITEMS = ['KEY BINDINGS', 'BACK'];
 
-export class SettingsMenuScene extends Scene {
+export class MenuSettingsScene extends Scene {
   private title = new SpriteText('SETTINGS', { color: config.COLOR_YELLOW });
   private menu = new Menu();
 
@@ -34,10 +34,10 @@ export class SettingsMenuScene extends Scene {
   private handleMenuSelected = (selectedIndex): void => {
     switch (selectedIndex) {
       case 0:
-        this.transition(SceneType.KeybindingMenu);
+        this.navigator.push(GameSceneType.MenuKeybinding);
         break;
       case 1:
-        this.transition(SceneType.MainMenu);
+        this.navigator.back();
         break;
     }
   };

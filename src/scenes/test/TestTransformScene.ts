@@ -1,10 +1,8 @@
-import { GameObject, RectPainter } from '../core';
-import { GameObjectUpdateArgs } from '../game';
-import { InputControl } from '../input';
+import { GameObject, RectPainter, Scene } from '../../core';
+import { GameObjectUpdateArgs } from '../../game';
+import { InputControl } from '../../input';
 
-import { Scene } from './Scene';
-
-export class TestScene extends Scene {
+export class TestTransformScene extends Scene {
   private parent: GameObject;
   private child: GameObject;
   private angle = 0;

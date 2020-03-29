@@ -3,10 +3,11 @@ import {
   CollisionDetector,
   RandomUtils,
   Rect,
+  Scene,
   Timer,
-} from '../core';
-import { LevelInputContext } from '../input';
-import { GameObjectUpdateArgs, GameState, Rotation, Session } from '../game';
+} from '../../core';
+import { LevelInputContext } from '../../input';
+import { GameObjectUpdateArgs, GameState, Rotation, Session } from '../../game';
 import {
   Base,
   Border,
@@ -20,10 +21,10 @@ import {
   PlayerTank,
   Points,
   Spawn,
-} from '../gameObjects';
-import { MapConfig } from '../map';
-import { TerrainFactory } from '../terrain';
-import { PointsRecord, PointsValue } from '../points';
+} from '../../gameObjects';
+import { MapConfig } from '../../map';
+import { TerrainFactory } from '../../terrain';
+import { PointsRecord, PointsValue } from '../../points';
 import {
   EnemySpawner,
   EnemySpawnerSpawnedEvent,
@@ -31,13 +32,12 @@ import {
   PlayerSpawnerSpawnedEvent,
   PowerupSpawner,
   PowerupSpawnerSpawnedEvent,
-} from '../spawn';
-import { TankDeathReason, TankTier } from '../tank';
+} from '../../spawn';
+import { TankDeathReason, TankTier } from '../../tank';
 
-import * as config from '../config';
+import * as config from '../../config';
 
-import { Scene } from './Scene';
-import { SceneType } from './SceneType';
+import { GameSceneType } from '../GameSceneType';
 
 enum State {
   Idle,
@@ -47,7 +47,7 @@ enum State {
   Ending,
 }
 
-export class LevelScene extends Scene {
+export class LevelPlayScene extends Scene {
   private state = State.Idle;
   private audioLoader: AudioLoader;
   private curtain: Curtain;
@@ -363,6 +363,6 @@ export class LevelScene extends Scene {
   };
 
   private handleEndTimer = (): void => {
-    this.transition(SceneType.Score);
+    this.navigator.replace(GameSceneType.LevelScore);
   };
 }
