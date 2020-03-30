@@ -142,13 +142,29 @@ export class LevelPlayScene extends Scene {
 
     const nodes = this.root.flatten();
 
-    // Nodes that initiate collision
-    const activeNodes = nodes.filter((node) => node.collider);
+    const activeNodes = [];
+    const bothNodes = [];
+
+    nodes.forEach((node) => {
+      if (node.collider === null) {
+        return;
+      }
+
+      if (node.collider.active) {
+        activeNodes.push(node);
+        bothNodes.push(node);
+      } else {
+        bothNodes.push(node);
+      }
+    });
 
     // Detect and handle collisions of all objects on the scene
-    const collisions = CollisionDetector.intersectObjects(activeNodes, nodes);
+    const collisions = CollisionDetector.intersectObjects(
+      activeNodes,
+      bothNodes,
+    );
     collisions.forEach((collision) => {
-      collision.source.invokeCollide(collision.target);
+      collision.self.invokeCollide(collision);
     });
   }
 

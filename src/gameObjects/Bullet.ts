@@ -1,11 +1,19 @@
-import { GameObject, Sound, Sprite, SpritePainter, Subject } from '../core';
+import {
+  Collider,
+  Collision,
+  GameObject,
+  Sound,
+  Sprite,
+  SpritePainter,
+  Subject,
+} from '../core';
 import { GameObjectUpdateArgs, Rotation, RotationMap, Tag } from '../game';
 
 import { SmallExplosion } from './SmallExplosion';
 import { WallDestroyer } from './WallDestroyer';
 
 export class Bullet extends GameObject {
-  public collider = true;
+  public collider = new Collider(true);
   public tankDamage: number;
   public wallDamage: number;
   public speed: number;
@@ -43,9 +51,9 @@ export class Bullet extends GameObject {
     this.painter.sprite = this.sprites.get(rotation);
   }
 
-  protected collide(target: GameObject): void {
-    if (target.tags.includes(Tag.Bullet)) {
-      const bullet = target as Bullet;
+  protected collide({ other }: Collision): void {
+    if (other.tags.includes(Tag.Bullet)) {
+      const bullet = other as Bullet;
 
       // Enemy bullets don't discard each other, they pass thru
       if (bullet.tags.includes(Tag.Enemy) && this.tags.includes(Tag.Enemy)) {
@@ -59,17 +67,17 @@ export class Bullet extends GameObject {
       return;
     }
 
-    const isWall = target.tags.includes(Tag.Wall);
-    const isBrickWall = isWall && target.tags.includes(Tag.Brick);
-    const isBorderWall = isWall && target.tags.includes(Tag.Border);
-    const isSteelWall = isWall && target.tags.includes(Tag.Steel);
+    const isWall = other.tags.includes(Tag.Wall);
+    const isBrickWall = isWall && other.tags.includes(Tag.Brick);
+    const isBorderWall = isWall && other.tags.includes(Tag.Border);
+    const isSteelWall = isWall && other.tags.includes(Tag.Steel);
 
     if (isWall) {
       this.explode();
     }
 
     if (isBrickWall || (isSteelWall && this.wallDamage === 2)) {
-      const wallWorldBox = target.getWorldBoundingBox();
+      const wallWorldBox = other.getWorldBoundingBox();
 
       const destroyer = new WallDestroyer(this.wallDamage);
 

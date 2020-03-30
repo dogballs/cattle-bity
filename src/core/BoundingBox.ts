@@ -2,16 +2,13 @@ import { Rect } from './Rect';
 import { Size } from './Size';
 import { Vector } from './Vector';
 
+/**
+ * Axis-aligned boudning box (AABB)
+ */
 export class BoundingBox {
   public min: Vector;
   public max: Vector;
 
-  /**
-   * Creates a rectangular box which captures entire object bounds (AABB)
-   * @param  {Vector} min Top-left point of the box
-   * @param  {Vector} max Bottom-right point of the box
-   * @return {BoundingBox}
-   */
   constructor(min = new Vector(), max = new Vector()) {
     this.min = min;
     this.max = max;
@@ -41,17 +38,26 @@ export class BoundingBox {
     );
   }
 
-  /**
-   * Tells if current bounding box intersects another one
-   * @param  {BoundingBox} box
-   * @return {Boolean}
-   */
-  public intersectsBox(box: BoundingBox): boolean {
+  public computeIntersectionBox(other: BoundingBox): BoundingBox {
+    const minX = Math.max(this.min.x, other.min.x);
+    const maxX = Math.min(this.max.x, other.max.x);
+    const minY = Math.max(this.min.y, other.min.y);
+    const maxY = Math.min(this.max.y, other.max.y);
+
+    const min = new Vector(minX, minY);
+    const max = new Vector(maxX, maxY);
+
+    const intersectionBox = new BoundingBox(min, max);
+
+    return intersectionBox;
+  }
+
+  public intersectsBox(other: BoundingBox): boolean {
     const isOutside =
-      this.max.x <= box.min.x ||
-      this.min.x >= box.max.x ||
-      this.max.y <= box.min.y ||
-      this.min.y >= box.max.y;
+      this.max.x <= other.min.x ||
+      this.min.x >= other.max.x ||
+      this.max.y <= other.min.y ||
+      this.min.y >= other.max.y;
 
     return !isOutside;
   }

@@ -6,6 +6,5 @@ export const EditorInputContext: InputContext = {
   MoveDown: [InputControl.Down],
   MoveLeft: [InputControl.Left],
   MoveRight: [InputControl.Right],
-  ToggleBrushSize: [InputControl.SecondaryAction],
   Draw: [InputControl.PrimaryAction],
 };

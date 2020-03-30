@@ -1,5 +1,5 @@
 import { GameObject, Rect } from '../core';
-import { BrickWall, SteelWall } from '../gameObjects';
+import { BrickWall, MenuBrickWall, SteelWall } from '../gameObjects';
 import * as config from '../config';
 
 import { TerrainType } from './TerrainType';
@@ -33,17 +33,33 @@ export class TerrainFactory {
       return walls;
     }
 
-    const walls = [];
+    if (type === TerrainType.Brick) {
+      const walls = [];
 
-    for (let i = x; i < x + width; i += config.BRICK_TILE_SIZE) {
-      for (let j = y; j < y + height; j += config.BRICK_TILE_SIZE) {
-        const wall = new BrickWall(type);
-        wall.position.set(i, j);
-        walls.push(wall);
+      for (let i = x; i < x + width; i += config.BRICK_TILE_SIZE) {
+        for (let j = y; j < y + height; j += config.BRICK_TILE_SIZE) {
+          const wall = new BrickWall();
+          wall.position.set(i, j);
+          walls.push(wall);
+        }
       }
+      return walls;
     }
 
-    return walls;
+    if (type === TerrainType.MenuBrick) {
+      const walls = [];
+
+      for (let i = x; i < x + width; i += config.BRICK_TILE_SIZE) {
+        for (let j = y; j < y + height; j += config.BRICK_TILE_SIZE) {
+          const wall = new MenuBrickWall();
+          wall.position.set(i, j);
+          walls.push(wall);
+        }
+      }
+      return walls;
+    }
+
+    return [];
   }
 
   public static createFromRegions(

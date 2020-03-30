@@ -55,3 +55,10 @@ export const PRIMARY_RECT_FONT_ID = 'primary';
 
 export const STORAGE_NAMESPACE = 'battle-city';
 export const STORAGE_KEY_BINDINGS = 'bindings';
+
+export const PLAYER_DEFAULT_SPAWN_POSITIONS = [{ x: 256, y: 768 }];
+export const ENEMY_DEFAULT_SPAWN_POSITIONS = [
+  { x: 384, y: 0 },
+  { x: 768, y: 0 },
+  { x: 0, y: 0 },
+];

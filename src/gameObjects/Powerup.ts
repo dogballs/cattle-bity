@@ -1,5 +1,7 @@
 import {
   Animation,
+  Collider,
+  Collision,
   GameObject,
   Sound,
   Sprite,
@@ -10,7 +12,7 @@ import { GameObjectUpdateArgs, Tag } from '../game';
 import { PowerupAction, PowerupType } from '../powerups';
 
 export class Powerup extends GameObject {
-  public collider = true;
+  public collider = new Collider(false);
 
   // Powerup should be blinking during pause
   public ignorePause = true;
@@ -59,8 +61,8 @@ export class Powerup extends GameObject {
     this.painter.sprite = this.animation.getCurrentFrame();
   }
 
-  protected collide(target: GameObject): void {
-    if (target.tags.includes(Tag.Player)) {
+  protected collide({ other }: Collision): void {
+    if (other.tags.includes(Tag.Player)) {
       this.removeSelf();
       this.picked.notify();
       // TODO: seems like not the best place

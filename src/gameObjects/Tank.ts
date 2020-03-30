@@ -1,6 +1,8 @@
 import {
   Alignment,
   Animation,
+  Collider,
+  Collision,
   GameObject,
   Sprite,
   SpritePainter,
@@ -31,7 +33,7 @@ export class Tank extends GameObject {
   public attributes: TankAttributes;
   public behavior: TankBehavior;
   public skinAnimation: TankSkinAnimation;
-  public collider = true;
+  public collider = new Collider(true);
   public tags = [Tag.Tank];
   public bullets: Bullet[] = [];
   public shield: Shield = null;
@@ -65,23 +67,23 @@ export class Tank extends GameObject {
     this.painter.sprite = this.skinAnimation.getCurrentFrame();
   }
 
-  protected collide(target: GameObject): void {
-    if (target.tags.includes(Tag.BlockMove)) {
-      const tankWorldBox = this.getWorldBoundingBox();
-      const targetWorldBox = target.getWorldBoundingBox();
+  protected collide({ other }: Collision): void {
+    if (other.tags.includes(Tag.BlockMove)) {
+      const selfWorldBox = this.getWorldBoundingBox();
+      const otherWorldBox = other.getWorldBoundingBox();
 
       // TODO: rework after collisions, because now we are tied to axis
       const rotation = this.getWorldRotation();
 
       // Fix overlap during collision
       if (rotation === Rotation.Up) {
-        this.translateY(tankWorldBox.min.y - targetWorldBox.max.y);
+        this.translateY(selfWorldBox.min.y - otherWorldBox.max.y);
       } else if (rotation === Rotation.Down) {
-        this.translateY(targetWorldBox.min.y - tankWorldBox.max.y);
+        this.translateY(otherWorldBox.min.y - selfWorldBox.max.y);
       } else if (rotation === Rotation.Left) {
-        this.translateY(tankWorldBox.min.x - targetWorldBox.max.x);
+        this.translateY(selfWorldBox.min.x - otherWorldBox.max.x);
       } else if (rotation === Rotation.Right) {
-        this.translateY(targetWorldBox.min.x - tankWorldBox.max.x);
+        this.translateY(otherWorldBox.min.x - selfWorldBox.max.x);
       }
 
       // If it collides with multiple brick at a time, each of them will
@@ -89,8 +91,8 @@ export class Tank extends GameObject {
       this.updateWorldMatrix();
     }
 
-    if (target.tags.includes(Tag.Bullet)) {
-      const bullet = target as Bullet;
+    if (other.tags.includes(Tag.Bullet)) {
+      const bullet = other as Bullet;
 
       // Prevent self-destruction
       if (this.bullets.includes(bullet)) {

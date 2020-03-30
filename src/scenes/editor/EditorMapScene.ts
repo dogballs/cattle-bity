@@ -1,21 +1,32 @@
-import { GameObject, Scene } from '../../core';
+import { CollisionDetector, GameObject, Scene } from '../../core';
 import { GameObjectUpdateArgs } from '../../game';
-import {
-  Base,
-  Border,
-  EditorBrush,
-  EditorBrushType,
-  Field,
-} from '../../gameObjects';
+import { Border } from '../../gameObjects';
 import { MapConfig } from '../../map';
-import { TerrainFactory, TerrainType } from '../../terrain';
+import {
+  TerrainFactory,
+  TerrainRegionConfig,
+  TerrainType,
+} from '../../terrain';
 import * as config from '../../config';
 
+import { EditorBrush, EditorField, EditorTool } from './objects';
+
+interface BrushVariant {
+  type: TerrainType;
+  height: number;
+  width: number;
+}
+
+const BRUSH_VARIANTS: BrushVariant[] = [
+  { type: TerrainType.Brick, width: 16, height: 16 },
+  { type: TerrainType.Brick, width: 32, height: 32 },
+  { type: TerrainType.Brick, width: 64, height: 64 },
+];
+
 export class EditorMapScene extends Scene {
-  private base: Base;
-  private field: Field;
+  private field: EditorField;
   private map: GameObject;
-  private brush: EditorBrush;
+  private tool: EditorTool;
   private mapConfig: MapConfig = {
     terrain: {
       regions: [],
@@ -32,52 +43,83 @@ export class EditorMapScene extends Scene {
     );
     this.root.add(this.map);
 
-    this.field = new Field();
+    this.field = new EditorField();
     this.field.position.set(
       config.BORDER_LEFT_WIDTH,
       config.BORDER_TOP_BOTTOM_HEIGHT,
     );
     this.root.add(this.field);
 
-    this.base = new Base();
-    this.base.position.set(352, 736);
-    this.field.add(this.base);
+    const brushes = BRUSH_VARIANTS.map((variant) => {
+      const brush = new EditorBrush(
+        variant.width,
+        variant.height,
+        variant.type,
+      );
+      return brush;
+    });
 
-    this.brush = new EditorBrush();
-    this.brush.draw.addListener(this.handleBrushDraw);
-    this.field.add(this.brush);
+    // brushes.push(brickSmallBrush);
+
+    this.tool = new EditorTool();
+    this.tool.position.set(64, 64);
+    this.tool.setBrush(brushes[0]);
+    this.tool.draw.addListener(this.handleBrushDraw);
+    this.field.add(this.tool);
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });
+
+    // Update all transforms before checking collisions
+    this.root.updateWorldMatrix(false, true);
+
+    const nodes = this.root.flatten();
+
+    const activeNodes = [];
+    const bothNodes = [];
+
+    nodes.forEach((node) => {
+      if (node.collider === null) {
+        return;
+      }
+
+      if (node.collider.active) {
+        activeNodes.push(node);
+        bothNodes.push(node);
+      } else {
+        bothNodes.push(node);
+      }
+    });
+
+    // Detect and handle collisions of all objects on the scene
+    const collisions = CollisionDetector.intersectObjects(
+      activeNodes,
+      bothNodes,
+    );
+    collisions.forEach((collision) => {
+      collision.self.invokeCollide(collision);
+    });
   }
 
-  private handleBrushDraw = (event): void => {
-    const rect = event.box.toRect();
+  private handleBrushDraw = (): void => {
+    const brush = this.tool.getBrush();
 
-    // TODO: check if coordinates are already taken?
+    const region: TerrainRegionConfig = {
+      type: brush.type,
+      x: this.tool.position.x,
+      y: this.tool.position.y,
+      width: this.tool.size.width,
+      height: this.tool.size.height,
+    };
 
-    if (event.brushType === EditorBrushType.BrickWall) {
-      this.mapConfig.terrain.regions.push({
-        type: TerrainType.Brick,
-        x: rect.x,
-        y: rect.y,
-        width: rect.width,
-        height: rect.height,
-      });
+    this.mapConfig.terrain.regions.push(region);
 
-      this.renderMap();
-    }
-  };
-
-  private renderMap(): void {
     const tiles = TerrainFactory.createFromRegionConfigs(
       this.mapConfig.terrain.regions,
     );
-
-    this.map.removeAllChildren();
     this.map.add(...tiles);
-  }
+  };
 }

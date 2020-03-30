@@ -1,6 +1,6 @@
-import { GameObject, Input, Subject, Timer } from '../core';
+import { GameObject, Subject } from '../core';
 import { GameObjectUpdateArgs } from '../game';
-import { InputControl, LevelSelectionInputContext } from '../input';
+import { InputHoldThrottle, LevelSelectionInputContext } from '../input';
 
 import { LevelTitle } from './LevelTitle';
 
@@ -13,12 +13,31 @@ export class LevelSelector extends GameObject {
   private minLevel = 1;
   private maxLevel: number;
   private title = new LevelTitle();
-  private holdThrottle = new Timer();
+  private holdThrottles: InputHoldThrottle[] = [];
 
   constructor(maxLevel = 1) {
     super();
 
     this.maxLevel = maxLevel;
+
+    this.holdThrottles = [
+      new InputHoldThrottle(LevelSelectionInputContext.Next, this.selectNext, {
+        delay: SLOW_HOLD_DELAY,
+      }),
+      new InputHoldThrottle(LevelSelectionInputContext.Prev, this.selectPrev, {
+        delay: SLOW_HOLD_DELAY,
+      }),
+      new InputHoldThrottle(
+        LevelSelectionInputContext.FastNext,
+        this.selectNext,
+        { delay: FAST_HOLD_DELAY },
+      ),
+      new InputHoldThrottle(
+        LevelSelectionInputContext.FastPrev,
+        this.selectPrev,
+        { delay: FAST_HOLD_DELAY },
+      ),
+    ];
   }
 
   protected setup(): void {
@@ -33,53 +52,8 @@ export class LevelSelector extends GameObject {
       return;
     }
 
-    this.throttleInput(
-      input,
-      deltaTime,
-      LevelSelectionInputContext.Next,
-      this.selectNext,
-      SLOW_HOLD_DELAY,
-    );
-    this.throttleInput(
-      input,
-      deltaTime,
-      LevelSelectionInputContext.Prev,
-      this.selectPrev,
-      SLOW_HOLD_DELAY,
-    );
-    this.throttleInput(
-      input,
-      deltaTime,
-      LevelSelectionInputContext.FastNext,
-      this.selectNext,
-      FAST_HOLD_DELAY,
-    );
-    this.throttleInput(
-      input,
-      deltaTime,
-      LevelSelectionInputContext.FastPrev,
-      this.selectPrev,
-      FAST_HOLD_DELAY,
-    );
-  }
-
-  private throttleInput(
-    input: Input,
-    deltaTime: number,
-    controls: InputControl[],
-    selectCallback: () => void,
-    delay: number,
-  ): void {
-    if (input.isDownAny(controls) || input.isUpAny(controls)) {
-      this.holdThrottle.stop();
-    }
-
-    if (input.isHoldFirstAny(controls)) {
-      if (this.holdThrottle.isDone()) {
-        selectCallback();
-        this.holdThrottle.reset(delay);
-      }
-      this.holdThrottle.update(deltaTime);
+    for (const holdThrottle of this.holdThrottles) {
+      holdThrottle.update(input, deltaTime);
     }
   }
 

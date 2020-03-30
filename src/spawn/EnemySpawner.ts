@@ -8,11 +8,8 @@ import {
 import { TankFactory } from '../tank';
 import * as config from '../config';
 
-const DEFAULT_LOCATIONS: MapConfigSpawnLocation[] = [
-  { x: 384, y: 0 },
-  { x: 768, y: 0 },
-  { x: 0, y: 0 },
-];
+const DEFAULT_LOCATIONS: MapConfigSpawnLocation[] =
+  config.ENEMY_DEFAULT_SPAWN_POSITIONS;
 
 export interface EnemySpawnerSpawnedEvent {
   tank: EnemyTank;

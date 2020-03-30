@@ -1,5 +1,5 @@
 export enum TerrainType {
   Brick = 'brick',
-  MenuBrick = 'menuBrick',
+  MenuBrick = 'menu-brick',
   Steel = 'steel',
 }

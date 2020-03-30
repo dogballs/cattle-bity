@@ -1,9 +1,17 @@
-import { GameObject, Sound, Sprite, SpritePainter, Subject } from '../core';
+import {
+  Collider,
+  Collision,
+  GameObject,
+  Sound,
+  Sprite,
+  SpritePainter,
+  Subject,
+} from '../core';
 import { GameObjectUpdateArgs, Tag } from '../game';
 import { Bullet, Explosion } from '../gameObjects';
 
 export class BaseHeart extends GameObject {
-  public collider = true;
+  public collider = new Collider(true);
   // Tank can't move on top of it
   public tags = [Tag.BlockMove];
   public painter = new SpritePainter();
@@ -44,14 +52,14 @@ export class BaseHeart extends GameObject {
     this.painter.sprite = this.aliveSprite;
   }
 
-  protected collide(target: GameObject): void {
+  protected collide({ other }: Collision): void {
     // If dead, don't collide with bullets, but they can still pass through
     if (this.isDead) {
       return;
     }
 
-    if (target.tags.includes(Tag.Bullet)) {
-      const bullet = target as Bullet;
+    if (other.tags.includes(Tag.Bullet)) {
+      const bullet = other as Bullet;
       bullet.explode();
       this.explode();
     }

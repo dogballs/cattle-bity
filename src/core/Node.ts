@@ -78,6 +78,20 @@ export class Node {
     return this;
   }
 
+  public hasParent(parentToFind: this): boolean {
+    let parent = this.parent;
+
+    while (parent !== null) {
+      if (parent === parentToFind) {
+        return true;
+      }
+
+      parent = parent.parent;
+    }
+
+    return false;
+  }
+
   public traverseParents(callback: (node: this) => void): this {
     const parent = this.parent;
 

@@ -1,9 +1,11 @@
+import { Collider, Collision } from './collision';
+
 import { Painter } from './Painter';
 import { Transform } from './Transform';
 
 export class GameObject extends Transform {
   // TODO: These two must go
-  public collider = false;
+  public collider: Collider = null;
   public ignorePause = false;
 
   public visible = true;
@@ -44,13 +46,13 @@ export class GameObject extends Transform {
     this.update(...args);
   }
 
-  public invokeCollide(target: GameObject): void {
+  public invokeCollide(collision: Collision): void {
     // Can't collide if not setup yet
     if (this.needsSetup === true) {
       return;
     }
 
-    this.collide(target);
+    this.collide(collision);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
@@ -64,7 +66,7 @@ export class GameObject extends Transform {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected collide(target: GameObject): void {
+  protected collide(collision: Collision): void {
     return undefined;
   }
 }

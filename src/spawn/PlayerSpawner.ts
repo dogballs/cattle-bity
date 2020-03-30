@@ -4,7 +4,8 @@ import { MapConfigSpawnLocation, MapConfigSpawnPlayer } from '../map';
 import { TankFactory } from '../tank';
 import * as config from '../config';
 
-const DEFAULT_LOCATIONS: MapConfigSpawnLocation[] = [{ x: 256, y: 768 }];
+const DEFAULT_LOCATIONS: MapConfigSpawnLocation[] =
+  config.PLAYER_DEFAULT_SPAWN_POSITIONS;
 
 export interface PlayerSpawnerSpawnedEvent {
   tank: PlayerTank;

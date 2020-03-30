@@ -1,11 +1,11 @@
-import { GameObject } from '../core';
+import { Collider, Collision, GameObject } from '../core';
 import { Tag } from '../game';
 import * as config from '../config';
 
 const MAX_DAMAGE = 2;
 
 export class WallDestroyer extends GameObject {
-  public readonly collider;
+  public readonly collider: Collider;
   public readonly damage: number;
 
   constructor(argDamage: number) {
@@ -17,17 +17,17 @@ export class WallDestroyer extends GameObject {
     super(width, depth);
 
     this.damage = damage;
-    this.collider = true;
+    this.collider = new Collider(true);
   }
 
-  public collide(target: GameObject): void {
+  public collide({ other }: Collision): void {
     const isBrickWall =
-      target.tags.includes(Tag.Wall) && target.tags.includes(Tag.Brick);
+      other.tags.includes(Tag.Wall) && other.tags.includes(Tag.Brick);
     const isSteelWall =
-      target.tags.includes(Tag.Wall) && target.tags.includes(Tag.Steel);
+      other.tags.includes(Tag.Wall) && other.tags.includes(Tag.Steel);
 
     if (isBrickWall || (isSteelWall && this.damage === 2)) {
-      target.removeSelf();
+      other.removeSelf();
       this.removeSelf();
     }
   }

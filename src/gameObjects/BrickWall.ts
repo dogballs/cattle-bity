@@ -1,34 +1,26 @@
-import { GameObject, Sprite, SpritePainter } from '../core';
+import { Collider, GameObject, Sprite, SpritePainter } from '../core';
 import { GameObjectUpdateArgs, Tag } from '../game';
-import { TerrainType } from '../terrain';
 
 export class BrickWall extends GameObject {
+  public collider = new Collider(false);
   public readonly tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
   public readonly painter = new SpritePainter();
-  private readonly type;
-  private sprites: Sprite[];
+  protected sprites: Sprite[];
 
-  constructor(type: TerrainType = TerrainType.Brick) {
+  constructor() {
     super(16, 16);
-
-    this.type = type;
   }
 
   protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
-    let spriteIds = ['wall.brick.1', 'wall.brick.2'];
-    if (this.type === TerrainType.MenuBrick) {
-      spriteIds = ['menu.brick.1', 'menu.brick.2'];
-    }
-
-    this.sprites = spriteLoader.loadList(spriteIds);
+    this.sprites = spriteLoader.loadList(this.getSpriteIds());
     this.painter.sprite = this.getSpriteByPosition();
   }
 
-  protected update(): void {
-    // this.painter.sprite = this.getSpriteByPosition();
+  protected getSpriteIds(): string[] {
+    return ['wall.brick.1', 'wall.brick.2'];
   }
 
-  private getSpriteByPosition(): Sprite {
+  protected getSpriteByPosition(): Sprite {
     const horizontalIndex = Math.floor(this.position.x / 16) % 2;
     const verticalIndex = Math.floor(this.position.y / 16) % 2;
     const index = (horizontalIndex + verticalIndex) % 2;
