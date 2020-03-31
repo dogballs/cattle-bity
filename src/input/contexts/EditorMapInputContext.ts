@@ -10,4 +10,5 @@ export const EditorMapInputContext: InputContext = {
   Erase: [InputControl.SecondaryAction],
   NextBrush: [InputControl.FastForward],
   PrevBrush: [InputControl.Rewind],
+  Menu: [InputControl.Select],
 };

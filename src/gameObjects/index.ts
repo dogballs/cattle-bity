@@ -1,3 +1,4 @@
+export * from './editor';
 export * from './menu';
 export * from './terrain';
 

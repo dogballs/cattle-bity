@@ -1,6 +1,6 @@
-import { Collider, GameObject, SpritePainter } from '../../../core';
-import { GameObjectUpdateArgs, Rotation, Tag } from '../../../game';
-import { TankType, TankSpriteId } from '../../../tank';
+import { Collider, GameObject, SpritePainter } from '../../core';
+import { GameObjectUpdateArgs, Rotation, Tag } from '../../game';
+import { TankType, TankSpriteId } from '../../tank';
 
 export class EditorTankDummy extends GameObject {
   public collider = new Collider(false);

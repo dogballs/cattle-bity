@@ -6,14 +6,14 @@ import {
   Subject,
   Timer,
   Vector,
-} from '../../../core';
-import { GameObjectUpdateArgs, Tag } from '../../../game';
+} from '../../core';
+import { GameObjectUpdateArgs, Tag } from '../../game';
 import {
   EditorMapInputContext,
   InputHoldThrottle,
   InputHoldThrottleOptions,
-} from '../../../input';
-import * as config from '../../../config';
+} from '../../input';
+import * as config from '../../config';
 
 import { EditorBrush } from './EditorBrush';
 

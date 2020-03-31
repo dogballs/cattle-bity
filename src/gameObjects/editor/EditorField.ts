@@ -1,8 +1,8 @@
-import { Collider, GameObject } from '../../../core';
-import { Rotation, Tag } from '../../../game';
-import { Base } from '../../../gameObjects';
-import { TankType } from '../../../tank';
-import * as config from '../../../config';
+import { Collider, GameObject } from '../../core';
+import { Rotation, Tag } from '../../game';
+import { Base } from '../../gameObjects';
+import { TankType } from '../../tank';
+import * as config from '../../config';
 
 import { EditorTankDummy } from './EditorTankDummy';
 

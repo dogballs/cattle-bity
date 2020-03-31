@@ -1,9 +1,10 @@
 import { CollisionDetector, Scene } from '../../core';
 import { GameObjectUpdateArgs } from '../../game';
-import { Border } from '../../gameObjects';
+import { Border, EditorField, EditorMap } from '../../gameObjects';
+import { EditorMapInputContext } from '../../input';
 import * as config from '../../config';
 
-import { EditorField, EditorMap } from './objects';
+import { GameSceneType } from '../GameSceneType';
 
 export class EditorMapScene extends Scene {
   private field: EditorField;
@@ -28,6 +29,13 @@ export class EditorMapScene extends Scene {
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
+    const { input } = updateArgs;
+
+    if (input.isDownAny(EditorMapInputContext.Menu)) {
+      this.navigator.push(GameSceneType.EditorMenu);
+      return;
+    }
+
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });

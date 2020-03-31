@@ -1,11 +1,11 @@
-import { BoundingBox, GameObject } from '../../../core';
-import { MapConfig } from '../../../map';
+import { BoundingBox, GameObject } from '../../core';
+import { MapConfig } from '../../map';
 import {
   TerrainFactory,
   TerrainRegionConfig,
   TerrainType,
-} from '../../../terrain';
-import * as config from '../../../config';
+} from '../../terrain';
+import * as config from '../../config';
 
 import { EditorBrush } from './EditorBrush';
 import { EditorTool } from './EditorTool';
