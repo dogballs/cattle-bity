@@ -8,5 +8,5 @@ export enum GameSceneType {
   MenuMain,
   MenuKeybinding,
   MenuSettings,
-  TestTransform,
+  SandboxTransform,
 }

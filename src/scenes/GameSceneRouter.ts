@@ -9,7 +9,7 @@ import {
   LevelScoreScene,
 } from './level';
 import { MenuMainScene, MenuSettingsScene, MenuKeybindingScene } from './menu';
-import { TestTransformScene } from './test';
+import { SandboxTransformScene } from './sandbox';
 
 import { GameSceneType } from './GameSceneType';
 
@@ -27,7 +27,7 @@ export class GameSceneRouter extends SceneRouter {
     this.register(GameSceneType.MenuMain, MenuMainScene);
     this.register(GameSceneType.MenuSettings, MenuSettingsScene);
     this.register(GameSceneType.MenuKeybinding, MenuKeybindingScene);
-    this.register(GameSceneType.TestTransform, TestTransformScene);
+    this.register(GameSceneType.SandboxTransform, SandboxTransformScene);
   }
 
   protected createRoot(): GameObject {

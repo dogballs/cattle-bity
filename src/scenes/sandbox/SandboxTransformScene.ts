@@ -2,7 +2,7 @@ import { GameObject, RectPainter, Scene } from '../../core';
 import { GameObjectUpdateArgs } from '../../game';
 import { InputControl } from '../../input';
 
-export class TestTransformScene extends Scene {
+export class SandboxTransformScene extends Scene {
   private parent: GameObject;
   private child: GameObject;
   private angle = 0;
