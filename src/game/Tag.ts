@@ -1,5 +1,6 @@
 export enum Tag {
   BlockMove = 'BlockMove',
+  EditorBlockMove = 'EditorBlockMove',
 
   Tank = 'Tank',
   Enemy = 'Enemy',

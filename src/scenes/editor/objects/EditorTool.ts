@@ -9,7 +9,7 @@ import {
 } from '../../../core';
 import { GameObjectUpdateArgs, Tag } from '../../../game';
 import {
-  EditorInputContext,
+  EditorMapInputContext,
   InputHoldThrottle,
   InputHoldThrottleOptions,
 } from '../../../input';
@@ -28,7 +28,9 @@ export class EditorTool extends GameObject {
   public collider = new Collider(true);
   public painter = new RectPainter(null, config.COLOR_RED);
   public draw = new Subject();
-  private brush: EditorBrush = null;
+  public erase = new Subject();
+  private brushes: EditorBrush[] = [];
+  private selectedBrush: EditorBrush = null;
   private velocity = new Vector(0, 0);
   private holdThrottles: InputHoldThrottle[] = [];
   private blinkTimer = new Timer();
@@ -39,42 +41,35 @@ export class EditorTool extends GameObject {
 
     this.holdThrottles = [
       new InputHoldThrottle(
-        EditorInputContext.MoveUp,
+        EditorMapInputContext.MoveUp,
         this.moveUp,
         HOLD_THROTTLE_OPTIONS,
       ),
       new InputHoldThrottle(
-        EditorInputContext.MoveDown,
+        EditorMapInputContext.MoveDown,
         this.moveDown,
         HOLD_THROTTLE_OPTIONS,
       ),
       new InputHoldThrottle(
-        EditorInputContext.MoveLeft,
+        EditorMapInputContext.MoveLeft,
         this.moveLeft,
         HOLD_THROTTLE_OPTIONS,
       ),
       new InputHoldThrottle(
-        EditorInputContext.MoveRight,
+        EditorMapInputContext.MoveRight,
         this.moveRight,
         HOLD_THROTTLE_OPTIONS,
       ),
     ];
   }
 
-  public setBrush(brush: EditorBrush): void {
-    this.brush = brush;
-
-    this.size.copyFrom(brush.size);
-
-    this.position.x -= this.position.x % this.size.width;
-    this.position.y -= this.position.y % this.size.height;
-
-    this.removeAllChildren();
-    this.add(this.brush);
+  public setBrushes(brushes: EditorBrush[]): void {
+    this.brushes = brushes;
+    this.selectBrush(0);
   }
 
-  public getBrush(): EditorBrush {
-    return this.brush;
+  public getSelectedBrush(): EditorBrush {
+    return this.selectedBrush;
   }
 
   protected update(updateArgs: GameObjectUpdateArgs): void {
@@ -83,15 +78,24 @@ export class EditorTool extends GameObject {
 
     const { input } = updateArgs;
 
-    if (input.isDownAny(EditorInputContext.Draw)) {
+    if (input.isDownAny(EditorMapInputContext.Draw)) {
       this.draw.notify();
+    }
+    if (input.isDownAny(EditorMapInputContext.Erase)) {
+      this.erase.notify();
+    }
+    if (input.isDownAny(EditorMapInputContext.NextBrush)) {
+      this.selectNextBrush();
+    }
+    if (input.isDownAny(EditorMapInputContext.PrevBrush)) {
+      this.selectPrevBrush();
     }
   }
 
   protected collide(collision: Collision): void {
     const { other } = collision;
 
-    if (other.tags.includes(Tag.BlockMove)) {
+    if (other.tags.includes(Tag.EditorBlockMove)) {
       this.position.sub(this.velocity);
     }
   }
@@ -99,13 +103,13 @@ export class EditorTool extends GameObject {
   private updatePosition({ deltaTime, input }: GameObjectUpdateArgs): void {
     this.velocity.set(0, 0);
 
-    if (input.isDownAny(EditorInputContext.MoveUp)) {
+    if (input.isDownAny(EditorMapInputContext.MoveUp)) {
       this.moveUp();
-    } else if (input.isDownAny(EditorInputContext.MoveDown)) {
+    } else if (input.isDownAny(EditorMapInputContext.MoveDown)) {
       this.moveDown();
-    } else if (input.isDownAny(EditorInputContext.MoveLeft)) {
+    } else if (input.isDownAny(EditorMapInputContext.MoveLeft)) {
       this.moveLeft();
-    } else if (input.isDownAny(EditorInputContext.MoveRight)) {
+    } else if (input.isDownAny(EditorMapInputContext.MoveRight)) {
       this.moveRight();
     }
 
@@ -140,6 +144,54 @@ export class EditorTool extends GameObject {
       this.blinkTimer.update(deltaTime);
     }
 
-    this.brush.visible = this.isBlinkVisible;
+    if (this.selectBrush !== null) {
+      this.selectedBrush.visible = this.isBlinkVisible;
+    }
+  }
+
+  private selectNextBrush(): void {
+    const selectedBrushIndex = this.brushes.indexOf(this.selectedBrush);
+
+    let nextBrushIndex = selectedBrushIndex + 1;
+    if (nextBrushIndex > this.brushes.length - 1) {
+      nextBrushIndex = 0;
+    }
+
+    this.selectBrush(nextBrushIndex);
+  }
+
+  private selectPrevBrush(): void {
+    const selectedBrushIndex = this.brushes.indexOf(this.selectedBrush);
+
+    let prevBrushIndex = selectedBrushIndex - 1;
+    if (prevBrushIndex < 0) {
+      prevBrushIndex = this.brushes.length - 1;
+    }
+
+    this.selectBrush(prevBrushIndex);
+  }
+
+  private selectBrush(index: number): void {
+    // Clear previous brush
+    if (this.selectedBrush !== null) {
+      // Restore visibility
+      this.selectedBrush.visible = true;
+      this.remove(this.selectedBrush);
+    }
+
+    if (this.brushes[index] === undefined) {
+      this.selectBrush = null;
+      return;
+    }
+
+    this.selectedBrush = this.brushes[index];
+    this.selectedBrush.visible = this.isBlinkVisible;
+
+    this.size.copyFrom(this.selectedBrush.size);
+
+    this.position.x -= this.position.x % this.size.width;
+    this.position.y -= this.position.y % this.size.height;
+
+    this.add(this.selectedBrush);
   }
 }

@@ -5,7 +5,7 @@ import { TankType, TankSpriteId } from '../../../tank';
 export class EditorTankDummy extends GameObject {
   public collider = new Collider(false);
   public painter = new SpritePainter();
-  public tags = [Tag.BlockMove];
+  public tags = [Tag.EditorBlockMove];
   private type: TankType;
 
   constructor(type: TankType, rotation = Rotation.Up) {

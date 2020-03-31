@@ -6,6 +6,6 @@ export enum InputControl {
   Select,
   PrimaryAction,
   SecondaryAction,
-  FastForward,
   Rewind,
+  FastForward,
 }

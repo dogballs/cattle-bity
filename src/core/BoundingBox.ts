@@ -53,13 +53,12 @@ export class BoundingBox {
   }
 
   public intersectsBox(other: BoundingBox): boolean {
-    const isOutside =
-      this.max.x <= other.min.x ||
-      this.min.x >= other.max.x ||
-      this.max.y <= other.min.y ||
-      this.min.y >= other.max.y;
-
-    return !isOutside;
+    return (
+      this.min.x < other.max.x &&
+      this.max.x > other.min.x &&
+      this.min.y < other.max.y &&
+      this.max.y > other.min.y
+    );
   }
 
   public containsPoint(p: Vector): boolean {

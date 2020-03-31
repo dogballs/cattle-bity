@@ -12,5 +12,8 @@ export class KeyboardInputBinding extends InputBinding {
     this.setDefault(InputControl.Right, KeyboardButtonCode.Right);
     this.setDefault(InputControl.Select, KeyboardButtonCode.Enter);
     this.setDefault(InputControl.PrimaryAction, KeyboardButtonCode.Z);
+    this.setDefault(InputControl.SecondaryAction, KeyboardButtonCode.X);
+    this.setDefault(InputControl.Rewind, KeyboardButtonCode.A);
+    this.setDefault(InputControl.FastForward, KeyboardButtonCode.S);
   }
 }
