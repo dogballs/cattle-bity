@@ -1,7 +1,7 @@
 export * from './menu';
+export * from './terrain';
 
 export * from './Base';
-export * from './BrickWall';
 export * from './Border';
 export * from './BorderWall';
 export * from './Bullet';
@@ -19,7 +19,6 @@ export * from './InputButtonCaptureModal';
 export * from './LevelSelector';
 export * from './LivesCounter';
 export * from './MainHeading';
-export * from './MenuBrickWall';
 export * from './PauseNotice';
 export * from './PlayerTank';
 export * from './Points';
@@ -29,7 +28,6 @@ export * from './Shield';
 export * from './SmallExplosion';
 export * from './Spawn';
 export * from './SpriteText';
-export * from './SteelWall';
 export * from './Tank';
 export * from './TerrainText';
 export * from './WallDestroyer';

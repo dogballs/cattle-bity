@@ -30,10 +30,22 @@ export class EditorMap extends GameObject {
     this.container.size.copyFrom(this.size);
     this.add(this.container);
 
+    // Create brushes. Make sure terrain tile supports defined brush sizes
+
+    const { TILE_SIZE_SMALL, TILE_SIZE_MEDIUM, TILE_SIZE_LARGE } = config;
+
     this.brushes = [
-      new EditorBrush(16, 16, TerrainType.Brick),
-      new EditorBrush(32, 32, TerrainType.Brick),
-      new EditorBrush(64, 64, TerrainType.Brick),
+      new EditorBrush(TILE_SIZE_SMALL, TILE_SIZE_SMALL, TerrainType.Brick),
+      new EditorBrush(TILE_SIZE_MEDIUM, TILE_SIZE_MEDIUM, TerrainType.Brick),
+      new EditorBrush(TILE_SIZE_LARGE, TILE_SIZE_LARGE, TerrainType.Brick),
+      new EditorBrush(TILE_SIZE_MEDIUM, TILE_SIZE_MEDIUM, TerrainType.Steel),
+      new EditorBrush(TILE_SIZE_LARGE, TILE_SIZE_LARGE, TerrainType.Steel),
+      new EditorBrush(TILE_SIZE_MEDIUM, TILE_SIZE_MEDIUM, TerrainType.Jungle),
+      new EditorBrush(TILE_SIZE_LARGE, TILE_SIZE_LARGE, TerrainType.Jungle),
+      new EditorBrush(TILE_SIZE_MEDIUM, TILE_SIZE_MEDIUM, TerrainType.Water),
+      new EditorBrush(TILE_SIZE_LARGE, TILE_SIZE_LARGE, TerrainType.Water),
+      new EditorBrush(TILE_SIZE_MEDIUM, TILE_SIZE_MEDIUM, TerrainType.Ice),
+      new EditorBrush(TILE_SIZE_LARGE, TILE_SIZE_LARGE, TerrainType.Ice),
     ];
 
     this.tool = new EditorTool();

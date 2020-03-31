@@ -1,5 +1,12 @@
-import { GameObject, Rect } from '../core';
-import { BrickWall, MenuBrickWall, SteelWall } from '../gameObjects';
+import { GameObject, Rect, Size } from '../core';
+import {
+  BrickTerrainTile,
+  IceTerrainTile,
+  JungleTerrainTile,
+  MenuBrickTerrainTile,
+  SteelTerrainTile,
+  WaterTerrainTile,
+} from '../gameObjects';
 import * as config from '../config';
 
 import { TerrainType } from './TerrainType';
@@ -19,47 +26,19 @@ export class TerrainFactory {
   ): GameObject[] {
     const { x, y, width, height } = regionRect;
 
-    if (type === TerrainType.Steel) {
-      const walls = [];
+    const tiles = [];
 
-      for (let i = x; i < x + width; i += config.STEEL_TILE_SIZE) {
-        for (let j = y; j < y + height; j += config.STEEL_TILE_SIZE) {
-          const wall = new SteelWall();
-          wall.position.set(i, j);
-          walls.push(wall);
-        }
+    const tileSize = this.getTileSize(type);
+
+    for (let i = x; i < x + width; i += tileSize.width) {
+      for (let j = y; j < y + height; j += tileSize.height) {
+        const tile = this.createTile(type);
+        tile.position.set(i, j);
+        tiles.push(tile);
       }
-
-      return walls;
     }
 
-    if (type === TerrainType.Brick) {
-      const walls = [];
-
-      for (let i = x; i < x + width; i += config.BRICK_TILE_SIZE) {
-        for (let j = y; j < y + height; j += config.BRICK_TILE_SIZE) {
-          const wall = new BrickWall();
-          wall.position.set(i, j);
-          walls.push(wall);
-        }
-      }
-      return walls;
-    }
-
-    if (type === TerrainType.MenuBrick) {
-      const walls = [];
-
-      for (let i = x; i < x + width; i += config.BRICK_TILE_SIZE) {
-        for (let j = y; j < y + height; j += config.BRICK_TILE_SIZE) {
-          const wall = new MenuBrickWall();
-          wall.position.set(i, j);
-          walls.push(wall);
-        }
-      }
-      return walls;
-    }
-
-    return [];
+    return tiles;
   }
 
   public static createFromRegions(
@@ -93,5 +72,43 @@ export class TerrainFactory {
     });
 
     return tiles;
+  }
+
+  private static createTile(type: TerrainType): GameObject {
+    switch (type) {
+      case TerrainType.Brick:
+        return new BrickTerrainTile();
+      case TerrainType.Steel:
+        return new SteelTerrainTile();
+      case TerrainType.Jungle:
+        return new JungleTerrainTile();
+      case TerrainType.Water:
+        return new WaterTerrainTile();
+      case TerrainType.Ice:
+        return new IceTerrainTile();
+      case TerrainType.MenuBrick:
+        return new MenuBrickTerrainTile();
+      default:
+        throw new Error(`Tile object for "${type}" not defined`);
+    }
+  }
+
+  private static getTileSize(type: TerrainType): Size {
+    switch (type) {
+      case TerrainType.Brick:
+        return new Size(config.BRICK_TILE_SIZE, config.BRICK_TILE_SIZE);
+      case TerrainType.Steel:
+        return new Size(config.STEEL_TILE_SIZE, config.STEEL_TILE_SIZE);
+      case TerrainType.Jungle:
+        return new Size(config.JUNGLE_TILE_SIZE, config.JUNGLE_TILE_SIZE);
+      case TerrainType.Water:
+        return new Size(config.WATER_TILE_SIZE, config.WATER_TILE_SIZE);
+      case TerrainType.Ice:
+        return new Size(config.ICE_TILE_SIZE, config.ICE_TILE_SIZE);
+      case TerrainType.MenuBrick:
+        return new Size(config.BRICK_TILE_SIZE, config.BRICK_TILE_SIZE);
+      default:
+        throw new Error(`Tile size for "${type}" not defined`);
+    }
   }
 }
