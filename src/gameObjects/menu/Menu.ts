@@ -19,6 +19,7 @@ const CURSOR_OFFSET = 96;
 const ITEM_OFFSET = 16;
 
 export class Menu extends GameObject {
+  public focused = new Subject<number>();
   public selected = new Subject<number>();
   private items: MenuItem[] = [];
   private options: MenuOptions;
@@ -38,7 +39,6 @@ export class Menu extends GameObject {
     this.size.set(480, items.length * this.options.itemHeight);
 
     this.removeAllChildren();
-    this.focusedIndex = 0;
 
     this.items.forEach((menuItem, index) => {
       menuItem.position.set(
@@ -50,7 +50,7 @@ export class Menu extends GameObject {
 
     this.add(this.cursor);
 
-    this.updateCursor();
+    this.focusItem(0);
   }
 
   public hideCursor(): void {
@@ -66,12 +66,10 @@ export class Menu extends GameObject {
 
     if (input.isDownAny(MenuInputContext.VerticalPrev)) {
       this.focusPrev();
-      this.updateCursor();
     }
 
     if (input.isDownAny(MenuInputContext.VerticalNext)) {
       this.focusNext();
-      this.updateCursor();
     }
 
     if (input.isDownAny(MenuInputContext.Select)) {
@@ -85,15 +83,27 @@ export class Menu extends GameObject {
     });
   }
 
-  private updateCursor(): void {
-    if (this.focusedIndex === -1) {
+  private focusItem(index: number): void {
+    const prevFocusedItem = this.items[this.focusedIndex];
+    if (prevFocusedItem !== undefined) {
+      prevFocusedItem.unfocused.notify();
+    }
+
+    if (index === -1) {
+      this.focusedIndex = -1;
       this.hideCursor();
       return;
     }
 
+    this.focusedIndex = index;
     this.showCursor();
 
     this.cursor.position.setY(this.cursor.size.height * this.focusedIndex);
+
+    this.focused.notify(this.focusedIndex);
+
+    const focusedItem = this.items[this.focusedIndex];
+    focusedItem.focused.notify();
   }
 
   private notifyItemSelected(): void {
@@ -108,11 +118,13 @@ export class Menu extends GameObject {
   }
 
   private focusPrev(): void {
-    this.focusedIndex = this.getPrevFocusableIndex();
+    const prevIndex = this.getPrevFocusableIndex();
+    this.focusItem(prevIndex);
   }
 
   private focusNext(): void {
-    this.focusedIndex = this.getNextFocusableIndex();
+    const nextIndex = this.getNextFocusableIndex();
+    this.focusItem(nextIndex);
   }
 
   private getPrevFocusableIndex(): number {

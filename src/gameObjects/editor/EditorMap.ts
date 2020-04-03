@@ -13,11 +13,7 @@ import { EditorTool } from './EditorTool';
 export class EditorMap extends GameObject {
   private container: GameObject;
   private tool: EditorTool;
-  private mapConfig: MapConfig = {
-    terrain: {
-      regions: [],
-    },
-  };
+  private mapConfig: MapConfig;
   private brushes: EditorBrush[];
 
   constructor() {
@@ -25,6 +21,8 @@ export class EditorMap extends GameObject {
   }
 
   protected setup(): void {
+    this.mapConfig = new MapConfig();
+
     // Holds all map tiles
     this.container = new GameObject();
     this.container.size.copyFrom(this.size);
@@ -70,7 +68,7 @@ export class EditorMap extends GameObject {
       height: this.tool.size.height,
     };
 
-    this.mapConfig.terrain.regions.push(region);
+    this.mapConfig.addTerrainRegion(region);
 
     const tiles = TerrainFactory.createFromRegionConfigs([region]);
 

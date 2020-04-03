@@ -1,5 +1,4 @@
 import { MapConfig } from './MapConfig';
-import { MapConfigSchema } from './MapConfigSchema';
 
 interface MapManifestListItem {
   file: string;
@@ -26,13 +25,11 @@ export class MapLoader {
     const response = await fetch(item.file);
     const data = await response.json();
 
-    const { value, error } = MapConfigSchema.validate(data);
+    const config = new MapConfig();
 
-    if (error !== undefined) {
-      throw error;
-    }
+    config.fromDto(data);
 
-    return value;
+    return config;
   }
 
   public getItemsCount(): number {

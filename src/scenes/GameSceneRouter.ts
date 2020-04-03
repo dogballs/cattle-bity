@@ -1,7 +1,7 @@
 import { GameObject, SceneRouter } from '../core';
 import * as config from '../config';
 
-import { EditorMapScene, EditorMenuScene } from './editor';
+import { EditorEnemyScene, EditorMapScene, EditorMenuScene } from './editor';
 import {
   LevelGameOverScene,
   LevelSelectionScene,
@@ -18,6 +18,7 @@ export class GameSceneRouter extends SceneRouter {
   public constructor() {
     super();
 
+    this.register(GameSceneType.EditorEnemy, EditorEnemyScene);
     this.register(GameSceneType.EditorMap, EditorMapScene);
     this.register(GameSceneType.EditorMenu, EditorMenuScene);
     this.register(GameSceneType.LevelGameOver, LevelGameOverScene);

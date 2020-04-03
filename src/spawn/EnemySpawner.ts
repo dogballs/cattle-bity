@@ -1,15 +1,8 @@
 import { Subject, Timer, Vector } from '../core';
 import { EnemyTank } from '../gameObjects';
-import {
-  MapConfigSpawnEnemy,
-  MapConfigSpawnEnemyListItem,
-  MapConfigSpawnLocation,
-} from '../map';
-import { TankFactory } from '../tank';
+import { MapConfig } from '../map';
+import { TankFactory, TankType } from '../tank';
 import * as config from '../config';
-
-const DEFAULT_LOCATIONS: MapConfigSpawnLocation[] =
-  config.ENEMY_DEFAULT_SPAWN_POSITIONS;
 
 export interface EnemySpawnerSpawnedEvent {
   tank: EnemyTank;
@@ -18,23 +11,17 @@ export interface EnemySpawnerSpawnedEvent {
 
 export class EnemySpawner {
   public spawned = new Subject<EnemySpawnerSpawnedEvent>();
-  private list: MapConfigSpawnEnemyListItem[] = [];
+  private list: TankType[] = [];
   private listIndex = 0;
   private positions: Vector[] = [];
   private positionIndex = 0;
   private aliveTanks: EnemyTank[] = [];
   private timer = new Timer();
 
-  constructor(spawnConfig: MapConfigSpawnEnemy) {
-    this.list = spawnConfig.list.slice(0, config.ENEMY_MAX_TOTAL_COUNT);
+  constructor(mapConfig: MapConfig) {
+    this.list = mapConfig.getEnemySpawnList();
 
-    // Allow overriding spawn locations in map config
-    let locations = DEFAULT_LOCATIONS;
-    if (spawnConfig.locations.length > 0) {
-      locations = spawnConfig.locations;
-    }
-
-    this.positions = this.getLocationPositions(locations);
+    this.positions = mapConfig.getEnemySpawnPositions();
 
     this.timer.reset(config.ENEMY_FIRST_SPAWN_DELAY);
     this.timer.done.addListener(this.handleTimer);
@@ -77,12 +64,11 @@ export class EnemySpawner {
   };
 
   private spawn(): void {
-    const enemyConfig = this.list[this.listIndex];
-    const { drop: hasDrop, tier } = enemyConfig;
+    const type = this.list[this.listIndex];
 
     const position = this.positions[this.positionIndex];
 
-    const tank = TankFactory.createEnemy(tier, hasDrop);
+    const tank = TankFactory.createEnemy(type.tier, type.hasDrop);
     tank.died.addListener(() => {
       // Remove from alive
       this.aliveTanks = this.aliveTanks.filter((aliveTank) => {
@@ -108,11 +94,5 @@ export class EnemySpawner {
     }
 
     this.spawned.notify({ tank, position });
-  }
-
-  private getLocationPositions(locations: MapConfigSpawnLocation[]): Vector[] {
-    return locations.map((location) => {
-      return new Vector(location.x, location.y);
-    });
   }
 }

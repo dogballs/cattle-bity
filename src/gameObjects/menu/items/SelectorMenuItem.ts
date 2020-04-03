@@ -11,26 +11,61 @@ import { MenuItem } from '../MenuItem';
 const ARROW_WIDTH = 28;
 const ARROW_OFFSET = 16;
 const ITEM_HEIGHT = 28;
-const CONTAINER_WIDTH = 256;
 
 export interface SelectorMenuItemChoice<T> {
   value: T;
   text: string;
 }
 
+export interface SelectorMenuItemOptions {
+  containerWidth?: number;
+  itemOriginX?: number;
+}
+
+const DEFAULT_OPTIONS = {
+  containerWidth: 256,
+  itemOriginX: 0.5,
+};
+
 export class SelectorMenuItem<T> extends MenuItem {
   public changed = new Subject<SelectorMenuItemChoice<T>>();
   private choices: SelectorMenuItemChoice<T>[] = [];
+  private options: SelectorMenuItemOptions;
   private leftArrow = new SpriteText('←', { color: config.COLOR_WHITE });
   private rightArrow = new SpriteText('→', { color: config.COLOR_WHITE });
   private container = new GameObject();
   private selectedIndex = 0;
   private items: SpriteText[] = [];
 
-  constructor(choices: SelectorMenuItemChoice<T>[] = []) {
+  constructor(
+    choices: SelectorMenuItemChoice<T>[] = [],
+    options: SelectorMenuItemOptions = {},
+  ) {
     super();
 
     this.choices = choices;
+    this.options = Object.assign({}, DEFAULT_OPTIONS, options);
+  }
+
+  public setValue(value: T): void {
+    const choiceIndex = this.choices.findIndex(
+      (choice) => choice.value === value,
+    );
+    if (choiceIndex === -1) {
+      return;
+    }
+
+    this.selectChoice(choiceIndex);
+  }
+
+  public getValue(): T {
+    const focusedChoice = this.choices[this.selectedIndex];
+    if (focusedChoice === undefined) {
+      return null;
+    }
+
+    const { value } = focusedChoice;
+    return value;
   }
 
   public updateFocused(updateArgs: GameObjectUpdateArgs): void {
@@ -38,13 +73,11 @@ export class SelectorMenuItem<T> extends MenuItem {
 
     if (input.isDownAny(MenuInputContext.HorizontalNext)) {
       this.selectNext();
-      this.updateSelected();
       this.emitChange();
     }
 
     if (input.isDownAny(MenuInputContext.HorizontalPrev)) {
       this.selectPrev();
-      this.updateSelected();
       this.emitChange();
     }
   }
@@ -54,23 +87,25 @@ export class SelectorMenuItem<T> extends MenuItem {
       const item = new SpriteText(choice.text, {
         color: config.COLOR_WHITE,
       });
-      item.origin.setX(0.5);
-      item.position.setX(CONTAINER_WIDTH / 2);
+      item.origin.setX(this.options.itemOriginX);
+      item.position.setX(
+        this.options.containerWidth * this.options.itemOriginX,
+      );
       this.container.add(item);
     });
-
-    this.updateSelected();
 
     this.add(this.leftArrow);
 
     this.container.position.setX(ARROW_WIDTH + ARROW_OFFSET);
-    this.container.size.set(CONTAINER_WIDTH, ITEM_HEIGHT);
+    this.container.size.set(this.options.containerWidth, ITEM_HEIGHT);
     this.add(this.container);
 
     this.rightArrow.position.setX(
-      ARROW_WIDTH + ARROW_OFFSET + CONTAINER_WIDTH + ARROW_OFFSET,
+      ARROW_WIDTH + ARROW_OFFSET + this.options.containerWidth + ARROW_OFFSET,
     );
     this.add(this.rightArrow);
+
+    this.selectChoice(0);
   }
 
   private emitChange(): void {
@@ -79,22 +114,13 @@ export class SelectorMenuItem<T> extends MenuItem {
     this.changed.notify(choice);
   }
 
-  private updateSelected(): void {
-    this.container.children.forEach((item, index) => {
-      if (this.selectedIndex === index) {
-        item.visible = true;
-      } else {
-        item.visible = false;
-      }
-    });
-  }
-
   private selectPrev(): void {
-    let nextIndex = this.selectedIndex - 1;
-    if (nextIndex < 0) {
-      nextIndex = this.choices.length - 1;
+    let prevIndex = this.selectedIndex - 1;
+    if (prevIndex < 0) {
+      prevIndex = this.choices.length - 1;
     }
-    this.selectedIndex = nextIndex;
+
+    this.selectChoice(prevIndex);
   }
 
   private selectNext(): void {
@@ -102,6 +128,23 @@ export class SelectorMenuItem<T> extends MenuItem {
     if (nextIndex > this.choices.length - 1) {
       nextIndex = 0;
     }
-    this.selectedIndex = nextIndex;
+
+    this.selectChoice(nextIndex);
+  }
+
+  private selectChoice(nextIndex: number): void {
+    if (this.choices[nextIndex] === undefined) {
+      this.selectedIndex = -1;
+    } else {
+      this.selectedIndex = nextIndex;
+    }
+
+    this.container.children.forEach((item, index) => {
+      if (this.selectedIndex === index) {
+        item.visible = true;
+      } else {
+        item.visible = false;
+      }
+    });
   }
 }

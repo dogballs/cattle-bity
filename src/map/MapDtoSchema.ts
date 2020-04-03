@@ -1,11 +1,12 @@
 import * as Joi from '@hapi/joi';
 
-import { TankTier } from '../tank';
-import { TerrainType } from '../terrain';
+// TODO: circular deps?
+import { TankTier } from '../tank/TankTier';
+import { TerrainType } from '../terrain/TerrainType';
 
-import { MapConfig } from './MapConfig';
+import { MapDto } from './MapDto';
 
-export const MapConfigSchema = Joi.object<MapConfig>({
+export const MapDtoSchema = Joi.object<MapDto>({
   spawn: Joi.object({
     enemy: Joi.object({
       locations: Joi.array()

@@ -15,15 +15,17 @@ export class EditorMenuScene extends Scene {
   private menu: Menu;
 
   protected setup(): void {
-    this.title = new SpriteText('CONSTRUCTION', { color: config.COLOR_YELLOW });
+    this.title = new SpriteText('CONSTRUCTION', {
+      color: config.COLOR_YELLOW,
+    });
     this.title.position.set(112, 96);
     this.root.add(this.title);
 
     const menuItems = [
-      new TextMenuItem('RESUME', { color: config.COLOR_WHITE }),
-      new TextMenuItem('NEXT → ENEMIES', { color: config.COLOR_WHITE }),
-      new DividerMenuItem({ color: config.COLOR_GRAY }),
-      new TextMenuItem('MAIN MENU', { color: config.COLOR_WHITE }),
+      new TextMenuItem('RESUME'),
+      new TextMenuItem('ENEMIES'),
+      new DividerMenuItem(),
+      new TextMenuItem('MAIN MENU'),
     ];
 
     this.menu = new Menu();
@@ -43,6 +45,9 @@ export class EditorMenuScene extends Scene {
     switch (selectedIndex) {
       case 0:
         this.navigator.back();
+        break;
+      case 1:
+        this.navigator.push(GameSceneType.EditorEnemy);
         break;
       case 3:
         this.navigator.replace(GameSceneType.MenuMain);

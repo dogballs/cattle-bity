@@ -193,7 +193,10 @@ export class LevelPlayScene extends Scene {
     this.root.add(this.pauseNotice);
 
     const terrainTiles = [];
-    mapConfig.terrain.regions.forEach((region) => {
+
+    const mapDto = mapConfig.getDto();
+
+    mapDto.terrain.regions.forEach((region) => {
       const regionRect = new Rect(
         region.x,
         region.y,
@@ -211,10 +214,10 @@ export class LevelPlayScene extends Scene {
     this.state = State.Starting;
     this.startTimer.reset(config.LEVEL_START_DELAY);
 
-    this.playerSpawner = new PlayerSpawner(mapConfig.spawn.player);
+    this.playerSpawner = new PlayerSpawner(mapConfig);
     this.playerSpawner.spawned.addListener(this.handlePlayerSpawned);
 
-    this.enemySpawner = new EnemySpawner(mapConfig.spawn.enemy);
+    this.enemySpawner = new EnemySpawner(mapConfig);
     this.enemySpawner.spawned.addListener(this.handleEnemySpawned);
 
     this.powerupSpawner = new PowerupSpawner();

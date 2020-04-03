@@ -41,6 +41,10 @@ export class SpriteText extends GameObject {
     this.painter.text = this.text;
   }
 
+  public setColor(color: string): void {
+    this.painter.color = color;
+  }
+
   public setText(text: string): void {
     this.text.setText(text);
     this.size.copyFrom(this.text.getSize());

@@ -1,4 +1,5 @@
 export enum GameSceneType {
+  EditorEnemy,
   EditorMap,
   EditorMenu,
   LevelGameOver,
