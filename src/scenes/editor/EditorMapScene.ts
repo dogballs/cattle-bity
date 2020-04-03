@@ -2,18 +2,24 @@ import { CollisionDetector, Scene } from '../../core';
 import { GameObjectUpdateArgs } from '../../game';
 import { Border, EditorField, EditorMap } from '../../gameObjects';
 import { EditorMapInputContext } from '../../input';
+import { MapConfig } from '../../map';
 import * as config from '../../config';
 
 import { GameSceneType } from '../GameSceneType';
 
-export class EditorMapScene extends Scene {
+import { EditorLocationParams } from './params';
+
+export class EditorMapScene extends Scene<EditorLocationParams> {
   private field: EditorField;
   private map: EditorMap;
+  private mapConfig: MapConfig;
 
   protected setup(): void {
     this.root.add(new Border());
 
-    this.map = new EditorMap();
+    this.mapConfig = this.params.mapConfig;
+
+    this.map = new EditorMap(this.mapConfig);
     this.map.position.set(
       config.BORDER_LEFT_WIDTH,
       config.BORDER_TOP_BOTTOM_HEIGHT,
@@ -32,7 +38,7 @@ export class EditorMapScene extends Scene {
     const { input } = updateArgs;
 
     if (input.isDownAny(EditorMapInputContext.Menu)) {
-      this.navigator.push(GameSceneType.EditorMenu);
+      this.navigator.replace(GameSceneType.EditorMenu, this.params);
       return;
     }
 

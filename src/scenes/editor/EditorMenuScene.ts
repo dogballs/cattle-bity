@@ -13,19 +13,15 @@ import * as config from '../../config';
 
 import { GameSceneType } from '../GameSceneType';
 
+import { EditorLoadState, EditorLocationParams } from './params';
+
 enum MenuState {
   Navigation,
   Alert,
   Confrimation,
 }
 
-enum LoadState {
-  None,
-  Draft,
-  File,
-}
-
-export class EditorMenuScene extends Scene {
+export class EditorMenuScene extends Scene<EditorLocationParams> {
   private title: SpriteText;
   private menu: Menu;
   private newItem: TextMenuItem;
@@ -40,9 +36,15 @@ export class EditorMenuScene extends Scene {
   private mapFileSaver: MapFileSaver;
   private mapFileLoader: MapFileLoader;
   private menuState = MenuState.Navigation;
-  private loadState = LoadState.None;
+  private loadState = EditorLoadState.None;
 
   protected setup(): void {
+    // In case we are coming back from other editor scene
+    if (this.params.mapConfig !== undefined) {
+      this.mapConfig = this.params.mapConfig;
+      this.loadState = this.params.loadState ?? EditorLoadState.Draft;
+    }
+
     this.mapFileSaver = new MapFileSaver();
 
     this.mapFileLoader = new MapFileLoader();
@@ -91,6 +93,8 @@ export class EditorMenuScene extends Scene {
     this.menu.setItems(menuItems);
     this.menu.position.set(16, 192);
     this.root.add(this.menu);
+
+    this.updateMenu();
 
     this.alertModal = new AlertModal({
       containerWidth: 768,
@@ -147,24 +151,31 @@ export class EditorMenuScene extends Scene {
     this.enemyItem.focusable = this.isLoaded();
   }
 
+  private createLocationParams(): EditorLocationParams {
+    return {
+      mapConfig: this.mapConfig,
+      loadState: this.loadState,
+    };
+  }
+
   private getTitleText(): string {
     const baseText = 'CONSTRUCTION';
-    if (this.loadState === LoadState.File) {
+    if (this.loadState === EditorLoadState.File) {
       return `${baseText} [FILE]`;
     }
-    if (this.loadState === LoadState.Draft) {
+    if (this.loadState === EditorLoadState.Draft) {
       return `${baseText} [DRAFT]`;
     }
     return baseText;
   }
 
   private isLoaded(): boolean {
-    return this.loadState !== LoadState.None;
+    return this.loadState !== EditorLoadState.None;
   }
 
   private handleFileLoaded = (mapConfig: MapConfig): void => {
     this.mapConfig = mapConfig;
-    this.loadState = LoadState.File;
+    this.loadState = EditorLoadState.File;
 
     this.updateMenu();
   };
@@ -175,7 +186,7 @@ export class EditorMenuScene extends Scene {
 
   private handleNewSelected = (): void => {
     this.mapConfig = new MapConfig();
-    this.loadState = LoadState.Draft;
+    this.loadState = EditorLoadState.Draft;
 
     this.updateMenu();
   };
@@ -189,11 +200,11 @@ export class EditorMenuScene extends Scene {
   };
 
   private handleMapSelected = (): void => {
-    this.navigator.push(GameSceneType.EditorMap);
+    this.navigator.push(GameSceneType.EditorMap, this.createLocationParams());
   };
 
   private handleEnemySelected = (): void => {
-    this.navigator.push(GameSceneType.EditorEnemy);
+    this.navigator.push(GameSceneType.EditorEnemy, this.createLocationParams());
   };
 
   private handleExitSelected = (): void => {

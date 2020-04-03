@@ -16,17 +16,24 @@ export class EditorMap extends GameObject {
   private mapConfig: MapConfig;
   private brushes: EditorBrush[];
 
-  constructor() {
+  constructor(mapConfig: MapConfig) {
     super(config.FIELD_SIZE, config.FIELD_SIZE);
+
+    this.mapConfig = mapConfig;
   }
 
   protected setup(): void {
-    this.mapConfig = new MapConfig();
-
     // Holds all map tiles
     this.container = new GameObject();
     this.container.size.copyFrom(this.size);
     this.add(this.container);
+
+    const terrainRegions = this.mapConfig.getTerrainRegions();
+    terrainRegions.forEach((region) => {
+      const tiles = TerrainFactory.createFromRegionConfigs([region]);
+
+      this.container.add(...tiles);
+    });
 
     // Create brushes. Make sure terrain tile supports defined brush sizes
 

@@ -105,7 +105,7 @@ export class SelectorMenuItem<T> extends MenuItem {
     );
     this.add(this.rightArrow);
 
-    this.selectChoice(0);
+    this.selectChoice();
   }
 
   private emitChange(): void {
@@ -132,7 +132,11 @@ export class SelectorMenuItem<T> extends MenuItem {
     this.selectChoice(nextIndex);
   }
 
-  private selectChoice(nextIndex: number): void {
+  private selectChoice(nextIndex?: number): void {
+    if (nextIndex === undefined) {
+      nextIndex = this.selectedIndex;
+    }
+
     if (this.choices[nextIndex] === undefined) {
       this.selectedIndex = -1;
     } else {

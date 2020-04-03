@@ -1,47 +1,54 @@
 import { GameObject } from '../GameObject';
 
 import { Scene } from './Scene';
-import { SceneNavigator } from './SceneNavigator';
+import { SceneNavigator, SceneParams } from './SceneNavigator';
 import { SceneType } from './SceneType';
 
 type SceneConstructor = {
-  new (navigator: SceneNavigator, root: GameObject): Scene;
+  new (navigator: SceneNavigator, root: GameObject, params: SceneParams): Scene;
 };
+
+interface SceneLocation {
+  type: SceneType;
+  params: SceneParams;
+}
 
 export class SceneRouter implements SceneNavigator {
   private routes = new Map<SceneType, SceneConstructor>();
-  private type: SceneType;
+  private location: SceneLocation;
   private scene: Scene;
-  private stack: SceneType[] = [];
+  private stack: SceneLocation[] = [];
 
   public register(type: SceneType, Scene: SceneConstructor): void {
     this.routes.set(type, Scene);
   }
 
-  public start(type: SceneType): void {
+  public start(type: SceneType, params?: SceneParams): void {
     this.assertRegistered(type);
 
-    this.push(type);
+    this.push(type, params);
   }
 
   public getCurrentScene(): Scene {
     return this.scene;
   }
 
-  public push(type: SceneType): void {
+  public push(type: SceneType, params?: SceneParams): void {
     this.assertRegistered(type);
 
-    this.stack.push(type);
-    this.transition(type);
+    const location = this.transition(type, params);
+
+    this.stack.push(location);
   }
 
-  public replace(type: SceneType): void {
+  public replace(type: SceneType, params?: SceneParams): void {
     this.assertRegistered(type);
 
     this.stack.pop();
-    this.stack.push(type);
 
-    this.transition(type);
+    const location = this.transition(type, params);
+
+    this.stack.push(location);
   }
 
   public back(): void {
@@ -52,32 +59,42 @@ export class SceneRouter implements SceneNavigator {
 
     this.stack.pop();
 
-    const lastType = this.stack[this.stack.length - 1];
-    this.transition(lastType);
+    const lastLocation = this.stack[this.stack.length - 1];
+    console.log({ lastLocation });
+
+    this.transition(lastLocation.type, lastLocation.params);
   }
 
-  public clearAndPush(type: SceneType): void {
+  public clearAndPush(type: SceneType, params?: SceneParams): void {
     this.assertRegistered(type);
 
     this.stack = [];
-    this.push(type);
+    this.push(type, params);
   }
 
   protected createRoot(): GameObject {
     return new GameObject();
   }
 
-  private transition(type: SceneType): void {
+  private transition(type: SceneType, params: SceneParams = {}): SceneLocation {
     this.assertRegistered(type);
 
     const SceneClass = this.routes.get(type);
 
     const root = this.createRoot();
 
-    const scene = new SceneClass(this, root);
+    const scene = new SceneClass(this, root, params);
 
     this.scene = scene;
-    this.type = type;
+
+    const location: SceneLocation = {
+      type,
+      params,
+    };
+
+    this.location = location;
+
+    return location;
   }
 
   private assertRegistered(type: SceneType): void {

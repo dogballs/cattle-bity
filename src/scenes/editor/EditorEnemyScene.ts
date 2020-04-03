@@ -13,6 +13,10 @@ import { MapConfig } from '../../map';
 import { TankType } from '../../tank';
 import * as config from '../../config';
 
+import { GameSceneType } from '../GameSceneType';
+
+import { EditorLocationParams } from './params';
+
 const ENEMY_TYPES = [
   TankType.EnemyDefaultA,
   TankType.EnemyDefaultB,
@@ -23,7 +27,7 @@ const ENEMY_TYPES = [
 const PER_PAGE = 5;
 const TOTAL_PAGES = config.ENEMY_MAX_TOTAL_COUNT / PER_PAGE;
 
-export class EditorEnemyScene extends Scene {
+export class EditorEnemyScene extends Scene<EditorLocationParams> {
   private mapConfig: MapConfig;
   private title: SpriteText;
   private menu: Menu;
@@ -35,7 +39,8 @@ export class EditorEnemyScene extends Scene {
   private pageIndex = 0;
 
   protected setup(): void {
-    this.mapConfig = new MapConfig();
+    this.mapConfig = this.params.mapConfig;
+    // Prefill enemies with default ones
     if (this.mapConfig.isEnemySpawnListEmpty()) {
       this.mapConfig.fillEnemySpawnList(TankType.EnemyDefaultA);
     }
@@ -244,6 +249,6 @@ export class EditorEnemyScene extends Scene {
   };
 
   private handleBackSelected = (): void => {
-    this.navigator.back();
+    this.navigator.replace(GameSceneType.EditorMenu, this.params);
   };
 }

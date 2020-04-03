@@ -1,15 +1,17 @@
 import { GameObject } from '../GameObject';
 
-import { SceneNavigator } from './SceneNavigator';
+import { SceneNavigator, SceneParams } from './SceneNavigator';
 
-export abstract class Scene {
+export abstract class Scene<T extends SceneParams = {}> {
   protected navigator: SceneNavigator;
   protected root: GameObject;
+  protected params: T;
   private needsSetup = true;
 
-  constructor(navigator: SceneNavigator, root: GameObject) {
+  constructor(navigator: SceneNavigator, root: GameObject, params: T) {
     this.navigator = navigator;
     this.root = root;
+    this.params = params;
   }
 
   public getRoot(): GameObject {

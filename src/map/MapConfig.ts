@@ -43,6 +43,10 @@ export class MapConfig {
     this.dto.terrain.regions.push(region);
   }
 
+  public getTerrainRegions(): TerrainRegionConfig[] {
+    return this.dto.terrain.regions;
+  }
+
   public getPlayerSpawnPosition(playerIndex: number): Vector {
     const dtoLocations = this.dto.spawn.player.locations;
 
@@ -118,6 +122,6 @@ export class MapConfig {
   public fromJSON(json: string): void {
     const dto = JSON.parse(json);
 
-    this.fillAndValidate(dto);
+    this.dto = this.fillAndValidate(dto);
   }
 }
