@@ -8,7 +8,8 @@ import {
   LevelPlayScene,
   LevelScoreScene,
 } from './level';
-import { MenuMainScene, MenuSettingsScene, MenuKeybindingScene } from './menu';
+import { MainMenuScene } from './main';
+import { SettingsKeybindingScene, SettingsMenuScene } from './settings';
 import { SandboxTransformScene } from './sandbox';
 
 import { GameSceneType } from './GameSceneType';
@@ -25,9 +26,9 @@ export class GameSceneRouter extends SceneRouter {
     this.register(GameSceneType.LevelSelection, LevelSelectionScene);
     this.register(GameSceneType.LevelScore, LevelScoreScene);
     this.register(GameSceneType.LevelPlay, LevelPlayScene);
-    this.register(GameSceneType.MenuMain, MenuMainScene);
-    this.register(GameSceneType.MenuSettings, MenuSettingsScene);
-    this.register(GameSceneType.MenuKeybinding, MenuKeybindingScene);
+    this.register(GameSceneType.MainMenu, MainMenuScene);
+    this.register(GameSceneType.SettingsMenu, SettingsMenuScene);
+    this.register(GameSceneType.SettingsKeybinding, SettingsKeybindingScene);
     this.register(GameSceneType.SandboxTransform, SandboxTransformScene);
   }
 

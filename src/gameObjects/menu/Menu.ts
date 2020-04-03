@@ -61,6 +61,10 @@ export class Menu extends GameObject {
     this.cursor.visible = true;
   }
 
+  public reset(): void {
+    this.focusItem(0);
+  }
+
   protected update(updateArgs: GameObjectUpdateArgs): void {
     const { input } = updateArgs;
 
@@ -86,7 +90,7 @@ export class Menu extends GameObject {
   private focusItem(index: number): void {
     const prevFocusedItem = this.items[this.focusedIndex];
     if (prevFocusedItem !== undefined) {
-      prevFocusedItem.unfocused.notify();
+      prevFocusedItem.unfocus();
     }
 
     if (index === -1) {
@@ -103,7 +107,7 @@ export class Menu extends GameObject {
     this.focused.notify(this.focusedIndex);
 
     const focusedItem = this.items[this.focusedIndex];
-    focusedItem.focused.notify();
+    focusedItem.focus();
   }
 
   private notifyItemSelected(): void {
@@ -112,7 +116,7 @@ export class Menu extends GameObject {
     }
 
     const focusedItem = this.items[this.focusedIndex];
-    focusedItem.selected.notify();
+    focusedItem.select();
 
     this.selected.notify(this.focusedIndex);
   }

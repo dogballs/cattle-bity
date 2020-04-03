@@ -6,6 +6,14 @@ import * as config from '../config';
 import { MapDto } from './MapDto';
 import { MapDtoSchema } from './MapDtoSchema';
 
+export interface MapConfigToJsonOptions {
+  pretty?: boolean;
+}
+
+const DEFAULT_TO_JSON_OPTIONS = {
+  pretty: true,
+};
+
 export class MapConfig {
   private dto: MapDto;
 
@@ -92,5 +100,24 @@ export class MapConfig {
       tier: type.tier,
       drop: type.hasDrop,
     };
+  }
+
+  public toJSON(argOptions: MapConfigToJsonOptions = {}): string {
+    const options = Object.assign({}, DEFAULT_TO_JSON_OPTIONS, argOptions);
+
+    let json;
+    if (options.pretty) {
+      json = JSON.stringify(this.dto, null, 2);
+    } else {
+      json = JSON.stringify(this.dto);
+    }
+
+    return json;
+  }
+
+  public fromJSON(json: string): void {
+    const dto = JSON.parse(json);
+
+    this.fillAndValidate(dto);
   }
 }

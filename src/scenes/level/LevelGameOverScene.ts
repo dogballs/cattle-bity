@@ -30,6 +30,6 @@ export class LevelGameOverScene extends Scene {
   }
 
   private handleDone = (): void => {
-    this.navigator.replace(GameSceneType.MenuMain);
+    this.navigator.clearAndPush(GameSceneType.MainMenu);
   };
 }

@@ -14,9 +14,10 @@ export interface SpriteTextOptions extends TextOptions {
   letterSpacing?: number;
 }
 
-const DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS: SpriteTextOptions = {
   color: null,
   letterSpacing: 4,
+  lineSpacing: 16,
 };
 
 export class SpriteText extends GameObject {

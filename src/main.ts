@@ -59,7 +59,7 @@ const mapLoader = new MapLoader(mapManifest);
 const session = new Session();
 
 const sceneRouter = new GameSceneRouter();
-sceneRouter.start(GameSceneType.MenuMain);
+sceneRouter.start(GameSceneType.MainMenu);
 
 const debugInspector = new DebugInspector(gameRenderer.getDomElement());
 debugInspector.listen();

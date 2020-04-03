@@ -37,7 +37,7 @@ enum State {
   WaitingInput,
 }
 
-export class MenuKeybindingScene extends Scene {
+export class SettingsKeybindingScene extends Scene {
   private state = State.Navigation;
   private selectedDeviceType: InputDeviceType;
   private inputManager: InputManager;

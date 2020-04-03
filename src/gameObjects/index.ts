@@ -1,6 +1,7 @@
 export * from './editor';
 export * from './menu';
 export * from './terrain';
+export * from './ui';
 
 export * from './Base';
 export * from './Border';
@@ -16,7 +17,6 @@ export * from './Explosion';
 export * from './Field';
 export * from './GameOverHeading';
 export * from './GameOverNotice';
-export * from './InputButtonCaptureModal';
 export * from './LevelSelector';
 export * from './LivesCounter';
 export * from './MainHeading';

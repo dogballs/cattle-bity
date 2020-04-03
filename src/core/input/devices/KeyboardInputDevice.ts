@@ -10,11 +10,13 @@ export class KeyboardInputDevice implements InputDevice {
   public listen(): void {
     document.addEventListener('keydown', this.handleWindowKeyDown);
     document.addEventListener('keyup', this.handleWindowKeyUp);
+    window.addEventListener('blur', this.handleWindowBlur);
   }
 
   public unlisten(): void {
     document.removeEventListener('keydown', this.handleWindowKeyDown);
     document.removeEventListener('keyup', this.handleWindowKeyUp);
+    window.removeEventListener('blur', this.handleWindowBlur);
   }
 
   public update(): void {
@@ -86,5 +88,16 @@ export class KeyboardInputDevice implements InputDevice {
     if (index !== -1) {
       this.listenedDownCodes.splice(index, 1);
     }
+  };
+
+  // If we press a key and game window becomes unfocused (for example,
+  // file dialog) and then the key is released, it's release won't be
+  // captured by the game window, because something else is in focus now
+  // (like file dialog). When we come back to game window, it's state
+  // has only captured key down event, but not key up, so it becomes
+  // stuck until same key goes full cycle once again. Reset the state
+  // when game window loses focus.
+  private handleWindowBlur = (): void => {
+    this.listenedDownCodes = [];
   };
 }

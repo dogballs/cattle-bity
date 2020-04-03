@@ -56,6 +56,13 @@ export class SceneRouter implements SceneNavigator {
     this.transition(lastType);
   }
 
+  public clearAndPush(type: SceneType): void {
+    this.assertRegistered(type);
+
+    this.stack = [];
+    this.push(type);
+  }
+
   protected createRoot(): GameObject {
     return new GameObject();
   }

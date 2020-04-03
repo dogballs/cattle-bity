@@ -15,7 +15,7 @@ enum State {
   Ready,
 }
 
-export class MenuMainScene extends Scene {
+export class MainMenuScene extends Scene {
   private heading = new MainHeading();
   private group = new GameObject();
   private menu = new Menu();
@@ -85,10 +85,10 @@ export class MenuMainScene extends Scene {
         this.navigator.replace(GameSceneType.LevelSelection);
         break;
       case 1:
-        this.navigator.push(GameSceneType.EditorMap);
+        this.navigator.push(GameSceneType.EditorMenu);
         break;
       case 2:
-        this.navigator.push(GameSceneType.MenuSettings);
+        this.navigator.push(GameSceneType.SettingsMenu);
         break;
     }
   };

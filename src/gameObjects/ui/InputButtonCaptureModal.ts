@@ -1,6 +1,6 @@
-import { GameObject, RectPainter } from '../core';
-import { SpriteText } from '../gameObjects';
-import * as config from '../config';
+import { GameObject, RectPainter } from '../../core';
+import { SpriteText } from '../../gameObjects';
+import * as config from '../../config';
 
 export class InputButtonCaptureModal extends GameObject {
   public painter = new RectPainter(config.COLOR_BACKDROP);

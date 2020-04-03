@@ -6,8 +6,8 @@ export enum GameSceneType {
   LevelPlay,
   LevelScore,
   LevelSelection,
-  MenuMain,
-  MenuKeybinding,
-  MenuSettings,
+  MainMenu,
+  SettingsKeybinding,
+  SettingsMenu,
   SandboxTransform,
 }
