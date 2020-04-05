@@ -1,5 +1,5 @@
 import { Scene, Timer } from '../../core';
-import { GameObjectUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import { GameOverHeading } from '../../gameObjects';
 
 import { GameSceneType } from '../GameSceneType';
@@ -10,7 +10,7 @@ export class LevelGameOverScene extends Scene {
   private heading = new GameOverHeading();
   private timer = new Timer(SCENE_DURATION);
 
-  protected setup({ session }: GameObjectUpdateArgs): void {
+  protected setup({ session }: GameUpdateArgs): void {
     session.reset();
 
     this.timer.done.addListener(this.handleDone);
@@ -21,7 +21,7 @@ export class LevelGameOverScene extends Scene {
     this.root.add(this.heading);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });

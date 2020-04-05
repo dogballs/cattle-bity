@@ -7,7 +7,7 @@ import {
   Timer,
   Vector,
 } from '../../core';
-import { GameObjectUpdateArgs, Tag } from '../../game';
+import { GameUpdateArgs, Tag } from '../../game';
 import {
   EditorMapInputContext,
   InputHoldThrottle,
@@ -72,17 +72,17 @@ export class EditorTool extends GameObject {
     return this.selectedBrush;
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.updatePosition(updateArgs);
     this.updateBlinking(updateArgs);
 
     const { input } = updateArgs;
 
     if (input.isDownAny(EditorMapInputContext.Draw)) {
-      this.draw.notify();
+      this.draw.notify(null);
     }
     if (input.isDownAny(EditorMapInputContext.Erase)) {
-      this.erase.notify();
+      this.erase.notify(null);
     }
     if (input.isDownAny(EditorMapInputContext.NextBrush)) {
       this.selectNextBrush();
@@ -100,7 +100,7 @@ export class EditorTool extends GameObject {
     }
   }
 
-  private updatePosition({ deltaTime, input }: GameObjectUpdateArgs): void {
+  private updatePosition({ deltaTime, input }: GameUpdateArgs): void {
     this.velocity.set(0, 0);
 
     if (input.isDownAny(EditorMapInputContext.MoveUp)) {
@@ -136,7 +136,7 @@ export class EditorTool extends GameObject {
     this.velocity.set(this.size.width, 0);
   };
 
-  private updateBlinking({ deltaTime }: GameObjectUpdateArgs): void {
+  private updateBlinking({ deltaTime }: GameUpdateArgs): void {
     if (this.blinkTimer.isDone()) {
       this.isBlinkVisible = !this.isBlinkVisible;
       this.blinkTimer.reset(BLINK_DELAY);

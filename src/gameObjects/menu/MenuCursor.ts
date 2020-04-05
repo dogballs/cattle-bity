@@ -5,7 +5,7 @@ import {
   Sprite,
   SpritePainter,
 } from '../../core';
-import { GameObjectUpdateArgs, Rotation } from '../../game';
+import { GameUpdateArgs, Rotation } from '../../game';
 import { TankType, TankMoveAnimation } from '../../tank';
 
 export class MenuCursor extends GameObject {
@@ -18,7 +18,7 @@ export class MenuCursor extends GameObject {
     this.painter.alignment = Alignment.MiddleCenter;
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.animation = new TankMoveAnimation(
       spriteLoader,
       TankType.PlayerPrimaryA,
@@ -27,7 +27,7 @@ export class MenuCursor extends GameObject {
     this.painter.sprite = this.animation.getCurrentFrame();
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.animation.update(updateArgs.deltaTime);
     this.painter.sprite = this.animation.getCurrentFrame();
   }

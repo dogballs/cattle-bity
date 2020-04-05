@@ -1,5 +1,5 @@
 import { Collider, GameObject, Sprite, SpritePainter } from '../../core';
-import { GameObjectUpdateArgs, Tag } from '../../game';
+import { GameUpdateArgs, Tag } from '../../game';
 import * as config from '../../config';
 
 export class BrickTerrainTile extends GameObject {
@@ -12,7 +12,7 @@ export class BrickTerrainTile extends GameObject {
     super(config.BRICK_TILE_SIZE, config.BRICK_TILE_SIZE);
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.sprites = spriteLoader.loadList(this.getSpriteIds());
     this.painter.sprite = this.getSpriteByPosition();
   }

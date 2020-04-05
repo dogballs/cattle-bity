@@ -2,41 +2,34 @@ import { GameObject, RectPainter, Subject } from '../../core';
 import { Menu, TextMenuItem, SpriteText } from '../../gameObjects';
 import * as config from '../../config';
 
-export interface ConfirmModalOptions {
+export interface AlertModalOptions {
   containerWidth?: number;
   containerHeight?: number;
   message?: string;
   acceptText?: string;
-  declineText?: string;
 }
 
-const DEFAULT_OPTIONS: ConfirmModalOptions = {
+const DEFAULT_OPTIONS: AlertModalOptions = {
   containerWidth: 512,
-  containerHeight: 256,
-  message: 'ARE YOU SURE?',
-  acceptText: 'YES',
-  declineText: 'NO',
+  containerHeight: 200,
+  message: '',
+  acceptText: 'OK',
 };
 
-export class ConfirmModal extends GameObject {
+export class AlertModal extends GameObject {
   public painter = new RectPainter(config.COLOR_BACKDROP);
   public accepted = new Subject();
-  public declined = new Subject();
-  private options: ConfirmModalOptions;
+  private options: AlertModalOptions;
   private container: GameObject;
   private text: SpriteText;
   private acceptItem: TextMenuItem;
   private declineItem: TextMenuItem;
   private menu: Menu;
 
-  constructor(options: ConfirmModalOptions = {}) {
+  constructor(options: AlertModalOptions = {}) {
     super();
 
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
-  }
-
-  public resetSelection(): void {
-    this.menu.reset();
   }
 
   protected setup(): void {
@@ -62,10 +55,7 @@ export class ConfirmModal extends GameObject {
     this.acceptItem = new TextMenuItem(this.options.acceptText);
     this.acceptItem.selected.addListener(this.handleAcceptSelected);
 
-    this.declineItem = new TextMenuItem(this.options.declineText);
-    this.declineItem.selected.addListener(this.handleDeclineSelected);
-
-    const menuItems = [this.acceptItem, this.declineItem];
+    const menuItems = [this.acceptItem];
 
     this.menu = new Menu();
     this.menu.position.set(16, 128);
@@ -74,10 +64,6 @@ export class ConfirmModal extends GameObject {
   }
 
   private handleAcceptSelected = (): void => {
-    this.accepted.notify();
-  };
-
-  private handleDeclineSelected = (): void => {
-    this.declined.notify();
+    this.accepted.notify(null);
   };
 }

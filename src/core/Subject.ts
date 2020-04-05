@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export class Subject<T> {
-  private listeners: ((event?: T) => any)[] = [];
+  private listeners: ((event: T) => any)[] = [];
 
-  public addListener(listenerToAdd: (event?: T) => any): () => void {
+  public addListener(listenerToAdd: (event: T) => any): () => void {
     this.listeners.push(listenerToAdd);
 
     const unsubscribe = (): void => {
@@ -13,10 +13,10 @@ export class Subject<T> {
     return unsubscribe;
   }
 
-  public addListenerOnce(listenerToAdd: (event?: T) => any): () => void {
-    const wrappedListener = (...args): void => {
+  public addListenerOnce(listenerToAdd: (event: T) => any): () => void {
+    const wrappedListener = (event: T): void => {
       this.removeListener(wrappedListener);
-      listenerToAdd(...args);
+      listenerToAdd(event);
     };
 
     const unsubscribe = this.addListener(wrappedListener);
@@ -24,7 +24,7 @@ export class Subject<T> {
     return unsubscribe;
   }
 
-  public removeListener(listenerToRemove: (event?: T) => any): this {
+  public removeListener(listenerToRemove: (event: T) => any): this {
     this.listeners = this.listeners.filter((listener) => {
       return listener !== listenerToRemove;
     });
@@ -32,7 +32,7 @@ export class Subject<T> {
     return this;
   }
 
-  public notify = (event?: T): this => {
+  public notify = (event: T): this => {
     this.listeners.forEach((listener) => {
       // TODO: handle errors
       listener(event);

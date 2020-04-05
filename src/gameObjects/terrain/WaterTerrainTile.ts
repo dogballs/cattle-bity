@@ -1,5 +1,5 @@
 import { Animation, GameObject, Sprite, SpritePainter } from '../../core';
-import { GameObjectUpdateArgs, Tag } from '../../game';
+import { GameUpdateArgs, Tag } from '../../game';
 import * as config from '../../config';
 
 export class WaterTerrainTile extends GameObject {
@@ -11,14 +11,14 @@ export class WaterTerrainTile extends GameObject {
     super(config.WATER_TILE_SIZE, config.WATER_TILE_SIZE);
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.animation = new Animation(
       spriteLoader.loadList(['terrain.water.1', 'terrain.water.2']),
       { delay: 0.5, loop: true },
     );
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.animation.update(updateArgs.deltaTime);
     this.painter.sprite = this.animation.getCurrentFrame();
   }

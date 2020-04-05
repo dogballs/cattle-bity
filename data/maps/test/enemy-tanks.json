@@ -1,19 +1,11 @@
 {
   "spawn": {
     "enemy": {
-      "list": [{ "tier": "a" }],
+      "list": [{ "tier": "a", "drop": true }, { "tier": "a" }],
       "locations": [
         {
           "x": 256,
           "y": 384
-        }
-      ]
-    },
-    "player": {
-      "locations": [
-        {
-          "x": 256,
-          "y": 0
         }
       ]
     }

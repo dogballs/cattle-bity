@@ -14,7 +14,7 @@ import {
   SpriteLoader,
 } from './core';
 import { DebugGameLoopController, DebugInspector } from './debug';
-import { GameObjectUpdateArgs, GameState, Session } from './game';
+import { GameUpdateArgs, GameState, Session } from './game';
 import { InputManager } from './input';
 import { MapLoader } from './map';
 import { GameSceneRouter, GameSceneType } from './scenes';
@@ -77,7 +77,7 @@ debugInspector.click.addListener((position: Vector) => {
 
 const gameState = new State<GameState>(GameState.Playing);
 
-const updateArgs: GameObjectUpdateArgs = {
+const updateArgs: GameUpdateArgs = {
   audioLoader,
   deltaTime: 0,
   imageLoader,

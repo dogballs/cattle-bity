@@ -1,5 +1,5 @@
 import { Sound } from '../../core';
-import { GameObjectUpdateArgs, Rotation } from '../../game';
+import { GameUpdateArgs, Rotation } from '../../game';
 import { Tank, TankState } from '../../gameObjects';
 import { LevelInputContext } from '../../input';
 
@@ -17,13 +17,13 @@ export class PlayerTankBehavior extends TankBehavior {
   private moveSound: Sound;
   private idleSound: Sound;
 
-  public setup(tank: Tank, { audioLoader }: GameObjectUpdateArgs): void {
+  public setup(tank: Tank, { audioLoader }: GameUpdateArgs): void {
     this.fireSound = audioLoader.load('fire');
     this.moveSound = audioLoader.load('tank.move');
     this.idleSound = audioLoader.load('tank.idle');
   }
 
-  public update(tank: Tank, { deltaTime, input }: GameObjectUpdateArgs): void {
+  public update(tank: Tank, { deltaTime, input }: GameUpdateArgs): void {
     if (input.isHoldLastAny(LevelInputContext.MoveUp)) {
       tank.rotate(Rotation.Up);
     }

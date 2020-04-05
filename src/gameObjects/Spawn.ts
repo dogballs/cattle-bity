@@ -6,7 +6,7 @@ import {
   SpritePainter,
   Subject,
 } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 
 export class Spawn extends GameObject {
   public painter = new SpritePainter();
@@ -19,16 +19,16 @@ export class Spawn extends GameObject {
     this.painter.alignment = Alignment.MiddleCenter;
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.animation = new Animation(
       spriteLoader.loadList(['spawn.1', 'spawn.2', 'spawn.3', 'spawn.4']),
       { delay: 0.05, loop: 3 },
     );
   }
 
-  protected update({ deltaTime }: GameObjectUpdateArgs): void {
+  protected update({ deltaTime }: GameUpdateArgs): void {
     if (this.animation.isComplete()) {
-      this.completed.notify();
+      this.completed.notify(null);
       return;
     }
 

@@ -6,7 +6,7 @@ import {
   SpritePainter,
   Subject,
 } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 
 export class SmallExplosion extends GameObject {
   public readonly painter = new SpritePainter();
@@ -19,7 +19,7 @@ export class SmallExplosion extends GameObject {
     this.painter.alignment = Alignment.MiddleCenter;
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.animation = new Animation(
       spriteLoader.loadList([
         'explosion.small.1',
@@ -30,10 +30,10 @@ export class SmallExplosion extends GameObject {
     );
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     if (this.animation.isComplete()) {
       this.removeSelf();
-      this.done.notify();
+      this.done.notify(null);
       return;
     }
 

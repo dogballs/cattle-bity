@@ -3,60 +3,39 @@ import {
   Collider,
   Collision,
   GameObject,
-  Sound,
   Sprite,
   SpritePainter,
   Subject,
 } from '../core';
-import { GameObjectUpdateArgs, Tag } from '../game';
-import { PowerupAction, PowerupType } from '../powerups';
+import { GameUpdateArgs, Tag } from '../game';
+import { PowerupType } from '../powerups';
 
 export class Powerup extends GameObject {
-  public collider = new Collider(false);
-
+  public collider = new Collider(true);
+  public painter = new SpritePainter();
   // Powerup should be blinking during pause
   public ignorePause = true;
-
-  public readonly picked = new Subject();
-
-  // Action to perform when picked up
-  public readonly action: PowerupAction;
-
-  public readonly type: PowerupType;
-
-  private spriteId: string;
-  private pickupSoundId: string;
-  private pickupSound: Sound;
-
-  public painter = new SpritePainter();
+  public picked = new Subject();
+  public type: PowerupType;
   private animation: Animation<Sprite>;
 
-  constructor(
-    type: PowerupType,
-    action: PowerupAction,
-    spriteId: string,
-    pickupSoundId: string,
-  ) {
+  constructor(type: PowerupType) {
     super(64, 64);
 
     this.type = type;
-    this.action = action;
-    this.spriteId = spriteId;
-    this.pickupSoundId = pickupSoundId;
   }
 
-  protected setup({ audioLoader, spriteLoader }: GameObjectUpdateArgs): void {
-    this.pickupSound = audioLoader.load(this.pickupSoundId);
-
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
+    const spriteId = this.getSpriteId();
     // Null as a second frame adds a blink effect
-    const frames = [spriteLoader.load(this.spriteId), null];
+    const frames = [spriteLoader.load(spriteId), null];
     this.animation = new Animation(frames, {
       delay: 0.12,
       loop: true,
     });
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.animation.update(updateArgs.deltaTime);
     this.painter.sprite = this.animation.getCurrentFrame();
   }
@@ -64,9 +43,21 @@ export class Powerup extends GameObject {
   protected collide({ other }: Collision): void {
     if (other.tags.includes(Tag.Player)) {
       this.removeSelf();
-      this.picked.notify();
-      // TODO: seems like not the best place
-      this.pickupSound.play();
+      this.picked.notify(null);
     }
+  }
+
+  private getSpriteId(): string {
+    switch (this.type) {
+      case PowerupType.BaseDefence:
+        return 'powerup.shovel';
+      case PowerupType.Shield:
+        return 'powerup.helment';
+      case PowerupType.Upgrade:
+        return 'powerup.star';
+      case PowerupType.Wipeout:
+        return 'powerup.grenade';
+    }
+    return 'unknown';
   }
 }

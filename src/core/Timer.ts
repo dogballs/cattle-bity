@@ -29,7 +29,7 @@ export class Timer {
 
     if (this.timeLeft < 0) {
       this.timeLeft = null;
-      this.done.notify();
+      this.done.notify(null);
     }
   }
 

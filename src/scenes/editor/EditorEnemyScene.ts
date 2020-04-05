@@ -1,5 +1,5 @@
 import { Scene } from '../../core';
-import { GameObjectUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import {
   DividerMenuItem,
   EditorEnemyPreview,
@@ -110,7 +110,7 @@ export class EditorEnemyScene extends Scene<EditorLocationParams> {
     this.updateMenu();
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });

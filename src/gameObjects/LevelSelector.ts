@@ -1,5 +1,5 @@
 import { GameObject, Subject } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 import { InputHoldThrottle, LevelSelectionInputContext } from '../input';
 
 import { LevelTitle } from './LevelTitle';
@@ -46,7 +46,7 @@ export class LevelSelector extends GameObject {
     this.updateText();
   }
 
-  protected update({ deltaTime, input }: GameObjectUpdateArgs): void {
+  protected update({ deltaTime, input }: GameUpdateArgs): void {
     if (input.isDownAny(LevelSelectionInputContext.Select)) {
       this.selected.notify(this.currentLevel);
       return;

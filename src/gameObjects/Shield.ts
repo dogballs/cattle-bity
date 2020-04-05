@@ -1,5 +1,5 @@
 import { Animation, GameObject, Sprite, SpritePainter } from '../core';
-import { GameObjectUpdateArgs, GameState } from '../game';
+import { GameUpdateArgs, GameState } from '../game';
 
 export class Shield extends GameObject {
   public ignorePause = true;
@@ -10,14 +10,14 @@ export class Shield extends GameObject {
     super(64, 64);
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.animation = new Animation(
       spriteLoader.loadList(['shield.1', 'shield.2']),
       { delay: 0.05, loop: true },
     );
   }
 
-  protected update({ deltaTime, gameState }: GameObjectUpdateArgs): void {
+  protected update({ deltaTime, gameState }: GameUpdateArgs): void {
     // Shield is not displayed during a pause
     if (gameState.hasChangedTo(GameState.Paused)) {
       this.visible = false;

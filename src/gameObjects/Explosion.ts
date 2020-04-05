@@ -6,11 +6,11 @@ import {
   SpritePainter,
   Subject,
 } from './../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 
 export class Explosion extends GameObject {
   public readonly painter = new SpritePainter();
-  public readonly done = new Subject();
+  public readonly completed = new Subject();
   private animation: Animation<Sprite>;
 
   constructor() {
@@ -19,17 +19,17 @@ export class Explosion extends GameObject {
     this.painter.alignment = Alignment.MiddleCenter;
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.animation = new Animation(
       spriteLoader.loadList(['explosion.large.1', 'explosion.large.2']),
       { delay: 0.066, loop: false },
     );
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     if (this.animation.isComplete()) {
       this.removeSelf();
-      this.done.notify();
+      this.completed.notify(null);
       return;
     }
     this.animation.update(updateArgs.deltaTime);

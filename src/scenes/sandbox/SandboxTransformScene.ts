@@ -1,5 +1,5 @@
 import { GameObject, RectPainter, Scene } from '../../core';
-import { GameObjectUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import { InputControl } from '../../input';
 
 export class SandboxTransformScene extends Scene {
@@ -26,7 +26,7 @@ export class SandboxTransformScene extends Scene {
     this.parent.add(this.child);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     const { input } = updateArgs;
 
     if (input.isDown(InputControl.Select)) {

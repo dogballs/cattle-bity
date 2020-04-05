@@ -7,19 +7,20 @@ import {
   SpritePainter,
   Subject,
 } from '../core';
-import { GameObjectUpdateArgs, Rotation, RotationMap, Tag } from '../game';
+import { GameUpdateArgs, Rotation, RotationMap, Tag } from '../game';
 
 import { SmallExplosion } from './SmallExplosion';
 import { WallDestroyer } from './WallDestroyer';
 
 export class Bullet extends GameObject {
   public collider = new Collider(true);
+  public painter = new SpritePainter();
+  public zIndex = 1;
   public tankDamage: number;
   public wallDamage: number;
   public speed: number;
   public tags = [Tag.Bullet];
   public died = new Subject();
-  public painter = new SpritePainter();
   private sprites: RotationMap<Sprite> = new RotationMap();
   private hitBrickSound: Sound;
   private hitSteelSound: Sound;
@@ -34,7 +35,7 @@ export class Bullet extends GameObject {
     this.pivot.set(0.5, 0.5);
   }
 
-  protected setup({ audioLoader, spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ audioLoader, spriteLoader }: GameUpdateArgs): void {
     this.hitBrickSound = audioLoader.load('hit.brick');
     this.hitSteelSound = audioLoader.load('hit.steel');
 
@@ -44,7 +45,7 @@ export class Bullet extends GameObject {
     this.sprites.set(Rotation.Right, spriteLoader.load('bullet.right'));
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.translateY(this.speed * updateArgs.deltaTime);
 
     const rotation = this.getWorldRotation();
@@ -125,13 +126,13 @@ export class Bullet extends GameObject {
 
   public nullify(): void {
     this.removeSelf();
-    this.died.notify();
+    this.died.notify(null);
   }
 
   public explode(): void {
     const explosion = new SmallExplosion();
     explosion.setCenter(this.getCenter());
     this.replaceSelf(explosion);
-    this.died.notify();
+    this.died.notify(null);
   }
 }

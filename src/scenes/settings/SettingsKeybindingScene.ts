@@ -1,5 +1,5 @@
 import { InputBinding, InputDevice, Scene } from '../../core';
-import { GameObjectUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import {
   DividerMenuItem,
   InputButtonCaptureModal,
@@ -55,7 +55,7 @@ export class SettingsKeybindingScene extends Scene {
   private backItem: TextMenuItem;
   private menu: Menu;
 
-  protected setup(updateArgs: GameObjectUpdateArgs): void {
+  protected setup(updateArgs: GameUpdateArgs): void {
     this.inputManager = updateArgs.inputManager;
 
     this.title.position.set(112, 96);
@@ -108,7 +108,7 @@ export class SettingsKeybindingScene extends Scene {
     }
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     // Capture user input from currently selected device
     if (this.state === State.WaitingInput) {
       const device = this.getSelectedDevice();

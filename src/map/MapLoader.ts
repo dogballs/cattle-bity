@@ -1,3 +1,4 @@
+import { Subject } from '../core';
 import { MapConfig } from './MapConfig';
 
 interface MapManifestListItem {
@@ -9,6 +10,7 @@ export interface MapManifest {
 }
 
 export class MapLoader {
+  public readonly loaded = new Subject<MapConfig>();
   private readonly manifest: MapManifest;
 
   constructor(manifest: MapManifest) {
@@ -28,6 +30,8 @@ export class MapLoader {
     const config = new MapConfig();
 
     config.fromDto(data);
+
+    this.loaded.notify(config);
 
     return config;
   }

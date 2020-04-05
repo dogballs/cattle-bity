@@ -1,5 +1,5 @@
 import { Animation, GameObject, Rect, Subject, Timer } from '../core';
-import { GameObjectUpdateArgs, Tag } from '../game';
+import { GameUpdateArgs, Tag } from '../game';
 import { TerrainFactory, TerrainType } from '../terrain';
 
 import { BaseHeart } from './BaseHeart';
@@ -43,7 +43,7 @@ export class Base extends GameObject {
     this.defenceTimer.done.addListener(this.handleDefenceTimer);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.defenceTimer.update(updateArgs.deltaTime);
 
     // TODO: fading logic seems a bit ugly

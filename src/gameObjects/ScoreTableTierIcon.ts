@@ -1,5 +1,5 @@
 import { GameObject, SpritePainter } from '../core';
-import { GameObjectUpdateArgs, Rotation } from '../game';
+import { GameUpdateArgs, Rotation } from '../game';
 import {
   TankColor,
   TankParty,
@@ -24,7 +24,7 @@ export class ScoreTableTierIcon extends GameObject {
     this.tier = tier;
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     const type = new TankType(TankParty.Enemy, TankColor.Default, this.tier);
     const spriteId = TankSpriteId.create(type, Rotation.Up);
     const sprite = spriteLoader.load(spriteId);

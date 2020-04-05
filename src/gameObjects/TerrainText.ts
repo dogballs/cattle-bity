@@ -1,5 +1,5 @@
 import { ArrayUtils, GameObject, Rect, Text, TextOptions } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 import { TerrainFactory, TerrainType } from '../terrain';
 import * as config from '../config';
 
@@ -14,7 +14,7 @@ export class TerrainText extends GameObject {
     this.terrainType = terrainType;
   }
 
-  protected setup({ rectFontLoader }: GameObjectUpdateArgs): void {
+  protected setup({ rectFontLoader }: GameUpdateArgs): void {
     const font = rectFontLoader.load(config.PRIMARY_RECT_FONT_ID);
 
     this.text.setFont(font);

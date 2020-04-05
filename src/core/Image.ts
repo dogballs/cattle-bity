@@ -18,7 +18,7 @@ export class Image {
   }
 
   private handleLoaded = (): void => {
-    this.loaded.notify();
+    this.loaded.notify(null);
     this.imageElement.removeEventListener('load', this.handleLoaded);
   };
 }

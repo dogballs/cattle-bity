@@ -1,5 +1,5 @@
 import { GameObject, Subject } from '../../core';
-import { GameObjectUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import { MenuInputContext } from '../../input';
 
 import { MenuCursor } from './MenuCursor';
@@ -65,7 +65,7 @@ export class Menu extends GameObject {
     this.focusItem(0);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     const { input } = updateArgs;
 
     if (input.isDownAny(MenuInputContext.VerticalPrev)) {

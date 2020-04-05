@@ -1,5 +1,5 @@
 import { GameObject, Subject, Timer } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 import { PointsRecord } from '../points';
 import { TankTier } from '../tank/TankTier'; // TODO: circular dep?
 import * as config from '../config';
@@ -76,7 +76,7 @@ export class ScoreTable extends GameObject {
     this.add(this.totalKills);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     if (this.state === State.Idle || this.state === State.Done) {
       return;
     }
@@ -86,7 +86,7 @@ export class ScoreTable extends GameObject {
         if (this.allCountersDone()) {
           this.totalKills.setText(this.record.getKillTotalCount().toString());
           this.state = State.Done;
-          this.done.notify();
+          this.done.notify(null);
           return;
         }
 

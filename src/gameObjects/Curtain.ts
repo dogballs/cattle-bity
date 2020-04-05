@@ -1,5 +1,5 @@
 import { GameObject, RectPainter } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 import * as config from '../config';
 
 enum State {
@@ -40,7 +40,7 @@ export class Curtain extends GameObject {
     this.add(this.bottomPart);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     const { deltaTime } = updateArgs;
 
     if (this.state === State.Open || this.state === State.Closed) {

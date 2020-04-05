@@ -1,5 +1,5 @@
 import { Scene } from '../../core';
-import { GameObjectUpdateArgs, Session } from '../../game';
+import { GameUpdateArgs, Session } from '../../game';
 import { Curtain, LevelSelector } from '../../gameObjects';
 
 import { GameSceneType } from '../GameSceneType';
@@ -9,7 +9,7 @@ export class LevelSelectionScene extends Scene {
   private selector: LevelSelector;
   private session: Session;
 
-  protected setup({ mapLoader, session }: GameObjectUpdateArgs): void {
+  protected setup({ mapLoader, session }: GameUpdateArgs): void {
     this.session = session;
 
     this.curtain = new Curtain(this.root.size.width, this.root.size.height);
@@ -26,7 +26,7 @@ export class LevelSelectionScene extends Scene {
     this.curtain.close();
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });
@@ -34,6 +34,6 @@ export class LevelSelectionScene extends Scene {
 
   private handleLevelSelected = (levelNumber: number): void => {
     this.session.start(levelNumber);
-    this.navigator.replace(GameSceneType.LevelPlay);
+    this.navigator.replace(GameSceneType.LevelLoad);
   };
 }

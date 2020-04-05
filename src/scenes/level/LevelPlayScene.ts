@@ -1,140 +1,160 @@
-import {
-  AudioLoader,
-  CollisionDetector,
-  RandomUtils,
-  Rect,
-  Scene,
-  Timer,
-} from '../../core';
-import { LevelInputContext } from '../../input';
-import { GameObjectUpdateArgs, GameState, Rotation, Session } from '../../game';
-import {
-  Base,
-  Border,
-  Curtain,
-  EnemyTank,
-  Explosion,
-  LevelInfo,
-  LevelTitle,
-  Field,
-  PauseNotice,
-  PlayerTank,
-  Points,
-  Spawn,
-} from '../../gameObjects';
-import { MapConfig } from '../../map';
+import { CollisionDetector, Rect, Scene, Timer } from '../../core';
+import { GameUpdateArgs, GameState, Session } from '../../game';
+import { Border } from '../../gameObjects';
 import { TerrainFactory } from '../../terrain';
-import { PointsRecord, PointsValue } from '../../points';
-import {
-  EnemySpawner,
-  EnemySpawnerSpawnedEvent,
-  PlayerSpawner,
-  PlayerSpawnerSpawnedEvent,
-  PowerupSpawner,
-  PowerupSpawnerSpawnedEvent,
-} from '../../spawn';
-import { TankDeathReason, TankTier } from '../../tank';
-
 import * as config from '../../config';
+
+import { LevelEventBus, LevelWorld } from '../../level';
+import {
+  LevelEnemyDiedEvent,
+  LevelPowerupPickedEvent,
+} from '../../level/events';
+import {
+  LevelAudioScript,
+  LevelBaseScript,
+  LevelEnemyScript,
+  LevelExplosionScript,
+  LevelInfoScript,
+  LevelIntroScript,
+  LevelPauseScript,
+  LevelPlayerScript,
+  LevelPointsScript,
+  LevelPowerupScript,
+  LevelSpawnScript,
+} from '../../level/scripts';
 
 import { GameSceneType } from '../GameSceneType';
 
+import { LevelLocationParams } from './params';
+
 enum State {
   Idle,
-  Loading,
   Starting,
   Playing,
   Ending,
 }
 
-export class LevelPlayScene extends Scene {
+export class LevelPlayScene extends Scene<LevelLocationParams> {
   private state = State.Idle;
-  private audioLoader: AudioLoader;
-  private curtain: Curtain;
-  private title: LevelTitle;
   private session: Session;
-  private startTimer = new Timer();
   private endTimer = new Timer();
-  private enemySpawner: EnemySpawner;
-  private playerSpawner: PlayerSpawner;
-  private powerupSpawner: PowerupSpawner;
-  private playerTank: PlayerTank;
 
-  private info = new LevelInfo();
-  private base = new Base();
-  private field = new Field();
-  private pauseNotice = new PauseNotice();
-  private pointsRecord = new PointsRecord();
+  private eventBus: LevelEventBus;
+  private world: LevelWorld;
 
-  protected setup({
-    audioLoader,
-    mapLoader,
-    session,
-  }: GameObjectUpdateArgs): void {
-    this.audioLoader = audioLoader;
+  private audioScript: LevelAudioScript;
+  private baseScript: LevelBaseScript;
+  private enemyScript: LevelEnemyScript;
+  private explosionScript: LevelExplosionScript;
+  private infoScript: LevelInfoScript;
+  private introScript: LevelIntroScript;
+  private playerScript: LevelPlayerScript;
+  private pointsScript: LevelPointsScript;
+  private powerupSpawnScript: LevelPowerupScript;
+  private pauseScript: LevelPauseScript;
+  private spawnScript: LevelSpawnScript;
+
+  protected setup({ session }: GameUpdateArgs): void {
+    this.world = new LevelWorld(this.root);
+
+    this.root.add(new Border());
+
+    this.world.field.position.set(
+      config.BORDER_LEFT_WIDTH,
+      config.BORDER_TOP_BOTTOM_HEIGHT,
+    );
+    this.root.add(this.world.field);
+
+    this.eventBus = new LevelEventBus();
+
+    this.eventBus.enemyDied.addListener(this.handleEnemyDied);
+    this.eventBus.playerDied.addListener(this.handlePlayerDied);
+    this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
+
     this.session = session;
 
-    this.state = State.Loading;
-    mapLoader.loadAsync(session.getLevelNumber()).then(this.handleMapLoaded);
-
-    // TODO: add them last order is important
-    // TODO: curtain is displayed on top of scenes? (transition between levels)
-    this.curtain = new Curtain(
-      this.root.size.width,
-      this.root.size.height,
-      false,
-    );
-    this.root.add(this.curtain);
-
-    this.title = new LevelTitle(session.getLevelNumber());
-    this.title.setCenter(this.root.getSelfCenter());
-    this.title.origin.set(0.5, 0.5);
-    this.root.add(this.title);
-
     this.endTimer.done.addListener(this.handleEndTimer);
+
+    const { mapConfig } = this.params;
+
+    const terrainTiles = [];
+
+    mapConfig.getTerrainRegions().forEach((region) => {
+      const regionRect = new Rect(
+        region.x,
+        region.y,
+        region.width,
+        region.height,
+      );
+      const tiles = TerrainFactory.createFromRegion(region.type, regionRect);
+      terrainTiles.push(...tiles);
+    });
+    this.world.field.add(...terrainTiles);
+
+    this.state = State.Starting;
+
+    this.enemyScript = new LevelEnemyScript(
+      this.world,
+      this.eventBus,
+      mapConfig,
+    );
+    this.playerScript = new LevelPlayerScript(
+      this.world,
+      this.eventBus,
+      mapConfig,
+    );
+    this.pointsScript = new LevelPointsScript(this.world, this.eventBus);
+    this.powerupSpawnScript = new LevelPowerupScript(this.world, this.eventBus);
+    this.pauseScript = new LevelPauseScript(this.world);
+    this.spawnScript = new LevelSpawnScript(this.world, this.eventBus);
+    this.explosionScript = new LevelExplosionScript(this.world, this.eventBus);
+    this.infoScript = new LevelInfoScript(
+      this.world,
+      this.eventBus,
+      this.session,
+    );
+    this.baseScript = new LevelBaseScript(this.world, this.eventBus);
+    this.introScript = new LevelIntroScript(
+      this.world,
+      this.eventBus,
+      this.session,
+    );
+    this.introScript.completed.addListener(() => {
+      this.state = State.Playing;
+    });
+    this.audioScript = new LevelAudioScript(this.eventBus);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
-    if (this.state === State.Loading) {
+  protected update(updateArgs: GameUpdateArgs): void {
+    if (this.state === State.Starting) {
+      this.introScript.invokeUpdate(updateArgs);
       this.root.traverseDescedants((child) => {
         child.invokeUpdate(updateArgs);
       });
       return;
     }
 
-    if (this.state === State.Starting) {
-      if (this.startTimer.isDone()) {
-        this.state = State.Playing;
-      }
-      this.startTimer.update(updateArgs.deltaTime);
-      return;
-    }
+    const { gameState } = updateArgs;
 
-    const { gameState, input } = updateArgs;
-
-    if (input.isDownAny(LevelInputContext.Pause)) {
-      if (gameState.is(GameState.Playing)) {
-        gameState.set(GameState.Paused);
-        this.activatePause();
-      } else {
-        gameState.set(GameState.Playing);
-        this.deactivatePause();
-      }
-    }
+    this.audioScript.invokeUpdate(updateArgs);
+    this.pauseScript.invokeUpdate(updateArgs);
 
     // TODO: enemies with drops are still animated
     if (!gameState.is(GameState.Paused)) {
-      this.playerSpawner.update(updateArgs.deltaTime);
-      this.enemySpawner.update(updateArgs.deltaTime);
-      this.powerupSpawner.update(updateArgs.deltaTime);
+      this.baseScript.invokeUpdate(updateArgs);
+      this.powerupSpawnScript.invokeUpdate(updateArgs);
+      this.playerScript.invokeUpdate(updateArgs);
+      this.enemyScript.invokeUpdate(updateArgs);
+      this.infoScript.invokeUpdate(updateArgs);
+
       this.endTimer.update(updateArgs.deltaTime);
     }
 
     // Update all objects on the scene
-    this.root.traverseDescedants((child) => {
-      const shouldUpdate = gameState.is(GameState.Playing) || child.ignorePause;
+    this.root.traverseDescedants((node) => {
+      const shouldUpdate = gameState.is(GameState.Playing) || node.ignorePause;
       if (shouldUpdate) {
-        child.invokeUpdate(updateArgs);
+        node.invokeUpdate(updateArgs);
       }
     });
 
@@ -163,213 +183,33 @@ export class LevelPlayScene extends Scene {
       activeNodes,
       bothNodes,
     );
+
     collisions.forEach((collision) => {
       collision.self.invokeCollide(collision);
     });
   }
 
-  private handleMapLoaded = (mapConfig: MapConfig): void => {
-    this.root.add(new Border());
-
-    this.field.position.set(
-      config.BORDER_LEFT_WIDTH,
-      config.BORDER_TOP_BOTTOM_HEIGHT,
-    );
-    this.root.add(this.field);
-
-    this.base.position.set(352, 736);
-    this.base.died.addListener(this.handleBaseDied);
-    this.field.add(this.base);
-
-    this.info.position.set(
-      config.BORDER_LEFT_WIDTH + config.FIELD_SIZE + 32,
-      config.BORDER_TOP_BOTTOM_HEIGHT + 32,
-    );
-    this.root.add(this.info);
-
-    this.pauseNotice.setCenter(this.field.getSelfCenter());
-    this.pauseNotice.position.y += 18;
-    this.pauseNotice.visible = false;
-    this.root.add(this.pauseNotice);
-
-    const terrainTiles = [];
-
-    const mapDto = mapConfig.getDto();
-
-    mapDto.terrain.regions.forEach((region) => {
-      const regionRect = new Rect(
-        region.x,
-        region.y,
-        region.width,
-        region.height,
-      );
-      const tiles = TerrainFactory.createFromRegion(region.type, regionRect);
-      terrainTiles.push(...tiles);
-    });
-    this.field.add(...terrainTiles);
-
-    // this.title.visible = false;
-    this.curtain.open();
-
-    this.state = State.Starting;
-    this.startTimer.reset(config.LEVEL_START_DELAY);
-
-    this.playerSpawner = new PlayerSpawner(mapConfig);
-    this.playerSpawner.spawned.addListener(this.handlePlayerSpawned);
-
-    this.enemySpawner = new EnemySpawner(mapConfig);
-    this.enemySpawner.spawned.addListener(this.handleEnemySpawned);
-
-    this.powerupSpawner = new PowerupSpawner();
-    this.powerupSpawner.spawned.addListener(this.handlePowerupSpawned);
-
-    this.info.setEnemyCount(this.enemySpawner.getUnspawnedCount());
-
-    this.info.setLivesCount(this.session.getLivesCount());
-  };
-
-  private activatePause(): void {
-    this.audioLoader.pauseAll();
-    this.audioLoader.load('pause').play();
-    this.pauseNotice.visible = true;
-    this.pauseNotice.restart();
-    this.field.add(this.pauseNotice);
-  }
-
-  private deactivatePause(): void {
-    this.audioLoader.resumeAll();
-    this.pauseNotice.visible = false;
-  }
-
-  private handlePlayerSpawned = (event: PlayerSpawnerSpawnedEvent): void => {
-    const { tank, position } = event;
-
-    const spawn = new Spawn();
-    spawn.position.copyFrom(position);
-    spawn.completed.addListener(() => {
-      tank.setCenter(spawn.getCenter());
-      tank.died.addListener(() => {
-        const explosion = new Explosion();
-        explosion.setCenter(tank.getCenter());
-        tank.replaceSelf(explosion);
-
-        this.audioLoader.load('explosion.player').play();
-
-        this.session.removeLive();
-        if (this.session.isGameOver()) {
-          this.playerSpawner.disable();
-          this.end();
-        } else {
-          this.info.setLivesCount(this.session.getLivesCount());
-        }
-      });
-      tank.activateShield(config.SHIELD_SPAWN_DURATION);
-
-      this.playerTank = tank;
-
-      spawn.replaceSelf(tank);
-    });
-    this.field.add(spawn);
-  };
-
-  private handleEnemySpawned = (event: EnemySpawnerSpawnedEvent): void => {
-    const { tank, position } = event;
-
-    if (tank.hasDrop) {
-      this.powerupSpawner.unspawn();
+  private handlePlayerDied = (): void => {
+    this.session.removeLive();
+    if (this.session.isGameOver()) {
+      this.playerScript.disable();
+      this.end();
+    } else {
+      // this.info.setLivesCount(this.session.getLivesCount());
     }
-
-    // TODO: refactor this chain of subscriptions
-    const spawn = new Spawn();
-    spawn.position.copyFrom(position);
-    spawn.completed.addListener(() => {
-      tank.rotate(Rotation.Down);
-      tank.setCenter(spawn.getCenter());
-      tank.died.addListener((event) => {
-        // TODO: grenade explosion explodes multiple enemies, should trigger
-        // single audio
-        this.audioLoader.load('explosion.enemy').play();
-
-        if (tank.hasDrop) {
-          this.powerupSpawner.spawn();
-        }
-
-        const explosion = new Explosion();
-        explosion.setCenter(tank.getCenter());
-        tank.replaceSelf(explosion);
-
-        // Only player kills are awarded
-        if (event.reason === TankDeathReason.Bullet) {
-          explosion.done.addListenerOnce(() => {
-            const points = this.createEnemyTankPoints(tank);
-            points.setCenter(tank.getCenter());
-            this.field.add(points);
-          });
-        }
-
-        if (this.enemySpawner.areAllDead()) {
-          this.end();
-        }
-
-        this.session.addKillPoints(tank.type.tier);
-      });
-      spawn.replaceSelf(tank);
-    });
-
-    this.field.add(spawn);
-
-    this.info.setEnemyCount(this.enemySpawner.getUnspawnedCount());
   };
 
-  private handlePowerupSpawned = (event: PowerupSpawnerSpawnedEvent): void => {
-    const { powerup } = event;
+  private handleEnemyDied = (event: LevelEnemyDiedEvent): void => {
+    this.session.addKillPoints(event.type.tier);
 
-    // TODO: Positioning should be smart
-    // - on a road
-    // - not spawn on top of base/tank/steel or water walls, etc
-    const x = RandomUtils.number(0, config.FIELD_SIZE - powerup.size.width);
-    const y = RandomUtils.number(0, config.FIELD_SIZE - powerup.size.height);
-
-    powerup.position.set(x, y);
-
-    powerup.picked.addListener(() => {
-      powerup.action.execute(this.playerTank, powerup, this.base);
-
-      const points = new Points(
-        PointsValue.V500,
-        config.POINTS_POWERUP_DURATION,
-      );
-      points.setCenter(powerup.getCenter());
-      this.field.add(points);
-
-      this.session.addPowerupPoints(powerup.type);
-    });
-
-    this.field.add(powerup);
-
-    this.audioLoader.load('powerup.spawn').play();
+    // if (this.enemySpawner.areAllDead()) {
+    //   this.end();
+    // }
   };
 
-  private createEnemyTankPoints(tank: EnemyTank): Points {
-    const value = this.getEnemyTankPointsValue(tank);
-    const points = new Points(value, config.POINTS_ENEMY_TANK_DURATION);
-    return points;
-  }
-
-  private getEnemyTankPointsValue(tank: EnemyTank): PointsValue {
-    switch (tank.type.tier) {
-      case TankTier.A:
-        return PointsValue.V100;
-      case TankTier.B:
-        return PointsValue.V200;
-      case TankTier.C:
-        return PointsValue.V300;
-      case TankTier.D:
-        return PointsValue.V400;
-      default:
-        return 0;
-    }
-  }
+  private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
+    this.session.addPowerupPoints(event.type);
+  };
 
   private end(): void {
     this.state = State.Ending;

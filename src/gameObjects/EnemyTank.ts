@@ -1,21 +1,41 @@
-import { GameObjectUpdateArgs, GameState, Tag } from '../game';
+import { GameUpdateArgs, GameState, Tag } from '../game';
+import {
+  DumbAiTankBehavior,
+  TankAttributesFactory,
+  TankSkinAnimation,
+  TankType,
+} from '../tank';
 
 import { Tank } from './Tank';
 
-export abstract class EnemyTank extends Tank {
+export class EnemyTank extends Tank {
   public tags = [Tag.Tank, Tag.Enemy];
-  public hasDrop: boolean;
 
-  constructor(width: number, height: number, hasDrop = false) {
-    super(width, height);
+  constructor(type: TankType) {
+    super(64, 64);
 
-    this.hasDrop = hasDrop;
-    if (hasDrop) {
+    this.type = type;
+
+    if (this.type.hasDrop) {
       this.ignorePause = true;
     }
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected setup(updateArgs: GameUpdateArgs): void {
+    const { spriteLoader } = updateArgs;
+
+    this.attributes = TankAttributesFactory.create(this.type);
+    this.behavior = new DumbAiTankBehavior();
+    this.skinAnimation = new TankSkinAnimation(
+      spriteLoader,
+      this.type,
+      this.type.hasDrop,
+    );
+
+    super.setup(updateArgs);
+  }
+
+  protected update(updateArgs: GameUpdateArgs): void {
     const { deltaTime, gameState } = updateArgs;
 
     if (gameState.hasChangedTo(GameState.Paused)) {
@@ -32,7 +52,7 @@ export abstract class EnemyTank extends Tank {
   }
 
   public discardDrop(): this {
-    this.hasDrop = false;
+    this.type.hasDrop = false;
     this.ignorePause = false;
 
     return this;

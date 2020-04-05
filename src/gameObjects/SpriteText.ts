@@ -6,7 +6,7 @@ import {
   Text,
   TextOptions,
 } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 import * as config from '../config';
 
 export interface SpriteTextOptions extends TextOptions {
@@ -33,7 +33,7 @@ export class SpriteText extends GameObject {
     this.text = new Text(text, options);
   }
 
-  protected setup({ spriteFontLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteFontLoader }: GameUpdateArgs): void {
     const font = spriteFontLoader.load(config.PRIMARY_SPRITE_FONT_ID);
     this.text.setFont(font);
 

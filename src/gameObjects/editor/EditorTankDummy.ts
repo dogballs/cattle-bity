@@ -1,5 +1,5 @@
 import { Collider, GameObject, SpritePainter } from '../../core';
-import { GameObjectUpdateArgs, Rotation, Tag } from '../../game';
+import { GameUpdateArgs, Rotation, Tag } from '../../game';
 import { TankType, TankSpriteId } from '../../tank';
 
 export class EditorTankDummy extends GameObject {
@@ -16,7 +16,7 @@ export class EditorTankDummy extends GameObject {
     this.rotation = rotation;
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     const spriteId = TankSpriteId.create(this.type, this.rotation, 1);
     const sprite = spriteLoader.load(spriteId);
     this.painter.sprite = sprite;

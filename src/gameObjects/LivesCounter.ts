@@ -1,5 +1,5 @@
 import { GameObject, SpritePainter } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 
 import { SpriteText } from './SpriteText';
 
@@ -12,7 +12,7 @@ export class LivesCounter extends GameObject {
     super(64, 64);
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.icon.painter = new SpritePainter(spriteLoader.load('ui.player'));
     this.icon.position.set(0, 32);
     this.add(this.icon);

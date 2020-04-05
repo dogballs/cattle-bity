@@ -1,5 +1,5 @@
 import { CollisionDetector, Scene } from '../../core';
-import { GameObjectUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import { Border, EditorField, EditorMap } from '../../gameObjects';
 import { EditorMapInputContext } from '../../input';
 import { MapConfig } from '../../map';
@@ -34,7 +34,7 @@ export class EditorMapScene extends Scene<EditorLocationParams> {
     this.root.add(this.field);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     const { input } = updateArgs;
 
     if (input.isDownAny(EditorMapInputContext.Menu)) {

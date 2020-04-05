@@ -1,5 +1,5 @@
 import { GameObject, Scene } from '../../core';
-import { GameObjectUpdateArgs, Session } from '../../game';
+import { GameUpdateArgs, Session } from '../../game';
 import { MainHeading, Menu, TextMenuItem } from '../../gameObjects';
 import { MenuInputContext } from '../../input';
 import * as config from '../../config';
@@ -22,7 +22,7 @@ export class MainMenuScene extends Scene {
   private state: State = State.Ready;
   private session: Session;
 
-  protected setup({ session }: GameObjectUpdateArgs): void {
+  protected setup({ session }: GameUpdateArgs): void {
     this.session = session;
 
     this.group.size.copyFrom(this.root.size);
@@ -51,7 +51,7 @@ export class MainMenuScene extends Scene {
     this.root.add(this.group);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     const { deltaTime, input } = updateArgs;
 
     if (this.state === State.Sliding) {

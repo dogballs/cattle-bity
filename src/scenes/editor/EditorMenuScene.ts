@@ -1,5 +1,5 @@
 import { Scene } from '../../core';
-import { GameObjectUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import {
   AlertModal,
   ConfirmModal,
@@ -116,7 +116,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
     this.root.add(this.confirmModal);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     if (this.menuState === MenuState.Alert) {
       this.alertModal.traverse((node) => {
         node.invokeUpdate(updateArgs);

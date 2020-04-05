@@ -9,7 +9,7 @@ import {
   Subject,
   Timer,
 } from '../core';
-import { GameObjectUpdateArgs, Rotation, Tag } from '../game';
+import { GameUpdateArgs, Rotation, Tag } from '../game';
 import {
   TankAttributes,
   TankBehavior,
@@ -29,17 +29,18 @@ export enum TankState {
 }
 
 export class Tank extends GameObject {
+  public collider = new Collider(true);
+  public tags = [Tag.Tank];
+  public painter: SpritePainter = new SpritePainter();
+  public zIndex = 1;
   public type: TankType;
   public attributes: TankAttributes;
   public behavior: TankBehavior;
   public skinAnimation: TankSkinAnimation;
-  public collider = new Collider(true);
-  public tags = [Tag.Tank];
   public bullets: Bullet[] = [];
   public shield: Shield = null;
   public died = new Subject<{ reason: TankDeathReason }>();
   public state = TankState.Uninitialized;
-  public painter: SpritePainter = new SpritePainter();
   protected shieldTimer = new Timer();
   protected animation: Animation<Sprite>;
 
@@ -53,11 +54,11 @@ export class Tank extends GameObject {
     this.shieldTimer.done.addListener(this.handleShieldTimer);
   }
 
-  protected setup(updateArgs: GameObjectUpdateArgs): void {
+  protected setup(updateArgs: GameUpdateArgs): void {
     this.behavior.setup(this, updateArgs);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.shieldTimer.update(updateArgs.deltaTime);
 
     this.behavior.update(this, updateArgs);

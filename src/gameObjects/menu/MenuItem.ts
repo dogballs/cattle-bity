@@ -1,5 +1,5 @@
 import { GameObject, Subject } from '../../core';
-import { GameObjectUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 
 export abstract class MenuItem extends GameObject {
   public focused = new Subject();
@@ -9,21 +9,21 @@ export abstract class MenuItem extends GameObject {
   public isFocused = false;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public updateFocused(updateArgs?: GameObjectUpdateArgs): void {
+  public updateFocused(updateArgs?: GameUpdateArgs): void {
     // Virtual
   }
 
   public focus(): void {
     this.isFocused = true;
-    this.focused.notify();
+    this.focused.notify(null);
   }
 
   public unfocus(): void {
     this.isFocused = false;
-    this.unfocused.notify();
+    this.unfocused.notify(null);
   }
 
   public select(): void {
-    this.selected.notify();
+    this.selected.notify(null);
   }
 }

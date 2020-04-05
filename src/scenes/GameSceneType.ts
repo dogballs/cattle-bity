@@ -3,6 +3,7 @@ export enum GameSceneType {
   EditorMap,
   EditorMenu,
   LevelGameOver,
+  LevelLoad,
   LevelPlay,
   LevelScore,
   LevelSelection,

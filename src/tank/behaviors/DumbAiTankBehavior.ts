@@ -1,5 +1,5 @@
 import { Logger, RandomUtils, Timer, Vector } from '../../core';
-import { GameObjectUpdateArgs, Rotation } from '../../game';
+import { GameUpdateArgs, Rotation } from '../../game';
 import { Tank } from '../../gameObjects';
 import * as config from '../../config';
 
@@ -27,7 +27,7 @@ export class DumbAiTankBehavior extends TankBehavior {
   private fireTimer = new Timer();
   private log = new Logger(DumbAiTankBehavior.name, Logger.Level.Info);
 
-  public update(tank: Tank, updateArgs: GameObjectUpdateArgs): void {
+  public update(tank: Tank, updateArgs: GameUpdateArgs): void {
     if (this.fireTimer.isDone()) {
       const hasFired = tank.fire();
       if (hasFired) {

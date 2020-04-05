@@ -48,7 +48,7 @@ export class Sound {
   }
 
   private handleLoaded = (): void => {
-    this.loaded.notify();
+    this.loaded.notify(null);
     this.audioElement.removeEventListener('loadeddata', this.handleLoaded);
   };
 }

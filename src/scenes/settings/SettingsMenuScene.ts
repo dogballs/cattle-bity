@@ -1,5 +1,5 @@
 import { Scene } from '../../core';
-import { GameObjectUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import { Menu, SpriteText, TextMenuItem } from '../../gameObjects';
 import * as config from '../../config';
 
@@ -30,7 +30,7 @@ export class SettingsMenuScene extends Scene {
     this.root.add(this.menu);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });

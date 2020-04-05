@@ -1,4 +1,4 @@
-import { GameObjectUpdateArgs, Tag } from '../game';
+import { GameUpdateArgs, Tag } from '../game';
 import {
   PlayerTankBehavior,
   TankSkinAnimation,
@@ -18,7 +18,7 @@ export class PlayerTank extends Tank {
     super(64, 64);
   }
 
-  protected setup(updateArgs: GameObjectUpdateArgs): void {
+  protected setup(updateArgs: GameUpdateArgs): void {
     const { spriteLoader } = updateArgs;
 
     this.attributes = TankAttributesFactory.create(this.type);

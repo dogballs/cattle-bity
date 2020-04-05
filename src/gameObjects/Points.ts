@@ -1,5 +1,5 @@
 import { GameObject, SpritePainter, Timer } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 import { PointsValue } from '../points';
 
 const SPRITE_POINTS_PREFIX = 'points';
@@ -19,12 +19,12 @@ export class Points extends GameObject {
     this.timer.done.addListener(this.handleTimer);
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     const spriteId = this.getSpriteId(this.value);
     this.painter.sprite = spriteLoader.load(spriteId);
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     this.timer.update(updateArgs.deltaTime);
   }
 

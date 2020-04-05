@@ -5,7 +5,7 @@ import {
   Sprite,
   SpritePainter,
 } from '../../core';
-import { GameObjectUpdateArgs, Rotation } from '../../game';
+import { GameUpdateArgs, Rotation } from '../../game';
 import { TankType, TankIdleAnimation } from '../../tank';
 import * as config from '../../config';
 
@@ -34,7 +34,7 @@ export class EditorEnemyPreview extends GameObject {
     }
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.container = new GameObject(64, 64);
     this.container.setCenter(this.getSelfCenter());
     this.container.painter = new SpritePainter();
@@ -50,7 +50,7 @@ export class EditorEnemyPreview extends GameObject {
     });
   }
 
-  protected update({ deltaTime }: GameObjectUpdateArgs): void {
+  protected update({ deltaTime }: GameUpdateArgs): void {
     const animation = this.animations[this.selectedIndex];
     if (animation === undefined) {
       return;

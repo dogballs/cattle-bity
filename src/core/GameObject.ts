@@ -7,6 +7,7 @@ export class GameObject extends Transform {
   // TODO: These two must go
   public collider: Collider = null;
   public ignorePause = false;
+  public zIndex = 0;
 
   public visible = true;
 

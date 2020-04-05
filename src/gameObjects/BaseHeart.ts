@@ -7,7 +7,7 @@ import {
   SpritePainter,
   Subject,
 } from '../core';
-import { GameObjectUpdateArgs, Tag } from '../game';
+import { GameUpdateArgs, Tag } from '../game';
 import { Bullet, Explosion } from '../gameObjects';
 
 export class BaseHeart extends GameObject {
@@ -40,10 +40,10 @@ export class BaseHeart extends GameObject {
 
     this.explosionSound.play();
 
-    this.died.notify();
+    this.died.notify(null);
   }
 
-  protected setup({ audioLoader, spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ audioLoader, spriteLoader }: GameUpdateArgs): void {
     this.aliveSprite = spriteLoader.load('base.heart.alive');
     this.deadSprite = spriteLoader.load('base.heart.dead');
 

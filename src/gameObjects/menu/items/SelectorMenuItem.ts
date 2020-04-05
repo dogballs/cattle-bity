@@ -1,5 +1,5 @@
 import { GameObject, Subject } from '../../../core';
-import { GameObjectUpdateArgs } from '../../../game';
+import { GameUpdateArgs } from '../../../game';
 import { MenuInputContext } from '../../../input';
 import * as config from '../../../config';
 
@@ -68,7 +68,7 @@ export class SelectorMenuItem<T> extends MenuItem {
     return value;
   }
 
-  public updateFocused(updateArgs: GameObjectUpdateArgs): void {
+  public updateFocused(updateArgs: GameUpdateArgs): void {
     const { input } = updateArgs;
 
     if (input.isDownAny(MenuInputContext.HorizontalNext)) {

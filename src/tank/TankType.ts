@@ -60,6 +60,14 @@ export class TankType {
     );
   }
 
+  public serialize(): string {
+    return `${this.party}-${this.color}-${this.tier}-${this.hasDrop}`;
+  }
+
+  public toString(): string {
+    return this.serialize();
+  }
+
   public static PlayerPrimaryA = new TankType(
     TankParty.Player,
     TankColor.Primary,

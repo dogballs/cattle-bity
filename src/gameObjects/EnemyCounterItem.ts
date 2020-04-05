@@ -1,5 +1,5 @@
 import { GameObject, SpritePainter } from '../core';
-import { GameObjectUpdateArgs } from '../game';
+import { GameUpdateArgs } from '../game';
 
 export class EnemyCounterItem extends GameObject {
   public readonly painter = new SpritePainter();
@@ -8,7 +8,7 @@ export class EnemyCounterItem extends GameObject {
     super(32, 32);
   }
 
-  protected setup({ spriteLoader }: GameObjectUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.painter.sprite = spriteLoader.load('ui.enemy');
   }
 }

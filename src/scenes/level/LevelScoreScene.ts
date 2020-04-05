@@ -1,5 +1,5 @@
 import { RectPainter, Scene, Timer } from '../../core';
-import { GameObjectUpdateArgs, Session } from '../../game';
+import { GameUpdateArgs, Session } from '../../game';
 import { LevelTitle, ScoreTable } from '../../gameObjects';
 import * as config from '../../config';
 
@@ -20,7 +20,7 @@ export class LevelScoreScene extends Scene {
   private postTimer = new Timer();
   private state = State.Idle;
 
-  protected setup({ session }: GameObjectUpdateArgs): void {
+  protected setup({ session }: GameUpdateArgs): void {
     this.session = session;
 
     this.root.painter = new RectPainter(config.COLOR_BLACK);
@@ -44,7 +44,7 @@ export class LevelScoreScene extends Scene {
     this.scoreTable.start();
   }
 
-  protected update(updateArgs: GameObjectUpdateArgs): void {
+  protected update(updateArgs: GameUpdateArgs): void {
     if (this.state === State.Post) {
       this.postTimer.update(updateArgs.deltaTime);
       return;

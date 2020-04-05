@@ -13,7 +13,7 @@ import { MapLoader } from '../map';
 import { GameState } from './GameState';
 import { Session } from './Session';
 
-export interface GameObjectUpdateArgs {
+export interface GameUpdateArgs {
   audioLoader: AudioLoader;
   deltaTime: number;
   imageLoader: ImageLoader;
