@@ -9,6 +9,7 @@ import {
 import { GameUpdateArgs } from '../game';
 
 export class Spawn extends GameObject {
+  public zIndex = 3;
   public painter = new SpritePainter();
   public completed = new Subject();
   private animation: Animation<Sprite>;

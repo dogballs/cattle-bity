@@ -1,5 +1,5 @@
-import { GameObject } from '../GameObject';
 import { Painter } from '../Painter';
+import { RenderObject } from '../RenderObject';
 
 export class RectPainter extends Painter {
   public fillColor: string = null;
@@ -14,11 +14,11 @@ export class RectPainter extends Painter {
 
   public paint(
     context: CanvasRenderingContext2D,
-    gameObject: GameObject,
+    renderObject: RenderObject,
   ): void {
-    // const { min, max } = gameObject.getWorldBoundingBox();
+    // const { min, max } = RenderObject.getWorldBoundingBox();
 
-    const points = gameObject.getWorldPoints();
+    const points = renderObject.getWorldPoints();
     if (points.length === 0) {
       return;
     }

@@ -1,5 +1,5 @@
-import { GameObject } from '../GameObject';
 import { Painter } from '../Painter';
+import { RenderObject } from '../RenderObject';
 import { Vector } from '../Vector';
 
 export class LinePainter extends Painter {
@@ -8,13 +8,13 @@ export class LinePainter extends Painter {
 
   public paint(
     context: CanvasRenderingContext2D,
-    gameObject: GameObject,
+    renderObject: RenderObject,
   ): void {
     if (this.positions.length === 0) {
       return;
     }
 
-    const { min } = gameObject.getWorldBoundingBox();
+    const { min } = renderObject.getWorldBoundingBox();
 
     const [firstPosition, ...restPositions] = this.positions;
 

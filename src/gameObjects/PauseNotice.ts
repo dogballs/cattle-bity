@@ -2,6 +2,7 @@ import { Animation, GameObject, Sprite, SpritePainter } from '../core';
 import { GameUpdateArgs } from '../game';
 
 export class PauseNotice extends GameObject {
+  public zIndex = 7;
   public ignorePause = true;
   public readonly painter = new SpritePainter();
   private animation: Animation<Sprite>;

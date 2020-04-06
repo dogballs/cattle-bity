@@ -9,6 +9,7 @@ import {
 import { GameUpdateArgs } from '../game';
 
 export class Explosion extends GameObject {
+  public zIndex = 5;
   public readonly painter = new SpritePainter();
   public readonly completed = new Subject();
   private animation: Animation<Sprite>;

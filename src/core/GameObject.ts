@@ -1,41 +1,14 @@
 import { Collider, Collision } from './collision';
 
-import { Painter } from './Painter';
-import { Transform } from './Transform';
+import { RenderObject } from './RenderObject';
 
-export class GameObject extends Transform {
+export class GameObject extends RenderObject {
   // TODO: These two must go
   public collider: Collider = null;
   public ignorePause = false;
-  public zIndex = 0;
-
-  public visible = true;
-
-  // TODO: circular reference
-  public painter: Painter = null;
-
   public tags: string[] = [];
 
   private needsSetup = true;
-
-  public getChildrenWithTag(argTags: string | string[]): GameObject[] {
-    const objects = [];
-
-    const tags = Array.isArray(argTags) ? argTags : [argTags];
-
-    // TODO: These loops look like shit
-    this.traverse((object) => {
-      const hasAllTags = tags.every((tag) => {
-        return object.tags.includes(tag);
-      });
-
-      if (hasAllTags) {
-        objects.push(object);
-      }
-    });
-
-    return objects;
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   public invokeUpdate(...args: any[]): void {

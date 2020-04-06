@@ -4,7 +4,7 @@ import * as config from '../../config';
 
 export class JungleTerrainTile extends GameObject {
   public readonly painter = new SpritePainter();
-  public zIndex = 2;
+  public zIndex = 4;
 
   constructor() {
     super(config.JUNGLE_TILE_SIZE, config.JUNGLE_TILE_SIZE);

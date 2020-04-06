@@ -3,6 +3,7 @@ import { GameUpdateArgs, GameState } from '../game';
 
 export class Shield extends GameObject {
   public ignorePause = true;
+  public zIndex = 2;
   public painter = new SpritePainter();
   private animation: Animation<Sprite>;
 

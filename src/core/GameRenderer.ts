@@ -1,4 +1,4 @@
-import { GameObject } from './GameObject';
+import { RenderObject } from './RenderObject';
 
 export interface GameRendererOptions {
   height?: number;
@@ -40,7 +40,7 @@ export class GameRenderer {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  public render(root: GameObject): void {
+  public render(root: RenderObject): void {
     this.clear();
 
     // When image is scaled, display pixels as is without smoothing.
@@ -50,29 +50,43 @@ export class GameRenderer {
     this.offscreenContext.imageSmoothingEnabled = false;
 
     root.updateWorldMatrix(false, true);
+    root.updateWorldVisible(false, true);
+    root.updateWorldZIndex(false, true);
 
-    this.renderGameObject(root);
+    const objects = root.flatten();
+
+    const zSortedObjects = objects.sort((a, b) => {
+      return a.zIndex - b.zIndex;
+    });
+
+    zSortedObjects.forEach((object) => {
+      this.renderObject(object);
+    });
   }
 
-  private renderGameObject(gameObject: GameObject): void {
-    if (gameObject.painter !== null && gameObject.visible) {
-      gameObject.painter.paint(this.context, gameObject, this.offscreenContext);
+  private renderObject(renderObject: RenderObject): void {
+    if (renderObject.painter === null) {
+      return;
     }
+
+    if (renderObject.worldVisible === false) {
+      return;
+    }
+
+    renderObject.painter.paint(
+      this.context,
+      renderObject,
+      this.offscreenContext,
+    );
 
     if (this.options.debug) {
-      this.renderGameObjectDebugBox(gameObject);
-    }
-
-    if (gameObject.visible === true) {
-      gameObject.children.forEach((child) => {
-        this.renderGameObject(child);
-      });
+      this.renderObjectDebugBox(renderObject);
     }
   }
 
   // TODO: debug should not be a part of game renderer
-  private renderGameObjectDebugBox(gameObject: GameObject): void {
-    const { min, max } = gameObject.getWorldBoundingBox();
+  private renderObjectDebugBox(renderObject: RenderObject): void {
+    const { min, max } = renderObject.getWorldBoundingBox();
 
     this.context.beginPath();
     this.context.moveTo(min.x, min.y);

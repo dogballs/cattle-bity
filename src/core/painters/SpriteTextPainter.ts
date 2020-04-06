@@ -1,5 +1,5 @@
-import { GameObject } from '../GameObject';
 import { Painter } from '../Painter';
+import { RenderObject } from '../RenderObject';
 import { Sprite } from '../Sprite';
 import { SpriteFont, Text } from '../text';
 
@@ -16,7 +16,7 @@ export class SpriteTextPainter extends Painter {
 
   public paint(
     context: CanvasRenderingContext2D,
-    gameObject: GameObject,
+    renderObject: RenderObject,
     offscreenContext: OffscreenCanvasRenderingContext2D,
   ): void {
     if (this.text === null) {
@@ -28,7 +28,7 @@ export class SpriteTextPainter extends Painter {
       return;
     }
 
-    const { min: worldPosition } = gameObject.getWorldBoundingBox();
+    const { min: worldPosition } = renderObject.getWorldBoundingBox();
 
     const sprites = this.text.build();
 

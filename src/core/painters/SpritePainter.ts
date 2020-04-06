@@ -1,7 +1,7 @@
 import { Alignment } from '../Alignment';
-import { GameObject } from '../GameObject';
 import { Painter } from '../Painter';
 import { Rect } from '../Rect';
+import { RenderObject } from '../RenderObject';
 import { Sprite } from '../Sprite';
 
 export class SpritePainter extends Painter {
@@ -16,7 +16,7 @@ export class SpritePainter extends Painter {
 
   public paint(
     context: CanvasRenderingContext2D,
-    gameObject: GameObject,
+    renderObject: RenderObject,
   ): void {
     // Simply no sprite object provided
     if (this.sprite === null) {
@@ -28,7 +28,7 @@ export class SpritePainter extends Painter {
       return;
     }
 
-    const objectRect = gameObject.getWorldBoundingBox().toRect();
+    const objectRect = renderObject.getWorldBoundingBox().toRect();
 
     let targetRect = objectRect;
     if (this.alignment === Alignment.Stretch) {

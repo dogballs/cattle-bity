@@ -11,9 +11,9 @@ import { GameUpdateArgs, Tag } from '../game';
 import { PowerupType } from '../powerups';
 
 export class Powerup extends GameObject {
+  public zIndex = 6;
   public collider = new Collider(true);
   public painter = new SpritePainter();
-  // Powerup should be blinking during pause
   public ignorePause = true;
   public picked = new Subject();
   public type: PowerupType;

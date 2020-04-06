@@ -1,8 +1,15 @@
-import { Animation, GameObject, Sprite, SpritePainter } from '../../core';
+import {
+  Animation,
+  Collider,
+  GameObject,
+  Sprite,
+  SpritePainter,
+} from '../../core';
 import { GameUpdateArgs, Tag } from '../../game';
 import * as config from '../../config';
 
 export class WaterTerrainTile extends GameObject {
+  public collider = new Collider(false);
   public tags = [Tag.BlockMove];
   public readonly painter = new SpritePainter();
   private animation: Animation<Sprite>;
