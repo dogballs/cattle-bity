@@ -51,6 +51,8 @@ export class Powerup extends GameObject {
     switch (this.type) {
       case PowerupType.BaseDefence:
         return 'powerup.shovel';
+      case PowerupType.Freeze:
+        return 'powerup.clock';
       case PowerupType.Life:
         return 'powerup.tank';
       case PowerupType.Shield:

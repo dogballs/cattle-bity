@@ -1,4 +1,4 @@
-import { SpritePainter } from '../core';
+import { State } from '../core';
 import { GameUpdateArgs, GameState, Tag } from '../game';
 import {
   DumbAiTankBehavior,
@@ -12,6 +12,7 @@ import { Tank } from './Tank';
 
 export class EnemyTank extends Tank {
   public tags = [Tag.Tank, Tag.Enemy];
+  public freezeState = new State<boolean>(false);
   private healthSkinAnimations = new Map<number, TankSkinAnimation>();
 
   constructor(type: TankType) {
@@ -77,24 +78,22 @@ export class EnemyTank extends Tank {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { deltaTime, gameState } = updateArgs;
+    const { gameState } = updateArgs;
 
-    if (gameState.hasChangedTo(GameState.Paused)) {
+    const shouldIdle =
+      this.freezeState.hasChangedTo(true) ||
+      gameState.hasChangedTo(GameState.Paused);
+
+    if (shouldIdle) {
       this.idle();
     }
 
-    if (gameState.is(GameState.Paused)) {
-      this.skinAnimation.update(this, deltaTime);
+    const isIdle = this.freezeState.is(true) || gameState.is(GameState.Paused);
 
-      const frame = this.skinAnimation.getCurrentFrame();
-
-      this.skinLayers.forEach((layer, index) => {
-        const painter = layer.painter as SpritePainter;
-        const sprite = frame.getSprite(index);
-
-        painter.sprite = sprite;
-      });
-
+    // Only update animation when idle, other components should not receive
+    // updates
+    if (isIdle) {
+      this.updateAnimation(updateArgs.deltaTime);
       return;
     }
 

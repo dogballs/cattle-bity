@@ -5,7 +5,11 @@
         {
           "tier": "d",
           "drop": true
-        }
+        },
+        { "tier": "d" },
+        { "tier": "d" },
+        { "tier": "d" },
+        { "tier": "d" }
       ],
       "locations": [
         {

@@ -21,7 +21,8 @@ export class LevelEnemyScript extends GameScript {
   private aliveTanks: EnemyTank[] = [];
   private positions: Vector[] = [];
   private positionIndex = 0;
-  private timer = new Timer();
+  private spawnTimer = new Timer();
+  private freezeTimer = new Timer();
 
   constructor(
     world: LevelWorld,
@@ -40,31 +41,34 @@ export class LevelEnemyScript extends GameScript {
 
     this.positions = mapConfig.getEnemySpawnPositions();
 
-    this.timer.reset(config.ENEMY_FIRST_SPAWN_DELAY);
-    this.timer.done.addListener(this.handleTimer);
+    this.spawnTimer.reset(config.ENEMY_FIRST_SPAWN_DELAY);
+    this.spawnTimer.done.addListener(this.handleSpawnTimer);
+
+    this.freezeTimer.done.addListener(this.handleFreezeTimer);
   }
 
   protected update({ deltaTime }: GameUpdateArgs): void {
-    this.timer.update(deltaTime);
+    this.spawnTimer.update(deltaTime);
+    this.freezeTimer.update(deltaTime);
   }
 
-  private handleTimer = (): void => {
+  private handleSpawnTimer = (): void => {
     // Happens after max enemies spawn
     if (this.aliveTanks.length >= config.ENEMY_MAX_ALIVE_COUNT) {
-      this.timer.stop();
+      this.spawnTimer.stop();
       return;
     }
 
     // No more tanks to spawn
     if (this.listIndex >= this.list.length) {
-      this.timer.stop();
+      this.spawnTimer.stop();
       return;
     }
 
     this.requestSpawn();
 
     // Start timer to spawn next enemy
-    this.timer.reset(config.ENEMY_SPAWN_DELAY);
+    this.spawnTimer.reset(config.ENEMY_SPAWN_DELAY);
   };
 
   private handleSpawnCompleted = (
@@ -79,6 +83,10 @@ export class LevelEnemyScript extends GameScript {
     const tank = TankFactory.createEnemy(type.tier, type.hasDrop);
     tank.rotate(Rotation.Down);
     tank.setCenter(event.centerPosition);
+
+    if (this.freezeTimer.isActive()) {
+      tank.freezeState.set(true);
+    }
 
     tank.hit.addListener(() => {
       this.eventBus.enemyHit.notify({
@@ -102,8 +110,8 @@ export class LevelEnemyScript extends GameScript {
 
       // If timer was stopped because max count of alive enemies has been
       // reached, restart it, because one of alive tanks has just been killed
-      if (!this.timer.isActive()) {
-        this.timer.reset(config.ENEMY_SPAWN_DELAY);
+      if (!this.spawnTimer.isActive()) {
+        this.spawnTimer.reset(config.ENEMY_SPAWN_DELAY);
       }
     });
 
@@ -147,8 +155,22 @@ export class LevelEnemyScript extends GameScript {
     return areAllDead;
   }
 
+  private handleFreezeTimer = (): void => {
+    this.aliveTanks.forEach((tank) => {
+      tank.freezeState.set(false);
+    });
+  };
+
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
     const { type: powerupType } = event;
+
+    if (powerupType === PowerupType.Freeze) {
+      this.freezeTimer.reset(config.FREEZE_POWERUP_DURATION);
+
+      this.aliveTanks.forEach((tank) => {
+        tank.freezeState.set(true);
+      });
+    }
 
     if (powerupType === PowerupType.Wipeout) {
       this.aliveTanks.forEach((tank) => {

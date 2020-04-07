@@ -83,8 +83,11 @@ export class Tank extends GameObject {
 
     this.behavior.update(this, updateArgs);
 
-    this.skinAnimation.update(this, updateArgs.deltaTime);
+    this.updateAnimation(updateArgs.deltaTime);
+  }
 
+  protected updateAnimation(deltaTime: number): void {
+    this.skinAnimation.update(this, deltaTime);
     const frame = this.skinAnimation.getCurrentFrame();
 
     this.skinLayers.forEach((layer, index) => {
