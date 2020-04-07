@@ -1,8 +1,8 @@
 import { GameObject } from '../core';
 
-import { EnemyCounterItem } from './EnemyCounterItem';
+import { LevelEnemyCounterItem } from './LevelEnemyCounterItem';
 
-export class EnemyCounter extends GameObject {
+export class LevelEnemyCounter extends GameObject {
   // TODO: can only display 20 items as in original game there can only be
   // max 20 enemy tanks
 
@@ -27,7 +27,7 @@ export class EnemyCounter extends GameObject {
 
   private addItems(count: number): void {
     for (let i = 0; i < count; i += 1) {
-      const item = new EnemyCounterItem();
+      const item = new LevelEnemyCounterItem();
 
       const x = item.size.width * (i % 2);
       const y = item.size.height * Math.floor(i / 2);

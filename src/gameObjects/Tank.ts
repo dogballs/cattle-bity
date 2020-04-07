@@ -243,13 +243,11 @@ export class Tank extends GameObject {
   }
 
   protected receiveHit(damage: number): void {
-    const nextHealth = this.attributes.health - damage;
+    this.attributes.health = Math.max(0, this.attributes.health - damage);
 
     this.hit.notify(null);
 
-    if (nextHealth > 0) {
-      this.attributes.health = nextHealth;
-    } else {
+    if (!this.isAlive()) {
       this.die();
     }
   }

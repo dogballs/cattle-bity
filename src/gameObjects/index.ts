@@ -16,7 +16,6 @@ export * from './Field';
 export * from './GameOverHeading';
 export * from './GameOverNotice';
 export * from './LevelSelector';
-export * from './LivesCounter';
 export * from './MainHeading';
 export * from './PauseNotice';
 export * from './PlayerTank';

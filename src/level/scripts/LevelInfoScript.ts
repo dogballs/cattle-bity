@@ -24,6 +24,7 @@ export class LevelInfoScript extends GameScript {
     );
 
     this.session = session;
+    this.session.lifeup.addListener(this.handleSessionLifeup);
   }
 
   protected setup(): void {
@@ -35,6 +36,7 @@ export class LevelInfoScript extends GameScript {
     this.world.sceneRoot.add(this.info);
 
     this.info.setLivesCount(this.session.getLivesCount());
+    this.info.setLevelNumber(this.session.getLevelNumber());
   }
 
   private handlePlayerDied = (): void => {
@@ -45,5 +47,9 @@ export class LevelInfoScript extends GameScript {
     event: LevelEnemySpawnRequestedEvent,
   ): void => {
     this.info.setEnemyCount(event.unspawnedCount);
+  };
+
+  private handleSessionLifeup = (): void => {
+    this.info.setLivesCount(this.session.getLivesCount());
   };
 }

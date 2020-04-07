@@ -1,12 +1,16 @@
 import { AudioLoader } from '../../core';
-import { GameScript, GameUpdateArgs } from '../../game';
+import { GameScript, GameUpdateArgs, Session } from '../../game';
+import { PowerupType } from '../../powerups';
+
 import { LevelEventBus } from '../LevelEventBus';
+import { LevelPowerupPickedEvent } from '../events';
 
 export class LevelAudioScript extends GameScript {
   private eventBus: LevelEventBus;
+  private session: Session;
   private audioLoader: AudioLoader;
 
-  constructor(eventBus: LevelEventBus) {
+  constructor(eventBus: LevelEventBus, session: Session) {
     super();
 
     this.eventBus = eventBus;
@@ -14,6 +18,9 @@ export class LevelAudioScript extends GameScript {
     this.eventBus.playerDied.addListener(this.handlePlayerDied);
     this.eventBus.powerupSpawned.addListener(this.handlePowerupSpawned);
     this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
+
+    this.session = session;
+    this.session.lifeup.addListener(this.handleSessionLifeup);
   }
 
   protected setup({ audioLoader }: GameUpdateArgs): void {
@@ -34,7 +41,16 @@ export class LevelAudioScript extends GameScript {
     this.audioLoader.load('powerup.spawn').play();
   };
 
-  private handlePowerupPicked = (): void => {
+  private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
+    // Separate sound for life pickup
+    if (event.type === PowerupType.Life) {
+      return;
+    }
+
     this.audioLoader.load('powerup.pickup').play();
+  };
+
+  private handleSessionLifeup = (): void => {
+    this.audioLoader.load('life').play();
   };
 }

@@ -1,6 +1,7 @@
 import { CollisionDetector, Rect, Scene, Timer } from '../../core';
 import { GameUpdateArgs, GameState, Session } from '../../game';
 import { Border } from '../../gameObjects';
+import { PowerupType } from '../../powerups';
 import { TerrainFactory } from '../../terrain';
 import * as config from '../../config';
 
@@ -122,7 +123,7 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
     this.introScript.completed.addListener(() => {
       this.state = State.Playing;
     });
-    this.audioScript = new LevelAudioScript(this.eventBus);
+    this.audioScript = new LevelAudioScript(this.eventBus, this.session);
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
@@ -190,12 +191,10 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
   }
 
   private handlePlayerDied = (): void => {
-    this.session.removeLive();
+    this.session.removeLife();
     if (this.session.isGameOver()) {
       this.playerScript.disable();
       this.end();
-    } else {
-      // this.info.setLivesCount(this.session.getLivesCount());
     }
   };
 
@@ -209,6 +208,10 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
     this.session.addPowerupPoints(event.type);
+
+    if (event.type === PowerupType.Life) {
+      this.session.addLife();
+    }
   };
 
   private end(): void {

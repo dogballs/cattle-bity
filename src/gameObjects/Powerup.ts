@@ -41,7 +41,7 @@ export class Powerup extends GameObject {
   }
 
   protected collide({ other }: Collision): void {
-    if (other.tags.includes(Tag.Player)) {
+    if (other.tags.includes(Tag.Tank) && other.tags.includes(Tag.Player)) {
       this.removeSelf();
       this.picked.notify(null);
     }
@@ -51,6 +51,8 @@ export class Powerup extends GameObject {
     switch (this.type) {
       case PowerupType.BaseDefence:
         return 'powerup.shovel';
+      case PowerupType.Life:
+        return 'powerup.tank';
       case PowerupType.Shield:
         return 'powerup.helmet';
       case PowerupType.Upgrade:

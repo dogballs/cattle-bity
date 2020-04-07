@@ -82,13 +82,13 @@ export class LevelEnemyScript extends GameScript {
 
     tank.hit.addListener(() => {
       this.eventBus.enemyHit.notify({
-        type,
+        type: tank.type,
       });
     });
 
     tank.died.addListener((deathEvent) => {
       this.eventBus.enemyDied.notify({
-        type,
+        type: tank.type,
         centerPosition: tank.getCenter(),
         reason: deathEvent.reason,
       });

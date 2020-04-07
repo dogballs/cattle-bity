@@ -5,6 +5,7 @@ import { PowerupType } from './PowerupType';
 
 const TYPES = [
   PowerupType.BaseDefence,
+  PowerupType.Life,
   PowerupType.Shield,
   PowerupType.Upgrade,
   PowerupType.Wipeout,

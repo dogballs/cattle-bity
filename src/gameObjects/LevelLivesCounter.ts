@@ -3,7 +3,7 @@ import { GameUpdateArgs } from '../game';
 
 import { SpriteText } from './SpriteText';
 
-export class LivesCounter extends GameObject {
+export class LevelLivesCounter extends GameObject {
   private title = new SpriteText('ⅠP');
   private livesText = new SpriteText('0');
   private icon = new GameObject(28, 32);
@@ -23,7 +23,8 @@ export class LivesCounter extends GameObject {
     this.add(this.title);
   }
 
-  public setCount(livesCounter: number): void {
-    this.livesText.setText(livesCounter.toString());
+  public setCount(livesCount: number): void {
+    const text = (livesCount - 1).toString();
+    this.livesText.setText(text);
   }
 }

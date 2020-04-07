@@ -44,7 +44,7 @@ export const LEVEL_END_DELAY = 3;
 // export const LEVEL_START_DELAY = 3;
 export const LEVEL_START_DELAY = 0;
 
-export const PLAYER_INITIAL_LIVES = 2;
+export const PLAYER_INITIAL_LIVES = 3;
 export const PLAYER_EXTRA_LIVE_POINTS = 20000;
 
 export const COLOR_BACKDROP = 'rgba(0,0,0,0.7)';

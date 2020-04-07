@@ -1,3 +1,4 @@
+import { Subject } from '../core';
 import { PointsRecord } from '../points';
 import { PowerupType } from '../powerups';
 import { TankTier } from '../tank';
@@ -10,12 +11,15 @@ enum State {
 }
 
 export class Session {
+  public lifeup = new Subject();
+
   private seenIntro: boolean;
   private startLevelNumber: number;
   private currentLevelNumber: number;
   private levelPointsRecord: PointsRecord;
   private totalPoints: number;
   private lives: number;
+  private nextLifePointThreshold: number;
   private state: State;
 
   constructor() {
@@ -39,6 +43,7 @@ export class Session {
     this.levelPointsRecord = new PointsRecord();
     this.totalPoints = 0;
     this.lives = config.PLAYER_INITIAL_LIVES;
+    this.nextLifePointThreshold = config.PLAYER_EXTRA_LIVE_POINTS;
     this.state = State.Idle;
   }
 
@@ -60,14 +65,21 @@ export class Session {
     return this.state === State.GameOver;
   }
 
-  // TODO: 20k points give extra live
+  // TODO: 20k points give extra life
 
   public addKillPoints(tier: TankTier): void {
     this.levelPointsRecord.addKill(tier);
+    this.checkLifeup();
   }
 
   public addPowerupPoints(type: PowerupType): void {
     this.levelPointsRecord.addPowerup(type);
+    this.checkLifeup();
+  }
+
+  public getTotalPoints(): number {
+    // Sum of all previous levels and current level
+    return this.totalPoints + this.levelPointsRecord.getTotalPoints();
   }
 
   public getLevelPointsRecord(): PointsRecord {
@@ -78,10 +90,20 @@ export class Session {
     return this.lives;
   }
 
-  public removeLive(): void {
+  public isAlive(): boolean {
+    return this.lives > 0;
+  }
+
+  public addLife(): void {
+    this.lives += 1;
+
+    this.lifeup.notify(null);
+  }
+
+  public removeLife(): void {
     this.lives -= 1;
 
-    if (this.lives < 0) {
+    if (!this.isAlive()) {
       this.setGameOver();
     }
   }
@@ -92,5 +114,12 @@ export class Session {
 
   public haveSeenIntro(): boolean {
     return this.seenIntro;
+  }
+
+  private checkLifeup(): void {
+    if (this.getTotalPoints() >= this.nextLifePointThreshold) {
+      this.nextLifePointThreshold += config.PLAYER_EXTRA_LIVE_POINTS;
+      this.addLife();
+    }
   }
 }

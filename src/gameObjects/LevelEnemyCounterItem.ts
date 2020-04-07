@@ -1,7 +1,7 @@
 import { GameObject, SpritePainter } from '../core';
 import { GameUpdateArgs } from '../game';
 
-export class EnemyCounterItem extends GameObject {
+export class LevelEnemyCounterItem extends GameObject {
   public readonly painter = new SpritePainter();
 
   constructor() {
