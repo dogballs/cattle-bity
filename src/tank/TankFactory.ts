@@ -1,6 +1,5 @@
 import { EnemyTank, PlayerTank } from '../gameObjects';
 
-import { TankColor } from './TankColor';
 import { TankParty } from './TankParty';
 import { TankTier } from './TankTier';
 import { TankType } from './TankType';
@@ -11,7 +10,7 @@ export class TankFactory {
   }
 
   public static createPlayerType(): TankType {
-    return TankType.PlayerPrimaryA;
+    return TankType.PlayerA();
   }
 
   public static createEnemy(tier: TankTier, hasDrop = false): EnemyTank {
@@ -23,6 +22,6 @@ export class TankFactory {
   }
 
   public static createEnemyType(tier: TankTier, hasDrop = false): TankType {
-    return new TankType(TankParty.Enemy, TankColor.Default, tier, hasDrop);
+    return new TankType(TankParty.Enemy, tier, hasDrop);
   }
 }

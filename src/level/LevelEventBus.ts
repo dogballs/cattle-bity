@@ -3,6 +3,7 @@ import { Subject } from '../core';
 import {
   LevelEnemyDiedEvent,
   LevelEnemyExplodedEvent,
+  LevelEnemyHitEvent,
   LevelEnemySpawnCompletedEvent,
   LevelEnemySpawnRequestedEvent,
   LevelPlayerDiedEvent,
@@ -15,6 +16,7 @@ import {
 export class LevelEventBus {
   public enemyDied = new Subject<LevelEnemyDiedEvent>();
   public enemyExploded = new Subject<LevelEnemyExplodedEvent>();
+  public enemyHit = new Subject<LevelEnemyHitEvent>();
   public enemySpawnCompleted = new Subject<LevelEnemySpawnCompletedEvent>();
   public enemySpawnRequested = new Subject<LevelEnemySpawnRequestedEvent>();
 

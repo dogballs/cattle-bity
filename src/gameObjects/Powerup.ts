@@ -52,7 +52,7 @@ export class Powerup extends GameObject {
       case PowerupType.BaseDefence:
         return 'powerup.shovel';
       case PowerupType.Shield:
-        return 'powerup.helment';
+        return 'powerup.helmet';
       case PowerupType.Upgrade:
         return 'powerup.star';
       case PowerupType.Wipeout:

@@ -1,3 +1,5 @@
+import { TankParty } from './TankParty';
+import { TankTier } from './TankTier';
 import { TankType } from './TankType';
 
 export interface TankAttributes {
@@ -9,84 +11,141 @@ export interface TankAttributes {
   moveSpeed: number;
 }
 
-// TODO: is it ok? Action class is created when file is loaded and single
-// instance is used for all powerups of that type
-// TODO: move configuration to separate fil
+export interface TankAttributesListSelector {
+  party: TankParty;
+  tier: TankTier;
+}
 
-const map = new Map<string, TankAttributes>();
+interface TankAttributesListItem {
+  selector: TankAttributesListSelector;
+  attributes: TankAttributes;
+}
 
-map.set(TankType.PlayerPrimaryA.serialize(), {
-  bulletMaxCount: 1,
-  bulletSpeed: 600,
-  bulletTankDamage: 1,
-  bulletWallDamage: 1,
-  health: 1,
-  moveSpeed: 180,
-});
+interface TankAttributesConfig {
+  list: TankAttributesListItem[];
+}
 
-map.set(TankType.PlayerPrimaryB.serialize(), {
-  bulletMaxCount: 1,
-  bulletSpeed: 900,
-  bulletTankDamage: 1,
-  bulletWallDamage: 1,
-  health: 1,
-  moveSpeed: 180,
-});
+// TODO: move configuration to json
+const config: TankAttributesConfig = {
+  list: [
+    {
+      selector: {
+        party: TankParty.Player,
+        tier: TankTier.A,
+      },
+      attributes: {
+        bulletMaxCount: 1,
+        bulletSpeed: 600,
+        bulletTankDamage: 1,
+        bulletWallDamage: 1,
+        health: 1,
+        moveSpeed: 180,
+      },
+    },
+    {
+      selector: {
+        party: TankParty.Player,
+        tier: TankTier.B,
+      },
+      attributes: {
+        bulletMaxCount: 1,
+        bulletSpeed: 900,
+        bulletTankDamage: 1,
+        bulletWallDamage: 1,
+        health: 1,
+        moveSpeed: 180,
+      },
+    },
+    {
+      selector: {
+        party: TankParty.Player,
+        tier: TankTier.C,
+      },
+      attributes: {
+        bulletMaxCount: 2,
+        bulletSpeed: 900,
+        bulletTankDamage: 1,
+        bulletWallDamage: 1,
+        health: 1,
+        moveSpeed: 180,
+      },
+    },
+    {
+      selector: {
+        party: TankParty.Player,
+        tier: TankTier.D,
+      },
+      attributes: {
+        bulletMaxCount: 2,
+        bulletSpeed: 900,
+        bulletTankDamage: 2,
+        bulletWallDamage: 2,
+        health: 1,
+        moveSpeed: 180,
+      },
+    },
 
-map.set(TankType.PlayerPrimaryC.serialize(), {
-  bulletMaxCount: 2,
-  bulletSpeed: 900,
-  bulletTankDamage: 1,
-  bulletWallDamage: 1,
-  health: 1,
-  moveSpeed: 180,
-});
+    {
+      selector: {
+        party: TankParty.Enemy,
+        tier: TankTier.A,
+      },
+      attributes: {
+        bulletMaxCount: 1,
+        bulletSpeed: 600,
+        bulletTankDamage: 1,
+        bulletWallDamage: 1,
+        health: 1,
+        moveSpeed: 120,
+      },
+    },
+    {
+      selector: {
+        party: TankParty.Enemy,
+        tier: TankTier.B,
+      },
+      attributes: {
+        bulletMaxCount: 1,
+        bulletSpeed: 600,
+        bulletTankDamage: 1,
+        bulletWallDamage: 1,
+        health: 1,
+        moveSpeed: 240,
+      },
+    },
 
-map.set(TankType.PlayerPrimaryD.serialize(), {
-  bulletMaxCount: 2,
-  bulletSpeed: 900,
-  bulletTankDamage: 2,
-  bulletWallDamage: 2,
-  health: 1,
-  moveSpeed: 180,
-});
-
-map.set(TankType.EnemyDefaultA.serialize(), {
-  bulletMaxCount: 1,
-  bulletSpeed: 600,
-  bulletTankDamage: 1,
-  bulletWallDamage: 1,
-  health: 1,
-  moveSpeed: 120,
-});
-
-map.set(TankType.EnemyDefaultDropA.serialize(), {
-  bulletMaxCount: 1,
-  bulletSpeed: 600,
-  bulletTankDamage: 1,
-  bulletWallDamage: 1,
-  health: 1,
-  moveSpeed: 120,
-});
-
-map.set(TankType.EnemyDefaultB.serialize(), {
-  bulletMaxCount: 1,
-  bulletSpeed: 600,
-  bulletTankDamage: 1,
-  bulletWallDamage: 1,
-  health: 1,
-  moveSpeed: 240,
-});
+    {
+      selector: {
+        party: TankParty.Enemy,
+        tier: TankTier.D,
+      },
+      attributes: {
+        bulletMaxCount: 1,
+        bulletSpeed: 600,
+        bulletTankDamage: 1,
+        bulletWallDamage: 1,
+        health: 4,
+        moveSpeed: 180,
+      },
+    },
+  ],
+};
 
 export class TankAttributesFactory {
   public static create(type: TankType): TankAttributes {
-    const description = map.get(type.serialize());
-    if (description === undefined) {
-      throw new Error(`Tank attributes not found for type = "${type}"`);
+    const foundItem = config.list.find((item) => {
+      const { selector } = item;
+      return selector.party === type.party && selector.tier === type.tier;
+    });
+
+    if (foundItem === undefined) {
+      throw new Error(
+        `Tank attributes not found for type = "${type.serialize()}"`,
+      );
     }
 
     // TODO: ugly, to prevent changing object by reference
-    const attributes = Object.assign({}, description);
+    const attributes = Object.assign({}, foundItem.attributes);
 
     return attributes;
   }

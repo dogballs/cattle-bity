@@ -1,16 +1,15 @@
-import {
-  Alignment,
-  Animation,
-  GameObject,
-  Sprite,
-  SpritePainter,
-} from '../../core';
+import { Alignment, Animation, GameObject, SpritePainter } from '../../core';
 import { GameUpdateArgs, Rotation } from '../../game';
-import { TankType, TankMoveAnimation } from '../../tank';
+import {
+  TankAnimationFrame,
+  TankColor,
+  TankType,
+  TankMoveAnimation,
+} from '../../tank';
 
 export class MenuCursor extends GameObject {
   public readonly painter = new SpritePainter();
-  private animation: Animation<Sprite>;
+  private animation: Animation<TankAnimationFrame>;
 
   constructor() {
     super(60, 60);
@@ -21,14 +20,24 @@ export class MenuCursor extends GameObject {
   protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.animation = new TankMoveAnimation(
       spriteLoader,
-      TankType.PlayerPrimaryA,
+      TankType.PlayerA(),
+      [TankColor.Primary],
       Rotation.Right,
     );
-    this.painter.sprite = this.animation.getCurrentFrame();
+
+    this.updateSprite();
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
     this.animation.update(updateArgs.deltaTime);
-    this.painter.sprite = this.animation.getCurrentFrame();
+
+    this.updateSprite();
+  }
+
+  private updateSprite(): void {
+    const frame = this.animation.getCurrentFrame();
+    const sprite = frame.getSprite(0);
+
+    this.painter.sprite = sprite;
   }
 }

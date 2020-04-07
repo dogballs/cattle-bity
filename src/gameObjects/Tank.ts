@@ -4,14 +4,15 @@ import {
   Collider,
   Collision,
   GameObject,
-  Sprite,
   SpritePainter,
   Subject,
   Timer,
 } from '../core';
 import { GameUpdateArgs, Rotation, Tag } from '../game';
 import {
+  TankAnimationFrame,
   TankAttributes,
+  TankAttributesFactory,
   TankBehavior,
   TankDeathReason,
   TankSkinAnimation,
@@ -28,10 +29,11 @@ export enum TankState {
   Moving,
 }
 
+const SKIN_LAYER_DESCRIPTIONS = [{ opacity: 1 }, { opacity: 0.5 }];
+
 export class Tank extends GameObject {
   public collider = new Collider(true);
   public tags = [Tag.Tank];
-  public painter: SpritePainter = new SpritePainter();
   public zIndex = 1;
   public type: TankType;
   public attributes: TankAttributes;
@@ -40,22 +42,40 @@ export class Tank extends GameObject {
   public bullets: Bullet[] = [];
   public shield: Shield = null;
   public died = new Subject<{ reason: TankDeathReason }>();
+  public hit = new Subject();
   public state = TankState.Uninitialized;
   protected shieldTimer = new Timer();
-  protected animation: Animation<Sprite>;
+  protected animation: Animation<TankAnimationFrame>;
+  protected skinLayers: GameObject[] = [];
 
-  constructor(width: number, height: number) {
-    super(width, height);
+  constructor(type: TankType) {
+    super(64, 64);
 
     this.pivot.set(0.5, 0.5);
 
-    this.painter.alignment = Alignment.MiddleCenter;
+    this.type = type;
+
+    this.attributes = TankAttributesFactory.create(this.type);
 
     this.shieldTimer.done.addListener(this.handleShieldTimer);
   }
 
   protected setup(updateArgs: GameUpdateArgs): void {
     this.behavior.setup(this, updateArgs);
+
+    SKIN_LAYER_DESCRIPTIONS.forEach(() => {
+      const layer = new GameObject();
+      layer.size.copyFrom(this.size);
+
+      const painter = new SpritePainter();
+      painter.alignment = Alignment.MiddleCenter;
+
+      layer.painter = painter;
+
+      this.skinLayers.push(layer);
+
+      this.add(layer);
+    });
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
@@ -65,7 +85,17 @@ export class Tank extends GameObject {
 
     this.skinAnimation.update(this, updateArgs.deltaTime);
 
-    this.painter.sprite = this.skinAnimation.getCurrentFrame();
+    const frame = this.skinAnimation.getCurrentFrame();
+
+    this.skinLayers.forEach((layer, index) => {
+      const description = SKIN_LAYER_DESCRIPTIONS[index];
+
+      const painter = layer.painter as SpritePainter;
+      const sprite = frame.getSprite(index);
+
+      painter.opacity = description.opacity;
+      painter.sprite = sprite;
+    });
   }
 
   protected collide({ other }: Collision): void {
@@ -111,14 +141,9 @@ export class Tank extends GameObject {
         return;
       }
 
-      const nextHealth = this.attributes.health - bullet.tankDamage;
-      if (nextHealth > 0) {
-        this.attributes.health = nextHealth;
-        bullet.explode();
-      } else {
-        this.die();
-        bullet.explode();
-      }
+      bullet.explode();
+
+      this.receiveHit(bullet.tankDamage);
     }
   }
 
@@ -211,6 +236,22 @@ export class Tank extends GameObject {
     this.add(this.shield);
 
     this.shieldTimer.reset(duration);
+  }
+
+  public isAlive(): boolean {
+    return this.attributes.health > 0;
+  }
+
+  protected receiveHit(damage: number): void {
+    const nextHealth = this.attributes.health - damage;
+
+    this.hit.notify(null);
+
+    if (nextHealth > 0) {
+      this.attributes.health = nextHealth;
+    } else {
+      this.die();
+    }
   }
 
   private handleShieldTimer = (): void => {

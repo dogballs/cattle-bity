@@ -116,6 +116,13 @@ export class Animation<T> {
     return this;
   }
 
+  public resetWithFrames(frames: T[]): this {
+    this.reset();
+    this.frames = frames;
+
+    return this;
+  }
+
   private isCurrentFrameComplete(): boolean {
     // By default each frame will have 1 tick guaranteed
     const minFrameTime = 1 / this.options.fps;

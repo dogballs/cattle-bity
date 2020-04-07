@@ -1,33 +1,25 @@
-import { TankColor } from './TankColor';
 import { TankParty } from './TankParty';
 import { TankTier } from './TankTier';
 
 export class TankType {
-  public readonly party: TankParty;
-  public color: TankColor;
+  public party: TankParty;
   public tier: TankTier;
   public hasDrop: boolean;
 
-  constructor(
-    party: TankParty,
-    color: TankColor,
-    tier: TankTier,
-    hasDrop = false,
-  ) {
+  constructor(party: TankParty, tier: TankTier, hasDrop = false) {
     this.party = party;
-    this.color = color;
     this.tier = tier;
     this.hasDrop = hasDrop;
   }
 
-  public clone(): TankType {
-    return new TankType(this.party, this.color, this.tier, this.hasDrop);
-  }
-
-  public setColor(color: TankColor): this {
-    this.color = color;
+  public setHasDrop(hasDrop): this {
+    this.hasDrop = hasDrop;
 
     return this;
+  }
+
+  public clone(): TankType {
+    return new TankType(this.party, this.tier);
   }
 
   public increaseTier(): this {
@@ -54,60 +46,38 @@ export class TankType {
   public equals(other: TankType): boolean {
     return (
       this.party === other.party &&
-      this.color === other.color &&
       this.tier === other.tier &&
       this.hasDrop === other.hasDrop
     );
   }
 
   public serialize(): string {
-    return `${this.party}-${this.color}-${this.tier}-${this.hasDrop}`;
+    return `${this.party}-${this.tier}-${this.hasDrop}`;
   }
 
   public toString(): string {
     return this.serialize();
   }
 
-  public static PlayerPrimaryA = new TankType(
-    TankParty.Player,
-    TankColor.Primary,
-    TankTier.A,
-  );
-  public static PlayerPrimaryB = new TankType(
-    TankParty.Player,
-    TankColor.Primary,
-    TankTier.B,
-  );
-  public static PlayerPrimaryC = new TankType(
-    TankParty.Player,
-    TankColor.Primary,
-    TankTier.C,
-  );
-  public static PlayerPrimaryD = new TankType(
-    TankParty.Player,
-    TankColor.Primary,
-    TankTier.D,
-  );
-  public static EnemyDefaultA = new TankType(
-    TankParty.Enemy,
-    TankColor.Default,
-    TankTier.A,
-  );
-  public static EnemyDefaultB = new TankType(
-    TankParty.Enemy,
-    TankColor.Default,
-    TankTier.B,
-  );
-  public static EnemyDefaultDropA = new TankType(
-    TankParty.Enemy,
-    TankColor.Default,
-    TankTier.A,
-    true,
-  );
-  public static EnemyDefaultDropB = new TankType(
-    TankParty.Enemy,
-    TankColor.Default,
-    TankTier.B,
-    true,
-  );
+  public static PlayerA(): TankType {
+    return new TankType(TankParty.Player, TankTier.A);
+  }
+  public static PlayerB(): TankType {
+    return new TankType(TankParty.Player, TankTier.B);
+  }
+  public static PlayerC(): TankType {
+    return new TankType(TankParty.Player, TankTier.C);
+  }
+  public static PlayerD(): TankType {
+    return new TankType(TankParty.Player, TankTier.D);
+  }
+  public static EnemyA(): TankType {
+    return new TankType(TankParty.Enemy, TankTier.A);
+  }
+  public static EnemyB(): TankType {
+    return new TankType(TankParty.Enemy, TankTier.B);
+  }
+  public static EnemyD(): TankType {
+    return new TankType(TankParty.Enemy, TankTier.D);
+  }
 }

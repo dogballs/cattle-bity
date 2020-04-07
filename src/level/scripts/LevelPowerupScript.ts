@@ -6,7 +6,7 @@ import * as config from '../../config';
 
 import { LevelEventBus } from '../LevelEventBus';
 import { LevelWorld } from '../LevelWorld';
-import { LevelEnemyDiedEvent, LevelEnemySpawnCompletedEvent } from '../events';
+import { LevelEnemyHitEvent, LevelEnemySpawnCompletedEvent } from '../events';
 
 export class LevelPowerupScript extends GameScript {
   private world: LevelWorld;
@@ -20,7 +20,7 @@ export class LevelPowerupScript extends GameScript {
     this.world = world;
 
     this.eventBus = eventBus;
-    this.eventBus.enemyDied.addListener(this.handleEnemyDied);
+    this.eventBus.enemyHit.addListener(this.handleEnemyHit);
     this.eventBus.enemySpawnCompleted.addListener(
       this.handleEnemySpawnCompleted,
     );
@@ -33,7 +33,7 @@ export class LevelPowerupScript extends GameScript {
     this.timer.update(deltaTime);
   }
 
-  private handleEnemyDied = (event: LevelEnemyDiedEvent): void => {
+  private handleEnemyHit = (event: LevelEnemyHitEvent): void => {
     const { type: tankType } = event;
 
     // Ignore if tank does not have droppable powerup

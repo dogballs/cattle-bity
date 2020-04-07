@@ -1,5 +1,6 @@
 export * from './LevelEnemyDiedEvent';
 export * from './LevelEnemyExplodedEvent';
+export * from './LevelEnemyHitEvent';
 export * from './LevelEnemySpawnCompletedEvent';
 export * from './LevelEnemySpawnRequestedEvent';
 

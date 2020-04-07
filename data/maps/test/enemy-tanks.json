@@ -3,11 +3,8 @@
     "enemy": {
       "list": [
         {
-          "tier": "a",
+          "tier": "d",
           "drop": true
-        },
-        {
-          "tier": "a"
         }
       ],
       "locations": [

@@ -18,10 +18,12 @@ import { GameSceneType } from '../GameSceneType';
 import { EditorLocationParams } from './params';
 
 const ENEMY_TYPES = [
-  TankType.EnemyDefaultA,
-  TankType.EnemyDefaultB,
-  TankType.EnemyDefaultDropA,
-  TankType.EnemyDefaultDropB,
+  TankType.EnemyA(),
+  TankType.EnemyB(),
+  TankType.EnemyD(),
+  TankType.EnemyA().setHasDrop(true),
+  TankType.EnemyB().setHasDrop(true),
+  TankType.EnemyD().setHasDrop(true),
 ];
 
 const PER_PAGE = 5;
@@ -42,7 +44,7 @@ export class EditorEnemyScene extends Scene<EditorLocationParams> {
     this.mapConfig = this.params.mapConfig;
     // Prefill enemies with default ones
     if (this.mapConfig.isEnemySpawnListEmpty()) {
-      this.mapConfig.fillEnemySpawnList(TankType.EnemyDefaultA);
+      this.mapConfig.fillEnemySpawnList(TankType.EnemyA());
     }
 
     this.title = new SpriteText(this.getTitleText(), {

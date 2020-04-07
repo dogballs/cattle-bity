@@ -7,6 +7,7 @@ import { Sprite } from '../Sprite';
 export class SpritePainter extends Painter {
   public alignment: Alignment = Alignment.MiddleCenter;
   public sprite: Sprite = null;
+  public opacity = 1;
 
   constructor(sprite: Sprite = null) {
     super();
@@ -51,6 +52,12 @@ export class SpritePainter extends Painter {
       );
     }
 
+    const tmpGlobalAlpha = context.globalAlpha;
+
+    if (this.opacity !== 1) {
+      context.globalAlpha = this.opacity;
+    }
+
     context.drawImage(
       this.sprite.image.imageElement,
       this.sprite.sourceRect.x,
@@ -62,5 +69,9 @@ export class SpritePainter extends Painter {
       targetRect.width,
       targetRect.height,
     );
+
+    if (this.opacity !== 1) {
+      context.globalAlpha = tmpGlobalAlpha;
+    }
   }
 }

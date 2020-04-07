@@ -1,37 +1,55 @@
-import { Animation, Sprite, SpriteLoader } from '../../core';
+import { Animation, SpriteLoader } from '../../core';
 import { Rotation } from '../../game';
 
+import { TankAnimationFrame } from '../TankAnimationFrame';
 import { TankColor } from '../TankColor';
+import { TankParty } from '../TankParty';
 import { TankType } from '../TankType';
-import { TankSpriteId } from '../TankSpriteId';
 
-export class TankMoveAnimation extends Animation<Sprite> {
+export class TankMoveAnimation extends Animation<TankAnimationFrame> {
+  private type: TankType;
+  private regularFrames: TankAnimationFrame[] = [];
+  private dropFrames: TankAnimationFrame[] = [];
+
   constructor(
     spriteLoader: SpriteLoader,
     type: TankType,
+    colors: TankColor[],
     rotation: Rotation,
-    hasDrop = false,
   ) {
-    const frames = spriteLoader.loadList([
-      TankSpriteId.create(type, rotation, 1),
-      TankSpriteId.create(type, rotation, 2),
-      TankSpriteId.create(type, rotation, 1),
-      TankSpriteId.create(type, rotation, 2),
-    ]);
+    super([], { delay: 0.02, loop: true });
 
-    if (hasDrop) {
-      const dropType = type.clone().setColor(TankColor.Danger);
+    this.type = type;
 
-      const dropFrames = spriteLoader.loadList([
-        TankSpriteId.create(dropType, rotation, 1),
-        TankSpriteId.create(dropType, rotation, 2),
-        TankSpriteId.create(dropType, rotation, 1),
-        TankSpriteId.create(dropType, rotation, 2),
-      ]);
+    this.regularFrames = [
+      new TankAnimationFrame(spriteLoader, type, colors, rotation, 1),
+      new TankAnimationFrame(spriteLoader, type, colors, rotation, 2),
+      new TankAnimationFrame(spriteLoader, type, colors, rotation, 1),
+      new TankAnimationFrame(spriteLoader, type, colors, rotation, 2),
+    ];
 
-      frames.push(...dropFrames);
+    // Only enemy has drop now
+    if (type.party === TankParty.Enemy) {
+      const dropColors = [TankColor.Danger];
+
+      this.dropFrames = [
+        new TankAnimationFrame(spriteLoader, type, dropColors, rotation, 1),
+        new TankAnimationFrame(spriteLoader, type, dropColors, rotation, 2),
+        new TankAnimationFrame(spriteLoader, type, dropColors, rotation, 1),
+        new TankAnimationFrame(spriteLoader, type, dropColors, rotation, 2),
+      ];
     }
 
-    super(frames, { delay: 0.02, loop: true });
+    this.updateFrames();
+  }
+
+  // Tank might lose his drop, use it remove drop animation frames
+  public updateFrames(): void {
+    const frames = [...this.regularFrames];
+    if (this.type.hasDrop) {
+      frames.push(...this.dropFrames);
+    }
+
+    this.resetWithFrames(frames);
   }
 }

@@ -2,6 +2,7 @@ import { GameUpdateArgs, Tag } from '../game';
 import {
   PlayerTankBehavior,
   TankSkinAnimation,
+  TankColor,
   TankTier,
   TankType,
   TankAttributesFactory,
@@ -10,35 +11,34 @@ import {
 import { Tank } from './Tank';
 
 export class PlayerTank extends Tank {
-  public readonly tags = [Tag.Tank, Tag.Player];
-  public readonly type = TankType.PlayerPrimaryA;
+  public tags = [Tag.Tank, Tag.Player];
   private tierSkinAnimations = new Map<TankTier, TankSkinAnimation>();
+  private colors: TankColor[] = [TankColor.Primary];
 
   constructor() {
-    super(64, 64);
+    super(TankType.PlayerA());
   }
 
   protected setup(updateArgs: GameUpdateArgs): void {
     const { spriteLoader } = updateArgs;
 
-    this.attributes = TankAttributesFactory.create(this.type);
     this.behavior = new PlayerTankBehavior();
 
     this.tierSkinAnimations.set(
       TankTier.A,
-      new TankSkinAnimation(spriteLoader, TankType.PlayerPrimaryA),
+      new TankSkinAnimation(spriteLoader, TankType.PlayerA(), this.colors),
     );
     this.tierSkinAnimations.set(
       TankTier.B,
-      new TankSkinAnimation(spriteLoader, TankType.PlayerPrimaryB),
+      new TankSkinAnimation(spriteLoader, TankType.PlayerB(), this.colors),
     );
     this.tierSkinAnimations.set(
       TankTier.C,
-      new TankSkinAnimation(spriteLoader, TankType.PlayerPrimaryC),
+      new TankSkinAnimation(spriteLoader, TankType.PlayerC(), this.colors),
     );
     this.tierSkinAnimations.set(
       TankTier.D,
-      new TankSkinAnimation(spriteLoader, TankType.PlayerPrimaryD),
+      new TankSkinAnimation(spriteLoader, TankType.PlayerD(), this.colors),
     );
 
     this.skinAnimation = this.tierSkinAnimations.get(this.type.tier);

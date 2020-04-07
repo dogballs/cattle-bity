@@ -1,6 +1,7 @@
 export * from './animations';
 export * from './behaviors';
 
+export * from './TankAnimationFrame';
 export * from './TankAttributesFactory';
 export * from './TankColor';
 export * from './TankDeathReason';

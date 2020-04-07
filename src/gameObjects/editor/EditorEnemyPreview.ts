@@ -1,18 +1,17 @@
-import {
-  Animation,
-  GameObject,
-  RectPainter,
-  Sprite,
-  SpritePainter,
-} from '../../core';
+import { Animation, GameObject, RectPainter, SpritePainter } from '../../core';
 import { GameUpdateArgs, Rotation } from '../../game';
-import { TankType, TankIdleAnimation } from '../../tank';
+import {
+  TankAnimationFrame,
+  TankColor,
+  TankType,
+  TankIdleAnimation,
+} from '../../tank';
 import * as config from '../../config';
 
 export class EditorEnemyPreview extends GameObject {
   public painter = new RectPainter(null, config.COLOR_WHITE);
   private container: GameObject;
-  private animations: Animation<Sprite>[] = [];
+  private animations: Animation<TankAnimationFrame>[] = [];
   private types: TankType[];
   private selectedIndex = -1;
 
@@ -44,8 +43,8 @@ export class EditorEnemyPreview extends GameObject {
       return new TankIdleAnimation(
         spriteLoader,
         type,
+        [TankColor.Default],
         Rotation.Up,
-        type.hasDrop,
       );
     });
   }
@@ -58,7 +57,10 @@ export class EditorEnemyPreview extends GameObject {
 
     animation.update(deltaTime);
 
+    const frame = animation.getCurrentFrame();
+    const sprite = frame.getSprite(0);
+
     const painter = this.container.painter as SpritePainter;
-    painter.sprite = animation.getCurrentFrame();
+    painter.sprite = sprite;
   }
 }

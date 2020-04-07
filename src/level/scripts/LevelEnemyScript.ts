@@ -79,6 +79,13 @@ export class LevelEnemyScript extends GameScript {
     const tank = TankFactory.createEnemy(type.tier, type.hasDrop);
     tank.rotate(Rotation.Down);
     tank.setCenter(event.centerPosition);
+
+    tank.hit.addListener(() => {
+      this.eventBus.enemyHit.notify({
+        type,
+      });
+    });
+
     tank.died.addListener((deathEvent) => {
       this.eventBus.enemyDied.notify({
         type,

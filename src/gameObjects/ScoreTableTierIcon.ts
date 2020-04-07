@@ -25,8 +25,8 @@ export class ScoreTableTierIcon extends GameObject {
   }
 
   protected setup({ spriteLoader }: GameUpdateArgs): void {
-    const type = new TankType(TankParty.Enemy, TankColor.Default, this.tier);
-    const spriteId = TankSpriteId.create(type, Rotation.Up);
+    const type = new TankType(TankParty.Enemy, this.tier);
+    const spriteId = TankSpriteId.create(type, TankColor.Default, Rotation.Up);
     const sprite = spriteLoader.load(spriteId);
 
     const painter = new SpritePainter();

@@ -1,62 +1,58 @@
-import { Animation, Sprite, SpriteLoader } from '../core';
+import { SpriteLoader } from '../core';
 import { Rotation, RotationMap } from '../game';
 import { Tank, TankState } from '../gameObjects';
 
 import { TankIdleAnimation, TankMoveAnimation } from './animations';
 
+import { TankAnimationFrame } from './TankAnimationFrame';
+import { TankColor } from './TankColor';
 import { TankType } from './TankType';
 
 // TODO: Remake to factory?
 
-type AnimationMap = RotationMap<Animation<Sprite>>;
-
 export class TankSkinAnimation {
-  public readonly type: TankType;
-  public readonly hasDrop: boolean;
-
   protected rotation: Rotation = Rotation.Up;
   protected tankState: TankState = TankState.Uninitialized;
 
-  protected readonly moveAnimationMap: AnimationMap = new RotationMap();
-  protected readonly idleAnimationMap: AnimationMap = new RotationMap();
-  protected currentAnimationMap: AnimationMap;
+  protected readonly moveAnimationMap = new RotationMap<TankMoveAnimation>();
+  protected readonly idleAnimationMap = new RotationMap<TankIdleAnimation>();
+  protected currentAnimationMap: RotationMap<
+    TankMoveAnimation | TankIdleAnimation
+  >;
 
-  constructor(spriteLoader: SpriteLoader, type: TankType, hasDrop = false) {
-    this.type = type;
-    this.hasDrop = hasDrop;
-
+  constructor(spriteLoader: SpriteLoader, type: TankType, colors: TankColor[]) {
     this.idleAnimationMap.set(
       Rotation.Up,
-      new TankIdleAnimation(spriteLoader, type, Rotation.Up, hasDrop),
+      new TankIdleAnimation(spriteLoader, type, colors, Rotation.Up),
     );
     this.idleAnimationMap.set(
       Rotation.Down,
-      new TankIdleAnimation(spriteLoader, type, Rotation.Down, hasDrop),
+      new TankIdleAnimation(spriteLoader, type, colors, Rotation.Down),
     );
     this.idleAnimationMap.set(
       Rotation.Left,
-      new TankIdleAnimation(spriteLoader, type, Rotation.Left, hasDrop),
+      new TankIdleAnimation(spriteLoader, type, colors, Rotation.Left),
     );
     this.idleAnimationMap.set(
       Rotation.Right,
-      new TankIdleAnimation(spriteLoader, type, Rotation.Right, hasDrop),
+      new TankIdleAnimation(spriteLoader, type, colors, Rotation.Right),
     );
 
     this.moveAnimationMap.set(
       Rotation.Up,
-      new TankMoveAnimation(spriteLoader, type, Rotation.Up, hasDrop),
+      new TankMoveAnimation(spriteLoader, type, colors, Rotation.Up),
     );
     this.moveAnimationMap.set(
       Rotation.Down,
-      new TankMoveAnimation(spriteLoader, type, Rotation.Down, hasDrop),
+      new TankMoveAnimation(spriteLoader, type, colors, Rotation.Down),
     );
     this.moveAnimationMap.set(
       Rotation.Left,
-      new TankMoveAnimation(spriteLoader, type, Rotation.Left, hasDrop),
+      new TankMoveAnimation(spriteLoader, type, colors, Rotation.Left),
     );
     this.moveAnimationMap.set(
       Rotation.Right,
-      new TankMoveAnimation(spriteLoader, type, Rotation.Right, hasDrop),
+      new TankMoveAnimation(spriteLoader, type, colors, Rotation.Right),
     );
 
     this.currentAnimationMap = this.idleAnimationMap;
@@ -81,7 +77,18 @@ export class TankSkinAnimation {
     animation.reset();
   }
 
-  public getCurrentFrame(): Sprite {
+  // Tank might lose his drop, use it remove drop animation frames
+  public updateFrames(): void {
+    this.idleAnimationMap.forEach((animation) => {
+      animation.updateFrames();
+    });
+
+    this.moveAnimationMap.forEach((animation) => {
+      animation.updateFrames();
+    });
+  }
+
+  public getCurrentFrame(): TankAnimationFrame {
     const animation = this.currentAnimationMap.get(this.rotation);
     return animation.getCurrentFrame();
   }
