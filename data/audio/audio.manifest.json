@@ -1,14 +1,14 @@
 {
-  "fire": { "file": "fire.wav" },
-  "hit.steel": { "file": "hit-steel.wav" },
-  "hit.brick": { "file": "hit-brick.wav" },
-  "life": { "file": "life.wav" },
-  "tank.idle": { "file": "tank-idle.wav" },
-  "tank.move": { "file": "tank-move.wav" },
-  "pause": { "file": "pause.wav" },
-  "powerup.spawn": { "file": "powerup-appear.wav" },
-  "powerup.pickup": { "file": "powerup-pickup.wav" },
-  "explosion.player": { "file": "player-explosion.wav" },
-  "explosion.enemy": { "file": "enemy-explosion.wav" },
-  "score": { "file": "score.wav" }
+  "fire": { "file": "fire.mp3" },
+  "hit.steel": { "file": "hit-steel.mp3" },
+  "hit.brick": { "file": "hit-brick.mp3" },
+  "life": { "file": "life.mp3" },
+  "tank.idle": { "file": "tank-idle.mp3" },
+  "tank.move": { "file": "tank-move.mp3" },
+  "pause": { "file": "pause.mp3" },
+  "powerup.spawn": { "file": "powerup-appear.mp3" },
+  "powerup.pickup": { "file": "powerup-pickup.mp3" },
+  "explosion.player": { "file": "player-explosion.mp3" },
+  "explosion.enemy": { "file": "enemy-explosion.mp3" },
+  "score": { "file": "score.mp3" }
 }
