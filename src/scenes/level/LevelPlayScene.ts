@@ -118,7 +118,7 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
       this.eventBus,
       mapConfig,
     );
-    this.pauseScript = new LevelPauseScript(this.world);
+    this.pauseScript = new LevelPauseScript(this.world, this.eventBus);
     this.spawnScript = new LevelSpawnScript(this.world, this.eventBus);
     this.explosionScript = new LevelExplosionScript(this.world, this.eventBus);
     this.infoScript = new LevelInfoScript(

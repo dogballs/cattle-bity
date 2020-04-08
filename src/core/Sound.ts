@@ -1,12 +1,14 @@
 import { Subject } from './Subject';
 
 export class Sound {
+  public readonly ended = new Subject();
   public readonly loaded = new Subject();
   public readonly audioElement: HTMLAudioElement;
 
   constructor(audioElement: HTMLAudioElement) {
     this.audioElement = audioElement;
     this.audioElement.addEventListener('loadeddata', this.handleLoaded);
+    this.audioElement.addEventListener('ended', this.handleEnded);
   }
 
   public isLoaded(): boolean {
@@ -47,8 +49,24 @@ export class Sound {
     );
   }
 
+  public mute(): void {
+    this.audioElement.muted = true;
+  }
+
+  public unmute(): void {
+    this.audioElement.muted = false;
+  }
+
+  public isMuted(): boolean {
+    return this.audioElement.muted;
+  }
+
   private handleLoaded = (): void => {
     this.loaded.notify(null);
     this.audioElement.removeEventListener('loadeddata', this.handleLoaded);
+  };
+
+  private handleEnded = (): void => {
+    this.ended.notify(null);
   };
 }

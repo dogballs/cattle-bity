@@ -2,7 +2,6 @@ import {
   Collider,
   Collision,
   GameObject,
-  Sound,
   Sprite,
   SpritePainter,
   Subject,
@@ -19,7 +18,6 @@ export class BaseHeart extends GameObject {
   private isDead = false;
   private aliveSprite: Sprite;
   private deadSprite: Sprite;
-  private explosionSound: Sound;
 
   constructor() {
     super(64, 64);
@@ -38,16 +36,12 @@ export class BaseHeart extends GameObject {
 
     this.painter.sprite = this.deadSprite;
 
-    this.explosionSound.play();
-
     this.died.notify(null);
   }
 
-  protected setup({ audioLoader, spriteLoader }: GameUpdateArgs): void {
+  protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.aliveSprite = spriteLoader.load('base.heart.alive');
     this.deadSprite = spriteLoader.load('base.heart.dead');
-
-    this.explosionSound = audioLoader.load('explosion.player');
 
     this.painter.sprite = this.aliveSprite;
   }

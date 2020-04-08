@@ -28,6 +28,7 @@ export class LevelBaseScript extends GameScript {
       config.BASE_DEFAULT_POSITION.y,
     );
     this.base.died.addListener(() => {
+      this.eventBus.baseDied.notify(null);
       // TODO
     });
     this.world.field.add(this.base);

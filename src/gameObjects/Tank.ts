@@ -41,6 +41,7 @@ export class Tank extends GameObject {
   public skinAnimation: TankSkinAnimation;
   public bullets: Bullet[] = [];
   public shield: Shield = null;
+  public fired = new Subject();
   public died = new Subject<{ reason: TankDeathReason }>();
   public hit = new Subject();
   public state = TankState.Uninitialized;
@@ -184,6 +185,8 @@ export class Tank extends GameObject {
         return tankBullet !== bullet;
       });
     });
+
+    this.fired.notify(null);
 
     return true;
   }

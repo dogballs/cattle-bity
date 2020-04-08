@@ -95,6 +95,10 @@ export class LevelPlayerScript extends GameScript {
       this.timer.reset(config.PLAYER_SPAWN_DELAY);
     });
 
+    tank.fired.addListener(() => {
+      this.eventBus.playerFired.notify(null);
+    });
+
     this.tank = tank;
 
     this.world.addPlayerTank(this.tank);

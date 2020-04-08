@@ -3,23 +3,22 @@ import { GameUpdateArgs, GameScript, GameState } from '../../game';
 import { PauseNotice } from '../../gameObjects';
 import { LevelInputContext } from '../../input';
 
+import { LevelEventBus } from '../LevelEventBus';
 import { LevelWorld } from '../LevelWorld';
 
 export class LevelPauseScript extends GameScript {
   private world: LevelWorld;
+  private eventBus: LevelEventBus;
   private notice: PauseNotice;
-  // TODO: rework
-  private audioLoader: AudioLoader;
 
-  constructor(world: LevelWorld) {
+  constructor(world: LevelWorld, eventBus: LevelEventBus) {
     super();
 
     this.world = world;
+    this.eventBus = eventBus;
   }
 
-  protected setup({ audioLoader }: GameUpdateArgs): void {
-    this.audioLoader = audioLoader;
-
+  protected setup(): void {
     this.notice = new PauseNotice();
     this.notice.setCenter(this.world.field.getSelfCenter());
     this.notice.position.y += 18;
@@ -45,13 +44,12 @@ export class LevelPauseScript extends GameScript {
     this.notice.visible = true;
     this.notice.restart();
 
-    this.audioLoader.pauseAll();
-    this.audioLoader.load('pause').play();
+    this.eventBus.paused.notify(null);
   }
 
   private deactivate(): void {
     this.notice.visible = false;
 
-    this.audioLoader.resumeAll();
+    this.eventBus.unpaused.notify(null);
   }
 }

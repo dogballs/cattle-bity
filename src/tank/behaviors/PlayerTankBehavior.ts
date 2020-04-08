@@ -1,4 +1,3 @@
-import { Sound } from '../../core';
 import { GameUpdateArgs, Rotation } from '../../game';
 import { Tank, TankState } from '../../gameObjects';
 import { LevelInputContext } from '../../input';
@@ -13,16 +12,6 @@ const MOVE_CONTROLS = [
 ];
 
 export class PlayerTankBehavior extends TankBehavior {
-  private fireSound: Sound;
-  private moveSound: Sound;
-  private idleSound: Sound;
-
-  public setup(tank: Tank, { audioLoader }: GameUpdateArgs): void {
-    this.fireSound = audioLoader.load('fire');
-    this.moveSound = audioLoader.load('tank.move');
-    this.idleSound = audioLoader.load('tank.idle');
-  }
-
   public update(tank: Tank, { deltaTime, input }: GameUpdateArgs): void {
     if (input.isHoldLastAny(LevelInputContext.MoveUp)) {
       tank.rotate(Rotation.Up);
@@ -38,24 +27,15 @@ export class PlayerTankBehavior extends TankBehavior {
     }
 
     if (input.isHoldAny(MOVE_CONTROLS)) {
-      if (tank.state !== TankState.Moving) {
-        this.idleSound.stop();
-        this.moveSound.playLoop();
-      }
       tank.move(deltaTime);
     }
 
     if (input.isNotHoldAll(MOVE_CONTROLS) && tank.state !== TankState.Idle) {
       tank.idle();
-      this.moveSound.stop();
-      this.idleSound.playLoop();
     }
 
     if (input.isDownAny(LevelInputContext.Fire)) {
-      const hasFired = tank.fire();
-      if (hasFired) {
-        this.fireSound.play();
-      }
+      tank.fire();
     }
   }
 }

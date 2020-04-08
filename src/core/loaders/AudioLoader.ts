@@ -93,6 +93,22 @@ export class AudioLoader {
     });
   }
 
+  public muteAllExcept(...exceptSounds: Sound[]): void {
+    const sounds = this.getAllLoaded();
+    sounds.forEach((sound) => {
+      if (!exceptSounds.includes(sound)) {
+        sound.mute();
+      }
+    });
+  }
+
+  public unmuteAll(): void {
+    const sounds = this.getAllLoaded();
+    sounds.forEach((sound) => {
+      sound.unmute();
+    });
+  }
+
   private getAllLoaded(): Sound[] {
     return Array.from(this.loaded.values());
   }

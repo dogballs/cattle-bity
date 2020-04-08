@@ -2,6 +2,7 @@
   "fire": { "file": "fire.mp3" },
   "hit.steel": { "file": "hit-steel.mp3" },
   "hit.brick": { "file": "hit-brick.mp3" },
+  "level-intro": { "file": "level-intro.mp3" },
   "life": { "file": "life.mp3" },
   "tank.idle": { "file": "tank-idle.mp3" },
   "tank.move": { "file": "tank-move.mp3" },

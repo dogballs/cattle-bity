@@ -4,9 +4,8 @@ Game logic
 
 - ice tiles
 - game over notice
-- highscore
+- highscore (ending + store)
 - input context hints
-- intro audio
 - game over audio
 - demo
 - multiplayer

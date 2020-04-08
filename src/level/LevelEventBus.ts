@@ -15,6 +15,8 @@ import {
 } from './events';
 
 export class LevelEventBus {
+  public baseDied = new Subject();
+
   public enemyDied = new Subject<LevelEnemyDiedEvent>();
   public enemyExploded = new Subject<LevelEnemyExplodedEvent>();
   public enemyHit = new Subject<LevelEnemyHitEvent>();
@@ -23,7 +25,11 @@ export class LevelEventBus {
 
   public mapTileDestroyed = new Subject<LevelMapTileDestroyedEvent>();
 
+  public paused = new Subject();
+  public unpaused = new Subject();
+
   public playerDied = new Subject<LevelPlayerDiedEvent>();
+  public playerFired = new Subject();
   public playerSpawnCompleted = new Subject<LevelPlayerSpawnCompletedEvent>();
   public playerSpawnRequested = new Subject<LevelPlayerSpawnRequestedEvent>();
 
