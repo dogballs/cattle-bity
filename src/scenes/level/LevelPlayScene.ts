@@ -1,7 +1,7 @@
 import { CollisionDetector, Rect, Scene, Timer } from '../../core';
 import { GameUpdateArgs, GameState, Session } from '../../game';
 import { Border } from '../../gameObjects';
-import { PowerupType } from '../../powerups';
+import { PowerupType } from '../../powerup';
 import { TerrainFactory } from '../../terrain';
 import * as config from '../../config';
 
@@ -78,8 +78,6 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
 
     const { mapConfig } = this.params;
 
-    const terrainTiles = [];
-
     mapConfig.getTerrainRegions().forEach((region) => {
       const regionRect = new Rect(
         region.x,
@@ -88,9 +86,19 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
         region.height,
       );
       const tiles = TerrainFactory.createFromRegion(region.type, regionRect);
-      terrainTiles.push(...tiles);
+
+      tiles.forEach((tile) => {
+        tile.destroyed.addListener(() => {
+          this.eventBus.mapTileDestroyed.notify({
+            type: tile.type,
+            position: tile.position.clone(),
+            size: tile.size.clone(),
+          });
+        });
+      });
+
+      this.world.field.add(...tiles);
     });
-    this.world.field.add(...terrainTiles);
 
     this.state = State.Starting;
 
@@ -105,7 +113,11 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
       mapConfig,
     );
     this.pointsScript = new LevelPointsScript(this.world, this.eventBus);
-    this.powerupSpawnScript = new LevelPowerupScript(this.world, this.eventBus);
+    this.powerupSpawnScript = new LevelPowerupScript(
+      this.world,
+      this.eventBus,
+      mapConfig,
+    );
     this.pauseScript = new LevelPauseScript(this.world);
     this.spawnScript = new LevelSpawnScript(this.world, this.eventBus);
     this.explosionScript = new LevelExplosionScript(this.world, this.eventBus);

@@ -1,6 +1,7 @@
 import { Animation, GameObject, Rect, Subject, Timer } from '../core';
 import { GameUpdateArgs, Tag } from '../game';
 import { TerrainFactory, TerrainType } from '../terrain';
+import * as config from '../config';
 
 import { BaseHeart } from './BaseHeart';
 
@@ -19,7 +20,7 @@ export class Base extends GameObject {
   private lastFadeWallType: TerrainType = TerrainType.Steel;
 
   constructor() {
-    super(128, 96);
+    super(config.BASE_DEFAULT_SIZE.width, config.BASE_DEFAULT_SIZE.height);
   }
 
   public activateDefence(duration: number): void {

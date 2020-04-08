@@ -2,7 +2,7 @@ import { Timer, Vector } from '../../core';
 import { GameScript, GameUpdateArgs, Rotation } from '../../game';
 import { EnemyTank } from '../../gameObjects';
 import { MapConfig } from '../../map';
-import { PowerupType } from '../../powerups';
+import { PowerupType } from '../../powerup';
 import { TankDeathReason, TankFactory, TankParty, TankType } from '../../tank';
 import * as config from '../../config';
 

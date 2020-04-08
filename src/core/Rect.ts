@@ -1,3 +1,5 @@
+import { Vector } from './Vector';
+
 export class Rect {
   public x: number;
   public y: number;
@@ -9,6 +11,10 @@ export class Rect {
     this.y = y;
     this.width = width;
     this.height = height;
+  }
+
+  public getCenter(): Vector {
+    return new Vector(this.x + this.width / 2, this.y + this.height / 2);
   }
 
   public clone(): Rect {

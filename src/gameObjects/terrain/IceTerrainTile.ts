@@ -1,8 +1,12 @@
-import { GameObject, SpritePainter } from '../../core';
+import { SpritePainter } from '../../core';
 import { GameUpdateArgs } from '../../game';
+import { TerrainType } from '../../terrain';
 import * as config from '../../config';
 
-export class IceTerrainTile extends GameObject {
+import { TerrainTile } from '../TerrainTile';
+
+export class IceTerrainTile extends TerrainTile {
+  public type = TerrainType.Ice;
   public readonly painter = new SpritePainter();
 
   constructor() {

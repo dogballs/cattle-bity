@@ -1,8 +1,12 @@
-import { Collider, GameObject, Sprite, SpritePainter } from '../../core';
+import { Collider, Sprite, SpritePainter } from '../../core';
 import { GameUpdateArgs, Tag } from '../../game';
+import { TerrainType } from '../../terrain';
 import * as config from '../../config';
 
-export class BrickTerrainTile extends GameObject {
+import { TerrainTile } from '../TerrainTile';
+
+export class BrickTerrainTile extends TerrainTile {
+  public type = TerrainType.Brick;
   public collider = new Collider(false);
   public readonly tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
   public readonly painter = new SpritePainter();

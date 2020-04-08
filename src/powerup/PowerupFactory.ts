@@ -3,7 +3,8 @@ import { Powerup } from '../gameObjects';
 
 import { PowerupType } from './PowerupType';
 
-const TYPES = [
+// Configure which powerups can be spawned randomly
+const AVAILABLE_TYPES = [
   PowerupType.BaseDefence,
   PowerupType.Freeze,
   PowerupType.Life,
@@ -14,17 +15,7 @@ const TYPES = [
 
 export class PowerupFactory {
   public static createRandom(): Powerup {
-    const type = this.createRandomType();
-    const powerup = this.create(type);
-    return powerup;
-  }
-
-  public static createRandomType(): PowerupType {
-    const type = RandomUtils.arrayElement(TYPES);
-    return type;
-  }
-
-  public static create(type: PowerupType): Powerup {
+    const type = RandomUtils.arrayElement(AVAILABLE_TYPES);
     const powerup = new Powerup(type);
     return powerup;
   }

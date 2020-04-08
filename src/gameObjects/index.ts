@@ -28,4 +28,5 @@ export * from './Spawn';
 export * from './SpriteText';
 export * from './Tank';
 export * from './TerrainText';
-export * from './WallDestroyer';
+export * from './TerrainTile';
+export * from './TerrainTileDestroyer';

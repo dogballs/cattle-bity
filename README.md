@@ -2,46 +2,17 @@
 
 ### [Play latest web version](https://dogballs.github.io/battle-city/)
 
-## Development
+## Description
 
-### Getting started
+Work in progress.
 
-```bash
-npm install
-npm start # Webpack watcher
-npm build # Webpack build
-npm lint # Run linters
-```
+Clone of Battle City by Namco (1985) written from scratch in TypeScript.
 
-### Folder structure
+Project is not commercial and was created for learning purposes only.
 
-- src
-  - core - Game engine. Think of it as a library which can be reused in another projects. Should not have any code associated with game domain.
+## Features
 
-### Implementation details
-
-- As we depend on one particular sprite, we want to follow the size of the images which are present on the sprite. Original images on the sprite are too small, so we are scaling it 1:4 in code. For now it is hardcoded which every display object.
-
-### Resources
-
-Game related:
-
-- https://strategywiki.org/wiki/Battle_City
-- http://www.ign.com/faqs/2003/battle-city-walkthroughfaq-424615
-- https://gamefaqs.gamespot.com/gameboy/574770-battle-city/faqs/31154
-- http://selmiak.bplaced.net/games/nes/index.php?lang=eng&game=Battle-City
-- https://www.youtube.com/watch?v=MPsA5PtfdL0
-- https://www.youtube.com/watch?v=g3aTE-Cvaj4
-- https://www.spriters-resource.com/nes/batcity/sheet/60016/
-- https://www.sounds-resource.com/nes/battlecity/sound/3710/
-
-Other libraries and game engies for inspiration, naming and structure:
-
-- https://docs.unity3d.com/Manual/index.html
-- https://love2d.org/wiki/Main_Page
-- https://docs.coronalabs.com/guide/index.html
-- https://threejs.org/
-
-Patterns:
-
-- http://java-design-patterns.com/patterns/
+- Single player mode
+- Level editor
+- Settings
+  - Customize keybindings

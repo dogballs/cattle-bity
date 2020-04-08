@@ -1,6 +1,6 @@
 import { GameScript } from '../../game';
 import { Base } from '../../gameObjects';
-import { PowerupType } from '../../powerups';
+import { PowerupType } from '../../powerup';
 import * as config from '../../config';
 
 import { LevelEventBus } from '../LevelEventBus';
@@ -23,7 +23,10 @@ export class LevelBaseScript extends GameScript {
 
   protected setup(): void {
     this.base = new Base();
-    this.base.position.set(352, 736);
+    this.base.position.set(
+      config.BASE_DEFAULT_POSITION.x,
+      config.BASE_DEFAULT_POSITION.y,
+    );
     this.base.died.addListener(() => {
       // TODO
     });

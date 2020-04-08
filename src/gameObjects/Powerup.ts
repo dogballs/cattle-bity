@@ -8,7 +8,7 @@ import {
   Subject,
 } from '../core';
 import { GameUpdateArgs, Tag } from '../game';
-import { PowerupType } from '../powerups';
+import { PowerupType } from '../powerup';
 
 export class Powerup extends GameObject {
   public zIndex = 6;

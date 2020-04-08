@@ -1,8 +1,12 @@
-import { GameObject, SpritePainter } from '../../core';
+import { SpritePainter } from '../../core';
 import { GameUpdateArgs } from '../../game';
+import { TerrainType } from '../../terrain';
 import * as config from '../../config';
 
-export class JungleTerrainTile extends GameObject {
+import { TerrainTile } from '../TerrainTile';
+
+export class JungleTerrainTile extends TerrainTile {
+  public type = TerrainType.Jungle;
   public readonly painter = new SpritePainter();
   public zIndex = 4;
 

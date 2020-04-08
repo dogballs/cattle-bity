@@ -1,9 +1,11 @@
-import { GameObject, LinePainter, Vector } from '../core';
+import { GameObject, LinePainter, RectPainter, Vector } from '../core';
 
 export class DebugGrid extends GameObject {
-  protected readonly step: number;
+  public zIndex = 100;
+  private step: number;
+  private highlightedCells: GameObject[] = [];
 
-  constructor(width: number, height: number, step: number, color = '#000') {
+  constructor(width: number, height: number, step: number, color = '#fff') {
     super(width, height);
 
     this.step = step;
@@ -25,5 +27,20 @@ export class DebugGrid extends GameObject {
       line.painter = painter;
       this.add(line);
     }
+  }
+
+  public highlightCell(index: Vector, color = 'rgba(255, 0, 0, 0.5)'): void {
+    const cell = new GameObject(this.step, this.step);
+    cell.painter = new RectPainter(color);
+    cell.position.set(index.x * this.step, index.y * this.step);
+    this.highlightedCells.push(cell);
+    this.add(cell);
+  }
+
+  public removeAllCellHighlights(): void {
+    this.highlightedCells.forEach((cell) => {
+      cell.removeSelf();
+    });
+    this.highlightedCells = [];
   }
 }

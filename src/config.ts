@@ -66,3 +66,5 @@ export const ENEMY_DEFAULT_SPAWN_POSITIONS = [
   { x: 768, y: 0 },
   { x: 0, y: 0 },
 ];
+export const BASE_DEFAULT_POSITION = { x: 352, y: 736 };
+export const BASE_DEFAULT_SIZE = { width: 128, height: 96 };

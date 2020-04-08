@@ -1,14 +1,12 @@
-import {
-  Animation,
-  Collider,
-  GameObject,
-  Sprite,
-  SpritePainter,
-} from '../../core';
+import { Animation, Collider, Sprite, SpritePainter } from '../../core';
 import { GameUpdateArgs, Tag } from '../../game';
+import { TerrainType } from '../../terrain';
 import * as config from '../../config';
 
-export class WaterTerrainTile extends GameObject {
+import { TerrainTile } from '../TerrainTile';
+
+export class WaterTerrainTile extends TerrainTile {
+  public type = TerrainType.Water;
   public collider = new Collider(false);
   public tags = [Tag.BlockMove];
   public readonly painter = new SpritePainter();

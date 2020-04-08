@@ -1,4 +1,4 @@
-import { PowerupType } from '../powerups';
+import { PowerupType } from '../powerup';
 import { TankTier } from '../tank';
 
 const TANK_POINTS_MAP = {

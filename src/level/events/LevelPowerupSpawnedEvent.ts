@@ -1,5 +1,5 @@
 import { Vector } from '../../core';
-import { PowerupType } from '../../powerups';
+import { PowerupType } from '../../powerup';
 
 export interface LevelPowerupSpawnedEvent {
   type: PowerupType;

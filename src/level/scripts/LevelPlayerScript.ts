@@ -1,8 +1,9 @@
 import { Timer, Vector } from '../../core';
+import { DebugLevelPlayerMenu } from '../../debug';
 import { GameScript, GameUpdateArgs } from '../../game';
 import { PlayerTank } from '../../gameObjects';
 import { MapConfig } from '../../map';
-import { PowerupType } from '../../powerups';
+import { PowerupType } from '../../powerup';
 import { TankFactory, TankParty } from '../../tank';
 import * as config from '../../config';
 
@@ -40,6 +41,21 @@ export class LevelPlayerScript extends GameScript {
     this.timer.done.addListener(this.handleTimer);
   }
 
+  protected setup(): void {
+    if (config.IS_DEV) {
+      const debugMenu = new DebugLevelPlayerMenu({
+        top: 250,
+      });
+      debugMenu.attach();
+      debugMenu.upgradeRequest.addListener(() => {
+        if (this.tank === null) {
+          return;
+        }
+        this.tank.upgrade();
+      });
+    }
+  }
+
   protected update({ deltaTime }: GameUpdateArgs): void {
     this.timer.update(deltaTime);
   }
@@ -74,13 +90,14 @@ export class LevelPlayerScript extends GameScript {
 
       tank.removeSelf();
       this.tank = null;
+      this.world.removePlayerTank();
 
       this.timer.reset(config.PLAYER_SPAWN_DELAY);
     });
 
     this.tank = tank;
 
-    this.world.field.add(this.tank);
+    this.world.addPlayerTank(this.tank);
   };
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {

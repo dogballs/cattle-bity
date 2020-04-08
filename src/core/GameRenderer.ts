@@ -56,7 +56,7 @@ export class GameRenderer {
     const objects = root.flatten();
 
     const zSortedObjects = objects.sort((a, b) => {
-      return a.zIndex - b.zIndex;
+      return a.worldZIndex - b.worldZIndex;
     });
 
     zSortedObjects.forEach((object) => {

@@ -1,5 +1,6 @@
-import { GameObject, Rect, Size } from '../core';
+import { Rect, Size } from '../core';
 import {
+  TerrainTile,
   BrickTerrainTile,
   IceTerrainTile,
   JungleTerrainTile,
@@ -23,7 +24,7 @@ export class TerrainFactory {
   public static createFromRegion(
     type: TerrainType,
     regionRect: Rect,
-  ): GameObject[] {
+  ): TerrainTile[] {
     const { x, y, width, height } = regionRect;
 
     const tiles = [];
@@ -44,7 +45,7 @@ export class TerrainFactory {
   public static createFromRegions(
     type: TerrainType,
     regionRects: Rect[],
-  ): GameObject[] {
+  ): TerrainTile[] {
     const allWalls = [];
 
     regionRects.forEach((regionRect) => {
@@ -57,7 +58,7 @@ export class TerrainFactory {
 
   public static createFromRegionConfigs(
     regions: TerrainRegionConfig[],
-  ): GameObject[] {
+  ): TerrainTile[] {
     const tiles = [];
 
     regions.forEach((region) => {
@@ -74,7 +75,7 @@ export class TerrainFactory {
     return tiles;
   }
 
-  private static createTile(type: TerrainType): GameObject {
+  private static createTile(type: TerrainType): TerrainTile {
     switch (type) {
       case TerrainType.Brick:
         return new BrickTerrainTile();

@@ -10,7 +10,7 @@ import {
 import { GameUpdateArgs, Rotation, RotationMap, Tag } from '../game';
 
 import { SmallExplosion } from './SmallExplosion';
-import { WallDestroyer } from './WallDestroyer';
+import { TerrainTileDestroyer } from './TerrainTileDestroyer';
 
 export class Bullet extends GameObject {
   public collider = new Collider(true);
@@ -80,7 +80,9 @@ export class Bullet extends GameObject {
     if (isBrickWall || (isSteelWall && this.wallDamage === 2)) {
       const wallWorldBox = other.getWorldBoundingBox();
 
-      const destroyer = new WallDestroyer(this.wallDamage);
+      // TODO: two destroyers are spawned if bullet hits two bricks at the same
+      // time (in the middle between them)
+      const destroyer = new TerrainTileDestroyer(this.wallDamage);
 
       this.add(destroyer);
       destroyer.updateWorldMatrix(true);

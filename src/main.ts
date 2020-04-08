@@ -13,7 +13,7 @@ import {
   SpriteFontLoader,
   SpriteLoader,
 } from './core';
-import { DebugGameLoopController, DebugInspector } from './debug';
+import { DebugGameLoopMenu, DebugInspector } from './debug';
 import { GameUpdateArgs, GameState, Session } from './game';
 import { InputManager } from './input';
 import { MapLoader } from './map';
@@ -94,11 +94,11 @@ const updateArgs: GameUpdateArgs = {
 const gameLoop = new GameLoop();
 
 const stats = new Stats();
-const debugGameLoopController = new DebugGameLoopController(gameLoop);
+const debugGameLoopMenu = new DebugGameLoopMenu(gameLoop);
 
 if (config.IS_DEV) {
   document.body.appendChild(stats.dom);
-  document.body.appendChild(debugGameLoopController.getElement());
+  debugGameLoopMenu.attach();
 }
 
 gameLoop.tick.addListener((event) => {

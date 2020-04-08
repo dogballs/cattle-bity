@@ -15,7 +15,10 @@ export class EditorField extends GameObject {
     const base = new Base();
     base.collider = new Collider(false);
     base.tags = [Tag.EditorBlockMove];
-    base.position.set(352, 736);
+    base.position.set(
+      config.BASE_DEFAULT_POSITION.x,
+      config.BASE_DEFAULT_POSITION.y,
+    );
     this.add(base);
 
     config.PLAYER_DEFAULT_SPAWN_POSITIONS.forEach((location) => {

@@ -1,6 +1,6 @@
 import { AudioLoader } from '../../core';
 import { GameScript, GameUpdateArgs, Session } from '../../game';
-import { PowerupType } from '../../powerups';
+import { PowerupType } from '../../powerup';
 
 import { LevelEventBus } from '../LevelEventBus';
 import { LevelPowerupPickedEvent } from '../events';

@@ -24,7 +24,7 @@ export class LevelLivesCounter extends GameObject {
   }
 
   public setCount(livesCount: number): void {
-    const text = (livesCount - 1).toString();
-    this.livesText.setText(text);
+    const displayLivesCount = Math.max(0, livesCount - 1);
+    this.livesText.setText(displayLivesCount.toString());
   }
 }

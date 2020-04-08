@@ -2,9 +2,11 @@ import { Collider, Collision, GameObject } from '../core';
 import { Tag } from '../game';
 import * as config from '../config';
 
+import { TerrainTile } from './TerrainTile';
+
 const MAX_DAMAGE = 2;
 
-export class WallDestroyer extends GameObject {
+export class TerrainTileDestroyer extends GameObject {
   public readonly collider: Collider;
   public readonly damage: number;
 
@@ -27,7 +29,8 @@ export class WallDestroyer extends GameObject {
       other.tags.includes(Tag.Wall) && other.tags.includes(Tag.Steel);
 
     if (isBrickWall || (isSteelWall && this.damage === 2)) {
-      other.removeSelf();
+      const tile = other as TerrainTile;
+      tile.destroy();
       this.removeSelf();
     }
   }

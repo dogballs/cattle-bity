@@ -1,6 +1,6 @@
 import { Subject } from '../core';
 import { PointsRecord } from '../points';
-import { PowerupType } from '../powerups';
+import { PowerupType } from '../powerup';
 import { TankTier } from '../tank';
 import * as config from '../config';
 
@@ -64,8 +64,6 @@ export class Session {
   public isGameOver(): boolean {
     return this.state === State.GameOver;
   }
-
-  // TODO: 20k points give extra life
 
   public addKillPoints(tier: TankTier): void {
     this.levelPointsRecord.addKill(tier);
