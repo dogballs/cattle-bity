@@ -5,11 +5,7 @@
         {
           "tier": "d",
           "drop": true
-        },
-        { "tier": "d" },
-        { "tier": "d" },
-        { "tier": "d" },
-        { "tier": "d" }
+        }
       ],
       "locations": [
         {
@@ -25,48 +21,6 @@
   "terrain": {
     "regions": [
       {
-        "type": "jungle",
-        "x": 256,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "jungle",
-        "x": 256,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "steel",
-        "x": 640,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "steel",
-        "x": 640,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "water",
-        "x": 448,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "water",
-        "x": 448,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
         "type": "ice",
         "x": 576,
         "y": 320,
@@ -81,142 +35,128 @@
         "height": 64
       },
       {
-        "type": "jungle",
+        "type": "ice",
+        "x": 256,
+        "y": 640,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 192,
+        "y": 640,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 128,
+        "y": 640,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 576,
+        "y": 576,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 640,
+        "y": 320,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 640,
+        "y": 256,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 128,
+        "y": 576,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 192,
+        "y": 576,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 256,
+        "y": 576,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 256,
+        "y": 512,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
         "x": 256,
         "y": 448,
         "width": 64,
         "height": 64
       },
       {
-        "type": "jungle",
+        "type": "ice",
+        "x": 256,
+        "y": 384,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
+        "x": 192,
+        "y": 384,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "ice",
         "x": 192,
         "y": 448,
         "width": 64,
         "height": 64
       },
       {
-        "type": "jungle",
+        "type": "ice",
         "x": 192,
         "y": 512,
         "width": 64,
         "height": 64
       },
       {
-        "type": "jungle",
-        "x": 192,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "jungle",
-        "x": 128,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "jungle",
+        "type": "ice",
         "x": 128,
         "y": 512,
         "width": 64,
         "height": 64
       },
       {
-        "type": "jungle",
+        "type": "ice",
         "x": 128,
         "y": 448,
         "width": 64,
         "height": 64
       },
       {
-        "type": "water",
-        "x": 512,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "water",
-        "x": 512,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "water",
-        "x": 512,
-        "y": 448,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "water",
-        "x": 448,
-        "y": 448,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "water",
-        "x": 384,
-        "y": 448,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "water",
-        "x": 384,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "water",
-        "x": 384,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "jungle",
-        "x": 64,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "jungle",
-        "x": 64,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "jungle",
-        "x": 64,
-        "y": 448,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "jungle",
-        "x": 0,
-        "y": 448,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "jungle",
-        "x": 0,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "jungle",
-        "x": 0,
-        "y": 576,
+        "type": "ice",
+        "x": 128,
+        "y": 384,
         "width": 64,
         "height": 64
       }

@@ -4,6 +4,7 @@ Game logic
 
 - ice tiles
 - game over notice
+- highscore
 - input context hints
 - intro audio
 - game over audio

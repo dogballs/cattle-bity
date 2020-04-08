@@ -1,4 +1,4 @@
-import { Vector } from '../core';
+import { Rect, Vector } from '../core';
 import { TankFactory, TankType } from '../tank';
 import { TerrainRegionConfig } from '../terrain';
 import * as config from '../config';
@@ -41,6 +41,26 @@ export class MapConfig {
 
   public addTerrainRegion(region: TerrainRegionConfig): void {
     this.dto.terrain.regions.push(region);
+  }
+
+  public clearTerrainRect(rectToClear: Rect): void {
+    const { regions } = this.dto.terrain;
+
+    // Iterate in reverse because we are removing items from array
+    for (let i = regions.length - 1; i >= 0; i -= 1) {
+      const region = regions[i];
+
+      const regionRect = new Rect(
+        region.x,
+        region.y,
+        region.width,
+        region.height,
+      );
+
+      if (regionRect.intersectsRect(rectToClear)) {
+        regions.splice(i, 1);
+      }
+    }
   }
 
   public getTerrainRegions(): TerrainRegionConfig[] {

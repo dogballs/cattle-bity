@@ -1,4 +1,4 @@
-import { BoundingBox, GameObject } from '../../core';
+import { GameObject, Rect } from '../../core';
 import { MapConfig } from '../../map';
 import {
   TerrainFactory,
@@ -63,7 +63,7 @@ export class EditorMap extends GameObject {
 
   private handleDraw = (): void => {
     // Remove existing tiles first
-    this.clearRect(this.tool.getBoundingBox());
+    this.clearRect(this.tool.getBoundingBox().toRect());
 
     const brush = this.tool.getSelectedBrush();
 
@@ -83,20 +83,22 @@ export class EditorMap extends GameObject {
   };
 
   private handleErase = (): void => {
-    this.clearRect(this.tool.getBoundingBox());
+    this.clearRect(this.tool.getBoundingBox().toRect());
   };
 
-  private clearRect(box: BoundingBox): void {
+  private clearRect(rect: Rect): void {
     const tiles = this.container.children;
 
     // Iterate in reverse because we are removing items
     for (let i = tiles.length - 1; i >= 0; i -= 1) {
       const tile = tiles[i];
-      const tileBox = tile.getBoundingBox();
+      const tileRect = tile.getBoundingBox().toRect();
 
-      if (tileBox.intersectsBox(box)) {
+      if (tileRect.intersectsRect(rect)) {
         tile.removeSelf();
       }
     }
+
+    this.mapConfig.clearTerrainRect(rect);
   }
 }
