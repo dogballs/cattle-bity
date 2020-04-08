@@ -1,7 +1,7 @@
 import { State } from '../core';
 import { GameUpdateArgs, GameState, Tag } from '../game';
 import {
-  DumbAiTankBehavior,
+  AiTankBehavior,
   TankColor,
   TankSkinAnimation,
   TankTier,
@@ -38,7 +38,7 @@ export class EnemyTank extends Tank {
   protected setup(updateArgs: GameUpdateArgs): void {
     const { spriteLoader } = updateArgs;
 
-    this.behavior = new DumbAiTankBehavior();
+    this.behavior = new AiTankBehavior();
 
     // Currently only tier D tank has more than 1 health
     if (this.type.tier === TankTier.D) {

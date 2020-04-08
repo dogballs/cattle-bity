@@ -1,4 +1,4 @@
-export * from './DumbAiTankBehavior';
+export * from './AiTankBehavior';
 export * from './PatrolTankBehavior';
 export * from './PatrolFireTankBehavior';
 export * from './PlayerTankBehavior';

@@ -12,7 +12,7 @@ enum State {
   Firing,
 }
 
-const THINK_DURATION = 0.33;
+const THINK_DURATION = 0.3;
 const FIRE_MIN_DELAY = 0;
 const FIRE_MAX_DELAY = 1;
 const STUCK_FIRE_CHANCE = 30;
@@ -20,12 +20,12 @@ const UNSTUCK_THINK_CHANCE = 5;
 
 const rotations = [Rotation.Up, Rotation.Down, Rotation.Left, Rotation.Right];
 
-export class DumbAiTankBehavior extends TankBehavior {
+export class AiTankBehavior extends TankBehavior {
   private state: State = State.Moving;
   private lastPosition = new Vector(-1, -1);
   private thinkTimer = new Timer();
   private fireTimer = new Timer();
-  private log = new Logger(DumbAiTankBehavior.name, Logger.Level.Info);
+  private log = new Logger(AiTankBehavior.name, Logger.Level.Info);
 
   public update(tank: Tank, updateArgs: GameUpdateArgs): void {
     if (this.fireTimer.isDone()) {
@@ -78,10 +78,15 @@ export class DumbAiTankBehavior extends TankBehavior {
 
     tank.move(updateArgs.deltaTime);
 
+    // Position might come as floats, but we need precise ints in here to
+    // check if positions is exactly the same
+    const tankPosition = this.roundPosition(tank.position);
+
     // If tank can no longer move it his direction, he has to decide what to do
     // next.
     const isStuck =
-      this.lastPosition.equals(tank.position) && this.state === State.Moving;
+      this.lastPosition.equals(tankPosition) && this.state === State.Moving;
+
     if (isStuck) {
       this.log.debug('I am stuck. Thinking...');
       this.state = State.Thinking;
@@ -98,7 +103,7 @@ export class DumbAiTankBehavior extends TankBehavior {
       return;
     }
 
-    this.lastPosition = tank.position.clone();
+    this.lastPosition = tankPosition;
   }
 
   private attemptFire(): void {
@@ -142,5 +147,13 @@ export class DumbAiTankBehavior extends TankBehavior {
 
   private getRandomRotation(): Rotation {
     return RandomUtils.arrayElement(rotations);
+  }
+
+  private roundPosition(position: Vector): Vector {
+    const roundedPosition = new Vector(
+      Math.round(position.x),
+      Math.round(position.y),
+    );
+    return roundedPosition;
   }
 }
