@@ -1,27 +1,16 @@
-import { GameScript } from '../../game';
 import { Base } from '../../gameObjects';
 import { PowerupType } from '../../powerup';
 import * as config from '../../config';
 
-import { LevelEventBus } from '../LevelEventBus';
-import { LevelWorld } from '../LevelWorld';
+import { LevelScript } from '../LevelScript';
 import { LevelPowerupPickedEvent } from '../events';
 
-export class LevelBaseScript extends GameScript {
-  private world: LevelWorld;
-  private eventBus: LevelEventBus;
+export class LevelBaseScript extends LevelScript {
   private base: Base;
 
-  constructor(world: LevelWorld, eventBus: LevelEventBus) {
-    super();
-
-    this.world = world;
-
-    this.eventBus = eventBus;
-    this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
-  }
-
   protected setup(): void {
+    this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
+
     this.base = new Base();
     this.base.position.set(
       config.BASE_DEFAULT_POSITION.x,
@@ -29,7 +18,6 @@ export class LevelBaseScript extends GameScript {
     );
     this.base.died.addListener(() => {
       this.eventBus.baseDied.notify(null);
-      // TODO
     });
     this.world.field.add(this.base);
   }

@@ -1,47 +1,35 @@
 import { Timer, Vector } from '../../core';
 import { DebugLevelPlayerMenu } from '../../debug';
-import { GameScript, GameUpdateArgs } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import { PlayerTank } from '../../gameObjects';
-import { MapConfig } from '../../map';
 import { PowerupType } from '../../powerup';
 import { TankFactory, TankParty } from '../../tank';
 import * as config from '../../config';
 
-import { LevelEventBus } from '../LevelEventBus';
-import { LevelWorld } from '../LevelWorld';
+import { LevelScript } from '../LevelScript';
 import {
   LevelPlayerSpawnCompletedEvent,
   LevelPowerupPickedEvent,
 } from '../events';
 
-export class LevelPlayerScript extends GameScript {
-  private world: LevelWorld;
-  private eventBus: LevelEventBus;
+export class LevelPlayerScript extends LevelScript {
   private position: Vector;
   private timer: Timer;
   private playerIndex = 0;
   private tank: PlayerTank = null;
 
-  constructor(
-    world: LevelWorld,
-    eventBus: LevelEventBus,
-    mapConfig: MapConfig,
-  ) {
-    super();
-
-    this.world = world;
-
-    this.eventBus = eventBus;
+  protected setup(): void {
     this.eventBus.playerSpawnCompleted.addListener(this.handleSpawnCompleted);
     this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
+    this.eventBus.levelGameOverMoveBlocked.addListener(
+      this.handleLevelGameOverMoveBlocked,
+    );
 
-    this.position = mapConfig.getPlayerSpawnPosition(this.playerIndex);
+    this.position = this.mapConfig.getPlayerSpawnPosition(this.playerIndex);
 
     this.timer = new Timer(config.PLAYER_FIRST_SPAWN_DELAY);
     this.timer.done.addListener(this.handleTimer);
-  }
 
-  protected setup(): void {
     if (config.IS_DEV) {
       const debugMenu = new DebugLevelPlayerMenu({
         top: 250,
@@ -52,6 +40,12 @@ export class LevelPlayerScript extends GameScript {
           return;
         }
         this.tank.upgrade();
+      });
+      debugMenu.deathRequest.addListener(() => {
+        if (this.tank === null) {
+          return;
+        }
+        this.tank.die();
       });
     }
   }
@@ -114,5 +108,14 @@ export class LevelPlayerScript extends GameScript {
     if (powerupType === PowerupType.Upgrade) {
       this.tank.upgrade();
     }
+  };
+
+  private handleLevelGameOverMoveBlocked = (): void => {
+    if (this.tank === null) {
+      return;
+    }
+
+    // Freeze the tank
+    this.tank.freezeState.set(true);
   };
 }

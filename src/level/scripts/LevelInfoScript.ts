@@ -1,33 +1,20 @@
-import { GameScript, Session } from '../../game';
 import { LevelInfo } from '../../gameObjects';
 import * as config from '../../config';
 
-import { LevelEventBus } from '../LevelEventBus';
-import { LevelWorld } from '../LevelWorld';
+import { LevelScript } from '../LevelScript';
 import { LevelEnemySpawnRequestedEvent } from '../events';
 
-export class LevelInfoScript extends GameScript {
-  private world: LevelWorld;
-  private eventBus: LevelEventBus;
-  private session: Session;
+export class LevelInfoScript extends LevelScript {
   private info: LevelInfo;
 
-  constructor(world: LevelWorld, eventBus: LevelEventBus, session: Session) {
-    super();
-
-    this.world = world;
-
-    this.eventBus = eventBus;
+  protected setup(): void {
     this.eventBus.playerDied.addListener(this.handlePlayerDied);
     this.eventBus.enemySpawnRequested.addListener(
       this.handleEnemySpawnRequested,
     );
 
-    this.session = session;
     this.session.lifeup.addListener(this.handleSessionLifeup);
-  }
 
-  protected setup(): void {
     this.info = new LevelInfo();
     this.info.position.set(
       config.BORDER_LEFT_WIDTH + config.FIELD_SIZE + 32,

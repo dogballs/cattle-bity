@@ -1,4 +1,3 @@
-import { State } from '../core';
 import { GameUpdateArgs, GameState, Tag } from '../game';
 import {
   AiTankBehavior,
@@ -12,7 +11,6 @@ import { Tank } from './Tank';
 
 export class EnemyTank extends Tank {
   public tags = [Tag.Tank, Tag.Enemy];
-  public freezeState = new State<boolean>(false);
   private healthSkinAnimations = new Map<number, TankSkinAnimation>();
 
   constructor(type: TankType) {

@@ -1,21 +1,11 @@
-import { GameUpdateArgs, GameScript, GameState } from '../../game';
+import { GameUpdateArgs, GameState } from '../../game';
 import { PauseNotice } from '../../gameObjects';
 import { LevelInputContext } from '../../input';
 
-import { LevelEventBus } from '../LevelEventBus';
-import { LevelWorld } from '../LevelWorld';
+import { LevelScript } from '../LevelScript';
 
-export class LevelPauseScript extends GameScript {
-  private world: LevelWorld;
-  private eventBus: LevelEventBus;
+export class LevelPauseScript extends LevelScript {
   private notice: PauseNotice;
-
-  constructor(world: LevelWorld, eventBus: LevelEventBus) {
-    super();
-
-    this.world = world;
-    this.eventBus = eventBus;
-  }
 
   protected setup(): void {
     this.notice = new PauseNotice();
@@ -43,12 +33,12 @@ export class LevelPauseScript extends GameScript {
     this.notice.visible = true;
     this.notice.restart();
 
-    this.eventBus.paused.notify(null);
+    this.eventBus.levelPaused.notify(null);
   }
 
   private deactivate(): void {
     this.notice.visible = false;
 
-    this.eventBus.unpaused.notify(null);
+    this.eventBus.levelUnpaused.notify(null);
   }
 }

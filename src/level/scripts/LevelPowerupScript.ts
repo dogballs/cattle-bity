@@ -1,45 +1,29 @@
 import { Rect, Timer } from '../../core';
 import { DebugLevelPowerupMenu } from '../../debug';
-import { GameUpdateArgs, GameScript } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import { Powerup } from '../../gameObjects';
-import { MapConfig } from '../../map';
 import { PowerupFactory, PowerupGrid } from '../../powerup';
 import { TerrainType } from '../../terrain';
 import * as config from '../../config';
 
-import { LevelEventBus } from '../LevelEventBus';
-import { LevelWorld } from '../LevelWorld';
+import { LevelScript } from '../LevelScript';
 import {
   LevelEnemyHitEvent,
   LevelEnemySpawnCompletedEvent,
   LevelMapTileDestroyedEvent,
 } from '../events';
 
-export class LevelPowerupScript extends GameScript {
-  private world: LevelWorld;
-  private eventBus: LevelEventBus;
-  private mapConfig: MapConfig;
+export class LevelPowerupScript extends LevelScript {
   private timer: Timer;
   private activePowerup: Powerup = null;
   private grid: PowerupGrid;
 
-  constructor(
-    world: LevelWorld,
-    eventBus: LevelEventBus,
-    mapConfig: MapConfig,
-  ) {
-    super();
-
-    this.world = world;
-
-    this.eventBus = eventBus;
+  protected setup(): void {
     this.eventBus.enemyHit.addListener(this.handleEnemyHit);
     this.eventBus.enemySpawnCompleted.addListener(
       this.handleEnemySpawnCompleted,
     );
     this.eventBus.mapTileDestroyed.addListener(this.handleMapTileDestroyed);
-
-    this.mapConfig = mapConfig;
 
     this.timer = new Timer();
     this.timer.done.addListener(this.handleTimer);
@@ -47,9 +31,7 @@ export class LevelPowerupScript extends GameScript {
     this.grid = new PowerupGrid();
     this.blockGridDefaults();
     this.blockGridInitialMap();
-  }
 
-  protected setup(): void {
     if (config.IS_DEV) {
       const debugMenu = new DebugLevelPowerupMenu(this.world, this.grid, {
         top: 110,

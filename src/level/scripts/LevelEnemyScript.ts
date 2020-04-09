@@ -1,21 +1,17 @@
 import { Timer, Vector } from '../../core';
-import { GameScript, GameUpdateArgs, Rotation } from '../../game';
+import { GameUpdateArgs, Rotation } from '../../game';
 import { EnemyTank } from '../../gameObjects';
-import { MapConfig } from '../../map';
 import { PowerupType } from '../../powerup';
 import { TankDeathReason, TankFactory, TankParty, TankType } from '../../tank';
 import * as config from '../../config';
 
-import { LevelEventBus } from '../LevelEventBus';
-import { LevelWorld } from '../LevelWorld';
+import { LevelScript } from '../LevelScript';
 import {
   LevelEnemySpawnCompletedEvent,
   LevelPowerupPickedEvent,
 } from '../events';
 
-export class LevelEnemyScript extends GameScript {
-  private world: LevelWorld;
-  private eventBus: LevelEventBus;
+export class LevelEnemyScript extends LevelScript {
   private list: TankType[] = [];
   private listIndex = 0;
   private aliveTanks: EnemyTank[] = [];
@@ -24,22 +20,13 @@ export class LevelEnemyScript extends GameScript {
   private spawnTimer = new Timer();
   private freezeTimer = new Timer();
 
-  constructor(
-    world: LevelWorld,
-    eventBus: LevelEventBus,
-    mapConfig: MapConfig,
-  ) {
-    super();
-
-    this.world = world;
-
-    this.eventBus = eventBus;
+  protected setup(): void {
     this.eventBus.enemySpawnCompleted.addListener(this.handleSpawnCompleted);
     this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
 
-    this.list = mapConfig.getEnemySpawnList();
+    this.list = this.mapConfig.getEnemySpawnList();
 
-    this.positions = mapConfig.getEnemySpawnPositions();
+    this.positions = this.mapConfig.getEnemySpawnPositions();
 
     this.spawnTimer.reset(config.ENEMY_FIRST_SPAWN_DELAY);
     this.spawnTimer.done.addListener(this.handleSpawnTimer);
@@ -112,6 +99,10 @@ export class LevelEnemyScript extends GameScript {
       // reached, restart it, because one of alive tanks has just been killed
       if (!this.spawnTimer.isActive()) {
         this.spawnTimer.reset(config.ENEMY_SPAWN_DELAY);
+      }
+
+      if (this.areAllDead()) {
+        this.eventBus.enemyAllDied.notify(null);
       }
     });
 

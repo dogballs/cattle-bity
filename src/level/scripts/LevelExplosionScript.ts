@@ -1,20 +1,10 @@
-import { GameScript } from '../../game';
 import { Explosion } from '../../gameObjects';
 
-import { LevelEventBus } from '../LevelEventBus';
-import { LevelWorld } from '../LevelWorld';
+import { LevelScript } from '../LevelScript';
 import { LevelEnemyDiedEvent, LevelPlayerDiedEvent } from '../events';
 
-export class LevelExplosionScript extends GameScript {
-  private world: LevelWorld;
-  private eventBus: LevelEventBus;
-
-  constructor(world: LevelWorld, eventBus: LevelEventBus) {
-    super();
-
-    this.world = world;
-
-    this.eventBus = eventBus;
+export class LevelExplosionScript extends LevelScript {
+  protected setup(): void {
     this.eventBus.enemyDied.addListener(this.handleEnemyDied);
     this.eventBus.playerDied.addListener(this.handlePlayerDied);
   }

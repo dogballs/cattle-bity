@@ -92,6 +92,14 @@ export class InputManager {
     });
   }
 
+  public unlisten(): void {
+    this.variants.forEach((variant) => {
+      const { device } = variant;
+
+      device.unlisten();
+    });
+  }
+
   public update(): void {
     this.variants.forEach((variant) => {
       const { device } = variant;

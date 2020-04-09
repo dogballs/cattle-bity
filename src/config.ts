@@ -40,9 +40,7 @@ export const FREEZE_POWERUP_DURATION = 10;
 export const POINTS_POWERUP_DURATION = 0.8;
 export const POINTS_ENEMY_TANK_DURATION = 0.16;
 
-export const LEVEL_END_DELAY = 3;
-// export const LEVEL_START_DELAY = 3;
-export const LEVEL_START_DELAY = 0;
+export const LEVEL_START_DELAY = 2;
 
 export const PLAYER_INITIAL_LIVES = 3;
 export const PLAYER_EXTRA_LIVE_POINTS = 20000;

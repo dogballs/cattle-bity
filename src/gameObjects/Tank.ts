@@ -5,10 +5,11 @@ import {
   Collision,
   GameObject,
   SpritePainter,
+  State,
   Subject,
   Timer,
 } from '../core';
-import { GameUpdateArgs, Rotation, Tag } from '../game';
+import { GameState, GameUpdateArgs, Rotation, Tag } from '../game';
 import {
   TankAnimationFrame,
   TankAttributes,
@@ -45,6 +46,7 @@ export class Tank extends GameObject {
   public died = new Subject<{ reason: TankDeathReason }>();
   public hit = new Subject();
   public state = TankState.Uninitialized;
+  public freezeState = new State<boolean>(false);
   protected shieldTimer = new Timer();
   protected animation: Animation<TankAnimationFrame>;
   protected skinLayers: GameObject[] = [];
@@ -80,7 +82,25 @@ export class Tank extends GameObject {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
+    const { gameState } = updateArgs;
+
     this.shieldTimer.update(updateArgs.deltaTime);
+
+    const shouldIdle =
+      this.freezeState.hasChangedTo(true) ||
+      gameState.hasChangedTo(GameState.Paused);
+
+    if (shouldIdle) {
+      this.idle();
+    }
+
+    const isIdle = this.freezeState.is(true) || gameState.is(GameState.Paused);
+
+    // Only update animation when idle
+    if (isIdle) {
+      this.updateAnimation(updateArgs.deltaTime);
+      return;
+    }
 
     this.behavior.update(this, updateArgs);
 

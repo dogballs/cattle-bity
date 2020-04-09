@@ -1,6 +1,7 @@
 import { RectPainter, Scene, Timer } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import { LevelTitle, ScoreTable } from '../../gameObjects';
+import { TankTier } from '../../tank';
 import * as config from '../../config';
 
 import { GameSceneType } from '../GameSceneType';
@@ -33,7 +34,38 @@ export class LevelScoreScene extends Scene {
     this.levelTitle.position.setY(128);
     this.root.add(this.levelTitle);
 
-    this.scoreTable = new ScoreTable(this.session.getLevelPointsRecord());
+    const record = this.session.getLevelPointsRecord();
+
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.A);
+    record.addKill(TankTier.B);
+    record.addKill(TankTier.B);
+    record.addKill(TankTier.B);
+    record.addKill(TankTier.B);
+    record.addKill(TankTier.B);
+    record.addKill(TankTier.B);
+    record.addKill(TankTier.C);
+    record.addKill(TankTier.C);
+    record.addKill(TankTier.C);
+    record.addKill(TankTier.C);
+    record.addKill(TankTier.C);
+    record.addKill(TankTier.C);
+    record.addKill(TankTier.D);
+    record.addKill(TankTier.D);
+    record.addKill(TankTier.D);
+    record.addKill(TankTier.D);
+    record.addKill(TankTier.D);
+    record.addKill(TankTier.D);
+
+    this.scoreTable = new ScoreTable(record);
     this.scoreTable.setCenter(this.root.getSelfCenter());
     this.scoreTable.done.addListener(this.handleDone);
     this.root.add(this.scoreTable);
@@ -66,7 +98,7 @@ export class LevelScoreScene extends Scene {
     } else {
       // TODO: what if completed final level
       this.session.activateNextLevel();
-      this.navigator.replace(GameSceneType.LevelPlay);
+      this.navigator.replace(GameSceneType.LevelLoad);
     }
   };
 }

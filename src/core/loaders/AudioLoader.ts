@@ -93,6 +93,13 @@ export class AudioLoader {
     });
   }
 
+  public stopAll(): void {
+    const sounds = this.getAllLoaded();
+    sounds.forEach((sound) => {
+      sound.stop();
+    });
+  }
+
   public muteAllExcept(...exceptSounds: Sound[]): void {
     const sounds = this.getAllLoaded();
     sounds.forEach((sound) => {

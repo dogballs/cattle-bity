@@ -1,23 +1,13 @@
-import { GameScript } from '../../game';
 import { Points } from '../../gameObjects';
 import { PointsValue } from '../../points';
 import { TankDeathReason, TankTier, TankType } from '../../tank';
 import * as config from '../../config';
 
-import { LevelEventBus } from '../LevelEventBus';
-import { LevelWorld } from '../LevelWorld';
+import { LevelScript } from '../LevelScript';
 import { LevelEnemyExplodedEvent, LevelPowerupPickedEvent } from '../events';
 
-export class LevelPointsScript extends GameScript {
-  private world: LevelWorld;
-  private eventBus: LevelEventBus;
-
-  constructor(world: LevelWorld, eventBus: LevelEventBus) {
-    super();
-
-    this.world = world;
-
-    this.eventBus = eventBus;
+export class LevelPointsScript extends LevelScript {
+  protected setup(): void {
     this.eventBus.enemyExploded.addListener(this.handleEnemyExploded);
     this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
   }

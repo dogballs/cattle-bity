@@ -1,9 +1,9 @@
 import { AudioLoader, Sound } from '../../core';
-import { GameScript, GameUpdateArgs, Session } from '../../game';
+import { GameUpdateArgs } from '../../game';
 import { LevelInputContext } from '../../input';
 import { PowerupType } from '../../powerup';
 
-import { LevelEventBus } from '../LevelEventBus';
+import { LevelScript } from '../LevelScript';
 import { LevelPowerupPickedEvent } from '../events';
 
 const MOVE_CONTROLS = [
@@ -13,20 +13,13 @@ const MOVE_CONTROLS = [
   ...LevelInputContext.MoveRight,
 ];
 
-enum State {
-  Intro,
-}
-
 enum TankState {
   Idle,
   Moving,
 }
 
-export class LevelAudioScript extends GameScript {
-  private eventBus: LevelEventBus;
-  private session: Session;
+export class LevelAudioScript extends LevelScript {
   private audioLoader: AudioLoader;
-  private state = State.Intro;
   private tankState = TankState.Idle;
 
   private moveSound: Sound;
@@ -34,25 +27,23 @@ export class LevelAudioScript extends GameScript {
   private pauseSound: Sound;
   private playerExplosionSound: Sound;
 
-  constructor(eventBus: LevelEventBus, session: Session) {
-    super();
+  protected setup({ audioLoader }: GameUpdateArgs): void {
+    this.audioLoader = audioLoader;
 
-    this.eventBus = eventBus;
     this.eventBus.baseDied.addListener(this.handleBaseDied);
     this.eventBus.enemyDied.addListener(this.handleEnemyDied);
     this.eventBus.playerDied.addListener(this.handlePlayerDied);
     this.eventBus.playerFired.addListener(this.handlePlayerFired);
     this.eventBus.powerupSpawned.addListener(this.handlePowerupSpawned);
     this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
-    this.eventBus.paused.addListener(this.handlePaused);
-    this.eventBus.unpaused.addListener(this.handleUnpaused);
+    this.eventBus.levelPaused.addListener(this.handleLevelPaused);
+    this.eventBus.levelUnpaused.addListener(this.levelUnpaused);
+    this.eventBus.levelGameOverMoveBlocked.addListener(
+      this.handleLevelGameOverMoveBlocked,
+    );
+    this.eventBus.levelWinCompleted.addListener(this.handleLevelWinCompleted);
 
-    this.session = session;
     this.session.lifeup.addListener(this.handleSessionLifeup);
-  }
-
-  protected setup({ audioLoader }: GameUpdateArgs): void {
-    this.audioLoader = audioLoader;
 
     this.moveSound = audioLoader.load('tank.move');
     this.idleSound = audioLoader.load('tank.idle');
@@ -132,12 +123,21 @@ export class LevelAudioScript extends GameScript {
     this.audioLoader.load('life').play();
   };
 
-  private handlePaused = (): void => {
+  private handleLevelPaused = (): void => {
     this.audioLoader.pauseAll();
     this.pauseSound.play();
   };
 
-  private handleUnpaused = (): void => {
+  private levelUnpaused = (): void => {
     this.audioLoader.resumeAll();
+  };
+
+  private handleLevelGameOverMoveBlocked = (): void => {
+    this.moveSound.stop();
+    this.idleSound.stop();
+  };
+
+  private handleLevelWinCompleted = (): void => {
+    this.audioLoader.stopAll();
   };
 }

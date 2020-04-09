@@ -1,23 +1,13 @@
-import { GameScript } from '../../game';
 import { Spawn } from '../../gameObjects';
 
-import { LevelEventBus } from '../LevelEventBus';
-import { LevelWorld } from '../LevelWorld';
+import { LevelScript } from '../LevelScript';
 import {
   LevelEnemySpawnRequestedEvent,
   LevelPlayerSpawnRequestedEvent,
 } from '../events';
 
-export class LevelSpawnScript extends GameScript {
-  private world: LevelWorld;
-  private eventBus: LevelEventBus;
-
-  constructor(world: LevelWorld, eventBus: LevelEventBus) {
-    super();
-
-    this.world = world;
-
-    this.eventBus = eventBus;
+export class LevelSpawnScript extends LevelScript {
+  protected setup(): void {
     this.eventBus.enemySpawnRequested.addListener(
       this.handleEnemySpawnRequested,
     );

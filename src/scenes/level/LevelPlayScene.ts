@@ -1,11 +1,12 @@
-import { CollisionDetector, Rect, Scene, Timer } from '../../core';
+import { CollisionDetector, Rect, Scene } from '../../core';
 import { GameUpdateArgs, GameState, Session } from '../../game';
 import { Border } from '../../gameObjects';
+import { InputManager } from '../../input';
 import { PowerupType } from '../../powerup';
 import { TerrainFactory } from '../../terrain';
 import * as config from '../../config';
 
-import { LevelEventBus, LevelWorld } from '../../level';
+import { LevelEventBus, LevelScript, LevelWorld } from '../../level';
 import {
   LevelEnemyDiedEvent,
   LevelPowerupPickedEvent,
@@ -15,6 +16,7 @@ import {
   LevelBaseScript,
   LevelEnemyScript,
   LevelExplosionScript,
+  LevelGameOverScript,
   LevelInfoScript,
   LevelIntroScript,
   LevelPauseScript,
@@ -22,40 +24,40 @@ import {
   LevelPointsScript,
   LevelPowerupScript,
   LevelSpawnScript,
+  LevelWinScript,
 } from '../../level/scripts';
 
 import { GameSceneType } from '../GameSceneType';
 
 import { LevelLocationParams } from './params';
 
-enum State {
-  Idle,
-  Starting,
-  Playing,
-  Ending,
-}
-
 export class LevelPlayScene extends Scene<LevelLocationParams> {
-  private state = State.Idle;
-  private session: Session;
-  private endTimer = new Timer();
-
-  private eventBus: LevelEventBus;
   private world: LevelWorld;
+  private eventBus: LevelEventBus;
+  private session: Session;
+  private inputManager: InputManager;
+
+  private allScripts: LevelScript[] = [];
+  private alwaysUpdateScripts: LevelScript[] = [];
+  private playingUpdateScripts: LevelScript[] = [];
 
   private audioScript: LevelAudioScript;
   private baseScript: LevelBaseScript;
   private enemyScript: LevelEnemyScript;
   private explosionScript: LevelExplosionScript;
+  private gameOverScript: LevelGameOverScript;
   private infoScript: LevelInfoScript;
   private introScript: LevelIntroScript;
   private playerScript: LevelPlayerScript;
   private pointsScript: LevelPointsScript;
-  private powerupSpawnScript: LevelPowerupScript;
+  private powerupScript: LevelPowerupScript;
   private pauseScript: LevelPauseScript;
   private spawnScript: LevelSpawnScript;
+  private winScript: LevelWinScript;
 
-  protected setup({ session }: GameUpdateArgs): void {
+  protected setup(updateArgs: GameUpdateArgs): void {
+    const { inputManager, session } = updateArgs;
+
     this.world = new LevelWorld(this.root);
 
     this.root.add(new Border());
@@ -68,13 +70,8 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
 
     this.eventBus = new LevelEventBus();
 
-    this.eventBus.enemyDied.addListener(this.handleEnemyDied);
-    this.eventBus.playerDied.addListener(this.handlePlayerDied);
-    this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
-
+    this.inputManager = inputManager;
     this.session = session;
-
-    this.endTimer.done.addListener(this.handleEndTimer);
 
     const { mapConfig } = this.params;
 
@@ -100,67 +97,94 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
       this.world.field.add(...tiles);
     });
 
-    this.state = State.Starting;
+    this.audioScript = new LevelAudioScript();
+    this.baseScript = new LevelBaseScript();
+    this.enemyScript = new LevelEnemyScript();
+    this.explosionScript = new LevelExplosionScript();
+    this.gameOverScript = new LevelGameOverScript();
+    this.infoScript = new LevelInfoScript();
+    this.introScript = new LevelIntroScript();
+    this.pauseScript = new LevelPauseScript();
+    this.playerScript = new LevelPlayerScript();
+    this.pointsScript = new LevelPointsScript();
+    this.powerupScript = new LevelPowerupScript();
+    this.spawnScript = new LevelSpawnScript();
+    this.winScript = new LevelWinScript();
 
-    this.enemyScript = new LevelEnemyScript(
-      this.world,
-      this.eventBus,
-      mapConfig,
-    );
-    this.playerScript = new LevelPlayerScript(
-      this.world,
-      this.eventBus,
-      mapConfig,
-    );
-    this.pointsScript = new LevelPointsScript(this.world, this.eventBus);
-    this.powerupSpawnScript = new LevelPowerupScript(
-      this.world,
-      this.eventBus,
-      mapConfig,
-    );
-    this.pauseScript = new LevelPauseScript(this.world, this.eventBus);
-    this.spawnScript = new LevelSpawnScript(this.world, this.eventBus);
-    this.explosionScript = new LevelExplosionScript(this.world, this.eventBus);
-    this.infoScript = new LevelInfoScript(
-      this.world,
-      this.eventBus,
-      this.session,
-    );
-    this.baseScript = new LevelBaseScript(this.world, this.eventBus);
-    this.introScript = new LevelIntroScript(
-      this.world,
-      this.eventBus,
-      this.session,
-    );
-    this.introScript.completed.addListener(() => {
-      this.state = State.Playing;
+    this.allScripts = [
+      this.audioScript,
+      this.baseScript,
+      this.enemyScript,
+      this.explosionScript,
+      this.gameOverScript,
+      this.infoScript,
+      this.introScript,
+      this.pauseScript,
+      this.playerScript,
+      this.pointsScript,
+      this.powerupScript,
+      this.spawnScript,
+      this.winScript,
+    ];
+
+    this.allScripts.forEach((script) => {
+      script.invokeInit(this.world, this.eventBus, session, mapConfig);
     });
-    this.audioScript = new LevelAudioScript(this.eventBus, this.session);
+
+    // When intro starts, enable only it and audio
+    this.alwaysUpdateScripts = [this.audioScript, this.introScript];
+
+    // When intro is completed, enable the rest of the scripts
+    this.introScript.completed.addListener(() => {
+      this.alwaysUpdateScripts.push(
+        this.gameOverScript,
+        this.pauseScript,
+        this.winScript,
+      );
+
+      this.playingUpdateScripts.push(
+        this.baseScript,
+        this.explosionScript,
+        this.infoScript,
+        this.enemyScript,
+        this.spawnScript,
+        this.playerScript,
+        this.pointsScript,
+        this.powerupScript,
+      );
+    });
+
+    this.eventBus.baseDied.addListener(this.handleBaseDied);
+    this.eventBus.enemyAllDied.addListener(this.handleEnemyAllDied);
+    this.eventBus.enemyDied.addListener(this.handleEnemyDied);
+    this.eventBus.playerDied.addListener(this.handlePlayerDied);
+    this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
+    this.eventBus.levelGameOverCompleted.addListener(
+      this.handleLevelGameOverCompleted,
+    );
+    this.eventBus.levelGameOverMoveBlocked.addListener(
+      this.handleLevelGameOverMoveBlocked,
+    );
+    this.eventBus.levelWinCompleted.addListener(this.handleLevelWinCompleted);
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    if (this.state === State.Starting) {
-      this.introScript.invokeUpdate(updateArgs);
-      this.root.traverseDescedants((child) => {
-        child.invokeUpdate(updateArgs);
-      });
-      return;
-    }
-
     const { gameState } = updateArgs;
 
-    this.audioScript.invokeUpdate(updateArgs);
-    this.pauseScript.invokeUpdate(updateArgs);
+    this.alwaysUpdateScripts.forEach((script) => {
+      script.invokeUpdate(updateArgs);
+    });
 
-    // TODO: enemies with drops are still animated
     if (!gameState.is(GameState.Paused)) {
-      this.baseScript.invokeUpdate(updateArgs);
-      this.powerupSpawnScript.invokeUpdate(updateArgs);
-      this.playerScript.invokeUpdate(updateArgs);
-      this.enemyScript.invokeUpdate(updateArgs);
-      this.infoScript.invokeUpdate(updateArgs);
+      // These scripts won't run when game is paused
+      this.playingUpdateScripts.forEach((script) => {
+        // Extra check not to run same script twice
+        if (this.alwaysUpdateScripts.includes(script)) {
+          return;
+        }
 
-      this.endTimer.update(updateArgs.deltaTime);
+        script.invokeUpdate(updateArgs);
+      });
     }
 
     // Update all objects on the scene
@@ -204,18 +228,22 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
 
   private handlePlayerDied = (): void => {
     this.session.removeLife();
+
     if (this.session.isGameOver()) {
       this.playerScript.disable();
-      this.end();
+      this.gameOverScript.enable();
+
+      // Player can lose even after level is won
+      this.winScript.disable();
     }
+  };
+
+  private handleEnemyAllDied = (): void => {
+    this.winScript.enable();
   };
 
   private handleEnemyDied = (event: LevelEnemyDiedEvent): void => {
     this.session.addKillPoints(event.type.tier);
-
-    // if (this.enemySpawner.areAllDead()) {
-    //   this.end();
-    // }
   };
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
@@ -226,17 +254,28 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
     }
   };
 
-  private end(): void {
-    this.state = State.Ending;
-    this.endTimer.reset(config.LEVEL_END_DELAY);
-  }
-
   private handleBaseDied = (): void => {
     this.session.setGameOver();
-    this.end();
+    this.playerScript.disable();
+    this.gameOverScript.enable();
+
+    // Player can lose even after level is won
+    this.winScript.disable();
   };
 
-  private handleEndTimer = (): void => {
+  // Block user input after some delay when game is over
+  private handleLevelGameOverMoveBlocked = (): void => {
+    this.inputManager.unlisten();
+  };
+
+  private handleLevelGameOverCompleted = (): void => {
+    // Restore input
+    this.inputManager.listen();
+
+    this.navigator.replace(GameSceneType.LevelScore);
+  };
+
+  private handleLevelWinCompleted = (): void => {
     this.navigator.replace(GameSceneType.LevelScore);
   };
 }
