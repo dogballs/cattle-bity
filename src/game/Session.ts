@@ -18,6 +18,7 @@ export class Session {
   private currentLevelNumber: number;
   private levelPointsRecord: PointsRecord;
   private totalPoints: number;
+  private highscorePoints: number;
   private lives: number;
   private nextLifePointThreshold: number;
   private state: State;
@@ -63,6 +64,14 @@ export class Session {
 
   public isGameOver(): boolean {
     return this.state === State.GameOver;
+  }
+
+  public setHighscore(highscorePoints: number): void {
+    this.highscorePoints = highscorePoints;
+  }
+
+  public getHighscore(): number {
+    return this.highscorePoints;
   }
 
   public addKillPoints(tier: TankTier): void {

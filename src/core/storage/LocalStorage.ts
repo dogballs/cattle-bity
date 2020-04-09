@@ -1,4 +1,6 @@
-export class LocalStorage {
+import { Storage } from '../Storage';
+
+export class LocalStorage implements Storage {
   private namespace: string;
   private cache = {};
 
@@ -33,7 +35,7 @@ export class LocalStorage {
     this.cache = data;
   }
 
-  public persist(): void {
+  public save(): void {
     const json = JSON.stringify(this.cache);
 
     window.localStorage.setItem(this.namespace, json);

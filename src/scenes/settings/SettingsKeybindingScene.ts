@@ -197,7 +197,7 @@ export class SettingsKeybindingScene extends Scene {
 
     binding.setCustom(control, newCode);
 
-    this.inputManager.persistBinding(this.selectedDeviceType);
+    this.inputManager.saveBinding(this.selectedDeviceType);
   }
 
   private handleDeviceChanged = (
@@ -210,7 +210,7 @@ export class SettingsKeybindingScene extends Scene {
   private handleResetSelected = (): void => {
     const binding = this.getSelectedBinding();
     binding.resetAllToDefault();
-    this.inputManager.persistBinding(this.selectedDeviceType);
+    this.inputManager.saveBinding(this.selectedDeviceType);
     this.updateMenu();
   };
 

@@ -6,6 +6,7 @@ import {
   RectFontLoader,
   SpriteFontLoader,
   SpriteLoader,
+  Storage,
 } from '../core';
 import { InputManager } from '../input';
 import { MapLoader } from '../map';
@@ -25,4 +26,5 @@ export interface GameUpdateArgs {
   session: Session;
   spriteFontLoader: SpriteFontLoader;
   spriteLoader: SpriteLoader;
+  storage: Storage;
 }

@@ -1,6 +1,6 @@
 import { GameObject, Scene } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
-import { MainHeading, Menu, TextMenuItem } from '../../gameObjects';
+import { MainHeading, Menu, SpriteText, TextMenuItem } from '../../gameObjects';
 import { MenuInputContext } from '../../input';
 import * as config from '../../config';
 
@@ -8,38 +8,70 @@ import { GameSceneType } from '../GameSceneType';
 
 const SLIDE_SPEED = 240;
 
-const MENU_ITEMS = ['1 PLAYER', 'CONSTRUCTION', 'SETTINGS'];
-
 enum State {
   Sliding,
   Ready,
 }
 
 export class MainMenuScene extends Scene {
-  private heading = new MainHeading();
-  private group = new GameObject();
-  private menu = new Menu();
+  private group: GameObject;
+  private heading: MainHeading;
+  private primaryHighscore: SpriteText;
+  private commonHighscore: SpriteText;
+  private menu: Menu;
+  private singlePlayerItem: TextMenuItem;
+  private editorItem: TextMenuItem;
+  private settingsItem: TextMenuItem;
   private state: State = State.Ready;
   private session: Session;
 
-  protected setup({ session }: GameUpdateArgs): void {
+  protected setup({ session, storage }: GameUpdateArgs): void {
     this.session = session;
 
+    // Load highscore from storage
+    const highscore = Number(storage.get(config.STORAGE_KEY_HIGHSCORE)) || 0;
+    this.session.setHighscore(highscore);
+
+    this.group = new GameObject();
     this.group.size.copyFrom(this.root.size);
 
+    this.primaryHighscore = new SpriteText(this.getPrimaryHighscoreText(), {
+      color: config.COLOR_WHITE,
+    });
+    this.primaryHighscore.position.set(92, 64);
+    this.group.add(this.primaryHighscore);
+
+    this.commonHighscore = new SpriteText(this.getCommonHighscoreText(), {
+      color: config.COLOR_WHITE,
+    });
+    this.commonHighscore.position.set(380, 64);
+    this.group.add(this.commonHighscore);
+
+    this.heading = new MainHeading();
     this.heading.origin.setX(0.5);
     this.heading.setCenter(this.root.getSelfCenter());
     this.heading.position.setY(160);
     this.group.add(this.heading);
 
-    const menuItems = MENU_ITEMS.map((text) => {
-      return new TextMenuItem(text, { color: config.COLOR_WHITE });
-    });
+    this.singlePlayerItem = new TextMenuItem('1 PLAYER');
+    this.singlePlayerItem.selected.addListener(this.handleSinglePlayerSelected);
 
+    this.editorItem = new TextMenuItem('CONSTRUCTION');
+    this.editorItem.selected.addListener(this.handleEditorSelected);
+
+    this.settingsItem = new TextMenuItem('SETTINGS');
+    this.settingsItem.selected.addListener(this.handleSettingsSelected);
+
+    const menuItems = [
+      this.singlePlayerItem,
+      this.editorItem,
+      this.settingsItem,
+    ];
+
+    this.menu = new Menu();
     this.menu.setItems(menuItems);
     this.menu.setCenter(this.root.getSelfCenter());
     this.menu.position.setY(512);
-    this.menu.selected.addListener(this.handleMenuSelected);
     this.group.add(this.menu);
 
     if (!this.session.haveSeenIntro()) {
@@ -79,17 +111,39 @@ export class MainMenuScene extends Scene {
     });
   }
 
-  private handleMenuSelected = (selectedIndex): void => {
-    switch (selectedIndex) {
-      case 0:
-        this.navigator.replace(GameSceneType.LevelSelection);
-        break;
-      case 1:
-        this.navigator.push(GameSceneType.EditorMenu);
-        break;
-      case 2:
-        this.navigator.push(GameSceneType.SettingsMenu);
-        break;
+  private getPrimaryHighscoreText(): string {
+    const points = this.session.getHighscore();
+
+    const pointsNumberText = points > 0 ? points.toString() : '00';
+    const pointsText = pointsNumberText.padStart(6, ' ');
+
+    const text = `Ⅰ-${pointsText}`;
+
+    return text;
+  }
+
+  private getCommonHighscoreText(): string {
+    let points = this.session.getHighscore();
+    if (points === 0) {
+      points = config.DEFAULT_HIGHSCORE;
     }
+
+    const pointsText = points.toString().padStart(6, ' ');
+
+    const text = `HI-${pointsText}`;
+
+    return text;
+  }
+
+  private handleSinglePlayerSelected = (): void => {
+    this.navigator.replace(GameSceneType.LevelSelection);
+  };
+
+  private handleEditorSelected = (): void => {
+    this.navigator.push(GameSceneType.EditorMenu);
+  };
+
+  private handleSettingsSelected = (): void => {
+    this.navigator.push(GameSceneType.SettingsMenu);
   };
 }

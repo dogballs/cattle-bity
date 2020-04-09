@@ -46,6 +46,7 @@ export const LEVEL_START_DELAY = 0;
 
 export const PLAYER_INITIAL_LIVES = 3;
 export const PLAYER_EXTRA_LIVE_POINTS = 20000;
+export const DEFAULT_HIGHSCORE = 20000;
 
 export const COLOR_BACKDROP = 'rgba(0,0,0,0.7)';
 export const COLOR_GRAY = '#636363';
@@ -59,6 +60,7 @@ export const PRIMARY_RECT_FONT_ID = 'primary';
 
 export const STORAGE_NAMESPACE = 'battle-city';
 export const STORAGE_KEY_BINDINGS = 'bindings';
+export const STORAGE_KEY_HIGHSCORE = 'highscore';
 
 export const PLAYER_DEFAULT_SPAWN_POSITIONS = [{ x: 256, y: 768 }];
 export const ENEMY_DEFAULT_SPAWN_POSITIONS = [

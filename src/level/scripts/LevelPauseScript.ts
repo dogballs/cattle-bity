@@ -1,4 +1,3 @@
-import { AudioLoader } from '../../core';
 import { GameUpdateArgs, GameScript, GameState } from '../../game';
 import { PauseNotice } from '../../gameObjects';
 import { LevelInputContext } from '../../input';

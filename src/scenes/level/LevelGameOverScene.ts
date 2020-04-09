@@ -10,7 +10,7 @@ export class LevelGameOverScene extends Scene {
   private heading = new GameOverHeading();
   private timer = new Timer(SCENE_DURATION);
 
-  protected setup({ session }: GameUpdateArgs): void {
+  protected setup({ audioLoader, session }: GameUpdateArgs): void {
     session.reset();
 
     this.timer.done.addListener(this.handleDone);
@@ -19,6 +19,8 @@ export class LevelGameOverScene extends Scene {
     this.heading.setCenter(this.root.getSelfCenter());
     this.heading.position.addY(-32);
     this.root.add(this.heading);
+
+    audioLoader.load('game-over').play();
   }
 
   protected update(updateArgs: GameUpdateArgs): void {

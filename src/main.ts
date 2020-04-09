@@ -1,17 +1,18 @@
 import * as Stats from 'stats.js';
 
 import {
+  AudioLoader,
   GameObject,
   GameLoop,
   GameRenderer,
-  Logger,
-  State,
-  Vector,
-  AudioLoader,
   ImageLoader,
+  LocalStorage,
+  Logger,
   RectFontLoader,
   SpriteFontLoader,
   SpriteLoader,
+  State,
+  Vector,
 } from './core';
 import { DebugGameLoopMenu, DebugInspector } from './debug';
 import { GameUpdateArgs, GameState, Session } from './game';
@@ -36,7 +37,10 @@ const gameRenderer = new GameRenderer({
 });
 document.body.appendChild(gameRenderer.getDomElement());
 
-const inputManager = new InputManager();
+const storage = new LocalStorage(config.STORAGE_NAMESPACE);
+storage.load();
+
+const inputManager = new InputManager(storage);
 inputManager.listen();
 
 const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
@@ -89,6 +93,7 @@ const updateArgs: GameUpdateArgs = {
   session,
   spriteFontLoader,
   spriteLoader,
+  storage,
 };
 
 const gameLoop = new GameLoop();

@@ -4,7 +4,7 @@ import {
   InputBinding,
   InputDevice,
   KeyboardInputDevice,
-  LocalStorage,
+  Storage,
 } from '../core';
 import * as config from '../config';
 
@@ -26,9 +26,11 @@ export class InputManager {
   private input: Input;
   private variants = new Map<InputDeviceType, InputVariant>();
   private currentVariant: InputVariant = null;
-  private storage = new LocalStorage(config.STORAGE_NAMESPACE);
+  private storage: Storage;
 
-  constructor() {
+  constructor(storage: Storage) {
+    this.storage = storage;
+
     this.input = new Input();
 
     // Order by priority, first is default
@@ -110,8 +112,6 @@ export class InputManager {
   }
 
   public loadAllBindings(): void {
-    this.storage.load();
-
     this.variants.forEach((variant, type) => {
       const { binding } = variant;
 
@@ -123,14 +123,14 @@ export class InputManager {
     });
   }
 
-  public persistBinding(type: InputDeviceType): void {
+  public saveBinding(type: InputDeviceType): void {
     const binding = this.getBinding(type);
 
     const key = this.getBindingStorageKey(type);
     const json = binding.toJSON();
 
     this.storage.set(key, json);
-    this.storage.persist();
+    this.storage.save();
   }
 
   private getBindingStorageKey(type: InputDeviceType): string {

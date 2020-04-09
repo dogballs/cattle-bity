@@ -3,10 +3,9 @@
 Game logic
 
 - ice tiles
-- game over notice
+- level over logic + notice
 - highscore (ending + store)
 - input context hints
-- game over audio
 - demo
 - multiplayer
 
