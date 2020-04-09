@@ -15,6 +15,7 @@ export class Session {
 
   private seenIntro: boolean;
   private startLevelNumber: number;
+  private endLevelNumber: number;
   private currentLevelNumber: number;
   private levelPointsRecord: PointsRecord;
   private totalPoints: number;
@@ -27,12 +28,13 @@ export class Session {
     this.reset();
   }
 
-  public start(startLevelNumber: number): void {
+  public start(startLevelNumber: number, endLevelNumber: number): void {
     if (this.state !== State.Idle) {
       return;
     }
 
     this.startLevelNumber = startLevelNumber;
+    this.endLevelNumber = endLevelNumber;
     this.currentLevelNumber = startLevelNumber;
     this.state = State.Playing;
   }
@@ -41,6 +43,7 @@ export class Session {
     this.seenIntro = false;
     this.startLevelNumber = 1;
     this.currentLevelNumber = 1;
+    this.endLevelNumber = 1;
     this.levelPointsRecord = new PointsRecord();
     this.totalPoints = 0;
     this.lives = config.PLAYER_INITIAL_LIVES;
@@ -56,6 +59,10 @@ export class Session {
 
   public getLevelNumber(): number {
     return this.currentLevelNumber;
+  }
+
+  public isLastLevel(): boolean {
+    return this.currentLevelNumber === this.endLevelNumber;
   }
 
   public setGameOver(): void {

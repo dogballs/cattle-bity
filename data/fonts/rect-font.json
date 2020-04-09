@@ -3,7 +3,7 @@
   "emptySymbol": "-",
   "characterWidth": 7,
   "characterHeight": 7,
-  "characterSet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  "characterSet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
   "characters": [
     [
       "--ooo--",
@@ -238,6 +238,96 @@
       "-ooo---",
       "ooo----",
       "ooooooo"
+    ],
+    [
+      "---oo--",
+      "--ooo--",
+      "---oo--",
+      "---oo--",
+      "---oo--",
+      "---oo--",
+      "-oooooo"
+    ],
+    [
+      "-ooooo-",
+      "oo---oo",
+      "----ooo",
+      "--oooo-",
+      "-oooo--",
+      "ooo----",
+      "ooooooo"
+    ],
+    [
+      "-oooooo",
+      "----oo-",
+      "---oo--",
+      "--oooo-",
+      "-----oo",
+      "oo---oo",
+      "-ooooo-"
+    ],
+    [
+      "---ooo-",
+      "--oooo-",
+      "-oo-oo-",
+      "oo--oo-",
+      "ooooooo",
+      "----oo-",
+      "----oo-"
+    ],
+    [
+      "oooooo-",
+      "oo-----",
+      "oooooo-",
+      "-----oo",
+      "-----oo",
+      "oo---oo",
+      "-ooooo-"
+    ],
+    [
+      "--ooo--",
+      "-oo----",
+      "oo-----",
+      "oooooo-",
+      "oo---oo",
+      "oo---oo",
+      "-ooooo-"
+    ],
+    [
+      "ooooooo",
+      "oo---oo",
+      "----oo-",
+      "---oo--",
+      "--oo---",
+      "--oo---",
+      "--oo---"
+    ],
+    [
+      "-oooo--",
+      "oo---o-",
+      "ooo--o-",
+      "-oooo--",
+      "o--oooo",
+      "o----oo",
+      "-ooooo-"
+    ],
+    [
+      "-ooooo-",
+      "oo---oo",
+      "oo---oo",
+      "-oooooo",
+      "-----oo",
+      "----oo-",
+      "-oooo--"
+    ],
+    [
+      "--ooo--",
+      "-o--oo-",
+      "oo---oo",
+      "oo---oo",
+      "oo---oo",
+      "-oo--o-",
+      "--ooo--"
     ]
   ]
 }

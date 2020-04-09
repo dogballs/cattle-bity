@@ -6,4 +6,6 @@ export enum TerrainType {
   Ice = 'ice',
 
   MenuBrick = 'menu-brick',
+  InverseBrick = 'inverse-brick',
+  BlueBrick = 'blue-brick',
 }

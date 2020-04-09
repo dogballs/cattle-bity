@@ -41,6 +41,22 @@
   "terrain.ice": { "file": "sprite.png", "rect": [288, 32, 8, 8] },
   "terrain.menu-brick.1": { "file": "menu-brick.png", "rect": [0, 0, 4, 4] },
   "terrain.menu-brick.2": { "file": "menu-brick.png", "rect": [4, 0, 4, 4] },
+  "terrain.inverse-brick.1": {
+    "file": "inverse-brick.png",
+    "rect": [0, 0, 4, 4]
+  },
+  "terrain.inverse-brick.2": {
+    "file": "inverse-brick.png",
+    "rect": [4, 0, 4, 4]
+  },
+  "terrain.blue-brick.1": {
+    "file": "blue-brick.png",
+    "rect": [0, 0, 4, 4]
+  },
+  "terrain.blue-brick.2": {
+    "file": "blue-brick.png",
+    "rect": [4, 0, 4, 4]
+  },
   "flag": { "file": "sprite.png", "rect": [376, 184, 16, 15] },
   "tank.enemy.default.a.up.1": {
     "file": "sprite.png",

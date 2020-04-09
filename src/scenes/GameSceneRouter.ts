@@ -3,13 +3,17 @@ import * as config from '../config';
 
 import { EditorEnemyScene, EditorMapScene, EditorMenuScene } from './editor';
 import {
-  LevelGameOverScene,
   LevelLoadScene,
   LevelSelectionScene,
   LevelPlayScene,
   LevelScoreScene,
 } from './level';
-import { MainMenuScene } from './main';
+import {
+  MainGameOverScene,
+  MainHighscoreScene,
+  MainMenuScene,
+  MainVictoryScene,
+} from './main';
 import { SettingsKeybindingScene, SettingsMenuScene } from './settings';
 import { SandboxTransformScene } from './sandbox';
 
@@ -23,7 +27,10 @@ export class GameSceneRouter extends SceneRouter {
     this.register(GameSceneType.EditorEnemy, EditorEnemyScene);
     this.register(GameSceneType.EditorMap, EditorMapScene);
     this.register(GameSceneType.EditorMenu, EditorMenuScene);
-    this.register(GameSceneType.LevelGameOver, LevelGameOverScene);
+    this.register(GameSceneType.MainGameOver, MainGameOverScene);
+    this.register(GameSceneType.MainHighscore, MainHighscoreScene);
+    this.register(GameSceneType.MainMenu, MainMenuScene);
+    this.register(GameSceneType.MainVictory, MainVictoryScene);
     this.register(GameSceneType.LevelLoad, LevelLoadScene);
     this.register(GameSceneType.LevelSelection, LevelSelectionScene);
     this.register(GameSceneType.LevelScore, LevelScoreScene);

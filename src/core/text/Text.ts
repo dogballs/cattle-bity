@@ -7,6 +7,7 @@ import { NullFont } from './NullFont';
 export enum TextAlignment {
   Left,
   Center,
+  Right,
 }
 
 export interface TextOptions {
@@ -109,6 +110,9 @@ export class Text<T> {
       if (this.options.alignment === TextAlignment.Center) {
         const lineWidth = this.getUnscaledLineWidth(line);
         lineOffsetX = (textWidth - lineWidth) / 2;
+      } else if (this.options.alignment === TextAlignment.Right) {
+        const lineWidth = this.getUnscaledLineWidth(line);
+        lineOffsetX = textWidth - lineWidth;
       }
 
       const lineOffset = textOffset

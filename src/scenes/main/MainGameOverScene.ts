@@ -6,13 +6,11 @@ import { GameSceneType } from '../GameSceneType';
 
 const SCENE_DURATION = 3;
 
-export class LevelGameOverScene extends Scene {
+export class MainGameOverScene extends Scene {
   private heading = new GameOverHeading();
   private timer = new Timer(SCENE_DURATION);
 
-  protected setup({ audioLoader, session }: GameUpdateArgs): void {
-    session.reset();
-
+  protected setup({ audioLoader }: GameUpdateArgs): void {
     this.timer.done.addListener(this.handleDone);
 
     this.heading.origin.set(0.5, 0.5);
@@ -32,6 +30,6 @@ export class LevelGameOverScene extends Scene {
   }
 
   private handleDone = (): void => {
-    this.navigator.clearAndPush(GameSceneType.MainMenu);
+    this.navigator.clearAndPush(GameSceneType.MainHighscore);
   };
 }

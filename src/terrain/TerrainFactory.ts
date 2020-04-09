@@ -1,8 +1,10 @@
 import { Rect, Size } from '../core';
 import {
   TerrainTile,
+  BlueBrickTerrainTile,
   BrickTerrainTile,
   IceTerrainTile,
+  InverseBrickTerrainTile,
   JungleTerrainTile,
   MenuBrickTerrainTile,
   SteelTerrainTile,
@@ -89,6 +91,10 @@ export class TerrainFactory {
         return new IceTerrainTile();
       case TerrainType.MenuBrick:
         return new MenuBrickTerrainTile();
+      case TerrainType.InverseBrick:
+        return new InverseBrickTerrainTile();
+      case TerrainType.BlueBrick:
+        return new BlueBrickTerrainTile();
       default:
         throw new Error(`Tile object for "${type}" not defined`);
     }
@@ -107,6 +113,10 @@ export class TerrainFactory {
       case TerrainType.Ice:
         return new Size(config.ICE_TILE_SIZE, config.ICE_TILE_SIZE);
       case TerrainType.MenuBrick:
+        return new Size(config.BRICK_TILE_SIZE, config.BRICK_TILE_SIZE);
+      case TerrainType.InverseBrick:
+        return new Size(config.BRICK_TILE_SIZE, config.BRICK_TILE_SIZE);
+      case TerrainType.BlueBrick:
         return new Size(config.BRICK_TILE_SIZE, config.BRICK_TILE_SIZE);
       default:
         throw new Error(`Tile size for "${type}" not defined`);

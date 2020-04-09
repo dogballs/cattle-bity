@@ -1,6 +1,7 @@
 {
   "fire": { "file": "fire.mp3" },
   "game-over": { "file": "game-over.mp3" },
+  "highscore": { "file": "high-score.mp3" },
   "hit.steel": { "file": "hit-steel.mp3" },
   "hit.brick": { "file": "hit-brick.mp3" },
   "level-intro": { "file": "level-intro.mp3" },
