@@ -1,7 +1,6 @@
 import { Subject } from '../core';
 import { GameUpdateArgs, Tag } from '../game';
 import {
-  PlayerTankBehavior,
   TankSkinAnimation,
   TankColor,
   TankTier,
@@ -17,14 +16,8 @@ export class PlayerTank extends Tank {
   private tierSkinAnimations = new Map<TankTier, TankSkinAnimation>();
   private colors: TankColor[] = [TankColor.Primary];
 
-  constructor() {
-    super(TankType.PlayerA());
-  }
-
   protected setup(updateArgs: GameUpdateArgs): void {
     const { spriteLoader } = updateArgs;
-
-    this.behavior = new PlayerTankBehavior();
 
     this.tierSkinAnimations.set(
       TankTier.A,

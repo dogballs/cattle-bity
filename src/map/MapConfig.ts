@@ -1,5 +1,5 @@
 import { Rect, Vector } from '../core';
-import { TankFactory, TankType } from '../tank';
+import { TankParty, TankType } from '../tank';
 import { TerrainRegionConfig } from '../terrain';
 import * as config from '../config';
 
@@ -101,7 +101,7 @@ export class MapConfig {
 
   public getEnemySpawnList(): TankType[] {
     const types = this.dto.spawn.enemy.list.map((item) => {
-      return TankFactory.createEnemyType(item.tier, item.drop);
+      return new TankType(TankParty.Enemy, item.tier, item.drop);
     });
     return types;
   }

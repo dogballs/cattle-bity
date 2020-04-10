@@ -12,6 +12,16 @@ export class AudioController {
     sound.play();
   }
 
+  public playLoop(soundId: string): void {
+    const sound = this.audioLoader.load(soundId);
+    sound.playLoop();
+  }
+
+  public stop(soundId: string): void {
+    const sound = this.audioLoader.load(soundId);
+    sound.stop();
+  }
+
   public pauseAll(): void {
     const sounds = this.getLoadedSounds();
     sounds.forEach((sound) => {

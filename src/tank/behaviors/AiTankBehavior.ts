@@ -3,7 +3,7 @@ import { GameUpdateArgs, Rotation } from '../../game';
 import { Tank } from '../../gameObjects';
 import * as config from '../../config';
 
-import { TankBehavior } from './TankBehavior';
+import { TankBehavior } from '../TankBehavior';
 
 enum State {
   Moving,

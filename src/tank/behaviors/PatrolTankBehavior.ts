@@ -2,7 +2,7 @@ import { Vector } from '../../core';
 import { GameUpdateArgs, Rotation } from '../../game';
 import { Tank } from '../../gameObjects';
 
-import { TankBehavior } from './TankBehavior';
+import { TankBehavior } from '../TankBehavior';
 
 export class PatrolTankBehavior extends TankBehavior {
   private lastPosition: Vector = null;

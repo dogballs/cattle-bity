@@ -14,5 +14,6 @@
   "powerup.pickup": { "file": "powerup-pickup.mp3" },
   "explosion.player": { "file": "player-explosion.mp3" },
   "explosion.enemy": { "file": "enemy-explosion.mp3" },
-  "score": { "file": "score.mp3" }
+  "score": { "file": "score.mp3" },
+  "victory": { "file": "victory.mp3" }
 }

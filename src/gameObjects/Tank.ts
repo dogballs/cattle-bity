@@ -38,8 +38,8 @@ export class Tank extends GameObject {
   public tags = [Tag.Tank];
   public zIndex = 1;
   public type: TankType;
-  public attributes: TankAttributes;
   public behavior: TankBehavior;
+  public attributes: TankAttributes;
   public skinAnimation: TankSkinAnimation;
   public bullets: Bullet[] = [];
   public shield: Shield = null;
@@ -53,12 +53,13 @@ export class Tank extends GameObject {
   protected skinLayers: GameObject[] = [];
   private lastFireTimer = new Timer();
 
-  constructor(type: TankType) {
+  constructor(type: TankType, behavior: TankBehavior) {
     super(64, 64);
 
     this.pivot.set(0.5, 0.5);
 
     this.type = type;
+    this.behavior = behavior;
 
     this.attributes = TankAttributesFactory.create(this.type);
 

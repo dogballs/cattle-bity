@@ -2,7 +2,7 @@ import { GameUpdateArgs, Rotation } from '../../game';
 import { Tank, TankState } from '../../gameObjects';
 import { LevelInputContext } from '../../input';
 
-import { TankBehavior } from './TankBehavior';
+import { TankBehavior } from '../TankBehavior';
 
 const MOVE_CONTROLS = [
   ...LevelInputContext.MoveUp,

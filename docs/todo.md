@@ -2,7 +2,6 @@
 
 Game logic
 
-- victory style
 - ice tiles
 - input context hints
 - editor playtest

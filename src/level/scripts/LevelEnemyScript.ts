@@ -67,7 +67,7 @@ export class LevelEnemyScript extends LevelScript {
       return;
     }
 
-    const tank = TankFactory.createEnemy(type.tier, type.hasDrop);
+    const tank = TankFactory.createEnemy(type);
     tank.rotate(Rotation.Down);
     tank.setCenter(event.centerPosition);
 

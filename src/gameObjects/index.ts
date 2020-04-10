@@ -32,3 +32,4 @@ export * from './TerrainText';
 export * from './TerrainTile';
 export * from './TerrainTileDestroyer';
 export * from './VictoryHeading';
+export * from './VictoryMap';

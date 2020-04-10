@@ -1,4 +1,4 @@
-import { TankBehavior } from './TankBehavior';
+import { TankBehavior } from '../TankBehavior';
 
 export class StandStillTankBehavior extends TankBehavior {
   public update(): void {
