@@ -90,7 +90,7 @@ const config: TankAttributesConfig = {
       attributes: {
         bulletMaxCount: 2,
         bulletSpeed: BulletSpeed.Fast,
-        bulletTankDamage: 2,
+        bulletTankDamage: 1,
         bulletWallDamage: TankBulletWallDamage.High,
         health: 1,
         moveSpeed: MoveSpeed.Medium,

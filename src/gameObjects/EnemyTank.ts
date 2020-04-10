@@ -1,7 +1,7 @@
 import { Sound } from '../core';
 import { GameUpdateArgs, GameState, Tag } from '../game';
 import {
-  StandStillTankBehavior,
+  AiTankBehavior,
   TankColor,
   TankSkinAnimation,
   TankTier,
@@ -40,7 +40,7 @@ export class EnemyTank extends Tank {
 
     this.hitSound = audioLoader.load('hit.enemy');
 
-    this.behavior = new StandStillTankBehavior();
+    this.behavior = new AiTankBehavior();
 
     // Currently only tier D tank has more than 1 health
     if (this.type.tier === TankTier.D) {

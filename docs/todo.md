@@ -5,7 +5,6 @@ Game logic
 - victory style
 - ice tiles
 - scoreboard total separator
-- check if tier d enemy dies from two hits of tier b,c,d player
 - input context hints
 - editor playtest
 - mode to load custom map manifest
