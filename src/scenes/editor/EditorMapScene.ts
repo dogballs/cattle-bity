@@ -1,6 +1,6 @@
 import { CollisionDetector, Scene } from '../../core';
 import { GameUpdateArgs } from '../../game';
-import { Border, EditorField, EditorMap } from '../../gameObjects';
+import { EditorBorder, EditorField, EditorMap } from '../../gameObjects';
 import { EditorMapInputContext } from '../../input';
 import { MapConfig } from '../../map';
 import * as config from '../../config';
@@ -15,7 +15,7 @@ export class EditorMapScene extends Scene<EditorLocationParams> {
   private mapConfig: MapConfig;
 
   protected setup(): void {
-    this.root.add(new Border());
+    this.root.add(new EditorBorder());
 
     this.mapConfig = this.params.mapConfig;
 

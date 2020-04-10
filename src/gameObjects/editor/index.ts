@@ -1,3 +1,4 @@
+export * from './EditorBorder';
 export * from './EditorBrush';
 export * from './EditorEnemyPreview';
 export * from './EditorField';

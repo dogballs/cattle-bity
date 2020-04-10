@@ -14,6 +14,37 @@ export const FIELD_SIZE = FIELD_TILE_COUNT * TILE_SIZE_LARGE;
 export const BORDER_LEFT_WIDTH = 64;
 export const BORDER_RIGHT_WIDTH = 128;
 export const BORDER_TOP_BOTTOM_HEIGHT = 32;
+export const BORDER_RECTS = [
+  // Top
+  {
+    x: 0,
+    y: 0,
+    width: BORDER_LEFT_WIDTH + FIELD_SIZE + BORDER_RIGHT_WIDTH,
+    height: BORDER_TOP_BOTTOM_HEIGHT,
+  },
+  // Bottom
+  {
+    x: 0,
+    y: FIELD_SIZE + BORDER_TOP_BOTTOM_HEIGHT,
+    width: BORDER_LEFT_WIDTH + FIELD_SIZE + BORDER_RIGHT_WIDTH,
+    height: BORDER_TOP_BOTTOM_HEIGHT,
+  },
+  // Left
+  {
+    x: 0,
+    y: BORDER_TOP_BOTTOM_HEIGHT,
+    width: BORDER_LEFT_WIDTH,
+    height: FIELD_SIZE,
+  },
+  // Right
+  {
+    x: BORDER_LEFT_WIDTH + FIELD_SIZE,
+    y: BORDER_TOP_BOTTOM_HEIGHT,
+    width: BORDER_RIGHT_WIDTH,
+    height: FIELD_SIZE,
+  },
+];
+
 export const CANVAS_WIDTH = FIELD_SIZE + BORDER_LEFT_WIDTH + BORDER_RIGHT_WIDTH;
 export const CANVAS_HEIGHT = FIELD_SIZE + BORDER_TOP_BOTTOM_HEIGHT * 2;
 
