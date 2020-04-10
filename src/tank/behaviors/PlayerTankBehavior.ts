@@ -37,5 +37,9 @@ export class PlayerTankBehavior extends TankBehavior {
     if (input.isDownAny(LevelInputContext.Fire)) {
       tank.fire();
     }
+
+    if (input.isHoldAny(LevelInputContext.RapidFire)) {
+      tank.fire();
+    }
   }
 }

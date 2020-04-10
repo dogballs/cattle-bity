@@ -13,6 +13,8 @@ export class InputControlPresenter {
         return 'MOVE RIGHT';
       case InputControl.PrimaryAction:
         return 'FIRE';
+      case InputControl.SecondaryAction:
+        return 'RAPID FIRE';
       case InputControl.Select:
         return 'SELECT/PAUSE';
       default:

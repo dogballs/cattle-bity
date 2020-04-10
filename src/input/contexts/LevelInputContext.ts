@@ -7,5 +7,6 @@ export const LevelInputContext: InputContext = {
   MoveLeft: [InputControl.Left],
   MoveRight: [InputControl.Right],
   Fire: [InputControl.PrimaryAction],
+  RapidFire: [InputControl.SecondaryAction],
   Pause: [InputControl.Select],
 };

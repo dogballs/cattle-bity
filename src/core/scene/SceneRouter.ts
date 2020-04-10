@@ -60,7 +60,6 @@ export class SceneRouter implements SceneNavigator {
     this.stack.pop();
 
     const lastLocation = this.stack[this.stack.length - 1];
-    console.log({ lastLocation });
 
     this.transition(lastLocation.type, lastLocation.params);
   }

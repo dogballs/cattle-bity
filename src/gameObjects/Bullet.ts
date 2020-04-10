@@ -62,9 +62,15 @@ export class Bullet extends GameObject {
         return;
       }
 
+      // Player bullets pass thru
+      if (bullet.tags.includes(Tag.Player) && this.tags.includes(Tag.Player)) {
+        return;
+      }
+
       // When player bullet hits enemy bullet, they dissappear
       this.nullify();
       bullet.nullify();
+      console.log('null');
 
       return;
     }

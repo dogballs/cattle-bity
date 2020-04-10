@@ -29,6 +29,7 @@ const CONFIGURABLE_INPUT_CONTROLS = [
   InputControl.Left,
   InputControl.Right,
   InputControl.PrimaryAction,
+  InputControl.SecondaryAction,
   InputControl.Select,
 ];
 
@@ -83,7 +84,7 @@ export class SettingsKeybindingScene extends Scene {
 
     const menuItems = [
       this.deviceSelectorItem,
-      this.topDividerItem,
+      // this.topDividerItem,
       ...this.bindingItems,
       this.botDividerItem,
       this.resetItem,

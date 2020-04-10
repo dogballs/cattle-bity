@@ -31,6 +31,7 @@ export enum TankState {
 }
 
 const SKIN_LAYER_DESCRIPTIONS = [{ opacity: 1 }, { opacity: 0.5 }];
+const RAPID_FIRE_DELAY = 0.04;
 
 export class Tank extends GameObject {
   public collider = new Collider(true);
@@ -50,6 +51,7 @@ export class Tank extends GameObject {
   protected shieldTimer = new Timer();
   protected animation: Animation<TankAnimationFrame>;
   protected skinLayers: GameObject[] = [];
+  private lastFireTimer = new Timer();
 
   constructor(type: TankType) {
     super(64, 64);
@@ -82,9 +84,9 @@ export class Tank extends GameObject {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { gameState } = updateArgs;
+    const { deltaTime, gameState } = updateArgs;
 
-    this.shieldTimer.update(updateArgs.deltaTime);
+    this.shieldTimer.update(deltaTime);
 
     const shouldIdle =
       this.freezeState.hasChangedTo(true) ||
@@ -98,13 +100,15 @@ export class Tank extends GameObject {
 
     // Only update animation when idle
     if (isIdle) {
-      this.updateAnimation(updateArgs.deltaTime);
+      this.updateAnimation(deltaTime);
       return;
     }
 
     this.behavior.update(this, updateArgs);
 
-    this.updateAnimation(updateArgs.deltaTime);
+    this.lastFireTimer.update(deltaTime);
+
+    this.updateAnimation(deltaTime);
   }
 
   protected updateAnimation(deltaTime: number): void {
@@ -176,6 +180,11 @@ export class Tank extends GameObject {
       return;
     }
 
+    // Throttle how fast next bullet comes out during rapid fire
+    if (this.lastFireTimer.isActive()) {
+      return;
+    }
+
     const bullet = new Bullet(
       this.attributes.bulletSpeed,
       this.attributes.bulletTankDamage,
@@ -191,6 +200,7 @@ export class Tank extends GameObject {
 
     // Then, detach bullet from a tank and move it to a field
     this.parent.attach(bullet);
+    bullet.updateWorldMatrix(true);
 
     if (this.tags.includes(Tag.Player)) {
       bullet.tags.push(Tag.Player);
@@ -207,6 +217,8 @@ export class Tank extends GameObject {
     });
 
     this.fired.notify(null);
+
+    this.lastFireTimer.reset(RAPID_FIRE_DELAY);
 
     return true;
   }
