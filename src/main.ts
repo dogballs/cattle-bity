@@ -29,6 +29,8 @@ import * as spriteFontConfig from '../data/fonts/sprite-font.json';
 import * as rectFontConfig from '../data/fonts/rect-font.json';
 import * as mapManifest from '../data/maps/map.manifest.json';
 
+const loadingElement = document.querySelector('[data-loading]');
+
 const log = new Logger('main', Logger.Level.Debug);
 
 const gameRenderer = new GameRenderer({
@@ -36,7 +38,6 @@ const gameRenderer = new GameRenderer({
   height: config.CANVAS_HEIGHT,
   width: config.CANVAS_WIDTH,
 });
-document.body.appendChild(gameRenderer.getDomElement());
 
 const storage = new LocalStorage(config.STORAGE_NAMESPACE);
 const highscoreStorage = new PointsHighscoreStorage(storage);
@@ -149,6 +150,9 @@ async function main(): Promise<void> {
   log.time('Input bindings load');
   inputManager.loadAllBindings();
   log.timeEnd('Input bindings load');
+
+  document.body.removeChild(loadingElement);
+  document.body.appendChild(gameRenderer.getDomElement());
 
   gameLoop.start();
   // gameLoop.next();

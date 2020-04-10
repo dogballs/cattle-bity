@@ -11,3 +11,11 @@ body {
   justify-content: center;
   margin: 0;
 }
+
+.loading {
+  align-items: center;
+  display: flex;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 32px;
+}
