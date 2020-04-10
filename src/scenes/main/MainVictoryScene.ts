@@ -1,5 +1,5 @@
 import { CollisionDetector, Scene, Sound } from '../../core';
-import { AudioController, GameUpdateArgs } from '../../game';
+import { AudioManager, GameUpdateArgs } from '../../game';
 import { PlayerTank, VictoryHeading, VictoryMap } from '../../gameObjects';
 import { TankFactory, TankType, VictoryTankBehavior } from '../../tank';
 
@@ -9,15 +9,15 @@ const VICTORY_PLAYS = 3;
 
 export class MainVictoryScene extends Scene {
   private heading: VictoryHeading;
-  private audioController: AudioController;
+  private audioManager: AudioManager;
   private map: VictoryMap;
   private tank: PlayerTank;
   private behavior: VictoryTankBehavior;
   private victorySound: Sound;
   private victoryPlays = 0;
 
-  protected setup({ audioController, audioLoader }: GameUpdateArgs): void {
-    this.audioController = audioController;
+  protected setup({ audioManager, audioLoader }: GameUpdateArgs): void {
+    this.audioManager = audioManager;
 
     this.victorySound = audioLoader.load('victory');
     this.victorySound.ended.addListener(this.handleVictorySoundEnded);
@@ -41,7 +41,7 @@ export class MainVictoryScene extends Scene {
     this.tank.fired.addListener(this.handleTankFired);
     this.root.add(this.tank);
 
-    this.audioController.playLoop('tank.move');
+    this.audioManager.playLoop('tank.move');
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
@@ -81,15 +81,15 @@ export class MainVictoryScene extends Scene {
   }
 
   private handleStopped = (): void => {
-    this.audioController.stop('tank.move');
+    this.audioManager.stop('tank.move');
   };
 
   private handleTankFired = (): void => {
-    this.audioController.play('fire');
+    this.audioManager.play('fire');
   };
 
   private handleTileDestroyed = (): void => {
-    this.audioController.play('explosion.enemy');
+    this.audioManager.play('explosion.enemy');
   };
 
   private handleMapDestroyed = (): void => {
@@ -101,7 +101,7 @@ export class MainVictoryScene extends Scene {
 
   private handleVictorySoundEnded = (): void => {
     if (this.victoryPlays >= VICTORY_PLAYS) {
-      this.audioController.stopAll();
+      this.audioManager.stopAll();
       this.navigator.clearAndPush(GameSceneType.MainHighscore);
       return;
     }

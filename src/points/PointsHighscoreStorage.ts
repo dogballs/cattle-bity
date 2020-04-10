@@ -9,8 +9,6 @@ export class PointsHighscoreStorage {
   }
 
   public getPrimaryPoints(): number {
-    this.storage.load();
-
     const json = this.storage.get(config.STORAGE_KEY_HIGHSCORE_PRIMARY);
     const points = Number(json) || 0;
 

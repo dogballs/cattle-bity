@@ -13,10 +13,6 @@ Maps
 
 - Create maps 3 - 25
 
-Settings
-
-- mute audio
-
 Build
 
 - prod build

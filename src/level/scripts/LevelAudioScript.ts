@@ -1,5 +1,5 @@
 import { Sound } from '../../core';
-import { AudioController, GameUpdateArgs } from '../../game';
+import { AudioManager, GameUpdateArgs } from '../../game';
 import { LevelInputContext } from '../../input';
 import { PowerupType } from '../../powerup';
 
@@ -19,7 +19,7 @@ enum TankState {
 }
 
 export class LevelAudioScript extends LevelScript {
-  private audioConttoller: AudioController;
+  private audioConttoller: AudioManager;
   private tankState = TankState.Idle;
 
   private moveSound: Sound;
@@ -27,8 +27,8 @@ export class LevelAudioScript extends LevelScript {
   private pauseSound: Sound;
   private playerExplosionSound: Sound;
 
-  protected setup({ audioController, audioLoader }: GameUpdateArgs): void {
-    this.audioConttoller = audioController;
+  protected setup({ audioManager, audioLoader }: GameUpdateArgs): void {
+    this.audioConttoller = audioManager;
 
     this.eventBus.baseDied.addListener(this.handleBaseDied);
     this.eventBus.enemyDied.addListener(this.handleEnemyDied);

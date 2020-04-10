@@ -4,6 +4,8 @@ export class Sound {
   public readonly ended = new Subject();
   public readonly loaded = new Subject();
   public readonly audioElement: HTMLAudioElement;
+  private localMuted = false;
+  private globalMuted = false;
 
   constructor(audioElement: HTMLAudioElement) {
     this.audioElement = audioElement;
@@ -50,15 +52,35 @@ export class Sound {
   }
 
   public mute(): void {
-    this.audioElement.muted = true;
+    this.localMuted = true;
+    this.updateElementMuted();
   }
 
   public unmute(): void {
-    this.audioElement.muted = false;
+    this.localMuted = false;
+    this.updateElementMuted();
   }
 
   public isMuted(): boolean {
-    return this.audioElement.muted;
+    return this.localMuted;
+  }
+
+  public globalMute(): void {
+    this.globalMuted = true;
+    this.updateElementMuted();
+  }
+
+  public globalUnmute(): void {
+    this.globalMuted = false;
+    this.updateElementMuted();
+  }
+
+  public isGlobalMuted(): boolean {
+    return this.globalMuted;
+  }
+
+  private updateElementMuted(): void {
+    this.audioElement.muted = this.globalMuted || this.localMuted;
   }
 
   private handleLoaded = (): void => {

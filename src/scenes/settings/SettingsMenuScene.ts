@@ -8,6 +8,7 @@ import { GameSceneType } from '../GameSceneType';
 export class SettingsMenuScene extends Scene {
   private title: SpriteText;
   private keybindingItem: TextMenuItem;
+  private audioItem: TextMenuItem;
   private backItem: TextMenuItem;
   private menu: Menu;
 
@@ -19,10 +20,13 @@ export class SettingsMenuScene extends Scene {
     this.keybindingItem = new TextMenuItem('KEY BINDINGS');
     this.keybindingItem.selected.addListener(this.handleKeybindingSelected);
 
+    this.audioItem = new TextMenuItem('AUDIO');
+    this.audioItem.selected.addListener(this.handleAudioSelected);
+
     this.backItem = new TextMenuItem('BACK');
     this.backItem.selected.addListener(this.handleBackSelected);
 
-    const menuItems = [this.keybindingItem, this.backItem];
+    const menuItems = [this.keybindingItem, this.audioItem, this.backItem];
 
     this.menu = new Menu();
     this.menu.setItems(menuItems);
@@ -38,6 +42,10 @@ export class SettingsMenuScene extends Scene {
 
   private handleKeybindingSelected = (): void => {
     this.navigator.push(GameSceneType.SettingsKeybinding);
+  };
+
+  private handleAudioSelected = (): void => {
+    this.navigator.push(GameSceneType.SettingsAudio);
   };
 
   private handleBackSelected = (): void => {

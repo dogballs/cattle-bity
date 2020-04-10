@@ -1,4 +1,4 @@
-export * from './AudioController';
+export * from './AudioManager';
 export * from './GameUpdateArgs';
 export * from './GameState';
 export * from './Rotation';

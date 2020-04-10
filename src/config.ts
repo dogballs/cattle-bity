@@ -88,6 +88,7 @@ export const PRIMARY_SPRITE_FONT_ID = 'primary';
 export const PRIMARY_RECT_FONT_ID = 'primary';
 
 export const STORAGE_NAMESPACE = 'battle-city';
+export const STORAGE_KEY_SETTINGS_AUDIO = 'audio';
 export const STORAGE_KEY_BINDINGS_PRIMARY = 'bindings-primary';
 export const STORAGE_KEY_HIGHSCORE_PRIMARY = 'highscore-primary';
 

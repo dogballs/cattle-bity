@@ -16,6 +16,6 @@ body {
   align-items: center;
   display: flex;
   color: #fff;
-  font-family: sans-serif;
+  font-family: Lucida Console, Courier, monospace;
   font-size: 32px;
 }

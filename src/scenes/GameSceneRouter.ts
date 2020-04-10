@@ -14,7 +14,11 @@ import {
   MainMenuScene,
   MainVictoryScene,
 } from './main';
-import { SettingsKeybindingScene, SettingsMenuScene } from './settings';
+import {
+  SettingsAudioScene,
+  SettingsKeybindingScene,
+  SettingsMenuScene,
+} from './settings';
 import { SandboxTransformScene } from './sandbox';
 
 import { GameSceneType } from './GameSceneType';
@@ -36,6 +40,7 @@ export class GameSceneRouter extends SceneRouter {
     this.register(GameSceneType.LevelScore, LevelScoreScene);
     this.register(GameSceneType.LevelPlay, LevelPlayScene);
     this.register(GameSceneType.MainMenu, MainMenuScene);
+    this.register(GameSceneType.SettingsAudio, SettingsAudioScene);
     this.register(GameSceneType.SettingsMenu, SettingsMenuScene);
     this.register(GameSceneType.SettingsKeybinding, SettingsKeybindingScene);
     this.register(GameSceneType.SandboxTransform, SandboxTransformScene);

@@ -12,12 +12,12 @@ import { InputManager } from '../input';
 import { MapLoader } from '../map';
 import { PointsHighscoreStorage } from '../points';
 
-import { AudioController } from './AudioController';
+import { AudioManager } from './AudioManager';
 import { GameState } from './GameState';
 import { Session } from './Session';
 
 export interface GameUpdateArgs {
-  audioController: AudioController;
+  audioManager: AudioManager;
   audioLoader: AudioLoader;
   deltaTime: number;
   highscoreStorage: PointsHighscoreStorage;
