@@ -2,18 +2,14 @@
   "spawn": {
     "enemy": {
       "list": [
-        {
-          "tier": "a"
-        },
-        {
-          "tier": "b"
-        },
-        {
-          "tier": "c"
-        },
-        {
-          "tier": "d"
-        }
+        { "tier": "d" },
+        { "tier": "d" },
+        { "tier": "d" },
+        { "tier": "d" },
+        { "tier": "d" },
+        { "tier": "d" },
+        { "tier": "d" },
+        { "tier": "d" }
       ],
       "locations": [
         {

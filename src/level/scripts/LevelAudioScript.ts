@@ -1,5 +1,5 @@
-import { AudioLoader, Sound } from '../../core';
-import { GameUpdateArgs } from '../../game';
+import { Sound } from '../../core';
+import { AudioController, GameUpdateArgs } from '../../game';
 import { LevelInputContext } from '../../input';
 import { PowerupType } from '../../powerup';
 
@@ -19,7 +19,7 @@ enum TankState {
 }
 
 export class LevelAudioScript extends LevelScript {
-  private audioLoader: AudioLoader;
+  private audioConttoller: AudioController;
   private tankState = TankState.Idle;
 
   private moveSound: Sound;
@@ -27,8 +27,8 @@ export class LevelAudioScript extends LevelScript {
   private pauseSound: Sound;
   private playerExplosionSound: Sound;
 
-  protected setup({ audioLoader }: GameUpdateArgs): void {
-    this.audioLoader = audioLoader;
+  protected setup({ audioController, audioLoader }: GameUpdateArgs): void {
+    this.audioConttoller = audioController;
 
     this.eventBus.baseDied.addListener(this.handleBaseDied);
     this.eventBus.enemyDied.addListener(this.handleEnemyDied);
@@ -52,13 +52,13 @@ export class LevelAudioScript extends LevelScript {
 
     // Play level intro right away. Rest of the sound must be muted until
     // intro finishes.
-    const introSound = this.audioLoader.load('level-intro');
+    const introSound = audioLoader.load('level-intro');
     introSound.ended.addListener(() => {
-      this.audioLoader.unmuteAll();
+      this.audioConttoller.unmuteAll();
     });
     introSound.play();
 
-    this.audioLoader.muteAllExcept(
+    this.audioConttoller.muteAllExcept(
       introSound,
       this.pauseSound,
       this.playerExplosionSound,
@@ -95,7 +95,7 @@ export class LevelAudioScript extends LevelScript {
   private handleEnemyDied = (): void => {
     // TODO: wipeout powerup explodes multiple enemies, should trigger
     // single audio
-    this.audioLoader.load('explosion.enemy').play();
+    this.audioConttoller.play('explosion.enemy');
   };
 
   private handlePlayerDied = (): void => {
@@ -103,11 +103,11 @@ export class LevelAudioScript extends LevelScript {
   };
 
   private handlePlayerFired = (): void => {
-    this.audioLoader.load('fire').play();
+    this.audioConttoller.play('fire');
   };
 
   private handlePowerupSpawned = (): void => {
-    this.audioLoader.load('powerup.spawn').play();
+    this.audioConttoller.play('powerup.spawn');
   };
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
@@ -116,20 +116,20 @@ export class LevelAudioScript extends LevelScript {
       return;
     }
 
-    this.audioLoader.load('powerup.pickup').play();
+    this.audioConttoller.play('powerup.pickup');
   };
 
   private handleSessionLifeup = (): void => {
-    this.audioLoader.load('life').play();
+    this.audioConttoller.play('life');
   };
 
   private handleLevelPaused = (): void => {
-    this.audioLoader.pauseAll();
+    this.audioConttoller.pauseAll();
     this.pauseSound.play();
   };
 
   private levelUnpaused = (): void => {
-    this.audioLoader.resumeAll();
+    this.audioConttoller.resumeAll();
   };
 
   private handleLevelGameOverMoveBlocked = (): void => {
@@ -138,6 +138,6 @@ export class LevelAudioScript extends LevelScript {
   };
 
   private handleLevelWinCompleted = (): void => {
-    this.audioLoader.stopAll();
+    this.audioConttoller.stopAll();
   };
 }

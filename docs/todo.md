@@ -5,9 +5,10 @@ Game logic
 - victory style
 - ice tiles
 - scoreboard total separator
-- tier d sound hit
 - fire hold mode
 - input context hints
+- editor playtest
+- mode to load custom map manifest
 - demo
 - multiplayer
 

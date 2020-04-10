@@ -15,7 +15,7 @@ import {
   Vector,
 } from './core';
 import { DebugGameLoopMenu, DebugInspector } from './debug';
-import { GameUpdateArgs, GameState, Session } from './game';
+import { AudioController, GameUpdateArgs, GameState, Session } from './game';
 import { InputManager } from './input';
 import { MapLoader } from './map';
 import { PointsHighscoreStorage } from './points';
@@ -62,6 +62,8 @@ rectFontLoader.register(config.PRIMARY_RECT_FONT_ID, rectFontConfig, {
 
 const mapLoader = new MapLoader(mapManifest);
 
+const audioController = new AudioController(audioLoader);
+
 const session = new Session();
 
 const sceneRouter = new GameSceneRouter();
@@ -84,6 +86,7 @@ debugInspector.click.addListener((position: Vector) => {
 const gameState = new State<GameState>(GameState.Playing);
 
 const updateArgs: GameUpdateArgs = {
+  audioController,
   audioLoader,
   deltaTime: 0,
   highscoreStorage,
