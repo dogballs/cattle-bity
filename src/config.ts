@@ -57,8 +57,8 @@ export const PRIMARY_SPRITE_FONT_ID = 'primary';
 export const PRIMARY_RECT_FONT_ID = 'primary';
 
 export const STORAGE_NAMESPACE = 'battle-city';
-export const STORAGE_KEY_BINDINGS = 'bindings';
-export const STORAGE_KEY_HIGHSCORE = 'highscore';
+export const STORAGE_KEY_BINDINGS_PRIMARY = 'bindings-primary';
+export const STORAGE_KEY_HIGHSCORE_PRIMARY = 'highscore-primary';
 
 export const PLAYER_DEFAULT_SPAWN_POSITIONS = [{ x: 256, y: 768 }];
 export const ENEMY_DEFAULT_SPAWN_POSITIONS = [

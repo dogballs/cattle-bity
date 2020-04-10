@@ -1,16 +1,19 @@
 import { Scene } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import { HighscoreHeading } from '../../gameObjects';
-import * as config from '../../config';
 
 import { GameSceneType } from '../GameSceneType';
 
 export class MainHighscoreScene extends Scene {
   private heading: HighscoreHeading;
 
-  protected setup({ audioLoader, session, storage }: GameUpdateArgs): void {
-    const totalPoints = session.getTotalPoints();
-    const highscore = session.getHighscore();
+  protected setup({
+    audioLoader,
+    highscoreStorage,
+    session,
+  }: GameUpdateArgs): void {
+    const totalPoints = session.getMaxPoints();
+    const highscore = session.getMaxHighscore();
 
     // Reset all previous game session data
     session.reset();
@@ -22,8 +25,7 @@ export class MainHighscoreScene extends Scene {
     }
 
     // Save highscore
-    storage.set(config.STORAGE_KEY_HIGHSCORE, totalPoints.toString());
-    storage.save();
+    highscoreStorage.savePrimaryPoints(totalPoints);
 
     this.heading = new HighscoreHeading(totalPoints);
     this.heading.origin.set(0.5, 0.5);

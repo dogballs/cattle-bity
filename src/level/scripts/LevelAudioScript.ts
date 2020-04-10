@@ -43,7 +43,7 @@ export class LevelAudioScript extends LevelScript {
     );
     this.eventBus.levelWinCompleted.addListener(this.handleLevelWinCompleted);
 
-    this.session.lifeup.addListener(this.handleSessionLifeup);
+    this.session.primaryPlayer.lifeup.addListener(this.handleSessionLifeup);
 
     this.moveSound = audioLoader.load('tank.move');
     this.idleSound = audioLoader.load('tank.idle');

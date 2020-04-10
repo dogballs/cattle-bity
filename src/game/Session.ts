@@ -1,8 +1,6 @@
-import { Subject } from '../core';
-import { PointsRecord } from '../points';
-import { PowerupType } from '../powerup';
-import { TankTier } from '../tank';
 import * as config from '../config';
+
+import { SessionPlayer } from './SessionPlayer';
 
 enum State {
   Idle,
@@ -11,17 +9,11 @@ enum State {
 }
 
 export class Session {
-  public lifeup = new Subject();
-
+  public primaryPlayer = new SessionPlayer();
   private seenIntro: boolean;
   private startLevelNumber: number;
   private endLevelNumber: number;
   private currentLevelNumber: number;
-  private levelPointsRecord: PointsRecord;
-  private totalPoints: number;
-  private highscorePoints: number;
-  private lives: number;
-  private nextLifePointThreshold: number;
   private state: State;
 
   constructor() {
@@ -44,17 +36,15 @@ export class Session {
     this.startLevelNumber = 1;
     this.currentLevelNumber = 1;
     this.endLevelNumber = 1;
-    this.levelPointsRecord = new PointsRecord();
-    this.totalPoints = 0;
-    this.lives = config.PLAYER_INITIAL_LIVES;
-    this.nextLifePointThreshold = config.PLAYER_EXTRA_LIVE_POINTS;
     this.state = State.Idle;
+
+    this.primaryPlayer.reset();
   }
 
   public activateNextLevel(): void {
     this.currentLevelNumber += 1;
-    this.totalPoints += this.levelPointsRecord.getTotalPoints();
-    this.levelPointsRecord.reset();
+
+    this.primaryPlayer.completeLevel();
   }
 
   public getLevelNumber(): number {
@@ -73,53 +63,16 @@ export class Session {
     return this.state === State.GameOver;
   }
 
-  public setHighscore(highscorePoints: number): void {
-    this.highscorePoints = highscorePoints;
+  public getMaxPoints(): number {
+    return this.primaryPlayer.getTotalPoints();
   }
 
-  public getHighscore(): number {
-    return this.highscorePoints;
-  }
-
-  public addKillPoints(tier: TankTier): void {
-    this.levelPointsRecord.addKill(tier);
-    this.checkLifeup();
-  }
-
-  public addPowerupPoints(type: PowerupType): void {
-    this.levelPointsRecord.addPowerup(type);
-    this.checkLifeup();
-  }
-
-  public getTotalPoints(): number {
-    // Sum of all previous levels and current level
-    return this.totalPoints + this.levelPointsRecord.getTotalPoints();
-  }
-
-  public getLevelPointsRecord(): PointsRecord {
-    return this.levelPointsRecord;
-  }
-
-  public getLivesCount(): number {
-    return this.lives;
-  }
-
-  public isAlive(): boolean {
-    return this.lives > 0;
-  }
-
-  public addLife(): void {
-    this.lives += 1;
-
-    this.lifeup.notify(null);
-  }
-
-  public removeLife(): void {
-    this.lives -= 1;
-
-    if (!this.isAlive()) {
-      this.setGameOver();
+  public getMaxHighscore(): number {
+    const points = this.primaryPlayer.getHighscore();
+    if (points > config.DEFAULT_HIGHSCORE) {
+      return points;
     }
+    return config.DEFAULT_HIGHSCORE;
   }
 
   public setSeenIntro(seenIntro: boolean): void {
@@ -128,12 +81,5 @@ export class Session {
 
   public haveSeenIntro(): boolean {
     return this.seenIntro;
-  }
-
-  private checkLifeup(): void {
-    if (this.getTotalPoints() >= this.nextLifePointThreshold) {
-      this.nextLifePointThreshold += config.PLAYER_EXTRA_LIVE_POINTS;
-      this.addLife();
-    }
   }
 }

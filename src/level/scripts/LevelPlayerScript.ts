@@ -76,6 +76,14 @@ export class LevelPlayerScript extends LevelScript {
     tank.setCenter(event.centerPosition);
     tank.activateShield(config.SHIELD_SPAWN_DURATION);
 
+    // Check if tank tier from previous level should be activated.
+    // If tank dies - it loses all this tiers, so it applies only to first
+    // spawn.
+    if (this.session.primaryPlayer.isLevelFirstSpawn()) {
+      const carryoverTier = this.session.primaryPlayer.getTankTier();
+      tank.upgrade(carryoverTier, false);
+    }
+
     tank.died.addListener(() => {
       this.eventBus.playerDied.notify({
         type: event.type,
@@ -87,11 +95,19 @@ export class LevelPlayerScript extends LevelScript {
       this.world.removePlayerTank();
 
       this.timer.reset(config.PLAYER_SPAWN_DELAY);
+
+      this.session.primaryPlayer.resetTankTier();
     });
 
     tank.fired.addListener(() => {
       this.eventBus.playerFired.notify(null);
     });
+
+    tank.upgraded.addListener((event) => {
+      this.session.primaryPlayer.setTankTier(event.tier);
+    });
+
+    this.session.primaryPlayer.setLevelSpawned();
 
     this.tank = tank;
 

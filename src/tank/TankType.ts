@@ -22,7 +22,13 @@ export class TankType {
     return new TankType(this.party, this.tier);
   }
 
-  public increaseTier(): this {
+  public increaseTier(targetTier: TankTier = null): this {
+    if (targetTier !== null) {
+      this.tier = targetTier;
+
+      return this;
+    }
+
     switch (this.tier) {
       case TankTier.A:
         this.tier = TankTier.B;

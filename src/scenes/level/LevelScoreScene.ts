@@ -33,7 +33,7 @@ export class LevelScoreScene extends Scene {
     this.levelTitle.position.setY(128);
     this.root.add(this.levelTitle);
 
-    const pointsRecord = this.session.getLevelPointsRecord();
+    const pointsRecord = this.session.primaryPlayer.getLevelPointsRecord();
     this.scoreTable = new ScoreTable(pointsRecord);
     this.scoreTable.setCenter(this.root.getSelfCenter());
     this.scoreTable.done.addListener(this.handleDone);

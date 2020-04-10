@@ -13,7 +13,7 @@ export class LevelInfoScript extends LevelScript {
       this.handleEnemySpawnRequested,
     );
 
-    this.session.lifeup.addListener(this.handleSessionLifeup);
+    this.session.primaryPlayer.lifeup.addListener(this.handleSessionLifeup);
 
     this.info = new LevelInfo();
     this.info.position.set(
@@ -22,12 +22,12 @@ export class LevelInfoScript extends LevelScript {
     );
     this.world.sceneRoot.add(this.info);
 
-    this.info.setLivesCount(this.session.getLivesCount());
+    this.info.setLivesCount(this.session.primaryPlayer.getLivesCount());
     this.info.setLevelNumber(this.session.getLevelNumber());
   }
 
   private handlePlayerDied = (): void => {
-    this.info.setLivesCount(this.session.getLivesCount());
+    this.info.setLivesCount(this.session.primaryPlayer.getLivesCount());
   };
 
   private handleEnemySpawnRequested = (
@@ -37,6 +37,6 @@ export class LevelInfoScript extends LevelScript {
   };
 
   private handleSessionLifeup = (): void => {
-    this.info.setLivesCount(this.session.getLivesCount());
+    this.info.setLivesCount(this.session.primaryPlayer.getLivesCount());
   };
 }

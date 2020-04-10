@@ -227,15 +227,19 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
   }
 
   private handlePlayerDied = (): void => {
-    this.session.removeLife();
+    this.session.primaryPlayer.removeLife();
 
-    if (this.session.isGameOver()) {
-      this.playerScript.disable();
-      this.gameOverScript.enable();
-
-      // Player can lose even after level is won
-      this.winScript.disable();
+    if (this.session.primaryPlayer.isAlive()) {
+      return;
     }
+
+    this.session.setGameOver();
+
+    this.playerScript.disable();
+    this.gameOverScript.enable();
+
+    // Player can lose even after level is won
+    this.winScript.disable();
   };
 
   private handleEnemyAllDied = (): void => {
@@ -243,19 +247,20 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
   };
 
   private handleEnemyDied = (event: LevelEnemyDiedEvent): void => {
-    this.session.addKillPoints(event.type.tier);
+    this.session.primaryPlayer.addKillPoints(event.type.tier);
   };
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
-    this.session.addPowerupPoints(event.type);
+    this.session.primaryPlayer.addPowerupPoints(event.type);
 
     if (event.type === PowerupType.Life) {
-      this.session.addLife();
+      this.session.primaryPlayer.addLife();
     }
   };
 
   private handleBaseDied = (): void => {
     this.session.setGameOver();
+
     this.playerScript.disable();
     this.gameOverScript.enable();
 

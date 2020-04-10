@@ -10,6 +10,7 @@ import {
 } from '../core';
 import { InputManager } from '../input';
 import { MapLoader } from '../map';
+import { PointsHighscoreStorage } from '../points';
 
 import { GameState } from './GameState';
 import { Session } from './Session';
@@ -17,6 +18,7 @@ import { Session } from './Session';
 export interface GameUpdateArgs {
   audioLoader: AudioLoader;
   deltaTime: number;
+  highscoreStorage: PointsHighscoreStorage;
   imageLoader: ImageLoader;
   input: Input;
   inputManager: InputManager;

@@ -142,7 +142,7 @@ export class InputManager {
   }
 
   private getBindingStorageKey(type: InputDeviceType): string {
-    return `${config.STORAGE_KEY_BINDINGS}_${type.toString()}`;
+    return `${config.STORAGE_KEY_BINDINGS_PRIMARY}_${type.toString()}`;
   }
 
   private activateVariant(variant: InputVariant): void {

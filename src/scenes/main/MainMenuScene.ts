@@ -25,12 +25,12 @@ export class MainMenuScene extends Scene {
   private state: State = State.Ready;
   private session: Session;
 
-  protected setup({ session, storage }: GameUpdateArgs): void {
+  protected setup({ session, highscoreStorage }: GameUpdateArgs): void {
     this.session = session;
 
     // Load highscore from storage
-    const highscore = Number(storage.get(config.STORAGE_KEY_HIGHSCORE)) || 0;
-    this.session.setHighscore(highscore);
+    const highscorePoints = highscoreStorage.getPrimaryPoints();
+    this.session.primaryPlayer.setHighscore(highscorePoints);
 
     this.group = new GameObject();
     this.group.size.copyFrom(this.root.size);
@@ -112,7 +112,7 @@ export class MainMenuScene extends Scene {
   }
 
   private getPrimaryHighscoreText(): string {
-    const points = this.session.getHighscore();
+    const points = this.session.primaryPlayer.getHighscore();
 
     const pointsNumberText = points > 0 ? points.toString() : '00';
     const pointsText = pointsNumberText.padStart(6, ' ');
@@ -123,11 +123,7 @@ export class MainMenuScene extends Scene {
   }
 
   private getCommonHighscoreText(): string {
-    let points = this.session.getHighscore();
-    if (points === 0) {
-      points = config.DEFAULT_HIGHSCORE;
-    }
-
+    const points = this.session.getMaxHighscore();
     const pointsText = points.toString().padStart(6, ' ');
 
     const text = `HI-${pointsText}`;

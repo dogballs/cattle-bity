@@ -18,6 +18,7 @@ import { DebugGameLoopMenu, DebugInspector } from './debug';
 import { GameUpdateArgs, GameState, Session } from './game';
 import { InputManager } from './input';
 import { MapLoader } from './map';
+import { PointsHighscoreStorage } from './points';
 import { GameSceneRouter, GameSceneType } from './scenes';
 
 import * as config from './config';
@@ -38,6 +39,7 @@ const gameRenderer = new GameRenderer({
 document.body.appendChild(gameRenderer.getDomElement());
 
 const storage = new LocalStorage(config.STORAGE_NAMESPACE);
+const highscoreStorage = new PointsHighscoreStorage(storage);
 storage.load();
 
 const inputManager = new InputManager(storage);
@@ -84,6 +86,7 @@ const gameState = new State<GameState>(GameState.Playing);
 const updateArgs: GameUpdateArgs = {
   audioLoader,
   deltaTime: 0,
+  highscoreStorage,
   imageLoader,
   input: inputManager.getInput(),
   inputManager,
