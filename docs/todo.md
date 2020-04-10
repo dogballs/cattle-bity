@@ -4,9 +4,9 @@ Game logic
 
 - victory style
 - ice tiles
-- tank tier C
-- tweak tank attributes
 - scoreboard total separator
+- tier d sound hit
+- fire hold mode
 - input context hints
 - demo
 - multiplayer

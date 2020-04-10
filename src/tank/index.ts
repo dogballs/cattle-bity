@@ -3,6 +3,7 @@ export * from './behaviors';
 
 export * from './TankAnimationFrame';
 export * from './TankAttributesFactory';
+export * from './TankBulletWallDamage';
 export * from './TankColor';
 export * from './TankDeathReason';
 export * from './TankFactory';

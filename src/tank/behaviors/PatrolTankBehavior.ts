@@ -10,7 +10,9 @@ export class PatrolTankBehavior extends TankBehavior {
   public update(tank: Tank, updateArgs: GameUpdateArgs): void {
     tank.move(updateArgs.deltaTime);
 
-    if (this.lastPosition !== null && this.lastPosition.equals(tank.position)) {
+    const tankPosition = this.roundPosition(tank.position);
+
+    if (this.lastPosition !== null && this.lastPosition.equals(tankPosition)) {
       if (tank.rotation === Rotation.Up) {
         tank.rotate(Rotation.Down);
       } else if (tank.rotation === Rotation.Down) {
@@ -24,6 +26,14 @@ export class PatrolTankBehavior extends TankBehavior {
       return;
     }
 
-    this.lastPosition = tank.position.clone();
+    this.lastPosition = tankPosition;
+  }
+
+  private roundPosition(position: Vector): Vector {
+    const roundedPosition = new Vector(
+      Math.round(position.x),
+      Math.round(position.y),
+    );
+    return roundedPosition;
   }
 }

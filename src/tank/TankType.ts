@@ -83,6 +83,9 @@ export class TankType {
   public static EnemyB(): TankType {
     return new TankType(TankParty.Enemy, TankTier.B);
   }
+  public static EnemyC(): TankType {
+    return new TankType(TankParty.Enemy, TankTier.C);
+  }
   public static EnemyD(): TankType {
     return new TankType(TankParty.Enemy, TankTier.D);
   }

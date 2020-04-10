@@ -1,6 +1,6 @@
 import { GameUpdateArgs, GameState, Tag } from '../game';
 import {
-  AiTankBehavior,
+  PatrolFireTankBehavior,
   TankColor,
   TankSkinAnimation,
   TankTier,
@@ -36,7 +36,7 @@ export class EnemyTank extends Tank {
   protected setup(updateArgs: GameUpdateArgs): void {
     const { spriteLoader } = updateArgs;
 
-    this.behavior = new AiTankBehavior();
+    this.behavior = new PatrolFireTankBehavior();
 
     // Currently only tier D tank has more than 1 health
     if (this.type.tier === TankTier.D) {

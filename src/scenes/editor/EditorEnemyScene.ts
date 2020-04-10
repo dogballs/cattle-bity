@@ -20,9 +20,11 @@ import { EditorLocationParams } from './params';
 const ENEMY_TYPES = [
   TankType.EnemyA(),
   TankType.EnemyB(),
+  TankType.EnemyC(),
   TankType.EnemyD(),
   TankType.EnemyA().setHasDrop(true),
   TankType.EnemyB().setHasDrop(true),
+  TankType.EnemyC().setHasDrop(true),
   TankType.EnemyD().setHasDrop(true),
 ];
 

@@ -40,3 +40,11 @@
 
 - pause notice
 - game over notice
+
+#### 8
+
+- curtain
+
+#### 9
+
+- level title

@@ -3,13 +3,33 @@
     "enemy": {
       "list": [
         {
-          "tier": "d",
-          "drop": true
+          "tier": "a"
+        },
+        {
+          "tier": "b"
+        },
+        {
+          "tier": "c"
+        },
+        {
+          "tier": "d"
         }
       ],
       "locations": [
         {
           "x": 0,
+          "y": 0
+        },
+        {
+          "x": 64,
+          "y": 0
+        },
+        {
+          "x": 128,
+          "y": 0
+        },
+        {
+          "x": 192,
           "y": 0
         }
       ]
@@ -19,147 +39,6 @@
     }
   },
   "terrain": {
-    "regions": [
-      {
-        "type": "ice",
-        "x": 576,
-        "y": 320,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 576,
-        "y": 256,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 256,
-        "y": 640,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 192,
-        "y": 640,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 128,
-        "y": 640,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 576,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 640,
-        "y": 320,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 640,
-        "y": 256,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 128,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 192,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 256,
-        "y": 576,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 256,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 256,
-        "y": 448,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 256,
-        "y": 384,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 192,
-        "y": 384,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 192,
-        "y": 448,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 192,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 128,
-        "y": 512,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 128,
-        "y": 448,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 128,
-        "y": 384,
-        "width": 64,
-        "height": 64
-      }
-    ]
+    "regions": []
   }
 }

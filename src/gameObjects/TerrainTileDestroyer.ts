@@ -1,5 +1,6 @@
 import { Collider, Collision, GameObject } from '../core';
 import { Tag } from '../game';
+import { TankBulletWallDamage } from '../tank';
 import * as config from '../config';
 
 import { TerrainTile } from './TerrainTile';
@@ -28,7 +29,10 @@ export class TerrainTileDestroyer extends GameObject {
     const isSteelWall =
       other.tags.includes(Tag.Wall) && other.tags.includes(Tag.Steel);
 
-    if (isBrickWall || (isSteelWall && this.damage === 2)) {
+    if (
+      isBrickWall ||
+      (isSteelWall && this.damage === TankBulletWallDamage.High)
+    ) {
       const tile = other as TerrainTile;
       tile.destroy();
       this.removeSelf();

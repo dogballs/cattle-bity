@@ -8,6 +8,7 @@ import {
   Subject,
 } from '../core';
 import { GameUpdateArgs, Rotation, RotationMap, Tag } from '../game';
+import { TankBulletWallDamage } from '../tank';
 
 import { SmallExplosion } from './SmallExplosion';
 import { TerrainTileDestroyer } from './TerrainTileDestroyer';
@@ -77,7 +78,10 @@ export class Bullet extends GameObject {
       this.explode();
     }
 
-    if (isBrickWall || (isSteelWall && this.wallDamage === 2)) {
+    if (
+      isBrickWall ||
+      (isSteelWall && this.wallDamage === TankBulletWallDamage.High)
+    ) {
       const wallWorldBox = other.getWorldBoundingBox();
 
       // TODO: two destroyers are spawned if bullet hits two bricks at the same

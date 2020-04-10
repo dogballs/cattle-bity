@@ -1,3 +1,4 @@
+import { TankBulletWallDamage } from './TankBulletWallDamage';
 import { TankParty } from './TankParty';
 import { TankTier } from './TankTier';
 import { TankType } from './TankType';
@@ -25,6 +26,17 @@ interface TankAttributesConfig {
   list: TankAttributesListItem[];
 }
 
+enum BulletSpeed {
+  Slow = 600,
+  Fast = 900,
+}
+
+enum MoveSpeed {
+  Slow = 120,
+  Medium = 180,
+  Fast = 240,
+}
+
 // TODO: move configuration to json
 const config: TankAttributesConfig = {
   list: [
@@ -35,11 +47,11 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
-        bulletSpeed: 600,
+        bulletSpeed: BulletSpeed.Slow,
         bulletTankDamage: 1,
-        bulletWallDamage: 1,
+        bulletWallDamage: TankBulletWallDamage.Low,
         health: 1,
-        moveSpeed: 180,
+        moveSpeed: MoveSpeed.Medium,
       },
     },
     {
@@ -49,11 +61,11 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
-        bulletSpeed: 900,
+        bulletSpeed: BulletSpeed.Fast,
         bulletTankDamage: 1,
-        bulletWallDamage: 1,
+        bulletWallDamage: TankBulletWallDamage.Low,
         health: 1,
-        moveSpeed: 180,
+        moveSpeed: MoveSpeed.Medium,
       },
     },
     {
@@ -63,11 +75,11 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 2,
-        bulletSpeed: 900,
+        bulletSpeed: BulletSpeed.Fast,
         bulletTankDamage: 1,
-        bulletWallDamage: 1,
+        bulletWallDamage: TankBulletWallDamage.Low,
         health: 1,
-        moveSpeed: 180,
+        moveSpeed: MoveSpeed.Medium,
       },
     },
     {
@@ -77,11 +89,11 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 2,
-        bulletSpeed: 900,
+        bulletSpeed: BulletSpeed.Fast,
         bulletTankDamage: 2,
-        bulletWallDamage: 2,
+        bulletWallDamage: TankBulletWallDamage.High,
         health: 1,
-        moveSpeed: 180,
+        moveSpeed: MoveSpeed.Medium,
       },
     },
 
@@ -92,11 +104,11 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
-        bulletSpeed: 600,
+        bulletSpeed: BulletSpeed.Slow,
         bulletTankDamage: 1,
-        bulletWallDamage: 1,
+        bulletWallDamage: TankBulletWallDamage.Low,
         health: 1,
-        moveSpeed: 120,
+        moveSpeed: MoveSpeed.Slow,
       },
     },
     {
@@ -106,14 +118,27 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
-        bulletSpeed: 600,
+        bulletSpeed: BulletSpeed.Slow,
         bulletTankDamage: 1,
-        bulletWallDamage: 1,
+        bulletWallDamage: TankBulletWallDamage.Low,
         health: 1,
-        moveSpeed: 240,
+        moveSpeed: MoveSpeed.Fast,
       },
     },
-
+    {
+      selector: {
+        party: TankParty.Enemy,
+        tier: TankTier.C,
+      },
+      attributes: {
+        bulletMaxCount: 1,
+        bulletSpeed: BulletSpeed.Fast,
+        bulletTankDamage: 1,
+        bulletWallDamage: TankBulletWallDamage.Low,
+        health: 1,
+        moveSpeed: MoveSpeed.Slow,
+      },
+    },
     {
       selector: {
         party: TankParty.Enemy,
@@ -121,11 +146,11 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
-        bulletSpeed: 600,
+        bulletSpeed: BulletSpeed.Slow,
         bulletTankDamage: 1,
-        bulletWallDamage: 1,
+        bulletWallDamage: TankBulletWallDamage.Low,
         health: 4,
-        moveSpeed: 180,
+        moveSpeed: MoveSpeed.Slow,
       },
     },
   ],

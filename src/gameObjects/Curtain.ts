@@ -12,6 +12,7 @@ enum State {
 const SLIDE_SPEED = 1500;
 
 export class Curtain extends GameObject {
+  public zIndex = 8;
   private state: State;
   private readonly targetHeight: number;
   private readonly topPart: GameObject;

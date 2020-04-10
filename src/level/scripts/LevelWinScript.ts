@@ -3,7 +3,7 @@ import { GameUpdateArgs } from '../../game';
 
 import { LevelScript } from '../LevelScript';
 
-const POST_WIN_DELAY = 4;
+const POST_WIN_DELAY = 3;
 
 export class LevelWinScript extends LevelScript {
   // Disable by default

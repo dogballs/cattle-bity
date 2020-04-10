@@ -4,6 +4,8 @@ export class LevelTitle extends SpriteText {
   constructor(levelNumber = 0, options: SpriteTextOptions = {}) {
     const text = LevelTitle.getLevelText(levelNumber);
     super(text, options);
+
+    this.zIndex = 9;
   }
 
   public setLevelNumber(levelNumber: number): void {
