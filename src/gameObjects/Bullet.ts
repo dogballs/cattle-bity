@@ -1,11 +1,11 @@
 import {
-  Collider,
   Collision,
   GameObject,
   Sound,
   Sprite,
   SpritePainter,
   Subject,
+  SweptBoxCollider,
 } from '../core';
 import { GameUpdateArgs, Rotation, RotationMap, Tag } from '../game';
 import { TankBulletWallDamage } from '../tank';
@@ -14,7 +14,7 @@ import { SmallExplosion } from './SmallExplosion';
 import { TerrainTileDestroyer } from './TerrainTileDestroyer';
 
 export class Bullet extends GameObject {
-  public collider = new Collider(true);
+  public collider = new SweptBoxCollider(this, true);
   public painter = new SpritePainter();
   public zIndex = 1;
   public tankDamage: number;
@@ -22,7 +22,7 @@ export class Bullet extends GameObject {
   public speed: number;
   public tags = [Tag.Bullet];
   public died = new Subject();
-  private sprites: RotationMap<Sprite> = new RotationMap();
+  private sprites = new RotationMap<Sprite>();
   private hitBrickSound: Sound;
   private hitSteelSound: Sound;
 
@@ -36,7 +36,13 @@ export class Bullet extends GameObject {
     this.pivot.set(0.5, 0.5);
   }
 
-  protected setup({ audioLoader, spriteLoader }: GameUpdateArgs): void {
+  protected setup({
+    audioLoader,
+    collisionSystem,
+    spriteLoader,
+  }: GameUpdateArgs): void {
+    collisionSystem.register(this.collider);
+
     this.hitBrickSound = audioLoader.load('hit.brick');
     this.hitSteelSound = audioLoader.load('hit.steel');
 
@@ -51,11 +57,19 @@ export class Bullet extends GameObject {
 
     const rotation = this.getWorldRotation();
     this.painter.sprite = this.sprites.get(rotation);
+
+    this.collider.update();
   }
 
-  protected collide({ other }: Collision): void {
-    if (other.tags.includes(Tag.Bullet)) {
-      const bullet = other as Bullet;
+  protected collide(collision: Collision): void {
+    const { contacts } = collision;
+
+    const bulletContacts = contacts.filter((contact) => {
+      return contact.collider.object.tags.includes(Tag.Bullet);
+    });
+
+    bulletContacts.forEach((contact) => {
+      const bullet = contact.collider.object as Bullet;
 
       // Enemy bullets don't discard each other, they pass thru
       if (bullet.tags.includes(Tag.Enemy) && this.tags.includes(Tag.Enemy)) {
@@ -67,77 +81,118 @@ export class Bullet extends GameObject {
         return;
       }
 
-      // When player bullet hits enemy bullet, they dissappear
+      // When player bullet hits enemy bullet and vice versa, they dissappear
       this.nullify();
       bullet.nullify();
-      console.log('null');
+    });
 
-      return;
-    }
+    const wallContacts = contacts.filter((contact) => {
+      return contact.collider.object.tags.includes(Tag.Wall);
+    });
 
-    const isWall = other.tags.includes(Tag.Wall);
-    const isBrickWall = isWall && other.tags.includes(Tag.Brick);
-    const isBorderWall = isWall && other.tags.includes(Tag.Border);
-    const isSteelWall = isWall && other.tags.includes(Tag.Steel);
+    // Find closest wall we are colliding with. It solves the "tunneling"
+    // problem when bullet is going too fast it can jump over some walls.
+    // By using swept box collider and then finding closest points of contact,
+    // we make bullet interact with the first object on the way.
+    // Bullet can also hit multiple blocks (most likely two) at the same time.
+    let minDistance = null;
 
-    if (isWall) {
-      this.explode();
-    }
+    wallContacts.forEach((contact) => {
+      const prevBox = this.collider.getPrevBox();
+      const distance = prevBox.distanceCenterToCenter(contact.box);
 
-    if (
-      isBrickWall ||
-      (isSteelWall && this.wallDamage === TankBulletWallDamage.High)
-    ) {
-      const wallWorldBox = other.getWorldBoundingBox();
+      if (minDistance === null || distance < minDistance) {
+        minDistance = distance;
+      }
+    });
 
-      // TODO: two destroyers are spawned if bullet hits two bricks at the same
-      // time (in the middle between them)
-      const destroyer = new TerrainTileDestroyer(this.wallDamage);
+    const closestWallContacts = wallContacts.filter((contact) => {
+      const prevBox = this.collider.getPrevBox();
+      const distance = prevBox.distanceCenterToCenter(contact.box);
 
-      this.add(destroyer);
-      destroyer.updateWorldMatrix(true);
-      destroyer.setCenter(this.getSelfCenter());
+      return distance === minDistance;
+    });
 
-      // At this point destroyer is aligned by the main axis, i.e.
-      // if bullet rotation is left/right - destroyer is aligned at "y";
-      // if bullet rotation is up/down - destroyer is aligned at "x".
-      // What is left is to fix counterpart axis.
+    if (closestWallContacts.length > 0) {
+      const firstClosestWallContact = closestWallContacts[0];
+      const wallWorldBox = firstClosestWallContact.box;
 
-      destroyer.updateWorldMatrix();
-      const destroyerWorldBox = destroyer.getWorldBoundingBox();
+      const selfWorldBox = this.getWorldBoundingBox();
 
-      const rotation = destroyer.getWorldRotation();
-      // TODO: rework after collisions, because now we are tied to axis
+      // Reposition bullet to the place where it hits the wall so explosion
+      // will go off in the right place. Now it is tied to axis.
+      const rotation = this.getWorldRotation();
       if (rotation === Rotation.Up) {
-        destroyer.translateY(destroyerWorldBox.max.y - wallWorldBox.max.y);
+        this.translateY(selfWorldBox.max.y - wallWorldBox.max.y);
       } else if (rotation === Rotation.Down) {
-        destroyer.translateY(wallWorldBox.min.y - destroyerWorldBox.min.y);
+        this.translateY(wallWorldBox.min.y - selfWorldBox.min.y);
       } else if (rotation === Rotation.Left) {
-        destroyer.translateY(destroyerWorldBox.max.x - wallWorldBox.max.x);
+        this.translateY(selfWorldBox.max.x - wallWorldBox.max.x);
       } else if (rotation === Rotation.Right) {
-        destroyer.translateY(wallWorldBox.min.x - destroyerWorldBox.min.x);
+        this.translateY(wallWorldBox.min.x - selfWorldBox.min.x);
+      }
+      this.updateMatrix();
+
+      const wall = firstClosestWallContact.collider.object;
+
+      const isBrickWall = wall.tags.includes(Tag.Brick);
+      const isBorderWall = wall.tags.includes(Tag.Border);
+      const isSteelWall = wall.tags.includes(Tag.Steel);
+
+      const canDestroySteelWall = this.wallDamage === TankBulletWallDamage.High;
+
+      if (isBrickWall || (isSteelWall && canDestroySteelWall)) {
+        const destroyer = new TerrainTileDestroyer(this.wallDamage);
+
+        this.add(destroyer);
+        destroyer.updateWorldMatrix(true);
+        destroyer.setCenter(this.getSelfCenter());
+
+        // At this point destroyer is aligned by the main axis, i.e.
+        // if bullet rotation is left/right - destroyer is aligned at "y";
+        // if bullet rotation is up/down - destroyer is aligned at "x".
+        // What is left is to fix counterpart axis.
+
+        destroyer.updateWorldMatrix();
+        const destroyerWorldBox = destroyer.getWorldBoundingBox();
+
+        const rotation = destroyer.getWorldRotation();
+        if (rotation === Rotation.Up) {
+          destroyer.translateY(destroyerWorldBox.max.y - wallWorldBox.max.y);
+        } else if (rotation === Rotation.Down) {
+          destroyer.translateY(wallWorldBox.min.y - destroyerWorldBox.min.y);
+        } else if (rotation === Rotation.Left) {
+          destroyer.translateY(destroyerWorldBox.max.x - wallWorldBox.max.x);
+        } else if (rotation === Rotation.Right) {
+          destroyer.translateY(wallWorldBox.min.x - destroyerWorldBox.min.x);
+        }
+
+        this.parent.attach(destroyer);
+
+        // TODO: it collides with multiple "bricks", multiple audio sources are
+        // triggered
+        // Only player bullets make sound
+        if (this.tags.includes(Tag.Player)) {
+          this.hitBrickSound.play();
+        }
+      } else if (isSteelWall || isBorderWall) {
+        // TODO: when tank is grade 4, it can destroy steel walls, and in that
+        // case they make the same sound as brick walls
+        // Only player bullets make sound
+        if (this.tags.includes(Tag.Player)) {
+          this.hitSteelSound.play();
+        }
       }
 
-      this.parent.attach(destroyer);
-
-      // TODO: it collides with multiple "bricks", multiple audio sources are
-      // triggered
-      // Only player bullets make sound
-      if (this.tags.includes(Tag.Player)) {
-        this.hitBrickSound.play();
-      }
-    } else if (isSteelWall || isBorderWall) {
-      // TODO: when tank is grade 4, it can destroy steel walls, and in that
-      // case they make the same sound as brick walls
-      // Only player bullets make sound
-      if (this.tags.includes(Tag.Player)) {
-        this.hitSteelSound.play();
-      }
+      this.explode();
     }
   }
 
   public nullify(): void {
     this.removeSelf();
+
+    this.collider.unregister();
+
     this.died.notify(null);
   }
 
@@ -145,6 +200,9 @@ export class Bullet extends GameObject {
     const explosion = new SmallExplosion();
     explosion.setCenter(this.getCenter());
     this.replaceSelf(explosion);
+
+    this.collider.unregister();
+
     this.died.notify(null);
   }
 }

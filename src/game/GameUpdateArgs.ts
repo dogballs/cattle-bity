@@ -1,11 +1,12 @@
 import {
-  Input,
-  State,
   AudioLoader,
+  CollisionSystem,
   ImageLoader,
+  Input,
   RectFontLoader,
   SpriteFontLoader,
   SpriteLoader,
+  State,
   Storage,
 } from '../core';
 import { InputManager } from '../input';
@@ -19,6 +20,7 @@ import { Session } from './Session';
 export interface GameUpdateArgs {
   audioManager: AudioManager;
   audioLoader: AudioLoader;
+  collisionSystem: CollisionSystem;
   deltaTime: number;
   highscoreStorage: PointsHighscoreStorage;
   imageLoader: ImageLoader;

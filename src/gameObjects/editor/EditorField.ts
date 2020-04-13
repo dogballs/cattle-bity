@@ -1,5 +1,5 @@
-import { Collider, GameObject } from '../../core';
-import { Rotation, Tag } from '../../game';
+import { BoxCollider, GameObject } from '../../core';
+import { GameUpdateArgs, Rotation, Tag } from '../../game';
 import { Base } from '../../gameObjects';
 import { TankColor, TankType } from '../../tank';
 import * as config from '../../config';
@@ -7,19 +7,22 @@ import * as config from '../../config';
 import { EditorTankDummy } from './EditorTankDummy';
 
 export class EditorField extends GameObject {
+  private base: Base;
+
   constructor() {
     super(config.FIELD_SIZE, config.FIELD_SIZE);
   }
 
-  protected setup(): void {
-    const base = new Base();
-    base.collider = new Collider(false);
-    base.tags = [Tag.EditorBlockMove];
-    base.position.set(
+  protected setup({ collisionSystem }: GameUpdateArgs): void {
+    this.base = new Base();
+    this.base.collider = new BoxCollider(this.base, false);
+    this.base.tags = [Tag.EditorBlockMove];
+    this.base.position.set(
       config.BASE_DEFAULT_POSITION.x,
       config.BASE_DEFAULT_POSITION.y,
     );
-    this.add(base);
+    collisionSystem.register(this.base.collider);
+    this.add(this.base);
 
     config.PLAYER_DEFAULT_SPAWN_POSITIONS.forEach((location) => {
       const dummy = new EditorTankDummy(TankType.PlayerA(), TankColor.Primary);
@@ -36,5 +39,9 @@ export class EditorField extends GameObject {
       dummy.position.set(location.x, location.y);
       this.add(dummy);
     });
+  }
+
+  protected update(): void {
+    this.base.collider.update();
   }
 }

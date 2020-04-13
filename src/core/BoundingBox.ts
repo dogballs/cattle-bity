@@ -29,13 +29,8 @@ export class BoundingBox {
     return size;
   }
 
-  public toRect(): Rect {
-    return new Rect(
-      this.min.x,
-      this.min.y,
-      this.max.x - this.min.x,
-      this.max.y - this.min.y,
-    );
+  public distanceCenterToCenter(other: BoundingBox): number {
+    return this.getCenter().distanceTo(other.getCenter());
   }
 
   public computeIntersectionBox(other: BoundingBox): BoundingBox {
@@ -50,6 +45,37 @@ export class BoundingBox {
     const intersectionBox = new BoundingBox(min, max);
 
     return intersectionBox;
+  }
+
+  public unionWith(...others: BoundingBox[]): BoundingBox {
+    const boxes = [this, ...others];
+
+    let minX = null;
+    let maxX = null;
+    let minY = null;
+    let maxY = null;
+
+    for (const box of boxes) {
+      if (minX === null || box.min.x < minX) {
+        minX = box.min.x;
+      }
+      if (maxX === null || box.max.x > maxX) {
+        maxX = box.max.x;
+      }
+      if (minY === null || box.min.y < minY) {
+        minY = box.min.y;
+      }
+      if (maxY === null || box.max.y > maxY) {
+        maxY = box.max.y;
+      }
+    }
+
+    const min = new Vector(minX, minY);
+    const max = new Vector(maxX, maxY);
+
+    const box = new BoundingBox(min, max);
+
+    return box;
   }
 
   public intersectsBox(other: BoundingBox): boolean {
@@ -69,6 +95,19 @@ export class BoundingBox {
       this.min.y >= p.y;
 
     return !isOutside;
+  }
+
+  public clone(): BoundingBox {
+    return new BoundingBox(this.min.clone(), this.max.clone());
+  }
+
+  public toRect(): Rect {
+    return new Rect(
+      this.min.x,
+      this.min.y,
+      this.max.x - this.min.x,
+      this.max.y - this.min.y,
+    );
   }
 
   public fromPoints(points: Vector[]): this {

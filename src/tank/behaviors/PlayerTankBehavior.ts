@@ -13,6 +13,19 @@ const MOVE_CONTROLS = [
 
 export class PlayerTankBehavior extends TankBehavior {
   public update(tank: Tank, { deltaTime, input }: GameUpdateArgs): void {
+    // WARNING: order is important. Mkae sure to keep fire updates before
+    // movement updates. Fire places bullet based on tank position.
+    // Tank position changes during movement, and later can be corrected by
+    // collision resolution algorithm after update phase. This order issue
+    // can be fixed by adding some post-collide callback and place fire code
+    // in there.
+    if (input.isDownAny(LevelInputContext.Fire)) {
+      tank.fire();
+    }
+    if (input.isHoldAny(LevelInputContext.RapidFire)) {
+      tank.fire();
+    }
+
     if (input.isHoldLastAny(LevelInputContext.MoveUp)) {
       tank.rotate(Rotation.Up);
     }
@@ -32,14 +45,6 @@ export class PlayerTankBehavior extends TankBehavior {
 
     if (input.isNotHoldAll(MOVE_CONTROLS) && tank.state !== TankState.Idle) {
       tank.idle();
-    }
-
-    if (input.isDownAny(LevelInputContext.Fire)) {
-      tank.fire();
-    }
-
-    if (input.isHoldAny(LevelInputContext.RapidFire)) {
-      tank.fire();
     }
   }
 }

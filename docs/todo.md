@@ -3,6 +3,7 @@
 Game logic
 
 - ice tiles
+- movement collision between tanks
 - input context hints
 - editor playtest
 - mode to load custom map manifest
@@ -19,8 +20,8 @@ Build
 
 Bugs
 
-- wall destroyer for damage = 1 destroys two walls deep
 - rotating inside destroyed wall
+- powerup can be picked up with collision box
 
 Other
 

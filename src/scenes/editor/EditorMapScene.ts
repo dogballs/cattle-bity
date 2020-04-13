@@ -1,4 +1,5 @@
-import { CollisionDetector, Scene } from '../../core';
+import { Scene } from '../../core';
+import { DebugCollisionMenu } from '../../debug';
 import { GameUpdateArgs } from '../../game';
 import { EditorBorder, EditorField, EditorMap } from '../../gameObjects';
 import { EditorMapInputContext } from '../../input';
@@ -13,8 +14,21 @@ export class EditorMapScene extends Scene<EditorLocationParams> {
   private field: EditorField;
   private map: EditorMap;
   private mapConfig: MapConfig;
+  private debugCollisionMenu: DebugCollisionMenu;
 
-  protected setup(): void {
+  protected setup(updateArgs: GameUpdateArgs): void {
+    const { collisionSystem } = updateArgs;
+
+    this.debugCollisionMenu = new DebugCollisionMenu(
+      collisionSystem,
+      this.root,
+      { top: 400 },
+    );
+    if (config.IS_DEV) {
+      this.debugCollisionMenu.attach();
+      this.debugCollisionMenu.show();
+    }
+
     this.root.add(new EditorBorder());
 
     this.mapConfig = this.params.mapConfig;
@@ -35,7 +49,7 @@ export class EditorMapScene extends Scene<EditorLocationParams> {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { input } = updateArgs;
+    const { collisionSystem, input } = updateArgs;
 
     if (input.isDownAny(EditorMapInputContext.Menu)) {
       this.navigator.replace(GameSceneType.EditorMenu, this.params);
@@ -49,31 +63,12 @@ export class EditorMapScene extends Scene<EditorLocationParams> {
     // Update all transforms before checking collisions
     this.root.updateWorldMatrix(false, true);
 
-    const nodes = this.root.flatten();
+    collisionSystem.update();
 
-    const activeNodes = [];
-    const bothNodes = [];
+    if (config.IS_DEV) {
+      this.debugCollisionMenu.update();
+    }
 
-    nodes.forEach((node) => {
-      if (node.collider === null) {
-        return;
-      }
-
-      if (node.collider.active) {
-        activeNodes.push(node);
-        bothNodes.push(node);
-      } else {
-        bothNodes.push(node);
-      }
-    });
-
-    // Detect and handle collisions of all objects on the scene
-    const collisions = CollisionDetector.intersectObjects(
-      activeNodes,
-      bothNodes,
-    );
-    collisions.forEach((collision) => {
-      collision.self.invokeCollide(collision);
-    });
+    collisionSystem.collide();
   }
 }

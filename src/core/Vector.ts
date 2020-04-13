@@ -59,6 +59,18 @@ export class Vector {
     return this;
   }
 
+  public subX(x: number): this {
+    this.x -= x;
+
+    return this;
+  }
+
+  public subY(y: number): this {
+    this.y -= y;
+
+    return this;
+  }
+
   public divideScalar(s: number): this {
     this.x /= s;
     this.y /= s;
@@ -80,9 +92,56 @@ export class Vector {
     return this;
   }
 
+  public round(): this {
+    this.x = Math.round(this.x);
+    this.y = Math.round(this.y);
+
+    return this;
+  }
+
+  public length(): number {
+    return Math.sqrt(this.x ** 2 + this.y ** 2);
+  }
+
+  public normalize(): this {
+    const length = this.length() || 1; // In case length is zero
+
+    this.divideScalar(length);
+
+    return this;
+  }
+
+  public distanceTo(v: Vector): number {
+    const dx = this.x - v.x;
+    const dy = this.y - v.y;
+
+    const distance = Math.sqrt(dx ** 2 + dy ** 2);
+
+    return distance;
+  }
+
+  public negate(): this {
+    this.x = -this.x;
+    this.y = -this.y;
+
+    return this;
+  }
+
   public copyFrom(v: Vector): this {
     this.x = v.x;
     this.y = v.y;
+
+    return this;
+  }
+
+  public snapX(step = 1): this {
+    this.x = Math.round(this.x / step) * step;
+
+    return this;
+  }
+
+  public snapY(step = 1): this {
+    this.y = Math.round(this.y / step) * step;
 
     return this;
   }

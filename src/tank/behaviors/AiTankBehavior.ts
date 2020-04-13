@@ -14,11 +14,11 @@ enum State {
 
 const THINK_DURATION = 0.3;
 const FIRE_MIN_DELAY = 0;
-const FIRE_MAX_DELAY = 1;
+const FIRE_MAX_DELAY = 1.5;
 const STUCK_FIRE_CHANCE = 30;
 const UNSTUCK_THINK_CHANCE = 5;
 
-const rotations = [Rotation.Up, Rotation.Down, Rotation.Left, Rotation.Right];
+const ROTATIONS = [Rotation.Up, Rotation.Down, Rotation.Left, Rotation.Right];
 
 export class AiTankBehavior extends TankBehavior {
   private state: State = State.Moving;
@@ -69,7 +69,6 @@ export class AiTankBehavior extends TankBehavior {
         const nextRotation = this.getRandomRotation();
         this.log.debug('I am done thinking. Rotating %s', nextRotation);
         tank.rotate(nextRotation);
-        tank.move(updateArgs.deltaTime);
         return;
       }
       this.thinkTimer.update(updateArgs.deltaTime);
@@ -80,7 +79,7 @@ export class AiTankBehavior extends TankBehavior {
 
     // Position might come as floats, but we need precise ints in here to
     // check if positions is exactly the same
-    const tankPosition = this.roundPosition(tank.position);
+    const tankPosition = tank.position.clone().round();
 
     // If tank can no longer move it his direction, he has to decide what to do
     // next.
@@ -146,14 +145,16 @@ export class AiTankBehavior extends TankBehavior {
   }
 
   private getRandomRotation(): Rotation {
-    return RandomUtils.arrayElement(rotations);
+    return RandomUtils.arrayElement(ROTATIONS);
   }
 
-  private roundPosition(position: Vector): Vector {
-    const roundedPosition = new Vector(
-      Math.round(position.x),
-      Math.round(position.y),
-    );
-    return roundedPosition;
+  private getRandomRotationExcept(prevRotation: Rotation): Rotation {
+    const rotations = ROTATIONS.slice();
+
+    // Remove prev rotation from possible outcomes
+    const prevIndex = rotations.indexOf(prevRotation);
+    rotations.splice(prevIndex, 1);
+
+    return RandomUtils.arrayElement(rotations);
   }
 }

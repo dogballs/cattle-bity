@@ -1,4 +1,5 @@
-import { CollisionDetector, Rect, Scene } from '../../core';
+import { Rect, Scene } from '../../core';
+import { DebugCollisionMenu } from '../../debug';
 import { GameUpdateArgs, GameState, Session } from '../../game';
 import { Border } from '../../gameObjects';
 import { InputManager } from '../../input';
@@ -36,6 +37,7 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
   private eventBus: LevelEventBus;
   private session: Session;
   private inputManager: InputManager;
+  private debugCollisionMenu: DebugCollisionMenu;
 
   private allScripts: LevelScript[] = [];
   private alwaysUpdateScripts: LevelScript[] = [];
@@ -56,7 +58,17 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
   private winScript: LevelWinScript;
 
   protected setup(updateArgs: GameUpdateArgs): void {
-    const { inputManager, session } = updateArgs;
+    const { collisionSystem, inputManager, session } = updateArgs;
+
+    this.debugCollisionMenu = new DebugCollisionMenu(
+      collisionSystem,
+      this.root,
+      { top: 400 },
+    );
+    if (config.IS_DEV) {
+      this.debugCollisionMenu.attach();
+      this.debugCollisionMenu.show();
+    }
 
     this.world = new LevelWorld(this.root);
 
@@ -169,7 +181,7 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { gameState } = updateArgs;
+    const { collisionSystem, gameState } = updateArgs;
 
     this.alwaysUpdateScripts.forEach((script) => {
       script.invokeUpdate(updateArgs);
@@ -197,33 +209,13 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
 
     this.root.updateWorldMatrix(false, true);
 
-    const nodes = this.root.flatten();
+    collisionSystem.update();
 
-    const activeNodes = [];
-    const bothNodes = [];
+    if (config.IS_DEV) {
+      this.debugCollisionMenu.update();
+    }
 
-    nodes.forEach((node) => {
-      if (node.collider === null) {
-        return;
-      }
-
-      if (node.collider.active) {
-        activeNodes.push(node);
-        bothNodes.push(node);
-      } else {
-        bothNodes.push(node);
-      }
-    });
-
-    // Detect and handle collisions of all objects on the scene
-    const collisions = CollisionDetector.intersectObjects(
-      activeNodes,
-      bothNodes,
-    );
-
-    collisions.forEach((collision) => {
-      collision.self.invokeCollide(collision);
-    });
+    collisionSystem.collide();
   }
 
   private handlePlayerDied = (): void => {

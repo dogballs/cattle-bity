@@ -1,9 +1,9 @@
-import { Collider, GameObject, SpritePainter } from '../../core';
+import { BoxCollider, GameObject, SpritePainter } from '../../core';
 import { GameUpdateArgs, Rotation, Tag } from '../../game';
 import { TankColor, TankType, TankSpriteId } from '../../tank';
 
 export class EditorTankDummy extends GameObject {
-  public collider = new Collider(false);
+  public collider = new BoxCollider(this);
   public painter = new SpritePainter();
   public tags = [Tag.EditorBlockMove];
   private type: TankType;
@@ -18,7 +18,9 @@ export class EditorTankDummy extends GameObject {
     this.rotation = rotation;
   }
 
-  protected setup({ spriteLoader }: GameUpdateArgs): void {
+  protected setup({ collisionSystem, spriteLoader }: GameUpdateArgs): void {
+    collisionSystem.register(this.collider);
+
     const spriteId = TankSpriteId.create(
       this.type,
       this.color,
@@ -27,5 +29,9 @@ export class EditorTankDummy extends GameObject {
     );
     const sprite = spriteLoader.load(spriteId);
     this.painter.sprite = sprite;
+  }
+
+  protected update(): void {
+    this.collider.update();
   }
 }

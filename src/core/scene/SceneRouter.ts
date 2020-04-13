@@ -1,4 +1,5 @@
 import { GameObject } from '../GameObject';
+import { Subject } from '../Subject';
 
 import { Scene } from './Scene';
 import { SceneNavigator, SceneParams } from './SceneNavigator';
@@ -14,9 +15,10 @@ interface SceneLocation {
 }
 
 export class SceneRouter implements SceneNavigator {
+  public transitionStarted = new Subject();
   private routes = new Map<SceneType, SceneConstructor>();
   private location: SceneLocation;
-  private scene: Scene;
+  private scene: Scene = null;
   private stack: SceneLocation[] = [];
 
   public register(type: SceneType, Scene: SceneConstructor): void {
@@ -78,22 +80,24 @@ export class SceneRouter implements SceneNavigator {
   private transition(type: SceneType, params: SceneParams = {}): SceneLocation {
     this.assertRegistered(type);
 
-    const SceneClass = this.routes.get(type);
+    this.transitionStarted.notify(null);
 
-    const root = this.createRoot();
+    const NextSceneClass = this.routes.get(type);
 
-    const scene = new SceneClass(this, root, params);
+    const nextRoot = this.createRoot();
 
-    this.scene = scene;
+    const nextScene = new NextSceneClass(this, nextRoot, params);
 
-    const location: SceneLocation = {
+    this.scene = nextScene;
+
+    const nextLocation: SceneLocation = {
       type,
       params,
     };
 
-    this.location = location;
+    this.location = nextLocation;
 
-    return location;
+    return this.location;
   }
 
   private assertRegistered(type: SceneType): void {

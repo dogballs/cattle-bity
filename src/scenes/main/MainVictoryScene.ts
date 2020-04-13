@@ -1,4 +1,4 @@
-import { CollisionDetector, Scene, Sound } from '../../core';
+import { Scene, Sound } from '../../core';
 import { AudioManager, GameUpdateArgs } from '../../game';
 import { PlayerTank, VictoryHeading, VictoryMap } from '../../gameObjects';
 import { TankFactory, TankType, VictoryTankBehavior } from '../../tank';
@@ -45,6 +45,8 @@ export class MainVictoryScene extends Scene {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
+    const { collisionSystem } = updateArgs;
+
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });
@@ -52,32 +54,8 @@ export class MainVictoryScene extends Scene {
     // Update all transforms before checking collisions
     this.root.updateWorldMatrix(false, true);
 
-    const nodes = this.root.flatten();
-
-    const activeNodes = [];
-    const bothNodes = [];
-
-    nodes.forEach((node) => {
-      if (node.collider === null) {
-        return;
-      }
-
-      if (node.collider.active) {
-        activeNodes.push(node);
-        bothNodes.push(node);
-      } else {
-        bothNodes.push(node);
-      }
-    });
-
-    // Detect and handle collisions of all objects on the scene
-    const collisions = CollisionDetector.intersectObjects(
-      activeNodes,
-      bothNodes,
-    );
-    collisions.forEach((collision) => {
-      collision.self.invokeCollide(collision);
-    });
+    collisionSystem.update();
+    collisionSystem.collide();
   }
 
   private handleStopped = (): void => {

@@ -1,5 +1,5 @@
 import {
-  Collider,
+  BoxCollider,
   Collision,
   GameObject,
   RectPainter,
@@ -25,7 +25,7 @@ const HOLD_THROTTLE_OPTIONS: InputHoldThrottleOptions = {
 };
 
 export class EditorTool extends GameObject {
-  public collider = new Collider(true);
+  public collider = new BoxCollider(this, true);
   public painter = new RectPainter(null, config.COLOR_RED);
   public draw = new Subject();
   public erase = new Subject();
@@ -72,6 +72,10 @@ export class EditorTool extends GameObject {
     return this.selectedBrush;
   }
 
+  protected setup({ collisionSystem }: GameUpdateArgs): void {
+    collisionSystem.register(this.collider);
+  }
+
   protected update(updateArgs: GameUpdateArgs): void {
     this.updatePosition(updateArgs);
     this.updateBlinking(updateArgs);
@@ -90,12 +94,18 @@ export class EditorTool extends GameObject {
     if (input.isDownAny(EditorMapInputContext.PrevBrush)) {
       this.selectPrevBrush();
     }
+
+    this.collider.update();
   }
 
   protected collide(collision: Collision): void {
-    const { other } = collision;
+    const blockMoveContacts = collision.contacts.filter((contact) => {
+      return contact.collider.object.tags.includes(Tag.EditorBlockMove);
+    });
 
-    if (other.tags.includes(Tag.EditorBlockMove)) {
+    console.log(blockMoveContacts);
+
+    if (blockMoveContacts.length > 0) {
       this.position.sub(this.velocity);
     }
   }

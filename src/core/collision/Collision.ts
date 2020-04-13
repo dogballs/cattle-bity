@@ -1,18 +1,19 @@
 import { BoundingBox } from '../BoundingBox';
-import { GameObject } from '../GameObject';
+
+import { Collider } from './Collider';
+import { CollisionContact } from './CollisionContact';
 
 export class Collision {
-  public readonly self: GameObject;
-  public readonly other: GameObject;
-  public readonly intersectionBox: BoundingBox;
+  public collider: Collider;
+  public box: BoundingBox;
+  public contacts: CollisionContact[] = [];
 
-  constructor(
-    self: GameObject,
-    other: GameObject,
-    intersectionBox: BoundingBox,
-  ) {
-    this.self = self;
-    this.other = other;
-    this.intersectionBox = intersectionBox;
+  constructor(collider: Collider, box: BoundingBox) {
+    this.collider = collider;
+    this.box = box;
+  }
+
+  public addContact(contact: CollisionContact): void {
+    this.contacts.push(contact);
   }
 }

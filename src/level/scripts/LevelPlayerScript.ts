@@ -47,6 +47,12 @@ export class LevelPlayerScript extends LevelScript {
         }
         this.tank.die();
       });
+      debugMenu.moveSpeedUpRequest.addListener((moveSpeedToAdd) => {
+        if (this.tank === null) {
+          return;
+        }
+        this.tank.attributes.moveSpeed += moveSpeedToAdd;
+      });
     }
   }
 

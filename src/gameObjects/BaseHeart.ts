@@ -1,5 +1,5 @@
 import {
-  Collider,
+  BoxCollider,
   Collision,
   GameObject,
   Sprite,
@@ -10,11 +10,11 @@ import { GameUpdateArgs, Tag } from '../game';
 import { Bullet, Explosion } from '../gameObjects';
 
 export class BaseHeart extends GameObject {
-  public collider = new Collider(true);
+  public collider = new BoxCollider(this, true);
   // Tank can't move on top of it
   public tags = [Tag.BlockMove];
   public painter = new SpritePainter();
-  public readonly died = new Subject();
+  public died = new Subject();
   private isDead = false;
   private aliveSprite: Sprite;
   private deadSprite: Sprite;
@@ -39,21 +39,33 @@ export class BaseHeart extends GameObject {
     this.died.notify(null);
   }
 
-  protected setup({ spriteLoader }: GameUpdateArgs): void {
+  protected setup({ collisionSystem, spriteLoader }: GameUpdateArgs): void {
+    collisionSystem.register(this.collider);
+
     this.aliveSprite = spriteLoader.load('base.heart.alive');
     this.deadSprite = spriteLoader.load('base.heart.dead');
 
     this.painter.sprite = this.aliveSprite;
   }
 
-  protected collide({ other }: Collision): void {
+  protected update(): void {
+    this.collider.update();
+  }
+
+  protected collide(collision: Collision): void {
     // If dead, don't collide with bullets, but they can still pass through
     if (this.isDead) {
       return;
     }
 
-    if (other.tags.includes(Tag.Bullet)) {
-      const bullet = other as Bullet;
+    const bulletContacts = collision.contacts.filter((contact) => {
+      return contact.collider.object.tags.includes(Tag.Bullet);
+    });
+
+    if (bulletContacts.length > 0) {
+      const firstBulletContact = bulletContacts[0];
+      const bullet = firstBulletContact.collider.object as Bullet;
+
       bullet.explode();
       this.explode();
     }

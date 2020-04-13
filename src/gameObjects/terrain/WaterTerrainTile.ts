@@ -1,4 +1,4 @@
-import { Animation, Collider, Sprite, SpritePainter } from '../../core';
+import { Animation, BoxCollider, Sprite, SpritePainter } from '../../core';
 import { GameUpdateArgs, Tag } from '../../game';
 import { TerrainType } from '../../terrain';
 import * as config from '../../config';
@@ -7,7 +7,7 @@ import { TerrainTile } from '../TerrainTile';
 
 export class WaterTerrainTile extends TerrainTile {
   public type = TerrainType.Water;
-  public collider = new Collider(false);
+  public collider = new BoxCollider(this);
   public tags = [Tag.BlockMove];
   public readonly painter = new SpritePainter();
   private animation: Animation<Sprite>;
@@ -16,7 +16,14 @@ export class WaterTerrainTile extends TerrainTile {
     super(config.WATER_TILE_SIZE, config.WATER_TILE_SIZE);
   }
 
-  protected setup({ spriteLoader }: GameUpdateArgs): void {
+  public destroy(): void {
+    super.destroy();
+    this.collider.unregister();
+  }
+
+  protected setup({ collisionSystem, spriteLoader }: GameUpdateArgs): void {
+    collisionSystem.register(this.collider);
+
     this.animation = new Animation(
       spriteLoader.loadList(['terrain.water.1', 'terrain.water.2']),
       { delay: 0.5, loop: true },
@@ -24,6 +31,8 @@ export class WaterTerrainTile extends TerrainTile {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
+    this.collider.update();
+
     this.animation.update(updateArgs.deltaTime);
     this.painter.sprite = this.animation.getCurrentFrame();
   }

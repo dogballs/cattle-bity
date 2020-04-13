@@ -1,6 +1,6 @@
 import {
   Animation,
-  Collider,
+  BoxCollider,
   Collision,
   GameObject,
   Sprite,
@@ -12,7 +12,7 @@ import { PowerupType } from '../powerup';
 
 export class Powerup extends GameObject {
   public zIndex = 6;
-  public collider = new Collider(true);
+  public collider = new BoxCollider(this, true);
   public painter = new SpritePainter();
   public ignorePause = true;
   public picked = new Subject();
@@ -25,7 +25,9 @@ export class Powerup extends GameObject {
     this.type = type;
   }
 
-  protected setup({ spriteLoader }: GameUpdateArgs): void {
+  protected setup({ collisionSystem, spriteLoader }: GameUpdateArgs): void {
+    collisionSystem.register(this.collider);
+
     const spriteId = this.getSpriteId();
     // Null as a second frame adds a blink effect
     const frames = [spriteLoader.load(spriteId), null];
@@ -36,14 +38,24 @@ export class Powerup extends GameObject {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
+    this.collider.update();
+
     this.animation.update(updateArgs.deltaTime);
     this.painter.sprite = this.animation.getCurrentFrame();
   }
 
-  protected collide({ other }: Collision): void {
-    if (other.tags.includes(Tag.Tank) && other.tags.includes(Tag.Player)) {
+  protected collide(collision: Collision): void {
+    const playerTankContacts = collision.contacts.filter((contact) => {
+      return (
+        contact.collider.object.tags.includes(Tag.Tank) &&
+        contact.collider.object.tags.includes(Tag.Player)
+      );
+    });
+
+    if (playerTankContacts.length > 0) {
       this.removeSelf();
       this.picked.notify(null);
+      this.collider.unregister();
     }
   }
 

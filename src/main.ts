@@ -2,6 +2,7 @@ import * as Stats from 'stats.js';
 
 import {
   AudioLoader,
+  CollisionSystem,
   GameObject,
   GameLoop,
   GameRenderer,
@@ -68,8 +69,13 @@ audioManager.loadSettings();
 
 const session = new Session();
 
+const collisionSystem = new CollisionSystem();
+
 const sceneRouter = new GameSceneRouter();
 sceneRouter.start(GameSceneType.MainMenu);
+sceneRouter.transitionStarted.addListener(() => {
+  collisionSystem.reset();
+});
 
 const debugInspector = new DebugInspector(gameRenderer.getDomElement());
 debugInspector.listen();
@@ -90,6 +96,7 @@ const gameState = new State<GameState>(GameState.Playing);
 const updateArgs: GameUpdateArgs = {
   audioManager,
   audioLoader,
+  collisionSystem,
   deltaTime: 0,
   highscoreStorage,
   imageLoader,

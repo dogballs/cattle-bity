@@ -1,12 +1,12 @@
 import {
   Alignment,
   Animation,
-  Collider,
   Collision,
   GameObject,
   SpritePainter,
   State,
   Subject,
+  SweptBoxCollider,
   Timer,
 } from '../core';
 import { GameState, GameUpdateArgs, Rotation, Tag } from '../game';
@@ -34,7 +34,7 @@ const SKIN_LAYER_DESCRIPTIONS = [{ opacity: 1 }, { opacity: 0.5 }];
 const RAPID_FIRE_DELAY = 0.04;
 
 export class Tank extends GameObject {
-  public collider = new Collider(true);
+  public collider = new SweptBoxCollider(this, true);
   public tags = [Tag.Tank];
   public zIndex = 1;
   public type: TankType;
@@ -67,6 +67,10 @@ export class Tank extends GameObject {
   }
 
   protected setup(updateArgs: GameUpdateArgs): void {
+    const { collisionSystem } = updateArgs;
+
+    collisionSystem.register(this.collider);
+
     this.behavior.setup(this, updateArgs);
 
     SKIN_LAYER_DESCRIPTIONS.forEach(() => {
@@ -110,6 +114,8 @@ export class Tank extends GameObject {
     this.lastFireTimer.update(deltaTime);
 
     this.updateAnimation(deltaTime);
+
+    this.collider.update();
   }
 
   protected updateAnimation(deltaTime: number): void {
@@ -127,32 +133,84 @@ export class Tank extends GameObject {
     });
   }
 
-  protected collide({ other }: Collision): void {
-    if (other.tags.includes(Tag.BlockMove)) {
-      const selfWorldBox = this.getWorldBoundingBox();
-      const otherWorldBox = other.getWorldBoundingBox();
+  protected collide(collision: Collision): void {
+    const blockMoveContacts = [];
 
-      // TODO: rework after collisions, because now we are tied to axis
-      const rotation = this.getWorldRotation();
-
-      // Fix overlap during collision
-      if (rotation === Rotation.Up) {
-        this.translateY(selfWorldBox.min.y - otherWorldBox.max.y);
-      } else if (rotation === Rotation.Down) {
-        this.translateY(otherWorldBox.min.y - selfWorldBox.max.y);
-      } else if (rotation === Rotation.Left) {
-        this.translateY(selfWorldBox.min.x - otherWorldBox.max.x);
-      } else if (rotation === Rotation.Right) {
-        this.translateY(otherWorldBox.min.x - selfWorldBox.max.x);
+    for (const contact of collision.contacts) {
+      if (contact.collider.object.tags.includes(Tag.BlockMove)) {
+        blockMoveContacts.push(contact);
       }
-
-      // If it collides with multiple brick at a time, each of them will
-      // invoke translation above, matrix is updated
-      this.updateWorldMatrix();
     }
 
-    if (other.tags.includes(Tag.Bullet)) {
-      const bullet = other as Bullet;
+    // Find closest wall we are colliding with. It solves "tunneling" problem
+    // if tank is going too fast it can jump over some small tiles of walls.
+    // By using swept box collider and then finding closest points of contact,
+    // we make tank interact with the first object on the way.
+    // Tank can also hit multiple block at the same time.
+    let minDistance = null;
+
+    for (const contact of blockMoveContacts) {
+      const prevBox = this.collider.getPrevBox();
+      const distance = prevBox.distanceCenterToCenter(contact.box);
+
+      if (minDistance === null || distance < minDistance) {
+        minDistance = distance;
+      }
+    }
+
+    const closestBlockMoveContacts = [];
+
+    for (const contact of blockMoveContacts) {
+      const prevBox = this.collider.getPrevBox();
+      const distance = prevBox.distanceCenterToCenter(contact.box);
+
+      if (distance === minDistance) {
+        closestBlockMoveContacts.push(contact);
+      }
+    }
+
+    // Most likely it collides with multiple brick when going front and they
+    // are positioned in one line near each other. So it will be enough to
+    // resolve just one collision of them all.
+    if (closestBlockMoveContacts.length > 0) {
+      const firstBlockMoveContact = closestBlockMoveContacts[0];
+
+      const selfWorldBox = this.collider.getCurrentBox();
+      const otherWorldBox = firstBlockMoveContact.box;
+
+      const rotation = this.getWorldRotation();
+
+      // Tied to axis. Reset opposite axis direction so only primary axis
+      // will be resolved. Otherwise it conflicts with #rotate() code which
+      // aligns tank to a grid during rotation.
+      // Snap to avoid situations when between two walls opposite each other,
+      // and tank is colliding with right wall, collider pushes tank back to
+      // left wall, and wrong resolution branch is applied. Stick tank to grid.
+      if (rotation == Rotation.Up) {
+        this.position.addY(otherWorldBox.max.y - selfWorldBox.min.y);
+        this.position.snapY(config.TILE_SIZE_SMALL);
+      } else if (rotation === Rotation.Down) {
+        this.position.addY(otherWorldBox.min.y - selfWorldBox.max.y);
+        this.position.snapY(config.TILE_SIZE_SMALL);
+      } else if (rotation === Rotation.Left) {
+        this.position.addX(otherWorldBox.max.x - selfWorldBox.min.x);
+        this.position.snapX(config.TILE_SIZE_SMALL);
+      } else if (rotation === Rotation.Right) {
+        this.position.addX(otherWorldBox.min.x - selfWorldBox.max.x);
+        this.position.snapX(config.TILE_SIZE_SMALL);
+      }
+
+      // Make sure to update collider
+      this.updateWorldMatrix();
+      this.collider.update();
+    }
+
+    const bulletContacts = collision.contacts.filter((contact) => {
+      return contact.collider.object.tags.includes(Tag.Bullet);
+    });
+
+    bulletContacts.forEach((contact) => {
+      const bullet = contact.collider.object as Bullet;
 
       // Prevent self-destruction
       if (this.bullets.includes(bullet)) {
@@ -173,7 +231,7 @@ export class Tank extends GameObject {
       bullet.explode();
 
       this.receiveHit(bullet.tankDamage);
-    }
+    });
   }
 
   public fire(): boolean {
@@ -197,7 +255,7 @@ export class Tank extends GameObject {
     this.add(bullet);
     bullet.updateWorldMatrix(true);
     bullet.setCenter(this.getSelfCenter());
-    bullet.translateY(this.size.height / 2);
+    bullet.translateY(this.size.height / 2 - bullet.size.height / 2);
 
     // Then, detach bullet from a tank and move it to a field
     this.parent.attach(bullet);
@@ -242,15 +300,15 @@ export class Tank extends GameObject {
     // When tank is rotating align it to grid. It is needed to:
     // - simplify user navigation when moving into narrow passages; without it
     //   user will be stuck on corners
-    const alignSize = config.TILE_SIZE_MEDIUM;
-    if (rotation === Rotation.Up || rotation === Rotation.Down) {
-      const alignedTileIndexX = Math.round(this.position.x / alignSize);
-      const nextX = alignedTileIndexX * alignSize;
-      this.position.setX(nextX);
-    } else if (rotation === Rotation.Left || rotation === Rotation.Right) {
-      const alignedTileIndexY = Math.round(this.position.y / alignSize);
-      const nextY = alignedTileIndexY * alignSize;
-      this.position.setY(nextY);
+
+    if (rotation !== this.rotation) {
+      const alignSize = config.TILE_SIZE_MEDIUM;
+
+      if (rotation === Rotation.Up || rotation === Rotation.Down) {
+        this.position.snapX(alignSize);
+      } else if (rotation === Rotation.Left || rotation === Rotation.Right) {
+        this.position.snapY(alignSize);
+      }
     }
 
     super.rotate(rotation);
@@ -260,6 +318,7 @@ export class Tank extends GameObject {
 
   public die(reason: TankDeathReason = TankDeathReason.Bullet): void {
     this.died.notify({ reason });
+    this.collider.unregister();
   }
 
   public activateShield(duration: number): void {

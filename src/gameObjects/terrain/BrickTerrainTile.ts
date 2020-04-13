@@ -1,4 +1,4 @@
-import { Collider, Sprite, SpritePainter } from '../../core';
+import { BoxCollider, Sprite, SpritePainter } from '../../core';
 import { GameUpdateArgs, Tag } from '../../game';
 import { TerrainType } from '../../terrain';
 import * as config from '../../config';
@@ -7,7 +7,7 @@ import { TerrainTile } from '../TerrainTile';
 
 export class BrickTerrainTile extends TerrainTile {
   public type = TerrainType.Brick;
-  public collider = new Collider(false);
+  public collider = new BoxCollider(this);
   public readonly tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
   public readonly painter = new SpritePainter();
   protected sprites: Sprite[];
@@ -16,9 +16,20 @@ export class BrickTerrainTile extends TerrainTile {
     super(config.BRICK_TILE_SIZE, config.BRICK_TILE_SIZE);
   }
 
-  protected setup({ spriteLoader }: GameUpdateArgs): void {
+  public destroy(): void {
+    super.destroy();
+    this.collider.unregister();
+  }
+
+  protected setup({ collisionSystem, spriteLoader }: GameUpdateArgs): void {
+    collisionSystem.register(this.collider);
+
     this.sprites = spriteLoader.loadList(this.getSpriteIds());
     this.painter.sprite = this.getSpriteByPosition();
+  }
+
+  protected update(): void {
+    this.collider.update();
   }
 
   protected getSpriteIds(): string[] {
