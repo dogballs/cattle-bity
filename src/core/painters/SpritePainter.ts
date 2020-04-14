@@ -1,8 +1,9 @@
+import { Sprite } from '../graphics';
+
 import { Alignment } from '../Alignment';
 import { Painter } from '../Painter';
 import { Rect } from '../Rect';
 import { RenderObject } from '../RenderObject';
-import { Sprite } from '../Sprite';
 
 export class SpritePainter extends Painter {
   public alignment: Alignment = Alignment.MiddleCenter;
@@ -59,7 +60,7 @@ export class SpritePainter extends Painter {
     }
 
     context.drawImage(
-      this.sprite.image.imageElement,
+      this.sprite.image.getElement(),
       this.sprite.sourceRect.x,
       this.sprite.sourceRect.y,
       this.sprite.sourceRect.width,

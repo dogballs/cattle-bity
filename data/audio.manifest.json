@@ -1,0 +1,19 @@
+{
+  "fire": { "file": "data/audio/fire.mp3" },
+  "game-over": { "file": "data/audio/game-over.mp3" },
+  "highscore": { "file": "data/audio/high-score.mp3" },
+  "hit.enemy": { "file": "data/audio/hit-enemy.mp3" },
+  "hit.steel": { "file": "data/audio/hit-steel.mp3" },
+  "hit.brick": { "file": "data/audio/hit-brick.mp3" },
+  "level-intro": { "file": "data/audio/level-intro.mp3" },
+  "life": { "file": "data/audio/life.mp3" },
+  "tank.idle": { "file": "data/audio/tank-idle.mp3" },
+  "tank.move": { "file": "data/audio/tank-move.mp3" },
+  "pause": { "file": "data/audio/pause.mp3" },
+  "powerup.spawn": { "file": "data/audio/powerup-appear.mp3" },
+  "powerup.pickup": { "file": "data/audio/powerup-pickup.mp3" },
+  "explosion.player": { "file": "data/audio/player-explosion.mp3" },
+  "explosion.enemy": { "file": "data/audio/enemy-explosion.mp3" },
+  "score": { "file": "data/audio/score.mp3" },
+  "victory": { "file": "data/audio/victory.mp3" }
+}

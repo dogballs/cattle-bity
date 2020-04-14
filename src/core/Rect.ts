@@ -13,6 +13,18 @@ export class Rect {
     this.height = height;
   }
 
+  public setWidth(width: number): this {
+    this.width = width;
+
+    return this;
+  }
+
+  public setHeight(height: number): this {
+    this.height = height;
+
+    return this;
+  }
+
   public getCenter(): Vector {
     return new Vector(this.x + this.width / 2, this.y + this.height / 2);
   }

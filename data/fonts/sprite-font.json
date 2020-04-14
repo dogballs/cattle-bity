@@ -3,8 +3,10 @@
   "characterSet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-ⅠⅡ←→[]?()/+.",
   "characterWidth": 28,
   "characterHeight": 28,
-  "rowCount": 4,
+  "rowCount": 5,
   "columnCount": 10,
   "horizontalSpacing": 4,
-  "verticalSpacing": 4
+  "verticalSpacing": 4,
+  "offsetX": 0,
+  "offsetY": 0
 }

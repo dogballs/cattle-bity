@@ -1,6 +1,6 @@
-import { Image } from '../Image';
+import { ImageSource, Sprite } from '../graphics';
+
 import { Rect } from '../Rect';
-import { Sprite } from '../Sprite';
 import { Vector } from '../Vector';
 
 import { Font } from './Font';
@@ -14,6 +14,8 @@ export interface SpriteFontConfig {
   columnCount: number;
   horizontalSpacing: number;
   verticalSpacing: number;
+  offsetX: number;
+  offsetY: number;
 }
 
 export interface SpriteFontOptions {
@@ -26,12 +28,12 @@ const DEFAULT_OPTIONS = {
 
 export class SpriteFont implements Font<Sprite> {
   public readonly config: SpriteFontConfig;
-  public readonly image: Image;
+  public readonly image: ImageSource;
   public readonly options: SpriteFontOptions;
 
   constructor(
     config: SpriteFontConfig,
-    image: Image,
+    image: ImageSource,
     options: SpriteFontOptions = {},
   ) {
     this.config = config;
@@ -55,14 +57,17 @@ export class SpriteFont implements Font<Sprite> {
       columnCount,
       horizontalSpacing,
       verticalSpacing,
+      offsetY,
+      offsetX,
     } = this.config;
 
     const rowIndex = Math.floor(characterIndex / columnCount);
     const columnIndex = characterIndex % columnCount;
 
     const sourceX =
-      columnIndex * characterWidth + columnIndex * horizontalSpacing;
-    const sourceY = rowIndex * characterHeight + rowIndex * verticalSpacing;
+      offsetX + columnIndex * characterWidth + columnIndex * horizontalSpacing;
+    const sourceY =
+      offsetY + rowIndex * characterHeight + rowIndex * verticalSpacing;
     const sourceWidth = characterWidth;
     const sourceHeight = characterHeight;
 
@@ -96,5 +101,30 @@ export class SpriteFont implements Font<Sprite> {
 
   public getCharacterHeight(): number {
     return this.config.characterHeight;
+  }
+
+  public getImageSourceRect(): Rect {
+    const {
+      characterWidth,
+      characterHeight,
+      columnCount,
+      rowCount,
+      horizontalSpacing,
+      verticalSpacing,
+      offsetY,
+      offsetX,
+    } = this.config;
+
+    const x = offsetX;
+    const y = offsetY;
+
+    const width =
+      characterWidth * columnCount + horizontalSpacing * columnCount - 1;
+    const height =
+      characterHeight * rowCount + verticalSpacing * (rowCount - 1);
+
+    const rect = new Rect(x, y, width, height);
+
+    return rect;
   }
 }

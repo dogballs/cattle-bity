@@ -1,25 +1,14 @@
-import { Logger } from '../Logger';
-import { Image } from '../Image';
+import { Image } from '../graphics';
 
-import { PathUtils } from '../utils';
+import { Logger } from '../Logger';
 
 export class ImageLoader {
-  private loaded: Map<string, Image> = new Map();
-  private basePath = '';
   protected log = new Logger(ImageLoader.name, Logger.Level.None);
+  private images: Map<string, Image> = new Map();
 
-  constructor(basePath = '') {
-    this.basePath = basePath;
-  }
-
-  public load(path: string, isAbsolute = false): Image {
-    let fullPath = path;
-    if (isAbsolute === false) {
-      fullPath = PathUtils.join(this.basePath, path);
-    }
-
-    if (this.loaded.has(fullPath)) {
-      return this.loaded.get(fullPath);
+  public load(filePath: string): Image {
+    if (this.images.has(filePath)) {
+      return this.images.get(filePath);
     }
 
     const imageElement = new window.Image();
@@ -27,19 +16,19 @@ export class ImageLoader {
     const image = new Image(imageElement);
 
     image.loaded.addListenerOnce(() => {
-      this.log.debug('Loaded "%s"', fullPath);
+      this.log.debug('Loaded "%s"', filePath);
     });
 
-    imageElement.src = fullPath;
+    imageElement.src = filePath;
 
-    this.loaded.set(fullPath, image);
+    this.images.set(filePath, image);
 
     return image;
   }
 
-  public async loadAsync(path: string, isAbsolute = false): Promise<Image> {
+  public async loadAsync(path: string): Promise<Image> {
     return new Promise((resolve) => {
-      const image = this.load(path, isAbsolute);
+      const image = this.load(path);
       if (image.isLoaded()) {
         resolve(image);
       } else {

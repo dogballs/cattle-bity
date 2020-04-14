@@ -1,5 +1,6 @@
+import { Sprite } from '../graphics';
+
 import { Rect } from '../Rect';
-import { Sprite } from '../Sprite';
 
 import { ImageLoader } from './ImageLoader';
 
@@ -41,8 +42,8 @@ export class SpriteLoader {
       throw new Error(`Invalid sprite id = "${id}"`);
     }
 
-    const { file: fileName, rect: sourceRectValues } = item;
-    const image = this.imageLoader.load(fileName);
+    const { file: filePath, rect: sourceRectValues } = item;
+    const image = this.imageLoader.load(filePath);
     const sourceRect = new Rect(...sourceRectValues);
 
     const defaultTargetRect = new Rect(

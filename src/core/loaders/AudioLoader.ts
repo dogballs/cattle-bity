@@ -2,8 +2,6 @@ import { Logger } from '../Logger';
 import { Sound } from '../Sound';
 import { Subject } from '../Subject';
 
-import { PathUtils } from '../utils';
-
 interface AudioManifestItem {
   file: string;
 }
@@ -15,13 +13,11 @@ interface AudioManifest {
 export class AudioLoader {
   public loaded = new Subject<Sound>();
   private manifest: AudioManifest;
-  private basePath = '';
-  private readonly loadedSounds: Map<string, Sound> = new Map();
+  private readonly sounds: Map<string, Sound> = new Map();
   protected readonly log = new Logger(AudioLoader.name, Logger.Level.None);
 
-  constructor(manifest: AudioManifest, basePath = '') {
+  constructor(manifest: AudioManifest) {
     this.manifest = manifest;
-    this.basePath = basePath;
   }
 
   public load(id: string): Sound {
@@ -30,25 +26,24 @@ export class AudioLoader {
       throw new Error(`Invalid audio id = "${id}"`);
     }
 
-    const { file: fileName } = item;
-    const fullPath = PathUtils.join(this.basePath, fileName);
+    const { file: filePath } = item;
 
-    if (this.loadedSounds.has(fullPath)) {
-      return this.loadedSounds.get(fullPath);
+    if (this.sounds.has(filePath)) {
+      return this.sounds.get(filePath);
     }
 
     const audioElement = new Audio();
 
     const sound = new Sound(audioElement);
     sound.loaded.addListener(() => {
-      this.log.debug('Loaded "%s"', fullPath);
+      this.log.debug('Loaded "%s"', filePath);
       this.loaded.notify(sound);
     });
 
     audioElement.preload = 'auto';
-    audioElement.src = fullPath;
+    audioElement.src = filePath;
 
-    this.loadedSounds.set(fullPath, sound);
+    this.sounds.set(filePath, sound);
 
     return sound;
   }
@@ -81,6 +76,6 @@ export class AudioLoader {
   }
 
   public getAllLoaded(): Sound[] {
-    return Array.from(this.loadedSounds.values());
+    return Array.from(this.sounds.values());
   }
 }

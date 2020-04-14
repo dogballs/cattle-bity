@@ -6,8 +6,8 @@ interface RegisteredItem {
 }
 
 export class RectFontLoader {
-  private registered = new Map<string, RegisteredItem>();
-  private loaded = new Map<string, RectFont>();
+  private registeredItems = new Map<string, RegisteredItem>();
+  private loadedFonts = new Map<string, RectFont>();
 
   public register(
     id: string,
@@ -15,31 +15,31 @@ export class RectFontLoader {
     options: RectFontOptions = {},
   ): void {
     const item = { config, options };
-    this.registered.set(id, item);
+    this.registeredItems.set(id, item);
   }
 
   public load(id: string): RectFont {
-    const item = this.registered.get(id);
+    const item = this.registeredItems.get(id);
     if (item === undefined) {
       const error = new Error(`Rect font "${id} not registered`);
 
       throw error;
     }
 
-    if (this.loaded.has(id)) {
-      return this.loaded.get(id);
+    if (this.loadedFonts.has(id)) {
+      return this.loadedFonts.get(id);
     }
 
     const { config, options: defaultOptions } = item;
     const font = new RectFont(config, defaultOptions);
 
-    this.loaded.set(id, font);
+    this.loadedFonts.set(id, font);
 
     return font;
   }
 
   public preloadAll(): void {
-    this.registered.forEach((config, id) => {
+    this.registeredItems.forEach((config, id) => {
       this.load(id);
     });
   }

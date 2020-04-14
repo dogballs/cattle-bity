@@ -1,9 +1,6 @@
 export const IS_DEV = process.env.NODE_ENV === 'development';
 export const IS_PROD = process.env.NODE_ENV === 'production';
 
-export const AUDIO_BASE_PATH = 'data/audio/';
-export const GRAPHICS_BASE_PATH = 'data/graphics/';
-
 export const TILE_SIZE_SMALL = 16;
 export const TILE_SIZE_MEDIUM = 32;
 export const TILE_SIZE_LARGE = 64;

@@ -1,6 +1,7 @@
 import {
   AudioLoader,
   CollisionSystem,
+  ColorSpriteFontGenerator,
   ImageLoader,
   Input,
   RectFontLoader,
@@ -21,6 +22,7 @@ export interface GameUpdateArgs {
   audioManager: AudioManager;
   audioLoader: AudioLoader;
   collisionSystem: CollisionSystem;
+  colorSpriteFontGenerator: ColorSpriteFontGenerator;
   deltaTime: number;
   highscoreStorage: PointsHighscoreStorage;
   imageLoader: ImageLoader;

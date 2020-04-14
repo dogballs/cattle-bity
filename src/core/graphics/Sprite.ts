@@ -1,17 +1,18 @@
-import { Image } from './Image';
-import { Rect } from './Rect';
+import { Rect } from '../Rect';
+
+import { ImageSource } from './ImageSource';
 
 /**
  * Represents a specific fragment of an image by the coordinates.
  * The coordinates will be used by renderer to render the fragment.
  */
 export class Sprite {
-  public image: Image;
+  public image: ImageSource;
   public sourceRect: Rect;
   public targetRect: Rect;
 
   constructor(
-    image: Image,
+    image: ImageSource,
     sourceRect: Rect = new Rect(),
     targetRect: Rect = new Rect(),
   ) {

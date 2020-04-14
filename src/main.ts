@@ -3,6 +3,7 @@ import * as Stats from 'stats.js';
 import {
   AudioLoader,
   CollisionSystem,
+  ColorSpriteFontGenerator,
   GameObject,
   GameLoop,
   GameRenderer,
@@ -24,11 +25,11 @@ import { GameSceneRouter, GameSceneType } from './scenes';
 
 import * as config from './config';
 
-import * as audioManifest from '../data/audio/audio.manifest.json';
-import * as spriteManifest from '../data/graphics/sprite.manifest.json';
+import * as audioManifest from '../data/audio.manifest.json';
+import * as spriteManifest from '../data/sprite.manifest.json';
 import * as spriteFontConfig from '../data/fonts/sprite-font.json';
 import * as rectFontConfig from '../data/fonts/rect-font.json';
-import * as mapManifest from '../data/maps/map.manifest.json';
+import * as mapManifest from '../data/map.manifest.json';
 
 const loadingElement = document.querySelector('[data-loading]');
 
@@ -47,11 +48,17 @@ storage.load();
 const inputManager = new InputManager(storage);
 inputManager.listen();
 
-const audioLoader = new AudioLoader(audioManifest, config.AUDIO_BASE_PATH);
-const imageLoader = new ImageLoader(config.GRAPHICS_BASE_PATH);
+const audioLoader = new AudioLoader(audioManifest);
+const imageLoader = new ImageLoader();
 
 const spriteFontLoader = new SpriteFontLoader(imageLoader);
 spriteFontLoader.register(config.PRIMARY_SPRITE_FONT_ID, spriteFontConfig);
+
+const colorSpriteFontGenerator = new ColorSpriteFontGenerator(spriteFontLoader);
+colorSpriteFontGenerator.register(
+  config.PRIMARY_SPRITE_FONT_ID,
+  config.COLOR_BLACK,
+);
 
 const spriteLoader = new SpriteLoader(imageLoader, spriteManifest, {
   scale: 4,
@@ -97,6 +104,7 @@ const updateArgs: GameUpdateArgs = {
   audioManager,
   audioLoader,
   collisionSystem,
+  colorSpriteFontGenerator,
   deltaTime: 0,
   highscoreStorage,
   imageLoader,
@@ -150,6 +158,25 @@ async function main(): Promise<void> {
   log.time('Sprite font preload');
   await spriteFontLoader.preloadAllAsync();
   log.timeEnd('Sprite font preload');
+
+  log.time('Color sprite font generation');
+  colorSpriteFontGenerator.generate(
+    config.PRIMARY_SPRITE_FONT_ID,
+    config.COLOR_WHITE,
+  );
+  colorSpriteFontGenerator.generate(
+    config.PRIMARY_SPRITE_FONT_ID,
+    config.COLOR_GRAY,
+  );
+  colorSpriteFontGenerator.generate(
+    config.PRIMARY_SPRITE_FONT_ID,
+    config.COLOR_RED,
+  );
+  colorSpriteFontGenerator.generate(
+    config.PRIMARY_SPRITE_FONT_ID,
+    config.COLOR_YELLOW,
+  );
+  log.timeEnd('Color sprite font generation');
 
   log.time('Sprites preload');
   await spriteLoader.preloadAllAsync();
