@@ -1,5 +1,5 @@
-import { TextAlignment } from '../core';
-import { TerrainType } from '../terrain';
+import { TextAlignment } from '../../core';
+import { TerrainType } from '../../terrain';
 
 import { TerrainText } from './TerrainText';
 

@@ -3,10 +3,10 @@ import { GameUpdateArgs } from '../../game';
 import {
   DividerMenuItem,
   InputButtonCaptureModal,
-  Menu,
+  SceneMenu,
+  SceneMenuTitle,
   SelectorMenuItem,
   SelectorMenuItemChoice,
-  SpriteText,
   TextMenuItem,
 } from '../../gameObjects';
 import {
@@ -44,9 +44,7 @@ export class SettingsKeybindingScene extends Scene {
   private inputManager: InputManager;
   private selectedControl: InputControl = null;
 
-  private title = new SpriteText('SETTINGS → KEY BINDINGS', {
-    color: config.COLOR_YELLOW,
-  });
+  private title: SceneMenuTitle;
   private modal: InputButtonCaptureModal;
   private deviceSelectorItem: SelectorMenuItem<InputDeviceType>;
   private topDividerItem: DividerMenuItem;
@@ -54,11 +52,12 @@ export class SettingsKeybindingScene extends Scene {
   private bindingItems: TextMenuItem[];
   private resetItem: TextMenuItem;
   private backItem: TextMenuItem;
-  private menu: Menu;
+  private menu: SceneMenu;
 
   protected setup(updateArgs: GameUpdateArgs): void {
     this.inputManager = updateArgs.inputManager;
 
+    this.title = new SceneMenuTitle('SETTINGS → KEY BINDINGS');
     this.title.position.set(112, 96);
     this.root.add(this.title);
 
@@ -91,9 +90,8 @@ export class SettingsKeybindingScene extends Scene {
       this.backItem,
     ];
 
-    this.menu = new Menu();
+    this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
-    this.menu.position.set(16, 192);
     this.root.add(this.menu);
 
     this.modal = new InputButtonCaptureModal(

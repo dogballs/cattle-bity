@@ -2,7 +2,7 @@ import { GameObject, Subject } from '../core';
 import { GameUpdateArgs } from '../game';
 import { InputHoldThrottle, LevelSelectionInputContext } from '../input';
 
-import { LevelTitle } from './LevelTitle';
+import { LevelTitle } from './text';
 
 const SLOW_HOLD_DELAY = 0.12;
 const FAST_HOLD_DELAY = 0.016;

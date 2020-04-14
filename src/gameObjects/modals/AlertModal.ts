@@ -19,9 +19,10 @@ const DEFAULT_OPTIONS: AlertModalOptions = {
 export class AlertModal extends GameObject {
   public painter = new RectPainter(config.COLOR_BACKDROP);
   public accepted = new Subject();
+  public zIndex = 9;
   private options: AlertModalOptions;
   private container: GameObject;
-  private text: SpriteText;
+  private text: SpriteText = null;
   private acceptItem: TextMenuItem;
   private declineItem: TextMenuItem;
   private menu: Menu;
@@ -61,6 +62,16 @@ export class AlertModal extends GameObject {
     this.menu.position.set(16, 128);
     this.menu.setItems(menuItems);
     this.container.add(this.menu);
+  }
+
+  public setText(message: string): void {
+    // Setup has not been called yet
+    if (this.text === null) {
+      this.options.message = message;
+      return;
+    }
+
+    this.text.setText(message);
   }
 
   private handleAcceptSelected = (): void => {

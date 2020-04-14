@@ -19,7 +19,7 @@ import {
 import { DebugGameLoopMenu, DebugInspector } from './debug';
 import { AudioManager, GameUpdateArgs, GameState, Session } from './game';
 import { InputManager } from './input';
-import { MapLoader } from './map';
+import { ManifestMapListReader, MapLoader } from './map';
 import { PointsHighscoreStorage } from './points';
 import { GameSceneRouter, GameSceneType } from './scenes';
 
@@ -69,7 +69,8 @@ rectFontLoader.register(config.PRIMARY_RECT_FONT_ID, rectFontConfig, {
   scale: config.TILE_SIZE_SMALL,
 });
 
-const mapLoader = new MapLoader(mapManifest);
+const manifestMapListReader = new ManifestMapListReader(mapManifest);
+const mapLoader = new MapLoader(manifestMapListReader);
 
 const audioManager = new AudioManager(audioLoader, storage);
 audioManager.loadSettings();

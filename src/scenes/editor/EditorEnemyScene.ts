@@ -3,8 +3,8 @@ import { GameUpdateArgs } from '../../game';
 import {
   DividerMenuItem,
   EditorEnemyPreview,
-  Menu,
-  SpriteText,
+  SceneMenu,
+  SceneMenuTitle,
   SelectorMenuItem,
   SelectorMenuItemChoice,
   TextMenuItem,
@@ -33,8 +33,8 @@ const TOTAL_PAGES = config.ENEMY_MAX_TOTAL_COUNT / PER_PAGE;
 
 export class EditorEnemyScene extends Scene<EditorLocationParams> {
   private mapConfig: MapConfig;
-  private title: SpriteText;
-  private menu: Menu;
+  private title: SceneMenuTitle;
+  private menu: SceneMenu;
   private preview: EditorEnemyPreview;
   private selectorsItems: SelectorMenuItem<number>[] = [];
   private nextItem: TextMenuItem;
@@ -49,10 +49,7 @@ export class EditorEnemyScene extends Scene<EditorLocationParams> {
       this.mapConfig.fillEnemySpawnList(TankType.EnemyA());
     }
 
-    this.title = new SpriteText(this.getTitleText(), {
-      color: config.COLOR_YELLOW,
-    });
-    this.title.position.set(112, 96);
+    this.title = new SceneMenuTitle(this.getTitleText());
     this.root.add(this.title);
 
     this.preview = new EditorEnemyPreview(ENEMY_TYPES);
@@ -106,9 +103,8 @@ export class EditorEnemyScene extends Scene<EditorLocationParams> {
       this.backItem,
     ];
 
-    this.menu = new Menu();
+    this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
-    this.menu.position.set(16, 192);
     this.root.add(this.menu);
 
     this.updateMenu();

@@ -1,7 +1,7 @@
-import { GameObject, SpritePainter } from '../core';
-import { GameUpdateArgs } from '../game';
+import { GameObject, SpritePainter } from '../../core';
+import { GameUpdateArgs } from '../../game';
 
-import { SpriteText } from './SpriteText';
+import { SpriteText } from '../text';
 
 export class LevelLivesCounter extends GameObject {
   private title = new SpriteText('ⅠP');

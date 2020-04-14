@@ -6,7 +6,10 @@ import { TerrainType } from '../terrain/TerrainType';
 
 import { MapDto } from './MapDto';
 
+const DEFAULT_VERSION = 1;
+
 export const MapDtoSchema = Joi.object<MapDto>({
+  version: Joi.number().default(DEFAULT_VERSION),
   spawn: Joi.object({
     enemy: Joi.object({
       locations: Joi.array()

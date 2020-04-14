@@ -14,6 +14,7 @@ import {
   MainMenuScene,
   MainVictoryScene,
 } from './main';
+import { ModesCustomScene, ModesMenuScene } from './modes';
 import {
   SettingsAudioScene,
   SettingsKeybindingScene,
@@ -35,11 +36,12 @@ export class GameSceneRouter extends SceneRouter {
     this.register(GameSceneType.MainHighscore, MainHighscoreScene);
     this.register(GameSceneType.MainMenu, MainMenuScene);
     this.register(GameSceneType.MainVictory, MainVictoryScene);
+    this.register(GameSceneType.ModesMenu, ModesMenuScene);
+    this.register(GameSceneType.ModesCustom, ModesCustomScene);
     this.register(GameSceneType.LevelLoad, LevelLoadScene);
     this.register(GameSceneType.LevelSelection, LevelSelectionScene);
     this.register(GameSceneType.LevelScore, LevelScoreScene);
     this.register(GameSceneType.LevelPlay, LevelPlayScene);
-    this.register(GameSceneType.MainMenu, MainMenuScene);
     this.register(GameSceneType.SettingsAudio, SettingsAudioScene);
     this.register(GameSceneType.SettingsMenu, SettingsMenuScene);
     this.register(GameSceneType.SettingsKeybinding, SettingsKeybindingScene);

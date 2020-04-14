@@ -1,4 +1,4 @@
-import { GameObject, RectPainter } from '../core';
+import { GameObject, RectPainter } from '../../core';
 
 export class ScoreTableUnderline extends GameObject {
   public painter = new RectPainter('#fff');

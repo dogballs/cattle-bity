@@ -1,42 +1,54 @@
 import { Subject } from '../core';
+
 import { MapConfig } from './MapConfig';
+import { MapListReader } from './MapListReader';
 
-interface MapManifestListItem {
-  file: string;
-}
-
-export interface MapManifest {
-  list: MapManifestListItem[];
-}
+// Container for map list readers used in the game. Readers can be switched
+// in runtime, so maps can be loaded from different sources.
+// If user picks default single player, we load maps from manifest over HTTP.
+// If user wants custom maps from his file system, we use file reader.
 
 export class MapLoader {
-  public readonly loaded = new Subject<MapConfig>();
-  private readonly manifest: MapManifest;
+  public loaded = new Subject<MapConfig>();
+  public error = new Subject<Error>();
+  private defaultReader: MapListReader;
+  private activeReader: MapListReader = null;
 
-  constructor(manifest: MapManifest) {
-    this.manifest = manifest;
+  constructor(defaultReader: MapListReader) {
+    this.defaultReader = defaultReader;
+
+    this.setListReader(defaultReader);
   }
 
-  public async loadAsync(levelNumber: number): Promise<MapConfig> {
-    const index = levelNumber - 1;
-    const item = this.manifest.list[index];
-    if (item === undefined) {
-      throw new Error(`Level "${levelNumber} not defined`);
+  public setListReader(nextReader: MapListReader): void {
+    // Clean up previous reader
+    if (this.activeReader !== null) {
+      this.activeReader.loaded.removeListener(this.handleReaderLoaded);
+      this.activeReader.error.removeListener(this.handleReaderError);
     }
 
-    const response = await fetch(item.file);
-    const data = await response.json();
+    this.activeReader = nextReader;
+    this.activeReader.loaded.addListener(this.handleReaderLoaded);
+    this.activeReader.error.addListener(this.handleReaderError);
+  }
 
-    const config = new MapConfig();
+  public restoreDefaultReader(): void {
+    this.setListReader(this.defaultReader);
+  }
 
-    config.fromDto(data);
-
-    this.loaded.notify(config);
-
-    return config;
+  public loadAsync(levelNumber: number): void {
+    this.activeReader.readAsync(levelNumber);
   }
 
   public getItemsCount(): number {
-    return this.manifest.list.length;
+    return this.activeReader.getCount();
   }
+
+  private handleReaderLoaded = (mapConfig): void => {
+    this.loaded.notify(mapConfig);
+  };
+
+  private handleReaderError = (err): void => {
+    this.error.notify(err);
+  };
 }

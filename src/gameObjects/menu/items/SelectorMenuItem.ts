@@ -3,7 +3,7 @@ import { GameUpdateArgs } from '../../../game';
 import { MenuInputContext } from '../../../input';
 import * as config from '../../../config';
 
-import { SpriteText } from '../../SpriteText';
+import { SpriteText } from '../../text';
 
 import { MenuItem } from '../MenuItem';
 

@@ -1,13 +1,14 @@
-import { GameObject, Subject, Timer } from '../core';
-import { GameUpdateArgs } from '../game';
-import { PointsRecord } from '../points';
-import { TankTier } from '../tank/TankTier'; // TODO: circular dep?
-import * as config from '../config';
+import { GameObject, Subject, Timer } from '../../core';
+import { GameUpdateArgs } from '../../game';
+import { PointsRecord } from '../../points';
+import { TankTier } from '../../tank/TankTier'; // TODO: circular dep?
+import * as config from '../../config';
+
+import { SpriteText } from '../text';
 
 import { ScoreTableCounter } from './ScoreTableCounter';
 import { ScoreTableTierIcon } from './ScoreTableTierIcon';
 import { ScoreTableUnderline } from './ScoreTableUnderline';
-import { SpriteText } from './SpriteText';
 
 enum State {
   Idle,

@@ -4,45 +4,36 @@ import { SceneMenu, SceneMenuTitle, TextMenuItem } from '../../gameObjects';
 
 import { GameSceneType } from '../GameSceneType';
 
-export class SettingsMenuScene extends Scene {
+export class ModesMenuScene extends Scene {
   private title: SceneMenuTitle;
-  private keybindingItem: TextMenuItem;
-  private audioItem: TextMenuItem;
+  private customItem: TextMenuItem;
   private backItem: TextMenuItem;
   private menu: SceneMenu;
 
   protected setup(): void {
-    this.title = new SceneMenuTitle('SETTINGS');
+    this.title = new SceneMenuTitle('MODES');
     this.root.add(this.title);
 
-    this.keybindingItem = new TextMenuItem('KEY BINDINGS');
-    this.keybindingItem.selected.addListener(this.handleKeybindingSelected);
-
-    this.audioItem = new TextMenuItem('AUDIO');
-    this.audioItem.selected.addListener(this.handleAudioSelected);
+    this.customItem = new TextMenuItem('CUSTOM MAPS');
+    this.customItem.selected.addListener(this.handleCustomSelected);
 
     this.backItem = new TextMenuItem('BACK');
     this.backItem.selected.addListener(this.handleBackSelected);
 
-    const menuItems = [this.keybindingItem, this.audioItem, this.backItem];
+    const menuItems = [this.customItem, this.backItem];
 
     this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
     this.root.add(this.menu);
   }
-
   protected update(updateArgs: GameUpdateArgs): void {
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });
   }
 
-  private handleKeybindingSelected = (): void => {
-    this.navigator.push(GameSceneType.SettingsKeybinding);
-  };
-
-  private handleAudioSelected = (): void => {
-    this.navigator.push(GameSceneType.SettingsAudio);
+  private handleCustomSelected = (): void => {
+    this.navigator.push(GameSceneType.ModesCustom);
   };
 
   private handleBackSelected = (): void => {

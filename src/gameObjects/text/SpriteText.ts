@@ -6,9 +6,9 @@ import {
   SpriteTextPainter,
   Text,
   TextOptions,
-} from '../core';
-import { GameUpdateArgs } from '../game';
-import * as config from '../config';
+} from '../../core';
+import { GameUpdateArgs } from '../../game';
+import * as config from '../../config';
 
 export interface SpriteTextOptions extends TextOptions {
   color?: string;

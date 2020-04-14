@@ -1,22 +1,18 @@
 import { Scene } from '../../core';
 import { AudioManager, GameUpdateArgs } from '../../game';
-import { Menu, SpriteText, TextMenuItem } from '../../gameObjects';
-import * as config from '../../config';
+import { SceneMenu, SceneMenuTitle, TextMenuItem } from '../../gameObjects';
 
 export class SettingsAudioScene extends Scene {
-  private title: SpriteText;
+  private title: SceneMenuTitle;
   private muteItem: TextMenuItem;
   private backItem: TextMenuItem;
-  private menu: Menu;
+  private menu: SceneMenu;
   private audioManager: AudioManager;
 
   protected setup({ audioManager }: GameUpdateArgs): void {
     this.audioManager = audioManager;
 
-    this.title = new SpriteText('SETTINGS → AUDIO', {
-      color: config.COLOR_YELLOW,
-    });
-    this.title.position.set(112, 96);
+    this.title = new SceneMenuTitle('SETTINGS → AUDIO');
     this.root.add(this.title);
 
     this.muteItem = new TextMenuItem(this.getMuteText());
@@ -27,9 +23,8 @@ export class SettingsAudioScene extends Scene {
 
     const menuItems = [this.muteItem, this.backItem];
 
-    this.menu = new Menu();
+    this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
-    this.menu.position.set(16, 192);
     this.root.add(this.menu);
   }
 

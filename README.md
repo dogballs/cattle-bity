@@ -13,6 +13,12 @@ Project is not commercial and was created for learning purposes only.
 ## Features
 
 - Single player mode
+  - Original 25 maps
+- Modes
+  - Custom maps - load your own maps created in editor
 - Level editor
+  - Save to JSON
+  - Load from JSON to continue editing
 - Settings
   - Customize keybindings
+  - Mute audio

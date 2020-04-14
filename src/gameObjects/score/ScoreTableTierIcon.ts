@@ -1,15 +1,15 @@
-import { GameObject, SpritePainter } from '../core';
-import { GameUpdateArgs, Rotation } from '../game';
+import { GameObject, SpritePainter } from '../../core';
+import { GameUpdateArgs, Rotation } from '../../game';
 import {
   TankColor,
   TankParty,
   TankSpriteId,
   TankTier,
   TankType,
-} from '../tank';
-import * as config from '../config';
+} from '../../tank';
+import * as config from '../../config';
 
-import { SpriteText } from './SpriteText';
+import { SpriteText } from '../text';
 
 export class ScoreTableTierIcon extends GameObject {
   private tier: TankTier;

@@ -6,7 +6,6 @@ Game logic
 - movement collision between tanks
 - input context hints
 - editor playtest
-- mode to load custom map manifest
 - demo
 - multiplayer
 

@@ -1,7 +1,7 @@
-import { GameObject, SpritePainter } from '../core';
-import { GameUpdateArgs } from '../game';
+import { GameObject, SpritePainter } from '../../core';
+import { GameUpdateArgs } from '../../game';
 
-import { SpriteText } from './SpriteText';
+import { SpriteText } from '../text';
 
 export class LevelNumberCounter extends GameObject {
   public icon = new GameObject(64, 64);

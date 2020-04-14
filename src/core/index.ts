@@ -1,4 +1,5 @@
 export * from './collision';
+export * from './file';
 export * from './graphics';
 export * from './input';
 export * from './loaders';
@@ -11,6 +12,7 @@ export * from './utils';
 export * from './Alignment';
 export * from './Animation';
 export * from './BoundingBox';
+export * from './Deferred';
 export * from './GameLoop';
 export * from './GameObject';
 export * from './GameRenderer';

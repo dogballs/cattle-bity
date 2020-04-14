@@ -1,4 +1,4 @@
-import { GameObject } from '../core';
+import { GameObject } from '../../core';
 
 import { LevelEnemyCounter } from './LevelEnemyCounter';
 import { LevelLivesCounter } from './LevelLivesCounter';

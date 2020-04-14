@@ -1,15 +1,14 @@
-import { Scene } from '../../core';
+import { FileOpener, FileSaver, Scene } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import {
   AlertModal,
   ConfirmModal,
   DividerMenuItem,
-  Menu,
-  SpriteText,
+  SceneMenu,
+  SceneMenuTitle,
   TextMenuItem,
 } from '../../gameObjects';
-import { MapConfig, MapFileLoader, MapFileSaver } from '../../map';
-import * as config from '../../config';
+import { MapConfig, MapFileReader } from '../../map';
 
 import { GameSceneType } from '../GameSceneType';
 
@@ -22,8 +21,8 @@ enum MenuState {
 }
 
 export class EditorMenuScene extends Scene<EditorLocationParams> {
-  private title: SpriteText;
-  private menu: Menu;
+  private title: SceneMenuTitle;
+  private menu: SceneMenu;
   private newItem: TextMenuItem;
   private loadItem: TextMenuItem;
   private saveItem: TextMenuItem;
@@ -33,8 +32,6 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
   private alertModal: AlertModal;
   private confirmModal: ConfirmModal;
   private mapConfig: MapConfig = null;
-  private mapFileSaver: MapFileSaver;
-  private mapFileLoader: MapFileLoader;
   private menuState = MenuState.Navigation;
   private loadState = EditorLoadState.None;
 
@@ -45,16 +42,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
       this.loadState = this.params.loadState ?? EditorLoadState.Draft;
     }
 
-    this.mapFileSaver = new MapFileSaver();
-
-    this.mapFileLoader = new MapFileLoader();
-    this.mapFileLoader.loaded.addListener(this.handleFileLoaded);
-    this.mapFileLoader.error.addListener(this.handleFileLoadError);
-
-    this.title = new SpriteText(this.getTitleText(), {
-      color: config.COLOR_YELLOW,
-    });
-    this.title.position.set(112, 96);
+    this.title = new SceneMenuTitle(this.getTitleText());
     this.root.add(this.title);
 
     this.newItem = new TextMenuItem('NEW');
@@ -89,9 +77,8 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
       this.exitItem,
     ];
 
-    this.menu = new Menu();
+    this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
-    this.menu.position.set(16, 192);
     this.root.add(this.menu);
 
     this.updateMenu();
@@ -173,6 +160,29 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
     return this.loadState !== EditorLoadState.None;
   }
 
+  private handleNewSelected = (): void => {
+    this.mapConfig = new MapConfig();
+    this.loadState = EditorLoadState.Draft;
+
+    this.updateMenu();
+  };
+
+  private handleLoadSelected = (): void => {
+    const fileOpener = new FileOpener();
+    const mapFileReader = new MapFileReader();
+
+    fileOpener.opened.addListener((files) => {
+      const file = files[0];
+
+      mapFileReader.read(file);
+    });
+
+    mapFileReader.loaded.addListener(this.handleFileLoaded);
+    mapFileReader.error.addListener(this.handleFileLoadError);
+
+    fileOpener.openDialog();
+  };
+
   private handleFileLoaded = (mapConfig: MapConfig): void => {
     this.mapConfig = mapConfig;
     this.loadState = EditorLoadState.File;
@@ -184,19 +194,13 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
     this.showAlert();
   };
 
-  private handleNewSelected = (): void => {
-    this.mapConfig = new MapConfig();
-    this.loadState = EditorLoadState.Draft;
-
-    this.updateMenu();
-  };
-
-  private handleLoadSelected = (): void => {
-    this.mapFileLoader.loadFromFile();
-  };
-
   private handleSaveSelected = (): void => {
-    this.mapFileSaver.saveToFile(this.mapConfig);
+    const json = this.mapConfig.toJSON();
+    const fileName = 'map.json';
+
+    const fileSaver = new FileSaver();
+
+    fileSaver.saveJSON(json, fileName);
   };
 
   private handleMapSelected = (): void => {

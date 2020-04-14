@@ -1,7 +1,7 @@
-import { ArrayUtils, GameObject, Rect, Text, TextOptions } from '../core';
-import { GameUpdateArgs } from '../game';
-import { TerrainFactory, TerrainType } from '../terrain';
-import * as config from '../config';
+import { ArrayUtils, GameObject, Rect, Text, TextOptions } from '../../core';
+import { GameUpdateArgs } from '../../game';
+import { TerrainFactory, TerrainType } from '../../terrain';
+import * as config from '../../config';
 
 export class TerrainText extends GameObject {
   private terrainType: TerrainType;

@@ -20,17 +20,25 @@ export class MainMenuScene extends Scene {
   private commonHighscore: SpriteText;
   private menu: Menu;
   private singlePlayerItem: TextMenuItem;
+  private modesItem: TextMenuItem;
   private editorItem: TextMenuItem;
   private settingsItem: TextMenuItem;
   private state: State = State.Ready;
   private session: Session;
 
-  protected setup({ session, highscoreStorage }: GameUpdateArgs): void {
+  protected setup({
+    highscoreStorage,
+    mapLoader,
+    session,
+  }: GameUpdateArgs): void {
     this.session = session;
 
     // Load highscore from storage
     const highscorePoints = highscoreStorage.getPrimaryPoints();
     this.session.primaryPlayer.setHighscore(highscorePoints);
+
+    // Restore source for maps to default
+    mapLoader.restoreDefaultReader();
 
     this.group = new GameObject();
     this.group.size.copyFrom(this.root.size);
@@ -56,6 +64,9 @@ export class MainMenuScene extends Scene {
     this.singlePlayerItem = new TextMenuItem('1 PLAYER');
     this.singlePlayerItem.selected.addListener(this.handleSinglePlayerSelected);
 
+    this.modesItem = new TextMenuItem('MODES');
+    this.modesItem.selected.addListener(this.handleModesSelected);
+
     this.editorItem = new TextMenuItem('CONSTRUCTION');
     this.editorItem.selected.addListener(this.handleEditorSelected);
 
@@ -64,6 +75,7 @@ export class MainMenuScene extends Scene {
 
     const menuItems = [
       this.singlePlayerItem,
+      this.modesItem,
       this.editorItem,
       this.settingsItem,
     ];
@@ -133,6 +145,10 @@ export class MainMenuScene extends Scene {
 
   private handleSinglePlayerSelected = (): void => {
     this.navigator.replace(GameSceneType.LevelSelection);
+  };
+
+  private handleModesSelected = (): void => {
+    this.navigator.push(GameSceneType.ModesMenu);
   };
 
   private handleEditorSelected = (): void => {

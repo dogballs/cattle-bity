@@ -1,9 +1,6 @@
 import { GameObject, RectPainter, Scene } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import { InputControl } from '../../input';
-import { TankColor } from '../../tank';
-
-import { TestTank } from '../../gameObjects/TestTank';
 
 export class SandboxTransformScene extends Scene {
   private parent: GameObject;
@@ -28,18 +25,6 @@ export class SandboxTransformScene extends Scene {
     this.root.add(this.parent);
     this.parent.add(this.child);
 
-    const tank1 = new TestTank(TankColor.Default, TankColor.Secondary);
-    tank1.position.set(20, 20);
-    this.root.add(tank1);
-
-    const tank2 = new TestTank(TankColor.Default, TankColor.Primary);
-    tank2.position.set(100, 20);
-    this.root.add(tank2);
-
-    const tank3 = new TestTank(TankColor.Primary, TankColor.Secondary);
-    tank3.position.set(180, 20);
-    this.root.add(tank3);
-
     // const tank4 = new TestTank(TankColor.Secondary, TankColor.Primary);
     // tank4.position.set(260, 20);
     // this.root.add(tank4);
@@ -51,10 +36,6 @@ export class SandboxTransformScene extends Scene {
     // const tank6 = new TestTank(TankColor.Danger, TankColor.Primary);
     // tank6.position.set(420, 20);
     // this.root.add(tank6);
-
-    const tank7 = new TestTank(TankColor.Default, TankColor.Default);
-    tank7.position.set(260, 20);
-    this.root.add(tank7);
   }
 
   protected update(updateArgs: GameUpdateArgs): void {

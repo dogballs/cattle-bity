@@ -38,6 +38,7 @@ export interface MapDtoTerrain {
 }
 
 export interface MapDto {
+  version?: number;
   spawn?: MapDtoSpawn;
   terrain?: MapDtoTerrain;
 }

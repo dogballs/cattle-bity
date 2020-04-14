@@ -1,4 +1,4 @@
-import { TerrainType } from '../terrain';
+import { TerrainType } from '../../terrain';
 
 import { TerrainText } from './TerrainText';
 

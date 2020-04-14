@@ -10,6 +10,8 @@ export enum GameSceneType {
   MainHighscore,
   MainMenu,
   MainVictory,
+  ModesMenu,
+  ModesCustom,
   SettingsAudio,
   SettingsKeybinding,
   SettingsMenu,

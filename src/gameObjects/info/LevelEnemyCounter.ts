@@ -1,4 +1,4 @@
-import { GameObject } from '../core';
+import { GameObject } from '../../core';
 
 import { LevelEnemyCounterItem } from './LevelEnemyCounterItem';
 

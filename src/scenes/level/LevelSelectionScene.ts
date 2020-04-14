@@ -16,12 +16,9 @@ export class LevelSelectionScene extends Scene {
     this.mapLoader = mapLoader;
 
     this.curtain = new Curtain(this.root.size.width, this.root.size.height);
-
-    this.selector = new LevelSelector(mapLoader.getItemsCount());
-
-    // TODO: order is important, z-index
     this.root.add(this.curtain);
 
+    this.selector = new LevelSelector(mapLoader.getItemsCount());
     this.selector.setCenter(this.root.getSelfCenter());
     this.selector.selected.addListener(this.handleLevelSelected);
     this.root.add(this.selector);
