@@ -17,7 +17,7 @@ enum State {
 }
 
 const TIERS = [TankTier.A, TankTier.B, TankTier.C, TankTier.D];
-const TRANSITION_DELAY = 0.13;
+const TRANSITION_DELAY = 0.4;
 
 export class ScoreTable extends GameObject {
   public done = new Subject();

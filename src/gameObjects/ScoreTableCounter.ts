@@ -9,7 +9,7 @@ enum State {
   Progress,
   Done,
 }
-const INCREMENT_DELAY = 0.1;
+const INCREMENT_DELAY = 0.135;
 
 export class ScoreTableCounter extends GameObject {
   private pointsLabel = new SpriteText('PTS', { color: config.COLOR_WHITE });

@@ -34,6 +34,7 @@ export class LevelScoreScene extends Scene {
     this.root.add(this.levelTitle);
 
     const pointsRecord = this.session.primaryPlayer.getLevelPointsRecord();
+
     this.scoreTable = new ScoreTable(pointsRecord);
     this.scoreTable.setCenter(this.root.getSelfCenter());
     this.scoreTable.done.addListener(this.handleDone);
@@ -66,12 +67,10 @@ export class LevelScoreScene extends Scene {
       this.navigator.replace(GameSceneType.MainGameOver);
       return;
     }
-
     if (this.session.isLastLevel()) {
       this.navigator.replace(GameSceneType.MainVictory);
       return;
     }
-
     this.session.activateNextLevel();
     this.navigator.replace(GameSceneType.LevelLoad);
   };

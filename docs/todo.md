@@ -25,7 +25,6 @@ Bugs
 
 Other
 
-- optimize sprite fonts
 - try webgl, because CPU is too hot
 - dirty flags for matrix updates
 - AI random dont rotate to current rotation
