@@ -6,8 +6,6 @@ Game logic
 - movement collision between tanks
 - input context hints
 - editor playtest
-- demo
-- multiplayer
 
 Maps
 
@@ -19,7 +17,7 @@ Build
 
 Bugs
 
-- powerup can be picked up with collision box
+-
 
 Other
 

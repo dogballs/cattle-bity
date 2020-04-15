@@ -152,7 +152,7 @@ export class LevelPowerupScript extends LevelScript {
       return;
     }
 
-    this.activePowerup.removeSelf();
+    this.activePowerup.destroy();
     this.activePowerup = null;
 
     this.eventBus.powerupRevoked.notify(null);
@@ -188,11 +188,13 @@ export class LevelPowerupScript extends LevelScript {
   private blockGridDefaults(): void {
     this.grid.blockRect(this.createBaseRect());
 
-    config.PLAYER_DEFAULT_SPAWN_POSITIONS.forEach((position) => {
-      this.grid.blockRect(new Rect(position.x, position.y, 64, 64));
-    });
+    const playerSpawnPosition = this.mapConfig.getPlayerSpawnPosition(0);
+    this.grid.blockRect(
+      new Rect(playerSpawnPosition.x, playerSpawnPosition.y, 64, 64),
+    );
 
-    config.ENEMY_DEFAULT_SPAWN_POSITIONS.forEach((position) => {
+    const enemySpawnPositions = this.mapConfig.getEnemySpawnPositions();
+    enemySpawnPositions.forEach((position) => {
       this.grid.blockRect(new Rect(position.x, position.y, 64, 64));
     });
   }

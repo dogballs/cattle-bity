@@ -10,6 +10,8 @@ import {
 import { GameUpdateArgs, Tag } from '../game';
 import { PowerupType } from '../powerup';
 
+const PICKUP_MIN_INTERSECTION_SIZE = 16;
+
 export class Powerup extends GameObject {
   public zIndex = 6;
   public collider = new BoxCollider(this, true);
@@ -23,6 +25,11 @@ export class Powerup extends GameObject {
     super(64, 64);
 
     this.type = type;
+  }
+
+  public destroy(): void {
+    this.removeSelf();
+    this.collider.unregister();
   }
 
   protected setup({ collisionSystem, spriteLoader }: GameUpdateArgs): void {
@@ -53,9 +60,25 @@ export class Powerup extends GameObject {
     });
 
     if (playerTankContacts.length > 0) {
-      this.removeSelf();
-      this.picked.notify(null);
-      this.collider.unregister();
+      const firstPlayerTankContact = playerTankContacts[0];
+      const tankBox = firstPlayerTankContact.collider.getBox();
+      const selfBox = this.collider.getBox();
+
+      // Fixes the issue that tank can pick up powerup with his collision box
+      // even though tank is visually not exactly touching the powerup.
+      // Calculate minimum intersection area in order for powerup to get
+      // picked up.
+
+      const intersectionBox = selfBox.computeIntersectionBox(tankBox);
+      const intersectionRect = intersectionBox.toRect();
+
+      if (
+        intersectionRect.width > PICKUP_MIN_INTERSECTION_SIZE &&
+        intersectionRect.height > PICKUP_MIN_INTERSECTION_SIZE
+      ) {
+        this.destroy();
+        this.picked.notify(null);
+      }
     }
   }
 
