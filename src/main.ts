@@ -80,7 +80,7 @@ const session = new Session();
 const collisionSystem = new CollisionSystem();
 
 const sceneRouter = new GameSceneRouter();
-sceneRouter.start(GameSceneType.LevelLoad);
+sceneRouter.start(GameSceneType.MainMenu);
 sceneRouter.transitionStarted.addListener(() => {
   collisionSystem.reset();
 });
