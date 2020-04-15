@@ -22,7 +22,7 @@ export class LevelLoadScene extends Scene {
   protected setup({ mapLoader, session }: GameUpdateArgs): void {
     this.session = session;
 
-    const levelNumber = this.session.getLevelNumber();
+    const levelNumber = 3; //this.session.getLevelNumber();
 
     this.curtain = new Curtain(
       this.root.size.width,

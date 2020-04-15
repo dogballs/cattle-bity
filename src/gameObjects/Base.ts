@@ -80,7 +80,7 @@ export class Base extends GameObject {
   private setWalls(wallType: TerrainType): void {
     this.removeAllWalls();
 
-    const walls = TerrainFactory.createFromRegions(wallType, WALL_REGIONS);
+    const walls = TerrainFactory.createMapFromRegions(wallType, WALL_REGIONS);
     walls.forEach((wall) => {
       this.add(wall);
     });

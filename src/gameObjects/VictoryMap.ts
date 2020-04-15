@@ -39,10 +39,9 @@ export class VictoryMap extends GameObject {
   }
 
   protected setup(): void {
-    this.tiles = TerrainFactory.createFromRegion(
-      TerrainType.Brick,
+    this.tiles = TerrainFactory.createFromRegions(TerrainType.Brick, [
       new Rect(0, 0, this.size.width, this.size.height),
-    );
+    ]);
 
     this.tiles.forEach((tile) => {
       tile.destroyed.addListener(this.handleTileDestroyed);

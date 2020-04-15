@@ -1,4 +1,5 @@
 export * from './BlueBrickTerrainTile';
+export * from './BrickSuperTerrainTile';
 export * from './BrickTerrainTile';
 export * from './IceTerrainTile';
 export * from './InverseBrickTerrainTile';

@@ -41,4 +41,8 @@ export class Rect {
   public clone(): Rect {
     return new Rect(this.x, this.y, this.width, this.height);
   }
+
+  public toString(): string {
+    return `[x: ${this.x}, y: ${this.y}, width: ${this.width}, height: ${this.height}]`;
+  }
 }

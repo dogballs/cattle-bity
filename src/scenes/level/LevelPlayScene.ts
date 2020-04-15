@@ -1,4 +1,4 @@
-import { Rect, Scene } from '../../core';
+import { Scene } from '../../core';
 import { DebugCollisionMenu } from '../../debug';
 import { GameUpdateArgs, GameState, Session } from '../../game';
 import { Border } from '../../gameObjects';
@@ -87,27 +87,20 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
 
     const { mapConfig } = this.params;
 
-    mapConfig.getTerrainRegions().forEach((region) => {
-      const regionRect = new Rect(
-        region.x,
-        region.y,
-        region.width,
-        region.height,
-      );
-      const tiles = TerrainFactory.createFromRegion(region.type, regionRect);
+    const terrainRegions = mapConfig.getTerrainRegions();
+    const tiles = TerrainFactory.createMapFromRegionConfigs(terrainRegions);
 
-      tiles.forEach((tile) => {
-        tile.destroyed.addListener(() => {
-          this.eventBus.mapTileDestroyed.notify({
-            type: tile.type,
-            position: tile.position.clone(),
-            size: tile.size.clone(),
-          });
+    for (const tile of tiles) {
+      tile.destroyed.addListener(() => {
+        this.eventBus.mapTileDestroyed.notify({
+          type: tile.type,
+          position: tile.position.clone(),
+          size: tile.size.clone(),
         });
       });
+    }
 
-      this.world.field.add(...tiles);
-    });
+    this.world.field.add(...tiles);
 
     this.audioScript = new LevelAudioScript();
     this.baseScript = new LevelBaseScript();

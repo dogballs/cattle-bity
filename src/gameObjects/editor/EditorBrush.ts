@@ -11,10 +11,9 @@ export class EditorBrush extends GameObject {
   }
 
   protected setup(): void {
-    const tiles = TerrainFactory.createFromRegion(
-      this.type,
+    const tiles = TerrainFactory.createFromRegions(this.type, [
       new Rect(0, 0, this.size.width, this.size.height),
-    );
+    ]);
     this.add(...tiles);
   }
 }

@@ -1,6 +1,6 @@
 import { Rect, Vector } from '../core';
 import { TankParty, TankType } from '../tank';
-import { TerrainRegionConfig } from '../terrain';
+import { TerrainFactory, TerrainRegionConfig } from '../terrain';
 import * as config from '../config';
 
 import { MapDto } from './MapDto';
@@ -30,10 +30,19 @@ export class MapConfig {
   }
 
   public fillAndValidate(dto: MapDto): MapDto {
-    const { value: validatedDto, error } = MapDtoSchema.validate(dto);
+    const { value: validatedDto, error: schemaError } = MapDtoSchema.validate(
+      dto,
+    );
 
-    if (error !== undefined) {
-      throw error;
+    if (schemaError !== undefined) {
+      throw schemaError;
+    }
+
+    const terrainError = TerrainFactory.validateRegionConfigs(
+      validatedDto.terrain.regions,
+    );
+    if (terrainError !== undefined) {
+      throw terrainError;
     }
 
     return validatedDto;

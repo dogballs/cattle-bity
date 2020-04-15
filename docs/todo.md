@@ -19,7 +19,6 @@ Build
 
 Bugs
 
-- rotating inside destroyed wall
 - powerup can be picked up with collision box
 
 Other

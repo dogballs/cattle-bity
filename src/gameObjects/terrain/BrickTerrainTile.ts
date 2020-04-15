@@ -5,10 +5,13 @@ import * as config from '../../config';
 
 import { TerrainTile } from '../TerrainTile';
 
+// Movement collision tags are defined in BrickSuperTerrainTile.
+// Bullet collsion tags are defined here.
+
 export class BrickTerrainTile extends TerrainTile {
   public type = TerrainType.Brick;
   public collider = new BoxCollider(this);
-  public readonly tags = [Tag.Wall, Tag.Brick, Tag.BlockMove];
+  public readonly tags = [Tag.Wall, Tag.Brick];
   public readonly painter = new SpritePainter();
   protected sprites: Sprite[];
 

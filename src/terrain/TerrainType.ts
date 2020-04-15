@@ -1,5 +1,7 @@
 export enum TerrainType {
   Brick = 'brick',
+  BrickSuper = 'brick-super',
+
   Steel = 'steel',
   Jungle = 'jungle',
   Water = 'water',

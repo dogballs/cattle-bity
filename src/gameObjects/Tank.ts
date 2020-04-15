@@ -32,6 +32,7 @@ export enum TankState {
 
 const SKIN_LAYER_DESCRIPTIONS = [{ opacity: 1 }, { opacity: 0.5 }];
 const RAPID_FIRE_DELAY = 0.04;
+const SNAP_SIZE = config.TILE_SIZE_MEDIUM;
 
 export class Tank extends GameObject {
   public collider = new SweptBoxCollider(this, true);
@@ -188,16 +189,16 @@ export class Tank extends GameObject {
       // left wall, and wrong resolution branch is applied. Stick tank to grid.
       if (rotation == Rotation.Up) {
         this.position.addY(otherWorldBox.max.y - selfWorldBox.min.y);
-        this.position.snapY(config.TILE_SIZE_SMALL);
+        this.position.snapY(SNAP_SIZE);
       } else if (rotation === Rotation.Down) {
         this.position.addY(otherWorldBox.min.y - selfWorldBox.max.y);
-        this.position.snapY(config.TILE_SIZE_SMALL);
+        this.position.snapY(SNAP_SIZE);
       } else if (rotation === Rotation.Left) {
         this.position.addX(otherWorldBox.max.x - selfWorldBox.min.x);
-        this.position.snapX(config.TILE_SIZE_SMALL);
+        this.position.snapX(SNAP_SIZE);
       } else if (rotation === Rotation.Right) {
         this.position.addX(otherWorldBox.min.x - selfWorldBox.max.x);
-        this.position.snapX(config.TILE_SIZE_SMALL);
+        this.position.snapX(SNAP_SIZE);
       }
 
       // Make sure to update collider
@@ -302,12 +303,10 @@ export class Tank extends GameObject {
     //   user will be stuck on corners
 
     if (rotation !== this.rotation) {
-      const alignSize = config.TILE_SIZE_MEDIUM;
-
       if (rotation === Rotation.Up || rotation === Rotation.Down) {
-        this.position.snapX(alignSize);
+        this.position.snapX(SNAP_SIZE);
       } else if (rotation === Rotation.Left || rotation === Rotation.Right) {
-        this.position.snapY(alignSize);
+        this.position.snapY(SNAP_SIZE);
       }
     }
 

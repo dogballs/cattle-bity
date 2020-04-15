@@ -1,6 +1,6 @@
 import { EnemyTank, PlayerTank } from '../gameObjects';
 
-import { AiTankBehavior, PlayerTankBehavior } from './behaviors';
+import { StandStillTankBehavior, PlayerTankBehavior } from './behaviors';
 import { TankBehavior } from './TankBehavior';
 import { TankType } from './TankType';
 
@@ -18,7 +18,7 @@ export class TankFactory {
 
   public static createEnemy(
     type: TankType = TankType.EnemyA(),
-    behavior: TankBehavior = new AiTankBehavior(),
+    behavior: TankBehavior = new StandStillTankBehavior(),
   ): EnemyTank {
     return new EnemyTank(type, behavior);
   }
