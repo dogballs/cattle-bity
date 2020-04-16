@@ -1,6 +1,7 @@
 import { Scene, Sound } from '../../core';
 import { AudioManager, GameUpdateArgs } from '../../game';
 import { PlayerTank, VictoryHeading, VictoryMap } from '../../gameObjects';
+import { MenuInputContext } from '../../input';
 import { TankFactory, TankType, VictoryTankBehavior } from '../../tank';
 
 import { GameSceneType } from '../GameSceneType';
@@ -45,7 +46,12 @@ export class MainVictoryScene extends Scene {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { collisionSystem } = updateArgs;
+    const { collisionSystem, input } = updateArgs;
+
+    if (input.isDownAny(MenuInputContext.Skip)) {
+      this.finish();
+      return;
+    }
 
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
@@ -79,12 +85,16 @@ export class MainVictoryScene extends Scene {
 
   private handleVictorySoundEnded = (): void => {
     if (this.victoryPlays >= VICTORY_PLAYS) {
-      this.audioManager.stopAll();
-      this.navigator.clearAndPush(GameSceneType.MainHighscore);
+      this.finish();
       return;
     }
 
     this.victorySound.play();
     this.victoryPlays += 1;
   };
+
+  private finish(): void {
+    this.audioManager.stopAll();
+    this.navigator.clearAndPush(GameSceneType.MainHighscore);
+  }
 }

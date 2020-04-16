@@ -5,7 +5,6 @@ Game logic
 - ice tiles
 - movement collision between tanks
 - input context hints
-- editor playtest
 - prevent accidental page reload
 
 Maps

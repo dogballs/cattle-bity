@@ -82,6 +82,7 @@ export class ModesCustomScene extends Scene {
   };
 
   private handleBackSelected = (): void => {
+    this.mapLoader.restoreDefaultReader();
     this.navigator.back();
   };
 }

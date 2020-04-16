@@ -18,7 +18,7 @@ export class State<T> {
     return this;
   }
 
-  public tick(): this {
+  public update(): this {
     this.previousValue = this.value;
     this.value = this.value;
 
@@ -29,8 +29,16 @@ export class State<T> {
     return this.value === value;
   }
 
+  public not(value): boolean {
+    return this.value !== value;
+  }
+
   public hasChangedTo(toValue: T): boolean {
     return this.value !== this.previousValue && this.value === toValue;
+  }
+
+  public hasChangedFrom(fromValue: T): boolean {
+    return this.previousValue === fromValue;
   }
 
   public hasChangedFromTo(fromValue: T, toValue: T): boolean {

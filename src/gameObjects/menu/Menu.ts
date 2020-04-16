@@ -58,7 +58,8 @@ export class Menu extends GameObject {
   }
 
   public showCursor(): void {
-    this.cursor.visible = true;
+    // Reset to default so it could be overriden by parent visibility
+    this.cursor.visible = null;
   }
 
   public reset(): void {

@@ -63,6 +63,11 @@ export class LevelScoreScene extends Scene {
   };
 
   private handlePost = (): void => {
+    if (this.session.isPlaytest()) {
+      this.navigator.replace(GameSceneType.EditorMenu);
+      return;
+    }
+
     if (this.session.isGameOver()) {
       this.navigator.replace(GameSceneType.MainGameOver);
       return;

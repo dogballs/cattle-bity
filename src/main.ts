@@ -142,7 +142,7 @@ gameLoop.tick.addListener((event) => {
 
   gameRenderer.render(scene.getRoot());
 
-  gameState.tick();
+  gameState.update();
 
   stats.end();
 });

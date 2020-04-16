@@ -1,5 +1,5 @@
 import { FileOpener, FileSaver, Scene } from '../../core';
-import { GameUpdateArgs } from '../../game';
+import { GameUpdateArgs, Session } from '../../game';
 import {
   AlertModal,
   ConfirmModal,
@@ -8,7 +8,12 @@ import {
   SceneMenuTitle,
   TextMenuItem,
 } from '../../gameObjects';
-import { MapConfig, MapFileReader } from '../../map';
+import {
+  MapConfig,
+  MapFileReader,
+  MapLoader,
+  MemoryMapListReader,
+} from '../../map';
 
 import { GameSceneType } from '../GameSceneType';
 
@@ -26,6 +31,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
   private newItem: TextMenuItem;
   private loadItem: TextMenuItem;
   private saveItem: TextMenuItem;
+  private playtestItem: TextMenuItem;
   private mapItem: TextMenuItem;
   private enemyItem: TextMenuItem;
   private exitItem: TextMenuItem;
@@ -34,12 +40,25 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
   private mapConfig: MapConfig = null;
   private menuState = MenuState.Navigation;
   private loadState = EditorLoadState.None;
+  private session: Session;
+  private mapLoader: MapLoader;
 
-  protected setup(): void {
+  protected setup({ mapLoader, session }: GameUpdateArgs): void {
+    this.session = session;
+    this.mapLoader = mapLoader;
+
     // In case we are coming back from other editor scene
     if (this.params.mapConfig !== undefined) {
       this.mapConfig = this.params.mapConfig;
       this.loadState = this.params.loadState ?? EditorLoadState.Draft;
+    }
+
+    // If coming from playtest, go back to state which has map remembered
+    if (this.session.isPlaytest() && this.mapConfig === null) {
+      this.session.resetExceptIntro();
+      this.mapLoader.restoreDefaultReader();
+      this.navigator.back();
+      return;
     }
 
     this.title = new SceneMenuTitle(this.getTitleText());
@@ -54,6 +73,10 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
     this.saveItem = new TextMenuItem('SAVE');
     this.saveItem.selected.addListener(this.handleSaveSelected);
     this.saveItem.focusable = false;
+
+    this.playtestItem = new TextMenuItem('PLAYTEST');
+    this.playtestItem.selected.addListener(this.handlePlaytestSelected);
+    this.playtestItem.focusable = false;
 
     this.mapItem = new TextMenuItem('EDIT → MAP');
     this.mapItem.selected.addListener(this.handleMapSelected);
@@ -73,6 +96,8 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
       new DividerMenuItem(),
       this.mapItem,
       this.enemyItem,
+      new DividerMenuItem(),
+      this.playtestItem,
       new DividerMenuItem(),
       this.exitItem,
     ];
@@ -136,6 +161,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
     this.saveItem.focusable = this.isLoaded();
     this.mapItem.focusable = this.isLoaded();
     this.enemyItem.focusable = this.isLoaded();
+    this.playtestItem.focusable = this.isLoaded();
   }
 
   private createLocationParams(): EditorLocationParams {
@@ -201,6 +227,19 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
     const fileSaver = new FileSaver();
 
     fileSaver.saveJSON(json, fileName);
+  };
+
+  private handlePlaytestSelected = (): void => {
+    // Navigate to itself, but with remembered params. When coming back from
+    // playtest we will end up here with remembered state.
+    this.navigator.push(GameSceneType.EditorMenu, this.createLocationParams());
+
+    const memoryMapListReader = new MemoryMapListReader([this.mapConfig]);
+    this.mapLoader.setListReader(memoryMapListReader);
+
+    this.session.setPlaytest();
+
+    this.navigator.push(GameSceneType.LevelLoad);
   };
 
   private handleMapSelected = (): void => {

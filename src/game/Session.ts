@@ -14,6 +14,7 @@ export class Session {
   private startLevelNumber: number;
   private endLevelNumber: number;
   private currentLevelNumber: number;
+  private playtest: boolean;
   private state: State;
 
   constructor() {
@@ -37,6 +38,17 @@ export class Session {
     this.currentLevelNumber = 1;
     this.endLevelNumber = 1;
     this.state = State.Idle;
+    this.playtest = false;
+
+    this.primaryPlayer.reset();
+  }
+
+  public resetExceptIntro(): void {
+    this.startLevelNumber = 1;
+    this.currentLevelNumber = 1;
+    this.endLevelNumber = 1;
+    this.state = State.Idle;
+    this.playtest = false;
 
     this.primaryPlayer.reset();
   }
@@ -81,5 +93,17 @@ export class Session {
 
   public haveSeenIntro(): boolean {
     return this.seenIntro;
+  }
+
+  public setPlaytest(): void {
+    this.playtest = true;
+  }
+
+  public resetPlaytest(): void {
+    this.playtest = false;
+  }
+
+  public isPlaytest(): boolean {
+    return this.playtest;
   }
 }
