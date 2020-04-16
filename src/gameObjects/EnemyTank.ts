@@ -1,11 +1,13 @@
 import { Sound } from '../core';
 import { GameUpdateArgs, GameState, Tag } from '../game';
 import { TankColor, TankSkinAnimation, TankTier } from '../tank';
+import * as config from '../config';
 
 import { Tank } from './Tank';
 
 export class EnemyTank extends Tank {
   public tags = [Tag.Tank, Tag.Enemy];
+  public zIndex = config.ENEMY_TANK_Z_INDEX;
   private healthSkinAnimations = new Map<number, TankSkinAnimation>();
   private hitSound: Sound;
 

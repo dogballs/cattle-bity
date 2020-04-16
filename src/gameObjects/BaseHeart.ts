@@ -8,12 +8,13 @@ import {
 } from '../core';
 import { GameUpdateArgs, Tag } from '../game';
 import { Bullet, Explosion } from '../gameObjects';
+import * as config from '../config';
 
 export class BaseHeart extends GameObject {
   public collider = new BoxCollider(this, true);
-  // Tank can't move on top of it
   public tags = [Tag.BlockMove];
   public painter = new SpritePainter();
+  public zIndex = config.BASE_HEART_Z_INDEX;
   public died = new Subject();
   private isDead = false;
   private aliveSprite: Sprite;

@@ -26,7 +26,7 @@ Project is not commercial and was created for learning purposes only.
 ## Possible improvements
 
 - 2 player mode
-- Original 35+ levels
+- Original 25+ levels
 - Demo level with AI when main menu is idle
 - Extended level editing
   - Customize player and enemy spawn positions

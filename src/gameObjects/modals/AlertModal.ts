@@ -19,7 +19,7 @@ const DEFAULT_OPTIONS: AlertModalOptions = {
 export class AlertModal extends GameObject {
   public painter = new RectPainter(config.COLOR_BACKDROP);
   public accepted = new Subject();
-  public zIndex = 9;
+  public zIndex = config.ALERT_MODAL_Z_INDEX;
   private options: AlertModalOptions;
   private container: GameObject;
   private text: SpriteText = null;

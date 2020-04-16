@@ -7,9 +7,10 @@ import {
   Subject,
 } from './../core';
 import { GameUpdateArgs } from '../game';
+import * as config from '../config';
 
 export class Explosion extends GameObject {
-  public zIndex = 5;
+  public zIndex = config.LARGE_EXPLOSION_Z_INDEX;
   public readonly painter = new SpritePainter();
   public readonly completed = new Subject();
   private animation: Animation<Sprite>;

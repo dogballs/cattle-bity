@@ -6,6 +6,7 @@ Game logic
 - movement collision between tanks
 - input context hints
 - editor playtest
+- prevent accidental page reload
 
 Maps
 
@@ -17,7 +18,7 @@ Build
 
 Bugs
 
--
+- ice blocks move on level 2
 
 Other
 

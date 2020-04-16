@@ -1,9 +1,10 @@
 import { Animation, GameObject, Sprite, SpritePainter } from '../core';
 import { GameUpdateArgs, GameState } from '../game';
+import * as config from '../config';
 
 export class Shield extends GameObject {
   public ignorePause = true;
-  public zIndex = 2;
+  public zIndex = config.SHIELD_Z_INDEX;
   public painter = new SpritePainter();
   private animation: Animation<Sprite>;
 

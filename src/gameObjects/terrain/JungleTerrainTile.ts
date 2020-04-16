@@ -8,7 +8,7 @@ import { TerrainTile } from '../TerrainTile';
 export class JungleTerrainTile extends TerrainTile {
   public type = TerrainType.Jungle;
   public readonly painter = new SpritePainter();
-  public zIndex = 4;
+  public zIndex = config.JUNGLE_TILE_Z_INDEX;
 
   constructor() {
     super(config.JUNGLE_TILE_SIZE, config.JUNGLE_TILE_SIZE);

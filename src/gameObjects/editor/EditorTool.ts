@@ -103,8 +103,6 @@ export class EditorTool extends GameObject {
       return contact.collider.object.tags.includes(Tag.EditorBlockMove);
     });
 
-    console.log(blockMoveContacts);
-
     if (blockMoveContacts.length > 0) {
       this.position.sub(this.velocity);
     }

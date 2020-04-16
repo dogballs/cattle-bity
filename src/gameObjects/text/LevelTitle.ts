@@ -1,3 +1,5 @@
+import * as config from '../../config';
+
 import { SpriteText, SpriteTextOptions } from './SpriteText';
 
 export class LevelTitle extends SpriteText {
@@ -5,7 +7,7 @@ export class LevelTitle extends SpriteText {
     const text = LevelTitle.getLevelText(levelNumber);
     super(text, options);
 
-    this.zIndex = 9;
+    this.zIndex = config.LEVEL_TITLE_Z_INDEX;
   }
 
   public setLevelNumber(levelNumber: number): void {

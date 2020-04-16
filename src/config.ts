@@ -107,3 +107,27 @@ export const MENU_DEFAULT_POSITION = {
   x: 16,
   y: 192,
 };
+
+export const BRICK_TILE_Z_INDEX = 0;
+export const STEEL_TILE_Z_INDEX = 0;
+export const WATER_TILE_Z_INDEX = 0;
+export const ICE_TILE_Z_INDEX = 0;
+export const BORDER_WALL_Z_INDEX = 0;
+export const BASE_HEART_Z_INDEX = 0;
+export const ENEMY_TANK_Z_INDEX = 1;
+export const BULLET_Z_INDEX = 2;
+export const PLAYER_TANK_Z_INDEX = 2;
+export const SHIELD_Z_INDEX = 3;
+export const SMALL_EXPLOSION_Z_INDEX = 4;
+export const SPAWN_Z_INDEX = 4;
+export const JUNGLE_TILE_Z_INDEX = 5;
+export const LARGE_EXPLOSION_Z_INDEX = 6;
+export const POWERUP_Z_INDEX = 7;
+export const POINTS_Z_INDEX = 7;
+export const PAUSE_NOTICE_Z_INDEX = 8;
+export const GAME_OVER_NOTICE_Z_INDEX = 8;
+export const CURTAIN_Z_INDEX = 9;
+export const LEVEL_TITLE_Z_INDEX = 10;
+export const ALERT_MODAL_Z_INDEX = 11;
+export const DEBUG_COLLISION_RECT_Z_INDEX = 20;
+export const DEBUG_GRID_Z_INDEX = 21;

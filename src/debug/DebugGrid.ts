@@ -1,7 +1,8 @@
 import { GameObject, LinePainter, RectPainter, Vector } from '../core';
+import * as config from '../config';
 
 export class DebugGrid extends GameObject {
-  public zIndex = 100;
+  public zIndex = config.DEBUG_GRID_Z_INDEX;
   private step: number;
   private highlightedCells: GameObject[] = [];
 

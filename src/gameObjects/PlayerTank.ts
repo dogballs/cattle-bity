@@ -7,12 +7,14 @@ import {
   TankType,
   TankAttributesFactory,
 } from '../tank';
+import * as config from '../config';
 
 import { Tank } from './Tank';
 
 export class PlayerTank extends Tank {
   public upgraded = new Subject<{ tier: TankTier }>();
   public tags = [Tag.Tank, Tag.Player];
+  public zIndex = config.PLAYER_TANK_Z_INDEX;
   private tierSkinAnimations = new Map<TankTier, TankSkinAnimation>();
   private colors: TankColor[] = [TankColor.Primary];
 

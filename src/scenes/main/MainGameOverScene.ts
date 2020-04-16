@@ -1,6 +1,7 @@
 import { Scene, Timer } from '../../core';
-import { GameUpdateArgs } from '../../game';
+import { AudioManager, GameUpdateArgs } from '../../game';
 import { GameOverHeading } from '../../gameObjects';
+import { MenuInputContext } from '../../input';
 
 import { GameSceneType } from '../GameSceneType';
 
@@ -9,8 +10,11 @@ const SCENE_DURATION = 3;
 export class MainGameOverScene extends Scene {
   private heading = new GameOverHeading();
   private timer = new Timer(SCENE_DURATION);
+  private audioManager: AudioManager;
 
-  protected setup({ audioLoader }: GameUpdateArgs): void {
+  protected setup({ audioManager }: GameUpdateArgs): void {
+    this.audioManager = audioManager;
+
     this.timer.done.addListener(this.handleDone);
 
     this.heading.origin.set(0.5, 0.5);
@@ -18,10 +22,17 @@ export class MainGameOverScene extends Scene {
     this.heading.position.addY(-32);
     this.root.add(this.heading);
 
-    audioLoader.load('game-over').play();
+    this.audioManager.play('game-over');
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
+    const { input } = updateArgs;
+
+    if (input.isDownAny(MenuInputContext.Skip)) {
+      this.finish();
+      return;
+    }
+
     this.root.traverseDescedants((child) => {
       child.invokeUpdate(updateArgs);
     });
@@ -30,6 +41,11 @@ export class MainGameOverScene extends Scene {
   }
 
   private handleDone = (): void => {
-    this.navigator.clearAndPush(GameSceneType.MainHighscore);
+    this.finish();
   };
+
+  private finish(): void {
+    this.audioManager.stopAll();
+    this.navigator.clearAndPush(GameSceneType.MainHighscore);
+  }
 }

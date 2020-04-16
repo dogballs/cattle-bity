@@ -9,6 +9,7 @@ import {
 } from '../core';
 import { GameUpdateArgs, Rotation, RotationMap, Tag } from '../game';
 import { TankBulletWallDamage } from '../tank';
+import * as config from '../config';
 
 import { SmallExplosion } from './SmallExplosion';
 import { TerrainTileDestroyer } from './TerrainTileDestroyer';
@@ -16,7 +17,7 @@ import { TerrainTileDestroyer } from './TerrainTileDestroyer';
 export class Bullet extends GameObject {
   public collider = new SweptBoxCollider(this, true);
   public painter = new SpritePainter();
-  public zIndex = 1;
+  public zIndex = config.BULLET_Z_INDEX;
   public tankDamage: number;
   public wallDamage: number;
   public speed: number;

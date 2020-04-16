@@ -20,23 +20,40 @@ const DEFAULT_OPTIONS = {
   fps: 60,
 };
 
+enum State {
+  Idle,
+  Working,
+  StopRequested,
+}
+
 export class GameLoop {
   public readonly tick = new Subject<GameLoopTickEvent>();
   private options: GameLoopOptions;
   private lastTimestamp = null;
   private requestedStop = false;
+  private state = State.Idle;
 
   constructor(options: GameLoopOptions = {}) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
   }
 
   public start(): void {
+    if (this.state !== State.Idle) {
+      return;
+    }
+
+    this.state = State.Working;
+
     this.loop();
   }
 
   // WARNING: a couple of already queued callbacks might still fire after stop
   public stop(): void {
-    this.requestedStop = true;
+    if (this.state !== State.Working) {
+      return;
+    }
+
+    this.state = State.StopRequested;
   }
 
   // For manual stepping over frames when loop is paused
@@ -47,8 +64,12 @@ export class GameLoop {
   }
 
   private loop = (timestamp = null): void => {
-    if (this.requestedStop === true) {
-      this.requestedStop = false;
+    if (this.state === State.Idle) {
+      return;
+    }
+
+    if (this.state === State.StopRequested) {
+      this.state = State.Idle;
       return;
     }
 

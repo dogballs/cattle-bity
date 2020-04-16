@@ -37,7 +37,7 @@ const SNAP_SIZE = config.TILE_SIZE_MEDIUM;
 export class Tank extends GameObject {
   public collider = new SweptBoxCollider(this, true);
   public tags = [Tag.Tank];
-  public zIndex = 1;
+  public zIndex = config.PLAYER_TANK_Z_INDEX;
   public type: TankType;
   public behavior: TankBehavior;
   public attributes: TankAttributes;

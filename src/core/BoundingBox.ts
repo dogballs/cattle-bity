@@ -29,6 +29,10 @@ export class BoundingBox {
     return size;
   }
 
+  public equals(other: BoundingBox): boolean {
+    return this.min.equals(other.min) && this.max.equals(other.max);
+  }
+
   public distanceCenterToCenter(other: BoundingBox): number {
     return this.getCenter().distanceTo(other.getCenter());
   }

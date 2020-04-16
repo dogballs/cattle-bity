@@ -1,12 +1,13 @@
 import { GameObject, SpritePainter, Timer } from '../core';
 import { GameUpdateArgs } from '../game';
 import { PointsValue } from '../points';
+import * as config from '../config';
 
 const SPRITE_POINTS_PREFIX = 'points';
 const SPRITE_ID_SEPARATOR = '.';
 
 export class Points extends GameObject {
-  public zIndex = 6;
+  public zIndex = config.POINTS_Z_INDEX;
   public readonly value: PointsValue;
   public readonly painter = new SpritePainter();
   private readonly timer = new Timer();

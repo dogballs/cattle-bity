@@ -4,6 +4,7 @@ import {
   GameObject,
   RectPainter,
 } from '../../core';
+import * as config from '../../config';
 
 import { DebugMenu, DebugMenuOptions } from '../DebugMenu';
 
@@ -75,7 +76,7 @@ export class DebugCollisionMenu extends DebugMenu {
     const rect = box.toRect();
     const item = new GameObject(rect.width, rect.height);
     item.position.set(rect.x, rect.y);
-    item.zIndex = 20;
+    item.zIndex = config.DEBUG_COLLISION_RECT_Z_INDEX;
     item.painter = new RectPainter(null, color);
     return item;
   }

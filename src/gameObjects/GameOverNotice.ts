@@ -1,8 +1,9 @@
 import { GameObject, SpritePainter } from '../core';
 import { GameUpdateArgs } from '../game';
+import * as config from '../config';
 
 export class GameOverNotice extends GameObject {
-  public zIndex = 7;
+  public zIndex = config.GAME_OVER_NOTICE_Z_INDEX;
   public readonly painter = new SpritePainter();
 
   constructor() {

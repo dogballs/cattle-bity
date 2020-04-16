@@ -7,6 +7,10 @@ export class State<T> {
     this.previousValue = null;
   }
 
+  public get(): T {
+    return this.value;
+  }
+
   public set(newValue: T): this {
     this.previousValue = this.value;
     this.value = newValue;

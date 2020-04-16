@@ -11,6 +11,7 @@ import { TerrainTile } from '../TerrainTile';
 export class BrickTerrainTile extends TerrainTile {
   public type = TerrainType.Brick;
   public collider = new BoxCollider(this);
+  public zIndex = config.BRICK_TILE_Z_INDEX;
   public readonly tags = [Tag.Wall, Tag.Brick];
   public readonly painter = new SpritePainter();
   protected sprites: Sprite[];

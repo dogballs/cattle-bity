@@ -9,11 +9,12 @@ import {
 } from '../core';
 import { GameUpdateArgs, Tag } from '../game';
 import { PowerupType } from '../powerup';
+import * as config from '../config';
 
 const PICKUP_MIN_INTERSECTION_SIZE = 16;
 
 export class Powerup extends GameObject {
-  public zIndex = 6;
+  public zIndex = config.POWERUP_Z_INDEX;
   public collider = new BoxCollider(this, true);
   public painter = new SpritePainter();
   public ignorePause = true;

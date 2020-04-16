@@ -7,9 +7,10 @@ import {
   Subject,
 } from '../core';
 import { GameUpdateArgs } from '../game';
+import * as config from '../config';
 
 export class Spawn extends GameObject {
-  public zIndex = 3;
+  public zIndex = config.SPAWN_Z_INDEX;
   public painter = new SpritePainter();
   public completed = new Subject();
   private animation: Animation<Sprite>;

@@ -8,6 +8,7 @@ import { TerrainTile } from '../TerrainTile';
 export class SteelTerrainTile extends TerrainTile {
   public type = TerrainType.Steel;
   public collider = new BoxCollider(this);
+  public zIndex = config.STEEL_TILE_Z_INDEX;
   public tags = [Tag.Wall, Tag.Steel, Tag.BlockMove];
   public readonly painter = new SpritePainter();
 
