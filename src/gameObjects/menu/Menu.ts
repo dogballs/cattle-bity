@@ -37,6 +37,7 @@ export class Menu extends GameObject {
     this.items = items;
     // TODO: dynamic width and height
     this.size.set(480, items.length * this.options.itemHeight);
+    this.updateMatrix();
 
     this.removeAllChildren();
 
@@ -104,6 +105,7 @@ export class Menu extends GameObject {
     this.showCursor();
 
     this.cursor.position.setY(this.cursor.size.height * this.focusedIndex);
+    this.cursor.updateMatrix();
 
     this.focused.notify(this.focusedIndex);
 

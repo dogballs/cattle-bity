@@ -51,6 +51,7 @@ export class ScoreTable extends GameObject {
 
     TIERS.forEach((tier, index) => {
       const icon = new ScoreTableTierIcon(tier);
+      icon.updateMatrix();
       icon.setCenter(this.getSelfCenter());
       icon.position.setY(136 + 100 * index);
       this.add(icon);
@@ -64,6 +65,7 @@ export class ScoreTable extends GameObject {
       this.add(counter);
     });
 
+    this.underline.updateMatrix();
     this.underline.setCenter(this.getSelfCenter());
     this.underline.position.setY(504);
     this.add(this.underline);

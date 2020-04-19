@@ -98,6 +98,11 @@ export class LevelLoadScene extends Scene {
   }
 
   private handleAlertAccepted = (): void => {
+    if (this.session.isPlaytest()) {
+      this.navigator.replace(GameSceneType.EditorMenu);
+      return;
+    }
+
     // If level failed to load it might be last level, but it also might
     // be the only level. Check if user has any points to identify if user
     // has played at all.

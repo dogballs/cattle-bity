@@ -39,6 +39,9 @@ export class Transform extends Node {
   public boundingBox = new BoundingBox();
   public worldBoundingBox = new BoundingBox();
 
+  public matrixAutoUpdate = false;
+  public worldMatrixNeedsUpdate = false;
+
   constructor(width = 0, height = 0) {
     super();
 
@@ -65,10 +68,8 @@ export class Transform extends Node {
 
     // Revert all world transformations of self (new parent) from the target,
     // so target's local matrix will now be relative to a new parent.
+    target.updateMatrix();
     target.applyMatrix3(invSelfWorldTransformMatrix);
-
-    // Update target's world matrix, because it's local matrix has been updated
-    target.updateWorldMatrix();
 
     this.add(target);
 
@@ -76,7 +77,9 @@ export class Transform extends Node {
   }
 
   public applyMatrix3(transformMatrix: Matrix3): void {
-    this.updateMatrix();
+    if (this.matrixAutoUpdate) {
+      this.updateMatrix();
+    }
 
     this.matrix.multiply(transformMatrix);
 
@@ -135,24 +138,18 @@ export class Transform extends Node {
   }
 
   public setCenter(v: Vector): void {
-    this.updateMatrix();
-
     const size = this.getBoundingBox().getSize();
 
     this.position.set(v.x - size.width / 2, v.y - size.height / 2);
   }
 
   public setCenterX(x: number): void {
-    this.updateMatrix();
-
     const size = this.getBoundingBox().getSize();
 
     this.position.setX(x - size.width / 2);
   }
 
   public setCenterY(y: number): void {
-    this.updateMatrix();
-
     const size = this.getBoundingBox().getSize();
 
     this.position.setY(y - size.height / 2);
@@ -163,10 +160,16 @@ export class Transform extends Node {
   }
 
   public getBoundingBox(): BoundingBox {
+    if (this.matrixAutoUpdate) {
+      this.updateMatrix();
+    }
+
     return this.boundingBox;
   }
 
   public getWorldBoundingBox(): BoundingBox {
+    this.updateWorldMatrix(true);
+
     return this.worldBoundingBox;
   }
 
@@ -203,9 +206,7 @@ export class Transform extends Node {
     return points;
   }
 
-  // TODO: dirty flag
-
-  public updateMatrix(): void {
+  public updateMatrix(childrenNeedUpdate = false): void {
     const transformMatrix = this.composeTransformMatrix(
       this.getPivotOffset(),
       this.getOriginOffset(),
@@ -215,6 +216,18 @@ export class Transform extends Node {
     this.matrix.copyFrom(transformMatrix);
 
     this.boundingBox.fromPoints(this.getPoints());
+
+    this.setWorldMatrixNeedsUpdate(childrenNeedUpdate);
+  }
+
+  public setWorldMatrixNeedsUpdate(updateChildren = false): void {
+    this.worldMatrixNeedsUpdate = true;
+
+    if (updateChildren) {
+      for (const child of this.children) {
+        child.setWorldMatrixNeedsUpdate(updateChildren);
+      }
+    }
   }
 
   public updateWorldMatrix(
@@ -229,16 +242,22 @@ export class Transform extends Node {
     }
 
     // Update current node local matrix
-    this.updateMatrix();
-
-    // Update current node world matrix
-    if (this.parent === null) {
-      this.worldMatrix.copyFrom(this.matrix);
-    } else {
-      this.worldMatrix.multiplyMatrices(this.matrix, this.parent.worldMatrix);
+    if (this.matrixAutoUpdate) {
+      this.updateMatrix();
     }
 
-    this.worldBoundingBox.fromPoints(this.getWorldPoints());
+    if (this.worldMatrixNeedsUpdate) {
+      // Update current node world matrix
+      if (this.parent === null) {
+        this.worldMatrix.copyFrom(this.matrix);
+      } else {
+        this.worldMatrix.multiplyMatrices(this.matrix, this.parent.worldMatrix);
+      }
+
+      this.worldBoundingBox.fromPoints(this.getWorldPoints());
+
+      this.worldMatrixNeedsUpdate = false;
+    }
 
     // Goes down the tree and updates all children local and world matrix
     if (updateChildren === true) {

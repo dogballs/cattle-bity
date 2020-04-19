@@ -62,7 +62,7 @@ export class VictoryMap extends GameObject {
     // Whenever tank destroys first tile - the whole show begins
     this.shouldDestroy = true;
 
-    let explosion;
+    let explosion: Explosion | SmallExplosion;
 
     if (RandomUtils.number(0, 2) === 0) {
       explosion = new Explosion();
@@ -70,6 +70,7 @@ export class VictoryMap extends GameObject {
       explosion = new SmallExplosion();
     }
 
+    explosion.updateMatrix();
     explosion.setCenter(event.centerPosition);
     this.add(explosion);
 

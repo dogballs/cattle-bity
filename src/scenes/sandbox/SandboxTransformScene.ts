@@ -24,18 +24,6 @@ export class SandboxTransformScene extends Scene {
 
     this.root.add(this.parent);
     this.parent.add(this.child);
-
-    // const tank4 = new TestTank(TankColor.Secondary, TankColor.Primary);
-    // tank4.position.set(260, 20);
-    // this.root.add(tank4);
-
-    // const tank5 = new TestTank(TankColor.Default, TankColor.Danger);
-    // tank5.position.set(340, 20);
-    // this.root.add(tank5);
-
-    // const tank6 = new TestTank(TankColor.Danger, TankColor.Primary);
-    // tank6.position.set(420, 20);
-    // this.root.add(tank6);
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
@@ -44,6 +32,7 @@ export class SandboxTransformScene extends Scene {
     if (input.isDown(InputControl.Select)) {
       this.angle += 90;
       this.child.rotate(this.angle);
+      this.child.updateMatrix();
     }
 
     this.root.traverseDescedants((child) => {

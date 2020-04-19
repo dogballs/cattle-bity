@@ -32,6 +32,7 @@ export class ScoreTableTierIcon extends GameObject {
     const painter = new SpritePainter();
     painter.sprite = sprite;
     this.tank.painter = painter;
+    this.tank.updateMatrix();
     this.tank.setCenter(this.getSelfCenter());
     this.add(this.tank);
 

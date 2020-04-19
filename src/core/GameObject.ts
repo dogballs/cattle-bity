@@ -15,6 +15,7 @@ export class GameObject extends RenderObject {
     if (this.needsSetup === true) {
       this.needsSetup = false;
       this.setup(...args);
+      this.updateMatrix();
     }
 
     this.update(...args);

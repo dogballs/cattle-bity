@@ -13,6 +13,7 @@ export class DebugGameLoopMenu extends DebugMenu {
     this.appendButton('Start', this.handleStart);
     this.appendButton('Stop', this.handleStop);
     this.appendButton('Next frame', this.handleNextFrame);
+    this.appendButton('Next 10 frames', this.handleNextFrame10);
   }
 
   private handleStart = (): void => {
@@ -25,5 +26,9 @@ export class DebugGameLoopMenu extends DebugMenu {
 
   private handleNextFrame = (): void => {
     this.gameLoop.next();
+  };
+
+  private handleNextFrame10 = (): void => {
+    this.gameLoop.next(10);
   };
 }

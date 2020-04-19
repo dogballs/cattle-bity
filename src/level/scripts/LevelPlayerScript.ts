@@ -79,7 +79,9 @@ export class LevelPlayerScript extends LevelScript {
     }
 
     const tank = TankFactory.createPlayer();
+    tank.updateMatrix();
     tank.setCenter(event.centerPosition);
+    tank.updateMatrix();
     tank.activateShield(config.SHIELD_SPAWN_DURATION);
 
     // Check if tank tier from previous level should be activated.

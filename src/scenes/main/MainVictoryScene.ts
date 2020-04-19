@@ -29,6 +29,7 @@ export class MainVictoryScene extends Scene {
     this.root.add(this.map);
 
     this.heading = new VictoryHeading();
+    this.heading.updateMatrix();
     this.heading.origin.set(0.5, 0.5);
     this.heading.setCenterX(this.root.getSelfCenter().x);
     this.heading.position.setY(256);
@@ -37,6 +38,7 @@ export class MainVictoryScene extends Scene {
     this.behavior.stopped.addListener(this.handleStopped);
 
     this.tank = TankFactory.createPlayer(TankType.PlayerA(), this.behavior);
+    this.tank.updateMatrix();
     this.tank.setCenterX(this.root.getSelfCenter().x);
     this.tank.position.setY(this.root.size.height + 300);
     this.tank.fired.addListener(this.handleTankFired);

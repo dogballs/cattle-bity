@@ -11,4 +11,8 @@ export class BorderWall extends GameObject {
   protected setup({ collisionSystem }: GameUpdateArgs): void {
     collisionSystem.register(this.collider);
   }
+
+  protected update(): void {
+    this.collider.update();
+  }
 }

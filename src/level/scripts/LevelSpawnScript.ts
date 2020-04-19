@@ -21,6 +21,7 @@ export class LevelSpawnScript extends LevelScript {
   ): void => {
     const spawn = new Spawn();
     spawn.position.copyFrom(event.position);
+    spawn.updateMatrix();
     spawn.completed.addListenerOnce(() => {
       this.eventBus.enemySpawnCompleted.notify({
         type: event.type,
@@ -36,6 +37,7 @@ export class LevelSpawnScript extends LevelScript {
   ): void => {
     const spawn = new Spawn();
     spawn.position.copyFrom(event.position);
+    spawn.updateMatrix();
     spawn.completed.addListenerOnce(() => {
       this.eventBus.playerSpawnCompleted.notify({
         type: event.type,

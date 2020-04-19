@@ -99,14 +99,22 @@ export class MainMenuScene extends Scene {
     const { deltaTime, input } = updateArgs;
 
     if (this.state === State.Sliding) {
-      this.group.position.y -= SLIDE_SPEED * deltaTime;
+      let nextPosition = this.group.position.y - SLIDE_SPEED * deltaTime;
+      if (nextPosition <= 0) {
+        nextPosition = 0;
+      }
 
-      const hasReachedTop = this.group.position.y <= 0;
       const isSkipped = input.isDownAny(MenuInputContext.Skip);
-      const isReady = hasReachedTop || isSkipped;
+      if (isSkipped) {
+        nextPosition = 0;
+      }
 
-      if (isReady) {
-        this.group.position.y = 0;
+      const hasReachedTop = nextPosition === 0;
+
+      this.group.position.setY(nextPosition);
+      this.group.updateMatrix(true);
+
+      if (hasReachedTop) {
         this.state = State.Ready;
         this.menu.showCursor();
         this.session.setSeenIntro(true);

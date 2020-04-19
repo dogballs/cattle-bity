@@ -16,30 +16,30 @@ export class RectPainter extends Painter {
     context: CanvasRenderingContext2D,
     renderObject: RenderObject,
   ): void {
-    // const { min, max } = RenderObject.getWorldBoundingBox();
+    const { min, max } = renderObject.getWorldBoundingBox();
 
-    const points = renderObject.getWorldPoints();
-    if (points.length === 0) {
-      return;
-    }
+    // const points = renderObject.getWorldPoints();
+    // if (points.length === 0) {
+    //   return;
+    // }
 
-    const [firstPoint, ...restPoints] = points;
+    // const [firstPoint, ...restPoints] = points;
 
-    context.beginPath();
-    context.moveTo(firstPoint.x, firstPoint.y);
-    for (const point of restPoints) {
-      context.lineTo(point.x, point.y);
-    }
-    context.closePath();
+    // context.beginPath();
+    // context.moveTo(firstPoint.x, firstPoint.y);
+    // for (const point of restPoints) {
+    //   context.lineTo(point.x, point.y);
+    // }
+    // context.closePath();
 
     if (this.fillColor !== null) {
       context.fillStyle = this.fillColor;
-      context.fill();
+      context.fillRect(min.x, min.y, max.x - min.x, max.y - min.y);
     }
 
     if (this.strokeColor !== null) {
       context.strokeStyle = this.strokeColor;
-      context.stroke();
+      context.strokeRect(min.x, min.y, max.x - min.x, max.y - min.y);
     }
   }
 }

@@ -21,12 +21,14 @@ export class LevelPointsScript extends LevelScript {
     const value = this.getEnemyTankPointsValue(event.type);
 
     const points = new Points(value, config.POINTS_ENEMY_TANK_DURATION);
+    points.updateMatrix();
     points.setCenter(event.centerPosition);
     this.world.field.add(points);
   };
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
     const points = new Points(PointsValue.V500, config.POINTS_POWERUP_DURATION);
+    points.updateMatrix();
     points.setCenter(event.centerPosition);
     this.world.field.add(points);
   };

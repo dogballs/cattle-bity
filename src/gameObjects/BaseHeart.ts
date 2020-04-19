@@ -32,6 +32,7 @@ export class BaseHeart extends GameObject {
     this.isDead = true;
 
     const explosion = new Explosion();
+    explosion.updateMatrix();
     explosion.setCenter(this.getSelfCenter());
     this.add(explosion);
 

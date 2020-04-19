@@ -8,7 +8,6 @@ export class BoxCollider extends Collider {
   private currentBox: BoundingBox;
 
   public init(): void {
-    this.object.updateWorldMatrix();
     const box = this.object.getWorldBoundingBox();
 
     this.prevBox = box.clone();
@@ -16,7 +15,6 @@ export class BoxCollider extends Collider {
   }
 
   public update(): void {
-    this.object.updateWorldMatrix();
     const box = this.object.getWorldBoundingBox();
 
     this.prevBox = this.currentBox;

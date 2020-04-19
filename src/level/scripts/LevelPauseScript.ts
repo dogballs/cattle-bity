@@ -9,6 +9,7 @@ export class LevelPauseScript extends LevelScript {
 
   protected setup(): void {
     this.notice = new PauseNotice();
+    this.notice.updateMatrix();
     this.notice.setCenter(this.world.field.getSelfCenter());
     this.notice.position.y += 18;
     this.notice.visible = false;

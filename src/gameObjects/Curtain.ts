@@ -14,29 +14,30 @@ const SLIDE_SPEED = 1500;
 export class Curtain extends GameObject {
   public zIndex = config.CURTAIN_Z_INDEX;
   private state: State;
-  private readonly targetHeight: number;
-  private readonly topPart: GameObject;
-  private readonly bottomPart: GameObject;
+  private targetHeight: number;
+  private topPart: GameObject;
+  private bottomPart: GameObject;
 
   constructor(width: number, height: number, isOpen = true) {
     super(width, height);
 
-    // Curtain part is half a size of full curtain
-    this.targetHeight = height / 2;
     this.state = isOpen ? State.Open : State.Closed;
-
-    const initialHeight = isOpen ? 0 : this.targetHeight;
-
-    this.topPart = new GameObject(width, initialHeight);
-    this.topPart.painter = new RectPainter(config.COLOR_GRAY);
-
-    this.bottomPart = new GameObject(width, initialHeight);
-    this.bottomPart.painter = new RectPainter(config.COLOR_GRAY);
-    this.bottomPart.origin.set(0, 1);
-    this.bottomPart.position.setY(height);
   }
 
   protected setup(): void {
+    // Curtain part is half a size of full curtain
+    this.targetHeight = this.size.height / 2;
+
+    const initialHeight = this.state === State.Open ? 0 : this.targetHeight;
+
+    this.topPart = new GameObject(this.size.width, initialHeight);
+    this.topPart.painter = new RectPainter(config.COLOR_GRAY);
+
+    this.bottomPart = new GameObject(this.size.width, initialHeight);
+    this.bottomPart.painter = new RectPainter(config.COLOR_GRAY);
+    this.bottomPart.origin.set(0, 1);
+    this.bottomPart.position.setY(this.size.height);
+
     this.add(this.topPart);
     this.add(this.bottomPart);
   }
@@ -66,7 +67,10 @@ export class Curtain extends GameObject {
     }
 
     this.topPart.size.setHeight(nextHeight);
+    this.topPart.updateMatrix();
+
     this.bottomPart.size.setHeight(nextHeight);
+    this.bottomPart.updateMatrix();
   }
 
   public close(): void {

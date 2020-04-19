@@ -51,6 +51,9 @@ export class CollisionSystem {
         if (otherCollider.object.hasParent(selfCollider.object)) {
           continue;
         }
+        if (selfCollider.object.hasParent(otherCollider.object)) {
+          continue;
+        }
 
         const selfBox = selfCollider.getBox();
         const otherBox = otherCollider.getBox();

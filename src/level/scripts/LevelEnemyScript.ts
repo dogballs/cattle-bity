@@ -19,6 +19,7 @@ export class LevelEnemyScript extends LevelScript {
   private positionIndex = 0;
   private spawnTimer = new Timer();
   private freezeTimer = new Timer();
+  private spawningCount = 0;
 
   protected setup(): void {
     this.eventBus.enemySpawnCompleted.addListener(this.handleSpawnCompleted);
@@ -61,6 +62,8 @@ export class LevelEnemyScript extends LevelScript {
   private handleSpawnCompleted = (
     event: LevelEnemySpawnCompletedEvent,
   ): void => {
+    this.spawningCount -= 1;
+
     const { type } = event;
 
     if (type.party !== TankParty.Enemy) {
@@ -68,6 +71,7 @@ export class LevelEnemyScript extends LevelScript {
     }
 
     const tank = TankFactory.createEnemy(type);
+    tank.updateMatrix(); // Origin should be in before setting center
     tank.rotate(Rotation.Down);
     tank.setCenter(event.centerPosition);
 
@@ -112,6 +116,8 @@ export class LevelEnemyScript extends LevelScript {
   };
 
   private requestSpawn(): void {
+    this.spawningCount += 1;
+
     const type = this.list[this.listIndex];
     const position = this.positions[this.positionIndex];
 
@@ -138,10 +144,12 @@ export class LevelEnemyScript extends LevelScript {
   }
 
   private areAllDead(): boolean {
+    const spawningCount = this.spawningCount;
     const unspawnedCount = this.getUnspawnedCount();
     const aliveCount = this.aliveTanks.length;
 
-    const areAllDead = unspawnedCount === 0 && aliveCount === 0;
+    const areAllDead =
+      spawningCount === 0 && unspawnedCount === 0 && aliveCount === 0;
 
     return areAllDead;
   }

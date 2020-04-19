@@ -2,12 +2,11 @@ import {
   Collision,
   GameObject,
   Sound,
-  Sprite,
   SpritePainter,
   Subject,
   SweptBoxCollider,
 } from '../core';
-import { GameUpdateArgs, Rotation, RotationMap, Tag } from '../game';
+import { GameUpdateArgs, Rotation, Tag } from '../game';
 import { TankBulletWallDamage } from '../tank';
 import * as config from '../config';
 
@@ -23,7 +22,6 @@ export class Bullet extends GameObject {
   public speed: number;
   public tags = [Tag.Bullet];
   public died = new Subject();
-  private sprites = new RotationMap<Sprite>();
   private hitBrickSound: Sound;
   private hitSteelSound: Sound;
 
@@ -47,17 +45,16 @@ export class Bullet extends GameObject {
     this.hitBrickSound = audioLoader.load('hit.brick');
     this.hitSteelSound = audioLoader.load('hit.steel');
 
-    this.sprites.set(Rotation.Up, spriteLoader.load('bullet.up'));
-    this.sprites.set(Rotation.Down, spriteLoader.load('bullet.down'));
-    this.sprites.set(Rotation.Left, spriteLoader.load('bullet.left'));
-    this.sprites.set(Rotation.Right, spriteLoader.load('bullet.right'));
+    const rotation = this.getWorldRotation();
+    const spriteId = `bullet.${this.getRotationString(rotation)}`;
+    const sprite = spriteLoader.load(spriteId);
+
+    this.painter.sprite = sprite;
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
     this.translateY(this.speed * updateArgs.deltaTime);
-
-    const rotation = this.getWorldRotation();
-    this.painter.sprite = this.sprites.get(rotation);
+    this.updateMatrix();
 
     this.collider.update();
   }
@@ -120,20 +117,6 @@ export class Bullet extends GameObject {
 
       const selfWorldBox = this.getWorldBoundingBox();
 
-      // Reposition bullet to the place where it hits the wall so explosion
-      // will go off in the right place. Now it is tied to axis.
-      const rotation = this.getWorldRotation();
-      if (rotation === Rotation.Up) {
-        this.translateY(selfWorldBox.max.y - wallWorldBox.max.y);
-      } else if (rotation === Rotation.Down) {
-        this.translateY(wallWorldBox.min.y - selfWorldBox.min.y);
-      } else if (rotation === Rotation.Left) {
-        this.translateY(selfWorldBox.max.x - wallWorldBox.max.x);
-      } else if (rotation === Rotation.Right) {
-        this.translateY(wallWorldBox.min.x - selfWorldBox.min.x);
-      }
-      this.updateMatrix();
-
       const wall = firstClosestWallContact.collider.object;
 
       const isBrickWall = wall.tags.includes(Tag.Brick);
@@ -145,8 +128,10 @@ export class Bullet extends GameObject {
       if (isBrickWall || (isSteelWall && canDestroySteelWall)) {
         const destroyer = new TerrainTileDestroyer(this.wallDamage);
 
+        this.updateWorldMatrix(true);
         this.add(destroyer);
-        destroyer.updateWorldMatrix(true);
+
+        destroyer.updateMatrix();
         destroyer.setCenter(this.getSelfCenter());
 
         // At this point destroyer is aligned by the main axis, i.e.
@@ -154,7 +139,7 @@ export class Bullet extends GameObject {
         // if bullet rotation is up/down - destroyer is aligned at "x".
         // What is left is to fix counterpart axis.
 
-        destroyer.updateWorldMatrix();
+        destroyer.updateMatrix();
         const destroyerWorldBox = destroyer.getWorldBoundingBox();
 
         const rotation = destroyer.getWorldRotation();
@@ -185,6 +170,20 @@ export class Bullet extends GameObject {
         }
       }
 
+      // Reposition bullet to the place where it hits the wall so explosion
+      // will go off in the right place. Now it is tied to axis.
+      const rotation = this.getWorldRotation();
+      if (rotation === Rotation.Up) {
+        this.translateY(selfWorldBox.max.y - wallWorldBox.max.y);
+      } else if (rotation === Rotation.Down) {
+        this.translateY(wallWorldBox.min.y - selfWorldBox.min.y);
+      } else if (rotation === Rotation.Left) {
+        this.translateY(selfWorldBox.max.x - wallWorldBox.max.x);
+      } else if (rotation === Rotation.Right) {
+        this.translateY(wallWorldBox.min.x - selfWorldBox.min.x);
+      }
+      this.updateMatrix();
+
       this.explode();
     }
   }
@@ -199,11 +198,27 @@ export class Bullet extends GameObject {
 
   public explode(): void {
     const explosion = new SmallExplosion();
+    explosion.updateMatrix();
     explosion.setCenter(this.getCenter());
     this.replaceSelf(explosion);
 
     this.collider.unregister();
 
     this.died.notify(null);
+  }
+
+  private getRotationString(rotation: Rotation): string {
+    switch (rotation) {
+      case Rotation.Up:
+        return 'up';
+      case Rotation.Down:
+        return 'down';
+      case Rotation.Left:
+        return 'left';
+      case Rotation.Right:
+        return 'right';
+      default:
+        return 'unknown';
+    }
   }
 }

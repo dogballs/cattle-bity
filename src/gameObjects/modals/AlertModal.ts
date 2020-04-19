@@ -42,6 +42,7 @@ export class AlertModal extends GameObject {
       config.COLOR_GRAY,
       config.COLOR_WHITE,
     );
+    this.container.updateMatrix();
     this.container.setCenter(this.getSelfCenter());
     this.add(this.container);
 

@@ -200,9 +200,9 @@ export class Tank extends GameObject {
         this.position.addX(otherWorldBox.min.x - selfWorldBox.max.x);
         this.position.snapX(SNAP_SIZE);
       }
+      this.updateMatrix(true);
 
       // Make sure to update collider
-      this.updateWorldMatrix();
       this.collider.update();
     }
 
@@ -253,14 +253,20 @@ export class Tank extends GameObject {
 
     // First, add bullet inside a tank and position it at the north center
     // of the tank (where the gun is). Bullet will inherit tank's rotation.
+
+    // Update tank position
+    this.updateWorldMatrix(true);
+    // Add bullet - it will inherit rotation
     this.add(bullet);
-    bullet.updateWorldMatrix(true);
+    // Make sure rotation is in matrix
+    bullet.updateMatrix();
+    // Position bullet
     bullet.setCenter(this.getSelfCenter());
     bullet.translateY(this.size.height / 2 - bullet.size.height / 2);
+    bullet.updateMatrix();
 
     // Then, detach bullet from a tank and move it to a field
     this.parent.attach(bullet);
-    bullet.updateWorldMatrix(true);
 
     if (this.tags.includes(Tag.Player)) {
       bullet.tags.push(Tag.Player);
@@ -289,6 +295,7 @@ export class Tank extends GameObject {
     }
 
     this.translateY(this.attributes.moveSpeed * deltaTime);
+    this.updateMatrix(true);
   }
 
   public idle(): void {
@@ -328,6 +335,7 @@ export class Tank extends GameObject {
     }
 
     this.shield = new Shield();
+    this.shield.updateMatrix();
     this.shield.setCenter(this.getSelfCenter());
 
     this.add(this.shield);

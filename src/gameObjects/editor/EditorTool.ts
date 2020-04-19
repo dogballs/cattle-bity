@@ -105,6 +105,7 @@ export class EditorTool extends GameObject {
 
     if (blockMoveContacts.length > 0) {
       this.position.sub(this.velocity);
+      this.updateMatrix(true);
     }
   }
 
@@ -125,7 +126,10 @@ export class EditorTool extends GameObject {
       holdThrottle.update(input, deltaTime);
     }
 
-    this.position.add(this.velocity);
+    if (this.velocity.x !== 0 || this.velocity.y !== 0) {
+      this.position.add(this.velocity);
+      this.updateMatrix(true);
+    }
   }
 
   private moveUp = (): void => {
@@ -201,5 +205,7 @@ export class EditorTool extends GameObject {
     this.position.y -= this.position.y % this.size.height;
 
     this.add(this.selectedBrush);
+
+    this.updateMatrix(true);
   }
 }

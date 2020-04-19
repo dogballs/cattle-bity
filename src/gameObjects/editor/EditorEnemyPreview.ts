@@ -35,6 +35,7 @@ export class EditorEnemyPreview extends GameObject {
 
   protected setup({ spriteLoader }: GameUpdateArgs): void {
     this.container = new GameObject(64, 64);
+    this.container.updateMatrix();
     this.container.setCenter(this.getSelfCenter());
     this.container.painter = new SpritePainter();
     this.add(this.container);

@@ -72,6 +72,7 @@ export class SpriteText extends GameObject {
   public setText(text: string): void {
     this.text.setText(text);
     this.size.copyFrom(this.text.getSize());
+    this.updateMatrix();
   }
 
   public getTextSize(): Size {

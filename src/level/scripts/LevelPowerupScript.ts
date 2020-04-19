@@ -34,7 +34,7 @@ export class LevelPowerupScript extends LevelScript {
 
     if (config.IS_DEV) {
       const debugMenu = new DebugLevelPowerupMenu(this.world, this.grid, {
-        top: 110,
+        top: 125,
       });
       debugMenu.attach();
       debugMenu.spawnRequest.addListener(() => {

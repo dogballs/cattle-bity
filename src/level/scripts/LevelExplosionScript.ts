@@ -11,6 +11,7 @@ export class LevelExplosionScript extends LevelScript {
 
   private handleEnemyDied = (event: LevelEnemyDiedEvent): void => {
     const explosion = new Explosion();
+    explosion.updateMatrix();
     explosion.setCenter(event.centerPosition);
     explosion.completed.addListener(() => {
       this.eventBus.enemyExploded.notify(event);
@@ -20,6 +21,7 @@ export class LevelExplosionScript extends LevelScript {
 
   private handlePlayerDied = (event: LevelPlayerDiedEvent): void => {
     const explosion = new Explosion();
+    explosion.updateMatrix();
     explosion.setCenter(event.centerPosition);
     this.world.field.add(explosion);
   };

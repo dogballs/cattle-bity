@@ -19,6 +19,7 @@ export class LevelGameOverScript extends LevelScript {
 
   protected setup(): void {
     this.notice = new GameOverNotice();
+    this.notice.updateMatrix();
     this.notice.setCenterX(this.world.field.getSelfCenter().x);
     this.notice.position.y = this.world.field.size.height + 100;
     this.world.field.add(this.notice);
@@ -37,6 +38,7 @@ export class LevelGameOverScript extends LevelScript {
     if (this.notice.position.y <= TARGET_POSITION_Y) {
       this.notice.position.y = TARGET_POSITION_Y;
     }
+    this.notice.updateMatrix();
 
     this.moveBlockTimer.update(deltaTime);
     this.totalTimer.update(deltaTime);

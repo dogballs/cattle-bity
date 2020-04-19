@@ -13,6 +13,7 @@ export class DebugCollisionMenu extends DebugMenu {
   private itemsContainer: GameObject;
   private items: GameObject[] = [];
   private root: GameObject;
+  private isShown = false;
 
   constructor(
     collisionSystem: CollisionSystem,
@@ -32,18 +33,22 @@ export class DebugCollisionMenu extends DebugMenu {
   }
 
   public show(): void {
+    this.isShown = true;
     this.root.add(this.itemsContainer);
   }
 
   public hide(): void {
+    this.isShown = false;
     this.root.remove(this.itemsContainer);
+    this.clear();
   }
 
   public update(): void {
-    this.items.forEach((item) => {
-      item.removeSelf();
-    });
-    this.items = [];
+    if (!this.isShown) {
+      return;
+    }
+
+    this.clear();
 
     const collisions = this.collisionSystem.getCollisions();
 
@@ -58,6 +63,13 @@ export class DebugCollisionMenu extends DebugMenu {
         this.itemsContainer.add(otherItem);
       });
     });
+  }
+
+  private clear(): void {
+    this.items.forEach((item) => {
+      item.removeSelf();
+    });
+    this.items = [];
   }
 
   private handleShow = (): void => {
@@ -76,6 +88,7 @@ export class DebugCollisionMenu extends DebugMenu {
     const rect = box.toRect();
     const item = new GameObject(rect.width, rect.height);
     item.position.set(rect.x, rect.y);
+    item.updateMatrix();
     item.zIndex = config.DEBUG_COLLISION_RECT_Z_INDEX;
     item.painter = new RectPainter(null, color);
     return item;
