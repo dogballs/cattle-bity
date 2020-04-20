@@ -3,12 +3,12 @@ import { SpriteFont } from '../text';
 
 import { Rect } from '../Rect';
 
-import { CanvasImage } from './CanvasImage';
+import { CanvasImage } from './sources';
 
 interface ColorSpriteFontGeneratorIitem {
   defaultColor: string;
   defaultFont: SpriteFont;
-  canvas?: OffscreenCanvas | HTMLCanvasElement;
+  canvas?: NativeCanvas;
   generatedFonts: Map<string, SpriteFont>;
 }
 

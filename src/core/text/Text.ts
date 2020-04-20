@@ -2,7 +2,7 @@ import { Size } from '../Size';
 import { Vector } from '../Vector';
 
 import { Font } from './Font';
-import { NullFont } from './NullFont';
+import { NullFont } from './fonts';
 
 export enum TextAlignment {
   Left,

@@ -9,16 +9,16 @@ import { ImageSource } from './ImageSource';
 export class Sprite {
   public image: ImageSource;
   public sourceRect: Rect;
-  public targetRect: Rect;
+  public destinationRect: Rect;
 
   constructor(
     image: ImageSource,
     sourceRect: Rect = new Rect(),
-    targetRect: Rect = new Rect(),
+    destinationRect: Rect = new Rect(),
   ) {
     this.image = image;
     this.sourceRect = sourceRect;
-    this.targetRect = targetRect;
+    this.destinationRect = destinationRect;
   }
 
   public isImageLoaded(): boolean {

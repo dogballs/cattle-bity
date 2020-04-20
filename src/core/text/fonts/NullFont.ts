@@ -1,6 +1,6 @@
-import { Vector } from '../Vector';
+import { Vector } from '../../Vector';
 
-import { Font } from './Font';
+import { Font } from '../Font';
 
 export class NullFont implements Font<null> {
   public buildCharacter(): null {

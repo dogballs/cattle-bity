@@ -1,624 +1,638 @@
 {
   "bullet.down": {
     "file": "data/graphics/sprite.png",
-    "rect": [339, 102, 3, 4]
+    "rect": [1356, 408, 12, 16]
   },
   "bullet.left": {
     "file": "data/graphics/sprite.png",
-    "rect": [330, 102, 4, 3]
+    "rect": [1320, 408, 16, 12]
   },
   "bullet.right": {
     "file": "data/graphics/sprite.png",
-    "rect": [346, 102, 4, 3]
+    "rect": [1384, 408, 16, 12]
   },
-  "bullet.up": { "file": "data/graphics/sprite.png", "rect": [323, 102, 3, 4] },
+  "bullet.up": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1292, 408, 12, 16]
+  },
   "explosion.small.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [259, 130, 11, 11]
+    "rect": [1036, 520, 44, 44]
   },
   "explosion.small.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [273, 129, 15, 15]
+    "rect": [1092, 516, 60, 60]
   },
   "explosion.small.3": {
     "file": "data/graphics/sprite.png",
-    "rect": [288, 128, 16, 16]
+    "rect": [1152, 512, 64, 64]
   },
   "explosion.large.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [304, 129, 31, 29]
+    "rect": [1216, 516, 124, 116]
   },
   "explosion.large.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [334, 128, 34, 32]
+    "rect": [1336, 512, 136, 128]
   },
   "powerup.helmet": {
     "file": "data/graphics/sprite.png",
-    "rect": [256, 112, 16, 15]
+    "rect": [1024, 448, 64, 60]
   },
   "powerup.clock": {
     "file": "data/graphics/sprite.png",
-    "rect": [272, 112, 16, 15]
+    "rect": [1088, 448, 64, 60]
   },
   "powerup.shovel": {
     "file": "data/graphics/sprite.png",
-    "rect": [288, 112, 16, 15]
+    "rect": [1152, 448, 64, 60]
   },
   "powerup.star": {
     "file": "data/graphics/sprite.png",
-    "rect": [304, 112, 16, 15]
+    "rect": [1216, 448, 64, 60]
   },
   "powerup.grenade": {
     "file": "data/graphics/sprite.png",
-    "rect": [320, 112, 16, 15]
+    "rect": [1280, 448, 64, 60]
   },
   "powerup.tank": {
     "file": "data/graphics/sprite.png",
-    "rect": [336, 112, 16, 15]
+    "rect": [1344, 448, 64, 60]
   },
   "powerup.gun": {
     "file": "data/graphics/sprite.png",
-    "rect": [352, 112, 16, 15]
+    "rect": [1408, 448, 64, 60]
   },
   "points.100": {
     "file": "data/graphics/sprite.png",
-    "rect": [289, 164, 14, 7]
+    "rect": [1156, 656, 56, 28]
   },
   "points.200": {
     "file": "data/graphics/sprite.png",
-    "rect": [305, 164, 14, 7]
+    "rect": [1220, 656, 56, 28]
   },
   "points.300": {
     "file": "data/graphics/sprite.png",
-    "rect": [321, 164, 14, 7]
+    "rect": [1284, 656, 56, 28]
   },
   "points.400": {
     "file": "data/graphics/sprite.png",
-    "rect": [337, 164, 14, 7]
+    "rect": [1348, 656, 56, 28]
   },
   "points.500": {
     "file": "data/graphics/sprite.png",
-    "rect": [353, 164, 14, 7]
+    "rect": [1412, 656, 56, 28]
   },
-  "ui.enemy": { "file": "data/graphics/sprite.png", "rect": [320, 192, 8, 8] },
-  "ui.player": { "file": "data/graphics/sprite.png", "rect": [377, 144, 7, 8] },
-  "ui.pause": { "file": "data/graphics/sprite.png", "rect": [289, 176, 39, 7] },
+  "ui.enemy": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1280, 768, 32, 32]
+  },
+  "ui.player": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1508, 576, 28, 32]
+  },
+  "ui.pause": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1156, 704, 156, 28]
+  },
   "ui.gameOver": {
     "file": "data/graphics/sprite.png",
-    "rect": [289, 184, 31, 15]
+    "rect": [1156, 736, 124, 60]
   },
   "shield.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [256, 144, 16, 16]
+    "rect": [1024, 576, 64, 64]
   },
   "shield.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [272, 144, 16, 16]
+    "rect": [1088, 576, 64, 64]
   },
   "base.heart.alive": {
     "file": "data/graphics/sprite.png",
-    "rect": [304, 32, 16, 16]
+    "rect": [1216, 128, 64, 64]
   },
   "base.heart.dead": {
     "file": "data/graphics/sprite.png",
-    "rect": [320, 32, 16, 16]
+    "rect": [1280, 128, 64, 64]
   },
-  "spawn.1": { "file": "data/graphics/sprite.png", "rect": [259, 99, 9, 9] },
-  "spawn.2": { "file": "data/graphics/sprite.png", "rect": [274, 98, 11, 11] },
-  "spawn.3": { "file": "data/graphics/sprite.png", "rect": [289, 97, 13, 13] },
-  "spawn.4": { "file": "data/graphics/sprite.png", "rect": [304, 96, 15, 15] },
+  "spawn.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1036, 396, 36, 36]
+  },
+  "spawn.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1096, 392, 44, 44]
+  },
+  "spawn.3": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1156, 388, 52, 52]
+  },
+  "spawn.4": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1216, 384, 60, 60]
+  },
   "terrain.brick.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [256, 0, 4, 4]
+    "rect": [1024, 0, 16, 16]
   },
   "terrain.brick.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [260, 0, 4, 4]
+    "rect": [1040, 0, 16, 16]
   },
   "terrain.steel": {
     "file": "data/graphics/sprite.png",
-    "rect": [256, 16, 8, 8]
+    "rect": [1024, 64, 32, 32]
   },
   "terrain.jungle": {
     "file": "data/graphics/sprite.png",
-    "rect": [272, 32, 8, 8]
+    "rect": [1088, 128, 32, 32]
   },
   "terrain.water.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [256, 48, 8, 8]
+    "rect": [1024, 192, 32, 32]
   },
   "terrain.water.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [272, 48, 8, 8]
+    "rect": [1088, 192, 32, 32]
   },
   "terrain.ice": {
     "file": "data/graphics/sprite.png",
-    "rect": [288, 32, 8, 8]
+    "rect": [1152, 128, 32, 32]
   },
   "terrain.menu-brick.1": {
     "file": "data/graphics/menu-brick.png",
-    "rect": [0, 0, 4, 4]
+    "rect": [0, 0, 16, 16]
   },
   "terrain.menu-brick.2": {
     "file": "data/graphics/menu-brick.png",
-    "rect": [4, 0, 4, 4]
+    "rect": [16, 0, 16, 16]
   },
   "terrain.inverse-brick.1": {
     "file": "data/graphics/inverse-brick.png",
-    "rect": [0, 0, 4, 4]
+    "rect": [0, 0, 16, 16]
   },
   "terrain.inverse-brick.2": {
     "file": "data/graphics/inverse-brick.png",
-    "rect": [4, 0, 4, 4]
+    "rect": [16, 0, 16, 16]
   },
   "terrain.blue-brick.1": {
     "file": "data/graphics/blue-brick.png",
-    "rect": [0, 0, 4, 4]
+    "rect": [0, 0, 16, 16]
   },
   "terrain.blue-brick.2": {
     "file": "data/graphics/blue-brick.png",
-    "rect": [4, 0, 4, 4]
+    "rect": [16, 0, 16, 16]
   },
-  "flag": { "file": "data/graphics/sprite.png", "rect": [376, 184, 16, 15] },
+  "flag": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1504, 736, 64, 60]
+  },
   "tank.enemy.default.a.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [129, 64, 13, 15]
+    "rect": [516, 256, 52, 60]
   },
   "tank.enemy.default.a.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [145, 64, 13, 15]
+    "rect": [580, 256, 52, 60]
   },
   "tank.enemy.default.a.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [193, 64, 13, 15]
+    "rect": [772, 256, 52, 60]
   },
   "tank.enemy.default.a.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [209, 64, 13, 15]
+    "rect": [836, 256, 52, 60]
   },
   "tank.enemy.default.a.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [160, 66, 15, 13]
+    "rect": [640, 264, 60, 52]
   },
   "tank.enemy.default.a.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [176, 66, 15, 13]
+    "rect": [704, 264, 60, 52]
   },
   "tank.enemy.default.a.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [225, 65, 15, 13]
+    "rect": [900, 260, 60, 52]
   },
   "tank.enemy.default.a.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [241, 65, 15, 13]
+    "rect": [964, 260, 60, 52]
   },
-
   "tank.enemy.default.b.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [129, 80, 13, 15]
+    "rect": [516, 320, 52, 60]
   },
   "tank.enemy.default.b.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [145, 80, 13, 15]
+    "rect": [580, 320, 52, 60]
   },
   "tank.enemy.default.b.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [193, 81, 13, 15]
+    "rect": [772, 324, 52, 60]
   },
   "tank.enemy.default.b.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [209, 81, 13, 15]
+    "rect": [836, 324, 52, 60]
   },
   "tank.enemy.default.b.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [160, 82, 15, 13]
+    "rect": [640, 328, 60, 52]
   },
   "tank.enemy.default.b.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [176, 82, 15, 13]
+    "rect": [704, 328, 60, 52]
   },
   "tank.enemy.default.b.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [225, 81, 15, 13]
+    "rect": [900, 324, 60, 52]
   },
   "tank.enemy.default.b.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [241, 81, 15, 13]
+    "rect": [964, 324, 60, 52]
   },
-
   "tank.enemy.default.c.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [129, 96, 13, 15]
+    "rect": [516, 384, 52, 60]
   },
   "tank.enemy.default.c.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [145, 96, 13, 15]
+    "rect": [580, 384, 52, 60]
   },
   "tank.enemy.default.c.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [192, 96, 13, 15]
+    "rect": [768, 384, 52, 60]
   },
   "tank.enemy.default.c.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [208, 96, 13, 15]
+    "rect": [832, 384, 52, 60]
   },
   "tank.enemy.default.c.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [160, 98, 15, 13]
+    "rect": [640, 392, 60, 52]
   },
   "tank.enemy.default.c.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [176, 98, 15, 13]
+    "rect": [704, 392, 60, 52]
   },
   "tank.enemy.default.c.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [225, 97, 15, 13]
+    "rect": [900, 388, 60, 52]
   },
   "tank.enemy.default.c.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [241, 97, 15, 13]
+    "rect": [964, 388, 60, 52]
   },
-
   "tank.enemy.default.d.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [129, 112, 13, 15]
+    "rect": [516, 448, 52, 60]
   },
   "tank.enemy.default.d.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [145, 112, 13, 15]
+    "rect": [580, 448, 52, 60]
   },
   "tank.enemy.default.d.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [193, 112, 13, 15]
+    "rect": [772, 448, 52, 60]
   },
   "tank.enemy.default.d.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [209, 112, 13, 15]
+    "rect": [836, 448, 52, 60]
   },
   "tank.enemy.default.d.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [160, 113, 15, 13]
+    "rect": [640, 452, 60, 52]
   },
   "tank.enemy.default.d.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [176, 113, 15, 13]
+    "rect": [704, 452, 60, 52]
   },
   "tank.enemy.default.d.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [224, 113, 15, 13]
+    "rect": [896, 452, 60, 52]
   },
   "tank.enemy.default.d.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [240, 113, 15, 13]
+    "rect": [960, 452, 60, 52]
   },
-
   "tank.enemy.danger.a.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [129, 192, 13, 15]
+    "rect": [516, 768, 52, 60]
   },
   "tank.enemy.danger.a.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [145, 192, 13, 15]
+    "rect": [580, 768, 52, 60]
   },
   "tank.enemy.danger.a.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [193, 192, 13, 15]
+    "rect": [772, 768, 52, 60]
   },
   "tank.enemy.danger.a.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [209, 192, 13, 15]
+    "rect": [836, 768, 52, 60]
   },
   "tank.enemy.danger.a.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [160, 194, 15, 13]
+    "rect": [640, 776, 60, 52]
   },
   "tank.enemy.danger.a.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [176, 194, 15, 13]
+    "rect": [704, 776, 60, 52]
   },
   "tank.enemy.danger.a.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [225, 193, 15, 13]
+    "rect": [900, 772, 60, 52]
   },
   "tank.enemy.danger.a.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [241, 193, 15, 13]
+    "rect": [964, 772, 60, 52]
   },
-
   "tank.enemy.danger.b.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [129, 208, 13, 15]
+    "rect": [516, 832, 52, 60]
   },
   "tank.enemy.danger.b.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [145, 208, 13, 15]
+    "rect": [580, 832, 52, 60]
   },
   "tank.enemy.danger.b.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [193, 209, 13, 15]
+    "rect": [772, 836, 52, 60]
   },
   "tank.enemy.danger.b.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [209, 209, 13, 15]
+    "rect": [836, 836, 52, 60]
   },
   "tank.enemy.danger.b.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [160, 210, 15, 13]
+    "rect": [640, 840, 60, 52]
   },
   "tank.enemy.danger.b.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [176, 210, 15, 13]
+    "rect": [704, 840, 60, 52]
   },
   "tank.enemy.danger.b.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [225, 209, 15, 13]
+    "rect": [900, 836, 60, 52]
   },
   "tank.enemy.danger.b.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [241, 209, 15, 13]
+    "rect": [964, 836, 60, 52]
   },
-
   "tank.enemy.danger.c.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [129, 224, 13, 15]
+    "rect": [516, 896, 52, 60]
   },
   "tank.enemy.danger.c.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [145, 224, 13, 15]
+    "rect": [580, 896, 52, 60]
   },
   "tank.enemy.danger.c.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [192, 224, 13, 15]
+    "rect": [768, 896, 52, 60]
   },
   "tank.enemy.danger.c.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [208, 224, 13, 15]
+    "rect": [832, 896, 52, 60]
   },
   "tank.enemy.danger.c.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [160, 226, 15, 13]
+    "rect": [640, 904, 60, 52]
   },
   "tank.enemy.danger.c.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [176, 226, 15, 13]
+    "rect": [704, 904, 60, 52]
   },
   "tank.enemy.danger.c.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [225, 225, 15, 13]
+    "rect": [900, 900, 60, 52]
   },
   "tank.enemy.danger.c.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [241, 225, 15, 13]
+    "rect": [964, 900, 60, 52]
   },
-
   "tank.enemy.danger.d.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [129, 240, 13, 15]
+    "rect": [516, 960, 52, 60]
   },
   "tank.enemy.danger.d.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [145, 240, 13, 15]
+    "rect": [580, 960, 52, 60]
   },
   "tank.enemy.danger.d.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [193, 240, 13, 15]
+    "rect": [772, 960, 52, 60]
   },
   "tank.enemy.danger.d.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [209, 240, 13, 15]
+    "rect": [836, 960, 52, 60]
   },
   "tank.enemy.danger.d.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [160, 241, 15, 13]
+    "rect": [640, 964, 60, 52]
   },
   "tank.enemy.danger.d.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [176, 241, 15, 13]
+    "rect": [704, 964, 60, 52]
   },
   "tank.enemy.danger.d.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [224, 241, 15, 13]
+    "rect": [896, 964, 60, 52]
   },
   "tank.enemy.danger.d.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [240, 241, 15, 13]
+    "rect": [960, 964, 60, 52]
   },
-
   "tank.enemy.primary.d.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [1, 112, 13, 15]
+    "rect": [4, 448, 52, 60]
   },
   "tank.enemy.primary.d.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [17, 112, 13, 15]
+    "rect": [68, 448, 52, 60]
   },
   "tank.enemy.primary.d.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [65, 112, 13, 15]
+    "rect": [260, 448, 52, 60]
   },
   "tank.enemy.primary.d.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [81, 112, 13, 15]
+    "rect": [324, 448, 52, 60]
   },
   "tank.enemy.primary.d.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [32, 113, 15, 13]
+    "rect": [128, 452, 60, 52]
   },
   "tank.enemy.primary.d.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [48, 113, 15, 13]
+    "rect": [192, 452, 60, 52]
   },
   "tank.enemy.primary.d.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [96, 113, 15, 13]
+    "rect": [384, 452, 60, 52]
   },
   "tank.enemy.primary.d.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [112, 113, 15, 13]
+    "rect": [448, 452, 60, 52]
   },
-
   "tank.enemy.secondary.d.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [1, 240, 13, 15]
+    "rect": [4, 960, 52, 60]
   },
   "tank.enemy.secondary.d.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [17, 240, 13, 15]
+    "rect": [68, 960, 52, 60]
   },
   "tank.enemy.secondary.d.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [65, 240, 13, 15]
+    "rect": [260, 960, 52, 60]
   },
   "tank.enemy.secondary.d.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [81, 240, 13, 15]
+    "rect": [324, 960, 52, 60]
   },
   "tank.enemy.secondary.d.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [32, 241, 15, 13]
+    "rect": [128, 964, 60, 52]
   },
   "tank.enemy.secondary.d.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [48, 241, 15, 13]
+    "rect": [192, 964, 60, 52]
   },
   "tank.enemy.secondary.d.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [96, 241, 15, 13]
+    "rect": [384, 964, 60, 52]
   },
   "tank.enemy.secondary.d.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [112, 241, 15, 13]
+    "rect": [448, 964, 60, 52]
   },
-
   "tank.player.primary.a.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [1, 2, 13, 13]
+    "rect": [4, 8, 52, 52]
   },
   "tank.player.primary.a.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [17, 2, 13, 13]
+    "rect": [68, 8, 52, 52]
   },
   "tank.player.primary.a.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [65, 1, 13, 13]
+    "rect": [260, 4, 52, 52]
   },
   "tank.player.primary.a.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [81, 1, 13, 13]
+    "rect": [324, 4, 52, 52]
   },
   "tank.player.primary.a.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [34, 1, 13, 13]
+    "rect": [136, 4, 52, 52]
   },
   "tank.player.primary.a.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [50, 1, 13, 13]
+    "rect": [200, 4, 52, 52]
   },
   "tank.player.primary.a.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [97, 1, 13, 13]
+    "rect": [388, 4, 52, 52]
   },
   "tank.player.primary.a.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [113, 1, 13, 13]
+    "rect": [452, 4, 52, 52]
   },
-
   "tank.player.primary.b.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [1, 16, 13, 16]
+    "rect": [4, 64, 52, 64]
   },
   "tank.player.primary.b.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [17, 16, 13, 16]
+    "rect": [68, 64, 52, 64]
   },
   "tank.player.primary.b.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [65, 16, 13, 16]
+    "rect": [260, 64, 52, 64]
   },
   "tank.player.primary.b.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [81, 16, 13, 16]
+    "rect": [324, 64, 52, 64]
   },
   "tank.player.primary.b.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [32, 17, 16, 13]
+    "rect": [128, 68, 64, 52]
   },
   "tank.player.primary.b.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [48, 17, 16, 13]
+    "rect": [192, 68, 64, 52]
   },
   "tank.player.primary.b.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [96, 17, 16, 13]
+    "rect": [384, 68, 64, 52]
   },
   "tank.player.primary.b.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [112, 17, 16, 13]
+    "rect": [448, 68, 64, 52]
   },
-
   "tank.player.primary.c.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [1, 32, 13, 15]
+    "rect": [4, 128, 52, 60]
   },
   "tank.player.primary.c.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [17, 32, 13, 15]
+    "rect": [68, 128, 52, 60]
   },
   "tank.player.primary.c.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [65, 33, 13, 15]
+    "rect": [260, 132, 52, 60]
   },
   "tank.player.primary.c.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [81, 33, 13, 15]
+    "rect": [324, 132, 52, 60]
   },
   "tank.player.primary.c.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [32, 33, 15, 13]
+    "rect": [128, 132, 60, 52]
   },
   "tank.player.primary.c.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [48, 33, 15, 13]
+    "rect": [192, 132, 60, 52]
   },
   "tank.player.primary.c.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [97, 33, 15, 13]
+    "rect": [388, 132, 60, 52]
   },
   "tank.player.primary.c.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [113, 33, 15, 13]
+    "rect": [452, 132, 60, 52]
   },
-
   "tank.player.primary.d.up.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [1, 48, 14, 15]
+    "rect": [4, 192, 56, 60]
   },
   "tank.player.primary.d.up.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [17, 48, 14, 15]
+    "rect": [68, 192, 56, 60]
   },
   "tank.player.primary.d.down.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [65, 48, 14, 15]
+    "rect": [260, 192, 56, 60]
   },
   "tank.player.primary.d.down.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [81, 48, 14, 15]
+    "rect": [324, 192, 56, 60]
   },
   "tank.player.primary.d.left.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [32, 49, 15, 14]
+    "rect": [128, 196, 60, 56]
   },
   "tank.player.primary.d.left.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [48, 49, 15, 14]
+    "rect": [192, 196, 60, 56]
   },
   "tank.player.primary.d.right.1": {
     "file": "data/graphics/sprite.png",
-    "rect": [97, 49, 15, 14]
+    "rect": [388, 196, 60, 56]
   },
   "tank.player.primary.d.right.2": {
     "file": "data/graphics/sprite.png",
-    "rect": [113, 49, 15, 14]
+    "rect": [452, 196, 60, 56]
   }
 }

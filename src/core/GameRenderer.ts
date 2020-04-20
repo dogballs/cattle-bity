@@ -1,3 +1,5 @@
+import { CanvasRenderContext, RenderContext } from './render';
+
 import { RenderObject } from './RenderObject';
 
 export interface GameRendererOptions {
@@ -15,9 +17,7 @@ const DEFAULT_OPTIONS = {
 export class GameRenderer {
   private readonly canvas: HTMLCanvasElement;
   private readonly options: GameRendererOptions;
-  private readonly context: CanvasRenderingContext2D;
-  private readonly offscreenCanvas: OffscreenCanvas;
-  private readonly offscreenContext: OffscreenCanvasRenderingContext2D;
+  private readonly context: RenderContext;
 
   constructor(options: GameRendererOptions = {}) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -26,28 +26,15 @@ export class GameRenderer {
     this.canvas.width = options.width;
     this.canvas.height = options.height;
 
-    this.context = this.canvas.getContext('2d');
-
-    this.offscreenCanvas = new OffscreenCanvas(options.width, options.height);
-    this.offscreenContext = this.offscreenCanvas.getContext('2d');
+    this.context = new CanvasRenderContext(this.canvas);
   }
 
   public getDomElement(): HTMLCanvasElement {
     return this.canvas;
   }
 
-  public clear(): void {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-
   public render(root: RenderObject): void {
-    this.clear();
-
-    // When image is scaled, display pixels as is without smoothing.
-    // Should be reset every time after clearing.
-    this.context.imageSmoothingEnabled = false;
-
-    this.offscreenContext.imageSmoothingEnabled = false;
+    this.context.clear();
 
     root.updateWorldMatrix(false, true);
     root.updateWorldVisible(false, true);
@@ -73,11 +60,7 @@ export class GameRenderer {
       return;
     }
 
-    renderObject.painter.paint(
-      this.context,
-      renderObject,
-      this.offscreenContext,
-    );
+    renderObject.painter.paint(this.context, renderObject);
 
     if (this.options.debug) {
       this.renderObjectDebugBox(renderObject);
@@ -86,16 +69,9 @@ export class GameRenderer {
 
   // TODO: debug should not be a part of game renderer
   private renderObjectDebugBox(renderObject: RenderObject): void {
-    const { min, max } = renderObject.getWorldBoundingBox();
+    const box = renderObject.getWorldBoundingBox();
+    const rect = box.toRect();
 
-    this.context.beginPath();
-    this.context.moveTo(min.x, min.y);
-    this.context.lineTo(max.x, min.y);
-    this.context.lineTo(max.x, max.y);
-    this.context.lineTo(min.x, max.y);
-    this.context.lineTo(min.x, min.y);
-
-    this.context.strokeStyle = '#fff';
-    this.context.stroke();
+    this.context.strokeRect(rect, '#fff');
   }
 }

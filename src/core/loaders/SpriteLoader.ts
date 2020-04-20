@@ -36,7 +36,7 @@ export class SpriteLoader {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
   }
 
-  public load(id: string, argTargetRect?: Rect): Sprite {
+  public load(id: string, argDestinationRect?: Rect): Sprite {
     const item = this.manifest[id];
     if (item === undefined) {
       throw new Error(`Invalid sprite id = "${id}"`);
@@ -46,23 +46,26 @@ export class SpriteLoader {
     const image = this.imageLoader.load(filePath);
     const sourceRect = new Rect(...sourceRectValues);
 
-    const defaultTargetRect = new Rect(
+    const defaultDestinationRect = new Rect(
       0,
       0,
       sourceRect.width * this.options.scale,
       sourceRect.height * this.options.scale,
     );
 
-    const targetRect = argTargetRect ?? defaultTargetRect;
+    const destinationRect = argDestinationRect ?? defaultDestinationRect;
 
-    const sprite = new Sprite(image, sourceRect, targetRect);
+    const sprite = new Sprite(image, sourceRect, destinationRect);
 
     return sprite;
   }
 
-  public async loadAsync(id: string, targetRect = new Rect()): Promise<Sprite> {
+  public async loadAsync(
+    id: string,
+    destinationRect = new Rect(),
+  ): Promise<Sprite> {
     return new Promise((resolve) => {
-      const sprite = this.load(id, targetRect);
+      const sprite = this.load(id, destinationRect);
       if (sprite.image.isLoaded()) {
         resolve(sprite);
       } else {

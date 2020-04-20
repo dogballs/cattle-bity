@@ -1,9 +1,9 @@
-import { ImageSource, Sprite } from '../graphics';
+import { ImageSource, Sprite } from '../../graphics';
 
-import { Rect } from '../Rect';
-import { Vector } from '../Vector';
+import { Rect } from '../../Rect';
+import { Vector } from '../../Vector';
 
-import { Font } from './Font';
+import { Font } from '../Font';
 
 export interface SpriteFontConfig {
   file: string;
@@ -73,14 +73,19 @@ export class SpriteFont implements Font<Sprite> {
 
     const sourceRect = new Rect(sourceX, sourceY, sourceWidth, sourceHeight);
 
-    const targetX = offset.x * scale.x;
-    const targetY = offset.y * scale.y;
-    const targetWidth = characterWidth * scale.x;
-    const targetHeight = characterHeight * scale.y;
+    const destinationX = offset.x * scale.x;
+    const destinationY = offset.y * scale.y;
+    const destinationWidth = characterWidth * scale.x;
+    const destinationHeight = characterHeight * scale.y;
 
-    const targetRect = new Rect(targetX, targetY, targetWidth, targetHeight);
+    const destinationRect = new Rect(
+      destinationX,
+      destinationY,
+      destinationWidth,
+      destinationHeight,
+    );
 
-    const sprite = new Sprite(this.image, sourceRect, targetRect);
+    const sprite = new Sprite(this.image, sourceRect, destinationRect);
 
     return sprite;
   }

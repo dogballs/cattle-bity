@@ -1,4 +1,4 @@
-export enum Alignment {
+export enum SpriteAlignment {
   Stretch,
   MiddleCenter,
   MiddleLeft,

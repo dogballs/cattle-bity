@@ -1,17 +1,15 @@
-import { ImageSource } from './ImageSource';
-
-type CanvasElement = HTMLCanvasElement | OffscreenCanvas;
+import { ImageSource } from '../ImageSource';
 
 export class CanvasImage extends ImageSource {
-  private readonly canvasElement: CanvasElement;
+  private readonly canvasElement: NativeCanvas;
 
-  constructor(canvasElement: CanvasElement) {
+  constructor(canvasElement: NativeCanvas) {
     super();
 
     this.canvasElement = canvasElement;
   }
 
-  public getElement(): CanvasElement {
+  public getElement(): NativeCanvas {
     return this.canvasElement;
   }
 

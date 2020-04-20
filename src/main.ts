@@ -60,9 +60,7 @@ colorSpriteFontGenerator.register(
   config.COLOR_BLACK,
 );
 
-const spriteLoader = new SpriteLoader(imageLoader, spriteManifest, {
-  scale: 4,
-});
+const spriteLoader = new SpriteLoader(imageLoader, spriteManifest);
 
 const rectFontLoader = new RectFontLoader();
 rectFontLoader.register(config.PRIMARY_RECT_FONT_ID, rectFontConfig, {

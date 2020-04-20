@@ -9,7 +9,6 @@ export * from './storage';
 export * from './text';
 export * from './utils';
 
-export * from './Alignment';
 export * from './Animation';
 export * from './BoundingBox';
 export * from './Deferred';
@@ -22,6 +21,7 @@ export * from './Node';
 export * from './Rect';
 export * from './Size';
 export * from './Sound';
+export * from './SpriteAlignment';
 export * from './State';
 export * from './Storage';
 export * from './Subject';

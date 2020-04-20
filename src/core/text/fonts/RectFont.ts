@@ -1,7 +1,7 @@
-import { Rect } from '../Rect';
-import { Vector } from '../Vector';
+import { Rect } from '../../Rect';
+import { Vector } from '../../Vector';
 
-import { Font } from './Font';
+import { Font } from '../Font';
 
 export interface RectFontConfig {
   fillSymbol: string;

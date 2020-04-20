@@ -1,4 +1,9 @@
-import { Alignment, Animation, GameObject, SpritePainter } from '../../core';
+import {
+  Animation,
+  GameObject,
+  SpriteAlignment,
+  SpritePainter,
+} from '../../core';
 import { GameUpdateArgs, Rotation } from '../../game';
 import {
   TankAnimationFrame,
@@ -14,7 +19,7 @@ export class MenuCursor extends GameObject {
   constructor() {
     super(60, 60);
 
-    this.painter.alignment = Alignment.MiddleCenter;
+    this.painter.alignment = SpriteAlignment.MiddleCenter;
   }
 
   protected setup({ spriteLoader }: GameUpdateArgs): void {

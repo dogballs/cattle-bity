@@ -1,7 +1,9 @@
 import { Sprite } from '../graphics';
+import { RenderContext } from '../render';
 import { Text } from '../text';
 
 import { Painter } from '../Painter';
+import { Rect } from '../Rect';
 import { RenderObject } from '../RenderObject';
 
 export class SpriteTextPainter extends Painter {
@@ -15,10 +17,7 @@ export class SpriteTextPainter extends Painter {
     this.color = color;
   }
 
-  public paint(
-    context: CanvasRenderingContext2D,
-    renderObject: RenderObject,
-  ): void {
+  public paint(context: RenderContext, renderObject: RenderObject): void {
     if (this.text === null) {
       return;
     }
@@ -28,17 +27,13 @@ export class SpriteTextPainter extends Painter {
     const sprites = this.text.build();
 
     sprites.forEach((sprite) => {
-      context.drawImage(
-        sprite.image.getElement(),
-        sprite.sourceRect.x,
-        sprite.sourceRect.y,
-        sprite.sourceRect.width,
-        sprite.sourceRect.height,
-        worldPosition.x + sprite.targetRect.x,
-        worldPosition.y + sprite.targetRect.y,
-        sprite.targetRect.width,
-        sprite.targetRect.height,
+      const destinationRect = new Rect(
+        worldPosition.x + sprite.destinationRect.x,
+        worldPosition.y + sprite.destinationRect.y,
+        sprite.destinationRect.width,
+        sprite.destinationRect.height,
       );
+      context.drawImage(sprite.image, sprite.sourceRect, destinationRect);
     });
   }
 }

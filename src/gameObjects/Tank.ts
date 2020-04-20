@@ -1,8 +1,8 @@
 import {
-  Alignment,
   Animation,
   Collision,
   GameObject,
+  SpriteAlignment,
   SpritePainter,
   State,
   Subject,
@@ -79,7 +79,7 @@ export class Tank extends GameObject {
       layer.size.copyFrom(this.size);
 
       const painter = new SpritePainter();
-      painter.alignment = Alignment.MiddleCenter;
+      painter.alignment = SpriteAlignment.MiddleCenter;
 
       layer.painter = painter;
 

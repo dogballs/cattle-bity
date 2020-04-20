@@ -1,8 +1,8 @@
 import {
-  Alignment,
   Animation,
   GameObject,
   Sprite,
+  SpriteAlignment,
   SpritePainter,
   Subject,
 } from './../core';
@@ -18,7 +18,7 @@ export class Explosion extends GameObject {
   constructor() {
     super(136, 136);
 
-    this.painter.alignment = Alignment.MiddleCenter;
+    this.painter.alignment = SpriteAlignment.MiddleCenter;
   }
 
   protected setup({ spriteLoader }: GameUpdateArgs): void {

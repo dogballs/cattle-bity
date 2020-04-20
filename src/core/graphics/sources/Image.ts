@@ -1,4 +1,4 @@
-import { ImageSource } from './ImageSource';
+import { ImageSource } from '../ImageSource';
 
 /**
  * Image represents entire image file, which might also be a spritesheet.

@@ -1,3 +1,5 @@
+import { RenderContext } from '../render';
+
 import { Painter } from '../Painter';
 import { RenderObject } from '../RenderObject';
 
@@ -12,11 +14,9 @@ export class RectPainter extends Painter {
     this.strokeColor = strokeColor;
   }
 
-  public paint(
-    context: CanvasRenderingContext2D,
-    renderObject: RenderObject,
-  ): void {
-    const { min, max } = renderObject.getWorldBoundingBox();
+  public paint(context: RenderContext, renderObject: RenderObject): void {
+    const box = renderObject.getWorldBoundingBox();
+    const rect = box.toRect();
 
     // const points = renderObject.getWorldPoints();
     // if (points.length === 0) {
@@ -33,13 +33,11 @@ export class RectPainter extends Painter {
     // context.closePath();
 
     if (this.fillColor !== null) {
-      context.fillStyle = this.fillColor;
-      context.fillRect(min.x, min.y, max.x - min.x, max.y - min.y);
+      context.fillRect(rect, this.fillColor);
     }
 
     if (this.strokeColor !== null) {
-      context.strokeStyle = this.strokeColor;
-      context.strokeRect(min.x, min.y, max.x - min.x, max.y - min.y);
+      context.strokeRect(rect, this.strokeColor);
     }
   }
 }
