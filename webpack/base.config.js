@@ -5,8 +5,6 @@ const { CheckerPlugin } = require('awesome-typescript-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
-
   entry: {
     main: './src/main.ts',
   },
@@ -14,8 +12,6 @@ module.exports = {
   output: {
     filename: '[name].js',
   },
-
-  devtool: 'source-map',
 
   resolve: {
     extensions: ['.js', '.ts'],
@@ -37,8 +33,4 @@ module.exports = {
       { from: 'data/', to: 'data/' },
     ]),
   ],
-
-  devServer: {
-    contentBase: './dist',
-  },
 };

@@ -89,7 +89,7 @@ export class DebugCollisionMenu extends DebugMenu {
     const item = new GameObject(rect.width, rect.height);
     item.position.set(rect.x, rect.y);
     item.updateMatrix();
-    item.zIndex = config.DEBUG_COLLISION_RECT_Z_INDEX;
+    item.setZIndex(config.DEBUG_COLLISION_RECT_Z_INDEX);
     item.painter = new RectPainter(null, color);
     return item;
   }

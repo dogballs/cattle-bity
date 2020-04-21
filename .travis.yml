@@ -15,7 +15,7 @@ branches:
 
 script:
   # Generates the dist folder with built app
-  - npm run build
+  - npm run build:prod
   # Run linter checks
   - npm run lint
   # Run tests
