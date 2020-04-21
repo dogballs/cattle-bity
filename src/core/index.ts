@@ -17,6 +17,7 @@ export * from './GameObject';
 export * from './GameRenderer';
 export * from './Logger';
 export * from './Matrix3';
+export * from './Matrix4';
 export * from './Node';
 export * from './Rect';
 export * from './Size';

@@ -27,6 +27,7 @@ export class GameRenderer {
     this.canvas.height = options.height;
 
     this.context = new CanvasRenderContext(this.canvas);
+    this.context.init();
   }
 
   public getDomElement(): HTMLCanvasElement {

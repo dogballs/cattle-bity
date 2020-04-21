@@ -8,10 +8,8 @@ import { RenderContext } from '../RenderContext';
 export class CanvasRenderContext extends RenderContext {
   private context: NativeContext;
 
-  constructor(canvas: NativeCanvas) {
-    super(canvas);
-
-    this.context = canvas.getContext('2d');
+  public init(): void {
+    this.context = this.canvas.getContext('2d');
   }
 
   public drawImage(

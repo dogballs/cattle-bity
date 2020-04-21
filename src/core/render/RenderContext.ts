@@ -12,6 +12,7 @@ export abstract class RenderContext {
     this.canvas = canvas;
   }
 
+  abstract init(): void;
   abstract clear(): void;
   abstract drawImage(
     imageSource: ImageSource,
