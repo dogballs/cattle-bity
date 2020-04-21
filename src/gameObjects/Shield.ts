@@ -22,10 +22,10 @@ export class Shield extends GameObject {
   protected update({ deltaTime, gameState }: GameUpdateArgs): void {
     // Shield is not displayed during a pause
     if (gameState.hasChangedTo(GameState.Paused)) {
-      this.visible = false;
+      this.setVisible(false);
     }
     if (gameState.hasChangedTo(GameState.Playing)) {
-      this.visible = true;
+      this.setVisible(true);
     }
     if (gameState.is(GameState.Paused)) {
       return;

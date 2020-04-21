@@ -214,7 +214,7 @@ export class EditorEnemyScene extends Scene<EditorLocationParams> {
   };
 
   private handleSelectorFocused = (selectorIndex: number): void => {
-    this.preview.visible = true;
+    this.preview.setVisible(true);
 
     const selectorItem = this.selectorsItems[selectorIndex];
 
@@ -225,7 +225,7 @@ export class EditorEnemyScene extends Scene<EditorLocationParams> {
   };
 
   private handleSelectorUnfocused = (): void => {
-    this.preview.visible = false;
+    this.preview.setVisible(false);
   };
 
   private handleNextSelected = (): void => {

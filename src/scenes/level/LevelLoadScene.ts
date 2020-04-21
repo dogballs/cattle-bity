@@ -41,7 +41,7 @@ export class LevelLoadScene extends Scene {
       message: 'FAILED TO LOAD THE MAP\nTRYING NEXT MAP',
     });
     this.alertModal.size.copyFrom(this.root.size);
-    this.alertModal.visible = false;
+    this.alertModal.setVisible(false);
     this.alertModal.accepted.addListener(this.handleAlertAccepted);
     this.root.add(this.alertModal);
 
@@ -88,12 +88,12 @@ export class LevelLoadScene extends Scene {
   };
 
   private showAlert(): void {
-    this.alertModal.visible = true;
+    this.alertModal.setVisible(true);
     this.state = State.Alert;
   }
 
   private hideAlert(): void {
-    this.alertModal.visible = false;
+    this.alertModal.setVisible(false);
     this.state = State.Navigation;
   }
 

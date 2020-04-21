@@ -36,7 +36,7 @@ export class LevelIntroScript extends LevelScript {
 
   private handleTimer = (): void => {
     this.curtain.open();
-    this.title.visible = false;
+    this.title.setVisible(false);
     this.completed.notify(null);
   };
 }

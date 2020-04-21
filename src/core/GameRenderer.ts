@@ -38,13 +38,11 @@ export class GameRenderer {
     this.context.clear();
 
     root.updateWorldMatrix(false, true);
-    root.updateWorldVisible(false, true);
-    root.updateWorldZIndex(false, true);
 
     const objects = root.flatten();
 
     const zSortedObjects = objects.sort((a, b) => {
-      return a.worldZIndex - b.worldZIndex;
+      return a.getWorldZIndex() - b.getWorldZIndex();
     });
 
     zSortedObjects.forEach((object) => {
@@ -57,7 +55,7 @@ export class GameRenderer {
       return;
     }
 
-    if (renderObject.worldVisible === false) {
+    if (renderObject.getWorldVisible() === false) {
       return;
     }
 

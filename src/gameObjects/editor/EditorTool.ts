@@ -157,7 +157,7 @@ export class EditorTool extends GameObject {
     }
 
     if (this.selectBrush !== null) {
-      this.selectedBrush.visible = this.isBlinkVisible;
+      this.selectedBrush.setVisible(this.isBlinkVisible);
     }
   }
 
@@ -187,7 +187,7 @@ export class EditorTool extends GameObject {
     // Clear previous brush
     if (this.selectedBrush !== null) {
       // Restore visibility
-      this.selectedBrush.visible = true;
+      this.selectedBrush.setVisible(true);
       this.remove(this.selectedBrush);
     }
 
@@ -197,7 +197,7 @@ export class EditorTool extends GameObject {
     }
 
     this.selectedBrush = this.brushes[index];
-    this.selectedBrush.visible = this.isBlinkVisible;
+    this.selectedBrush.setVisible(this.isBlinkVisible);
 
     this.size.copyFrom(this.selectedBrush.size);
 

@@ -55,12 +55,12 @@ export class Menu extends GameObject {
   }
 
   public hideCursor(): void {
-    this.cursor.visible = false;
+    this.cursor.setVisible(false);
   }
 
   public showCursor(): void {
     // Reset to default so it could be overriden by parent visibility
-    this.cursor.visible = null;
+    this.cursor.setVisible(null);
   }
 
   public reset(): void {

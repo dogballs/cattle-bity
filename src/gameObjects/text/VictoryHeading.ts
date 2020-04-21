@@ -26,7 +26,7 @@ export class VictoryHeading extends GameObject {
     ];
 
     this.texts.forEach((text) => {
-      text.visible = false;
+      text.setVisible(false);
       this.add(text);
     });
 
@@ -53,9 +53,9 @@ export class VictoryHeading extends GameObject {
   private updateVisibility(): void {
     this.texts.forEach((text, index) => {
       if (index === this.visibleIndex) {
-        text.visible = true;
+        text.setVisible(true);
       } else {
-        text.visible = false;
+        text.setVisible(false);
       }
     });
   }

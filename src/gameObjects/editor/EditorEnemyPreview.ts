@@ -27,9 +27,9 @@ export class EditorEnemyPreview extends GameObject {
     this.selectedIndex = index;
 
     if (this.selectedIndex === -1) {
-      this.visible = false;
+      this.setVisible(false);
     } else {
-      this.visible = true;
+      this.setVisible(true);
     }
   }
 

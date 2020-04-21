@@ -113,7 +113,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
       message: 'INVALID MAP CONFIG',
     });
     this.alertModal.size.copyFrom(this.root.size);
-    this.alertModal.visible = false;
+    this.alertModal.setVisible(false);
     this.alertModal.accepted.addListener(this.handleAlertAccepted);
     this.root.add(this.alertModal);
 
@@ -122,7 +122,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
       message: 'CHANGES WILL BE LOST.\nARE YOU SURE?',
     });
     this.confirmModal.size.copyFrom(this.root.size);
-    this.confirmModal.visible = false;
+    this.confirmModal.setVisible(false);
     this.confirmModal.accepted.addListener(this.handleConfirmAccepted);
     this.confirmModal.declined.addListener(this.handleConfirmDeclined);
     this.root.add(this.confirmModal);
@@ -263,7 +263,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
   };
 
   private showConfirmation(): void {
-    this.confirmModal.visible = true;
+    this.confirmModal.setVisible(true);
     this.menuState = MenuState.Confrimation;
   }
 
@@ -273,7 +273,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
     }
 
     this.confirmModal.resetSelection();
-    this.confirmModal.visible = false;
+    this.confirmModal.setVisible(false);
     this.menuState = MenuState.Navigation;
   }
 
@@ -296,12 +296,12 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
   };
 
   private showAlert(): void {
-    this.alertModal.visible = true;
+    this.alertModal.setVisible(true);
     this.menuState = MenuState.Alert;
   }
 
   private hideAlert(): void {
-    this.alertModal.visible = false;
+    this.alertModal.setVisible(false);
     this.menuState = MenuState.Navigation;
   }
 

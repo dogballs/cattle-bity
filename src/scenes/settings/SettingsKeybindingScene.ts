@@ -98,7 +98,7 @@ export class SettingsKeybindingScene extends Scene {
       this.root.size.width,
       this.root.size.height,
     );
-    this.modal.visible = false;
+    this.modal.setVisible(false);
     this.root.add(this.modal);
 
     if (DEVICE_SELECTOR_CHOICES.length > 0) {
@@ -143,13 +143,13 @@ export class SettingsKeybindingScene extends Scene {
   private openModal(control: InputControl): void {
     this.selectedControl = control;
     this.state = State.WaitingInput;
-    this.modal.visible = true;
+    this.modal.setVisible(true);
   }
 
   private closeModal(): void {
     this.selectedControl = null;
     this.state = State.Navigation;
-    this.modal.visible = false;
+    this.modal.setVisible(false);
   }
 
   private updateMenu(): void {

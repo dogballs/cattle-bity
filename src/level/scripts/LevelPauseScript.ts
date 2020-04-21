@@ -12,7 +12,7 @@ export class LevelPauseScript extends LevelScript {
     this.notice.updateMatrix();
     this.notice.setCenter(this.world.field.getSelfCenter());
     this.notice.position.y += 18;
-    this.notice.visible = false;
+    this.notice.setVisible(false);
     this.world.field.add(this.notice);
   }
 
@@ -31,14 +31,14 @@ export class LevelPauseScript extends LevelScript {
   }
 
   private activate(): void {
-    this.notice.visible = true;
+    this.notice.setVisible(true);
     this.notice.restart();
 
     this.eventBus.levelPaused.notify(null);
   }
 
   private deactivate(): void {
-    this.notice.visible = false;
+    this.notice.setVisible(false);
 
     this.eventBus.levelUnpaused.notify(null);
   }

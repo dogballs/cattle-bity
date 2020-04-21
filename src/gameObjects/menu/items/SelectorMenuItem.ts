@@ -145,9 +145,9 @@ export class SelectorMenuItem<T> extends MenuItem {
 
     this.container.children.forEach((item, index) => {
       if (this.selectedIndex === index) {
-        item.visible = true;
+        item.setVisible(true);
       } else {
-        item.visible = false;
+        item.setVisible(false);
       }
     });
   }
