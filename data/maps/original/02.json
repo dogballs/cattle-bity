@@ -74,41 +74,6 @@
         "height": 64
       },
       {
-        "type": "ice",
-        "x": 64,
-        "y": 384,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 64,
-        "y": 384,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 64,
-        "y": 384,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "ice",
-        "x": 64,
-        "y": 384,
-        "width": 64,
-        "height": 64
-      },
-      {
-        "type": "brick",
-        "x": 64,
-        "y": 384,
-        "width": 64,
-        "height": 64
-      },
-      {
         "type": "brick",
         "x": 128,
         "y": 384,
@@ -548,7 +513,15 @@
         "y": 704,
         "width": 64,
         "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 64,
+        "y": 384,
+        "width": 64,
+        "height": 64
       }
     ]
-  }
+  },
+  "version": 1
 }
