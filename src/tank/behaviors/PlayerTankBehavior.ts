@@ -1,14 +1,14 @@
 import { GameUpdateArgs, Rotation } from '../../game';
 import { Tank, TankState } from '../../gameObjects';
-import { LevelInputContext } from '../../input';
+import { LevelPlayInputContext } from '../../input';
 
 import { TankBehavior } from '../TankBehavior';
 
 const MOVE_CONTROLS = [
-  ...LevelInputContext.MoveUp,
-  ...LevelInputContext.MoveDown,
-  ...LevelInputContext.MoveLeft,
-  ...LevelInputContext.MoveRight,
+  ...LevelPlayInputContext.MoveUp,
+  ...LevelPlayInputContext.MoveDown,
+  ...LevelPlayInputContext.MoveLeft,
+  ...LevelPlayInputContext.MoveRight,
 ];
 
 export class PlayerTankBehavior extends TankBehavior {
@@ -19,24 +19,24 @@ export class PlayerTankBehavior extends TankBehavior {
     // collision resolution algorithm after update phase. This order issue
     // can be fixed by adding some post-collide callback and place fire code
     // in there.
-    if (input.isDownAny(LevelInputContext.Fire)) {
+    if (input.isDownAny(LevelPlayInputContext.Fire)) {
       tank.fire();
     }
-    if (input.isHoldAny(LevelInputContext.RapidFire)) {
+    if (input.isHoldAny(LevelPlayInputContext.RapidFire)) {
       tank.fire();
     }
 
     if (!tank.isSliding()) {
-      if (input.isHoldLastAny(LevelInputContext.MoveUp)) {
+      if (input.isHoldLastAny(LevelPlayInputContext.MoveUp)) {
         tank.rotate(Rotation.Up);
       }
-      if (input.isHoldLastAny(LevelInputContext.MoveDown)) {
+      if (input.isHoldLastAny(LevelPlayInputContext.MoveDown)) {
         tank.rotate(Rotation.Down);
       }
-      if (input.isHoldLastAny(LevelInputContext.MoveLeft)) {
+      if (input.isHoldLastAny(LevelPlayInputContext.MoveLeft)) {
         tank.rotate(Rotation.Left);
       }
-      if (input.isHoldLastAny(LevelInputContext.MoveRight)) {
+      if (input.isHoldLastAny(LevelPlayInputContext.MoveRight)) {
         tank.rotate(Rotation.Right);
       }
 

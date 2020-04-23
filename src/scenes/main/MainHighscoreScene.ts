@@ -7,11 +7,7 @@ import { GameSceneType } from '../GameSceneType';
 export class MainHighscoreScene extends Scene {
   private heading: HighscoreHeading;
 
-  protected setup({
-    audioLoader,
-    highscoreStorage,
-    session,
-  }: GameUpdateArgs): void {
+  protected setup({ audioLoader, gameStorage, session }: GameUpdateArgs): void {
     const totalPoints = session.getMaxPoints();
     const highscore = session.getMaxHighscore();
 
@@ -25,7 +21,7 @@ export class MainHighscoreScene extends Scene {
     }
 
     // Save highscore
-    highscoreStorage.savePrimaryPoints(totalPoints);
+    gameStorage.savePrimaryPoints(totalPoints);
 
     this.heading = new HighscoreHeading(totalPoints);
     this.heading.origin.set(0.5, 0.5);

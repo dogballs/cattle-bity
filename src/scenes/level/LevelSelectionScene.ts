@@ -25,11 +25,10 @@ export class LevelSelectionScene extends Scene {
     this.selector.selected.addListener(this.handleLevelSelected);
     this.root.add(this.selector);
 
-    const displayedCode = inputManager.getPresentedControlCode(
+    const continueDisplayCode = inputManager.getPresentedControlCode(
       LevelSelectionInputContext.Select[0],
     );
-
-    this.continueHint = new InputHint(`${displayedCode} TO SELECT`);
+    this.continueHint = new InputHint(`${continueDisplayCode} TO SELECT`);
     this.root.add(this.continueHint);
 
     this.curtain.close();

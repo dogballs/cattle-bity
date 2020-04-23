@@ -26,15 +26,11 @@ export class MainMenuScene extends Scene {
   private state: State = State.Ready;
   private session: Session;
 
-  protected setup({
-    highscoreStorage,
-    mapLoader,
-    session,
-  }: GameUpdateArgs): void {
+  protected setup({ gameStorage, mapLoader, session }: GameUpdateArgs): void {
     this.session = session;
 
     // Load highscore from storage
-    const highscorePoints = highscoreStorage.getPrimaryPoints();
+    const highscorePoints = gameStorage.getPrimaryPoints();
     this.session.primaryPlayer.setHighscore(highscorePoints);
 
     // Restore source for maps to default

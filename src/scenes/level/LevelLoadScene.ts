@@ -71,9 +71,15 @@ export class LevelLoadScene extends Scene {
   private handleMapLoaded = (mapConfig: MapConfig): void => {
     this.mapLoader.error.removeListener(this.handleMapLoadError);
 
-    this.navigator.replace(GameSceneType.LevelPlay, {
-      mapConfig,
-    });
+    if (this.session.showLevelHint()) {
+      this.navigator.replace(GameSceneType.LevelHint, {
+        mapConfig,
+      });
+    } else {
+      this.navigator.replace(GameSceneType.LevelPlay, {
+        mapConfig,
+      });
+    }
   };
 
   private handleMapLoadError = (err): void => {

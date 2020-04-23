@@ -1,5 +1,6 @@
 import * as config from '../config';
 
+import { GameStorage } from './GameStorage';
 import { SessionPlayer } from './SessionPlayer';
 
 enum State {
@@ -10,14 +11,19 @@ enum State {
 
 export class Session {
   public primaryPlayer = new SessionPlayer();
-  private seenIntro: boolean;
+  private storage: GameStorage;
   private startLevelNumber: number;
   private endLevelNumber: number;
   private currentLevelNumber: number;
   private playtest: boolean;
   private state: State;
+  private seenIntro: boolean;
+  private seenLevelHint: boolean;
+  private seenEditorHint: boolean;
 
-  constructor() {
+  constructor(storage: GameStorage) {
+    this.storage = storage;
+
     this.reset();
   }
 
@@ -39,6 +45,7 @@ export class Session {
     this.endLevelNumber = 1;
     this.state = State.Idle;
     this.playtest = false;
+    this.seenLevelHint = this.storage.getSeenLevelHint();
 
     this.primaryPlayer.reset();
   }
@@ -93,6 +100,16 @@ export class Session {
 
   public haveSeenIntro(): boolean {
     return this.seenIntro;
+  }
+
+  public setSeenLevelHint(): void {
+    this.seenLevelHint = true;
+
+    this.storage.saveSeenLevelHint();
+  }
+
+  public showLevelHint(): boolean {
+    return !this.seenLevelHint;
   }
 
   public setPlaytest(): void {

@@ -8,14 +8,13 @@ import {
   SpriteFontLoader,
   SpriteLoader,
   State,
-  Storage,
 } from '../core';
 import { InputManager } from '../input';
 import { MapLoader } from '../map';
-import { PointsHighscoreStorage } from '../points';
 
 import { AudioManager } from './AudioManager';
 import { GameState } from './GameState';
+import { GameStorage } from './GameStorage';
 import { Session } from './Session';
 
 export interface GameUpdateArgs {
@@ -24,15 +23,14 @@ export interface GameUpdateArgs {
   collisionSystem: CollisionSystem;
   colorSpriteFontGenerator: ColorSpriteFontGenerator;
   deltaTime: number;
-  highscoreStorage: PointsHighscoreStorage;
   imageLoader: ImageLoader;
   input: Input;
   inputManager: InputManager;
   gameState: State<GameState>;
+  gameStorage: GameStorage;
   mapLoader: MapLoader;
   rectFontLoader: RectFontLoader;
   session: Session;
   spriteFontLoader: SpriteFontLoader;
   spriteLoader: SpriteLoader;
-  storage: Storage;
 }

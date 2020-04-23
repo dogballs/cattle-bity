@@ -1,6 +1,6 @@
 import { GameUpdateArgs, GameState } from '../../game';
 import { PauseNotice } from '../../gameObjects';
-import { LevelInputContext } from '../../input';
+import { LevelPlayInputContext } from '../../input';
 
 import { LevelScript } from '../LevelScript';
 
@@ -19,7 +19,7 @@ export class LevelPauseScript extends LevelScript {
   protected update(updateArgs: GameUpdateArgs): void {
     const { gameState, input } = updateArgs;
 
-    if (input.isDownAny(LevelInputContext.Pause)) {
+    if (input.isDownAny(LevelPlayInputContext.Pause)) {
       if (gameState.is(GameState.Playing)) {
         gameState.set(GameState.Paused);
         this.activate();

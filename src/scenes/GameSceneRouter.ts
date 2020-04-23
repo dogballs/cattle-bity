@@ -3,6 +3,7 @@ import * as config from '../config';
 
 import { EditorEnemyScene, EditorMapScene, EditorMenuScene } from './editor';
 import {
+  LevelHintScene,
   LevelLoadScene,
   LevelSelectionScene,
   LevelPlayScene,
@@ -38,6 +39,7 @@ export class GameSceneRouter extends SceneRouter {
     this.register(GameSceneType.MainVictory, MainVictoryScene);
     this.register(GameSceneType.ModesMenu, ModesMenuScene);
     this.register(GameSceneType.ModesCustom, ModesCustomScene);
+    this.register(GameSceneType.LevelHint, LevelHintScene);
     this.register(GameSceneType.LevelLoad, LevelLoadScene);
     this.register(GameSceneType.LevelSelection, LevelSelectionScene);
     this.register(GameSceneType.LevelScore, LevelScoreScene);
@@ -52,7 +54,6 @@ export class GameSceneRouter extends SceneRouter {
     const root = new GameObject();
     root.size.set(config.CANVAS_WIDTH, config.CANVAS_HEIGHT);
     root.updateMatrix();
-    // root.setNeedsClear();
     return root;
   }
 }

@@ -1,16 +1,16 @@
 import { Sound } from '../../core';
 import { AudioManager, GameUpdateArgs, GameState } from '../../game';
-import { LevelInputContext } from '../../input';
+import { LevelPlayInputContext } from '../../input';
 import { PowerupType } from '../../powerup';
 
 import { LevelScript } from '../LevelScript';
 import { LevelPowerupPickedEvent } from '../events';
 
 const MOVE_CONTROLS = [
-  ...LevelInputContext.MoveUp,
-  ...LevelInputContext.MoveDown,
-  ...LevelInputContext.MoveLeft,
-  ...LevelInputContext.MoveRight,
+  ...LevelPlayInputContext.MoveUp,
+  ...LevelPlayInputContext.MoveDown,
+  ...LevelPlayInputContext.MoveLeft,
+  ...LevelPlayInputContext.MoveRight,
 ];
 
 enum TankState {

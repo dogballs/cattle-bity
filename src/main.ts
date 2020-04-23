@@ -8,7 +8,6 @@ import {
   GameLoop,
   GameRenderer,
   ImageLoader,
-  LocalStorage,
   Logger,
   RectFontLoader,
   SpriteFontLoader,
@@ -17,10 +16,15 @@ import {
   Vector,
 } from './core';
 import { DebugGameLoopMenu, DebugInspector } from './debug';
-import { AudioManager, GameUpdateArgs, GameState, Session } from './game';
+import {
+  AudioManager,
+  GameUpdateArgs,
+  GameState,
+  GameStorage,
+  Session,
+} from './game';
 import { InputManager } from './input';
 import { ManifestMapListReader, MapLoader } from './map';
-import { PointsHighscoreStorage } from './points';
 import { GameSceneRouter, GameSceneType } from './scenes';
 
 import * as config from './config';
@@ -41,11 +45,10 @@ const gameRenderer = new GameRenderer({
   width: config.CANVAS_WIDTH,
 });
 
-const storage = new LocalStorage(config.STORAGE_NAMESPACE);
-const highscoreStorage = new PointsHighscoreStorage(storage);
-storage.load();
+const gameStorage = new GameStorage(config.STORAGE_NAMESPACE);
+gameStorage.load();
 
-const inputManager = new InputManager(storage);
+const inputManager = new InputManager(gameStorage);
 inputManager.listen();
 
 const audioLoader = new AudioLoader(audioManifest);
@@ -70,10 +73,10 @@ rectFontLoader.register(config.PRIMARY_RECT_FONT_ID, rectFontConfig, {
 const manifestMapListReader = new ManifestMapListReader(mapManifest);
 const mapLoader = new MapLoader(manifestMapListReader);
 
-const audioManager = new AudioManager(audioLoader, storage);
+const audioManager = new AudioManager(audioLoader, gameStorage);
 audioManager.loadSettings();
 
-const session = new Session();
+const session = new Session(gameStorage);
 
 const collisionSystem = new CollisionSystem();
 
@@ -105,7 +108,7 @@ const updateArgs: GameUpdateArgs = {
   collisionSystem,
   colorSpriteFontGenerator,
   deltaTime: 0,
-  highscoreStorage,
+  gameStorage,
   imageLoader,
   input: inputManager.getInput(),
   inputManager,
@@ -115,7 +118,6 @@ const updateArgs: GameUpdateArgs = {
   session,
   spriteFontLoader,
   spriteLoader,
-  storage,
 };
 
 const gameLoop = new GameLoop();

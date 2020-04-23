@@ -4,9 +4,8 @@ import {
   InputBinding,
   InputDevice,
   KeyboardInputDevice,
-  Storage,
 } from '../core';
-import * as config from '../config';
+import { GameStorage } from '../game';
 
 import { GamepadInputBinding, KeyboardInputBinding } from './bindings';
 import {
@@ -27,9 +26,9 @@ export class InputManager {
   private input: Input;
   private variants = new Map<InputDeviceType, InputVariant>();
   private currentVariant: InputVariant = null;
-  private storage: Storage;
+  private storage: GameStorage;
 
-  constructor(storage: Storage) {
+  constructor(storage: GameStorage) {
     this.storage = storage;
 
     this.input = new Input();
@@ -134,9 +133,7 @@ export class InputManager {
     this.variants.forEach((variant, type) => {
       const { binding } = variant;
 
-      const key = this.getBindingStorageKey(type);
-
-      const json = this.storage.get(key);
+      const json = this.storage.getBindingJSON(type);
 
       binding.fromJSON(json);
     });
@@ -145,11 +142,9 @@ export class InputManager {
   public saveBinding(type: InputDeviceType): void {
     const binding = this.getBinding(type);
 
-    const key = this.getBindingStorageKey(type);
     const json = binding.toJSON();
 
-    this.storage.set(key, json);
-    this.storage.save();
+    this.storage.saveBindingJSON(type, json);
   }
 
   public getPresentedControlCode(control: InputControl): string {
@@ -160,10 +155,6 @@ export class InputManager {
     const displayedCode = presenter.asString(code);
 
     return displayedCode;
-  }
-
-  private getBindingStorageKey(type: InputDeviceType): string {
-    return `${config.STORAGE_KEY_BINDINGS_PRIMARY}_${type.toString()}`;
   }
 
   private activateVariant(variant: InputVariant): void {
