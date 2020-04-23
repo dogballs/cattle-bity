@@ -9,6 +9,7 @@ import { RenderObject } from '../RenderObject';
 export class SpriteTextPainter extends Painter {
   public text: Text<Sprite> = null;
   public color: string = null;
+  public opacity = 1;
 
   constructor(text: Text<Sprite> = null, color: string = null) {
     super();
@@ -26,6 +27,12 @@ export class SpriteTextPainter extends Painter {
 
     const sprites = this.text.build();
 
+    const tmpGlobalAlpha = context.getGlobalAlpha();
+
+    if (this.opacity !== 1) {
+      context.setGlobalAlpha(this.opacity);
+    }
+
     sprites.forEach((sprite) => {
       const destinationRect = new Rect(
         worldPosition.x + sprite.destinationRect.x,
@@ -35,5 +42,9 @@ export class SpriteTextPainter extends Painter {
       );
       context.drawImage(sprite.image, sprite.sourceRect, destinationRect);
     });
+
+    if (this.opacity !== 1) {
+      context.setGlobalAlpha(tmpGlobalAlpha);
+    }
   }
 }

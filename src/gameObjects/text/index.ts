@@ -1,5 +1,6 @@
 export * from './GameOverHeading';
 export * from './HighscoreHeading';
+export * from './InputHint';
 export * from './LevelTitle';
 export * from './MainHeading';
 export * from './ModeDescription';

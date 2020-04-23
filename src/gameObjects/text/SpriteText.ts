@@ -13,12 +13,14 @@ import * as config from '../../config';
 export interface SpriteTextOptions extends TextOptions {
   color?: string;
   letterSpacing?: number;
+  opacity?: number;
 }
 
 const DEFAULT_OPTIONS: SpriteTextOptions = {
   color: null,
   letterSpacing: 4,
   lineSpacing: 16,
+  opacity: 1,
 };
 
 export class SpriteText extends GameObject {
@@ -33,6 +35,7 @@ export class SpriteText extends GameObject {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
 
     this.painter.color = this.options.color;
+    this.painter.opacity = this.options.opacity;
 
     this.text = new Text(text, this.options);
   }

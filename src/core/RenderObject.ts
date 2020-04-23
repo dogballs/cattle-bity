@@ -40,6 +40,10 @@ export class RenderObject extends Transform {
     this.updateWorldVisible(true);
   }
 
+  public getVisible(): boolean {
+    return this.visible;
+  }
+
   public getWorldVisible(): boolean {
     return this.worldVisible;
   }

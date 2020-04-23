@@ -14,6 +14,7 @@ import {
   KeyboardButtonCodePresenter,
 } from './presenters';
 import { InputButtonCodePresenter } from './InputButtonCodePresenter';
+import { InputControl } from './InputControl';
 import { InputDeviceType } from './InputDeviceType';
 
 interface InputVariant {
@@ -80,6 +81,16 @@ export class InputManager {
     return presenter;
   }
 
+  public getCurrentBinding(): InputBinding {
+    const { binding } = this.currentVariant;
+    return binding;
+  }
+
+  public getCurrentPresenter(): InputButtonCodePresenter {
+    const { presenter } = this.currentVariant;
+    return presenter;
+  }
+
   public getInput(): Input {
     return this.input;
   }
@@ -139,6 +150,16 @@ export class InputManager {
 
     this.storage.set(key, json);
     this.storage.save();
+  }
+
+  public getPresentedControlCode(control: InputControl): string {
+    const binding = this.getCurrentBinding();
+    const presenter = this.getCurrentPresenter();
+
+    const code = binding.get(control);
+    const displayedCode = presenter.asString(code);
+
+    return displayedCode;
   }
 
   private getBindingStorageKey(type: InputDeviceType): string {
