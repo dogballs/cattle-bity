@@ -24,6 +24,26 @@ export class GameStorage extends LocalStorage {
     this.save();
   }
 
+  public getSeenEditorHint(): boolean {
+    const json = this.get(config.STORAGE_KEY_EDITOR_HINT);
+
+    let haveSeen = false;
+    try {
+      haveSeen = JSON.parse(json);
+    } catch (err) {
+      // Ignore error
+    }
+
+    return haveSeen;
+  }
+
+  public saveSeenEditorHint(): void {
+    const value = true;
+    const json = JSON.stringify(value);
+    this.set(config.STORAGE_KEY_EDITOR_HINT, json);
+    this.save();
+  }
+
   public getAudioSettings(): AudioManagerSettings {
     const json = this.get(config.STORAGE_KEY_SETTINGS_AUDIO);
 

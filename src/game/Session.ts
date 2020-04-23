@@ -46,6 +46,7 @@ export class Session {
     this.state = State.Idle;
     this.playtest = false;
     this.seenLevelHint = this.storage.getSeenLevelHint();
+    this.seenEditorHint = this.storage.getSeenEditorHint();
 
     this.primaryPlayer.reset();
   }
@@ -110,6 +111,16 @@ export class Session {
 
   public showLevelHint(): boolean {
     return !this.seenLevelHint;
+  }
+
+  public setSeenEditorHint(): void {
+    this.seenEditorHint = true;
+
+    this.storage.saveSeenEditorHint();
+  }
+
+  public showEditorHint(): boolean {
+    return !this.seenEditorHint;
   }
 
   public setPlaytest(): void {

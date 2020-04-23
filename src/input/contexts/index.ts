@@ -1,3 +1,4 @@
+export * from './EditorHintInputContext';
 export * from './EditorMapInputContext';
 export * from './LevelHintInputContext';
 export * from './LevelPlayInputContext';

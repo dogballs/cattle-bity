@@ -244,7 +244,14 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
   };
 
   private handleMapSelected = (): void => {
-    this.navigator.push(GameSceneType.EditorMap, this.createLocationParams());
+    if (this.session.showEditorHint()) {
+      this.navigator.push(
+        GameSceneType.EditorHint,
+        this.createLocationParams(),
+      );
+    } else {
+      this.navigator.push(GameSceneType.EditorMap, this.createLocationParams());
+    }
   };
 
   private handleEnemySelected = (): void => {

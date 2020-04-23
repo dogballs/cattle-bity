@@ -1,39 +1,30 @@
-import {
-  GameObject,
-  RectPainter,
-  Scene,
-  SpritePainter,
-  TextAlignment,
-} from '../../core';
-import { GameUpdateArgs, Rotation } from '../../game';
-import { InputHint, SpriteText } from '../../gameObjects';
-import { LevelHintInputContext, LevelPlayInputContext } from '../../input';
-import { TankColor, TankSpriteId, TankType } from '../../tank';
+import { GameObject, RectPainter, Scene, TextAlignment } from '../../core';
+import { GameUpdateArgs } from '../../game';
+import { EditorBrush, InputHint, SpriteText } from '../../gameObjects';
+import { EditorHintInputContext, EditorMapInputContext } from '../../input';
+import { TerrainType } from '../../terrain';
 import * as config from '../../config';
 
 import { GameSceneType } from '../GameSceneType';
 
-import { LevelLocationParams } from './params';
+import { EditorLocationParams } from './params';
 
-export class LevelHintScene extends Scene<LevelLocationParams> {
+export class EditorHintScene extends Scene<EditorLocationParams> {
   private background: GameObject;
   private title: SpriteText;
-  private tankIcon: GameObject;
+  private brushIcon: GameObject;
   private moveUpHint: SpriteText;
   private moveDownHint: SpriteText;
   private moveLeftHint: SpriteText;
   private moveRightHint: SpriteText;
-  private fireHint: SpriteText;
-  private rapidFireHint: SpriteText;
-  private pauseHint: SpriteText;
+  private drawHint: SpriteText;
+  private eraseHint: SpriteText;
+  private nextBrushHint: SpriteText;
+  private prevBrushHint: SpriteText;
   private continueHint: GameObject;
 
-  protected setup({
-    inputManager,
-    session,
-    spriteLoader,
-  }: GameUpdateArgs): void {
-    session.setSeenLevelHint();
+  protected setup({ inputManager, session }: GameUpdateArgs): void {
+    session.setSeenEditorHint();
 
     this.background = new GameObject();
     this.background.size.copyFrom(this.root.size);
@@ -48,20 +39,14 @@ export class LevelHintScene extends Scene<LevelLocationParams> {
     this.title.position.setY(64);
     this.root.add(this.title);
 
-    const tankSpriteId = TankSpriteId.create(
-      TankType.PlayerA(),
-      TankColor.Primary,
-      Rotation.Up,
-    );
-    this.tankIcon = new GameObject(64, 64);
-    this.tankIcon.origin.set(0.5, 0.5);
-    this.tankIcon.setCenterX(this.root.getSelfCenter().x);
-    this.tankIcon.position.setY(302);
-    this.tankIcon.painter = new SpritePainter(spriteLoader.load(tankSpriteId));
-    this.root.add(this.tankIcon);
+    this.brushIcon = new EditorBrush(64, 64, TerrainType.Brick);
+    this.brushIcon.origin.set(0.5, 0.5);
+    this.brushIcon.setCenterX(this.root.getSelfCenter().x);
+    this.brushIcon.position.setY(302);
+    this.root.add(this.brushIcon);
 
     const moveUpDisplayCode = inputManager.getPresentedControlCode(
-      LevelPlayInputContext.MoveUp[0],
+      EditorMapInputContext.MoveUp[0],
     );
     this.moveUpHint = new SpriteText(`${moveUpDisplayCode}\n↑`, {
       alignment: TextAlignment.Center,
@@ -72,7 +57,7 @@ export class LevelHintScene extends Scene<LevelLocationParams> {
     this.root.add(this.moveUpHint);
 
     const moveDownDisplayCode = inputManager.getPresentedControlCode(
-      LevelPlayInputContext.MoveDown[0],
+      EditorMapInputContext.MoveDown[0],
     );
     this.moveDownHint = new SpriteText(`↓\n${moveDownDisplayCode}`, {
       alignment: TextAlignment.Center,
@@ -83,7 +68,7 @@ export class LevelHintScene extends Scene<LevelLocationParams> {
     this.root.add(this.moveDownHint);
 
     const moveLeftDisplayCode = inputManager.getPresentedControlCode(
-      LevelPlayInputContext.MoveLeft[0],
+      EditorMapInputContext.MoveLeft[0],
     );
     this.moveLeftHint = new SpriteText(`${moveLeftDisplayCode} ←`, {
       alignment: TextAlignment.Right,
@@ -93,7 +78,7 @@ export class LevelHintScene extends Scene<LevelLocationParams> {
     this.root.add(this.moveLeftHint);
 
     const moveRightDisplayCode = inputManager.getPresentedControlCode(
-      LevelPlayInputContext.MoveRight[0],
+      EditorMapInputContext.MoveRight[0],
     );
     this.moveRightHint = new SpriteText(`→ ${moveRightDisplayCode}`, {
       alignment: TextAlignment.Right,
@@ -102,29 +87,36 @@ export class LevelHintScene extends Scene<LevelLocationParams> {
     this.moveRightHint.position.set(560, 305);
     this.root.add(this.moveRightHint);
 
-    const fireDisplayCode = inputManager.getPresentedControlCode(
-      LevelPlayInputContext.Fire[0],
+    const drawDisplayCode = inputManager.getPresentedControlCode(
+      EditorMapInputContext.Draw[0],
     );
-    this.fireHint = new SpriteText(`FIRE       - ${fireDisplayCode}`);
-    this.fireHint.position.set(250, 550);
-    this.root.add(this.fireHint);
+    this.drawHint = new SpriteText(`DRAW       - ${drawDisplayCode}`);
+    this.drawHint.position.set(290, 550);
+    this.root.add(this.drawHint);
 
-    const rapidFireDisplayCode = inputManager.getPresentedControlCode(
-      LevelPlayInputContext.RapidFire[0],
+    const eraseDisplayCode = inputManager.getPresentedControlCode(
+      EditorMapInputContext.Erase[0],
     );
-    this.rapidFireHint = new SpriteText(`RAPID FIRE - ${rapidFireDisplayCode}`);
-    this.rapidFireHint.position.set(250, 600);
-    this.root.add(this.rapidFireHint);
+    this.eraseHint = new SpriteText(`ERASE      - ${eraseDisplayCode}`);
+    this.eraseHint.position.set(290, 600);
+    this.root.add(this.eraseHint);
 
-    const pauseDisplayCode = inputManager.getPresentedControlCode(
-      LevelPlayInputContext.Pause[0],
+    const nextBrushDisplayCode = inputManager.getPresentedControlCode(
+      EditorMapInputContext.NextBrush[0],
     );
-    this.pauseHint = new SpriteText(`PAUSE      - ${pauseDisplayCode}`);
-    this.pauseHint.position.set(250, 650);
-    this.root.add(this.pauseHint);
+    this.nextBrushHint = new SpriteText(`NEXT BRUSH - ${nextBrushDisplayCode}`);
+    this.nextBrushHint.position.set(290, 650);
+    this.root.add(this.nextBrushHint);
+
+    const prevBrushDisplayCode = inputManager.getPresentedControlCode(
+      EditorMapInputContext.PrevBrush[0],
+    );
+    this.prevBrushHint = new SpriteText(`PREV BRUSH - ${prevBrushDisplayCode}`);
+    this.prevBrushHint.position.set(290, 700);
+    this.root.add(this.prevBrushHint);
 
     const continueDisplayedCode = inputManager.getPresentedControlCode(
-      LevelHintInputContext.Skip[0],
+      EditorHintInputContext.Skip[0],
     );
     this.continueHint = new InputHint(`${continueDisplayedCode} TO CONTINUE`);
     this.root.add(this.continueHint);
@@ -133,9 +125,9 @@ export class LevelHintScene extends Scene<LevelLocationParams> {
   protected update(updateArgs: GameUpdateArgs): void {
     const { input } = updateArgs;
 
-    if (input.isDownAny(LevelHintInputContext.Skip)) {
-      // Map config is forwarded from level load scene
-      this.navigator.replace(GameSceneType.LevelPlay, this.params);
+    if (input.isDownAny(EditorHintInputContext.Skip)) {
+      // Forward params
+      this.navigator.replace(GameSceneType.EditorMap, this.params);
       return;
     }
 

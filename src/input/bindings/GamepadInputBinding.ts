@@ -13,7 +13,7 @@ export class GamepadInputBinding extends InputBinding {
     this.setDefault(InputControl.Select, GamepadButtonCode.Start);
     this.setDefault(InputControl.PrimaryAction, GamepadButtonCode.X);
     this.setDefault(InputControl.SecondaryAction, GamepadButtonCode.Y);
-    this.setDefault(InputControl.Rewind, GamepadButtonCode.Y);
+    this.setDefault(InputControl.Rewind, GamepadButtonCode.A);
     this.setDefault(InputControl.FastForward, GamepadButtonCode.B);
   }
 }

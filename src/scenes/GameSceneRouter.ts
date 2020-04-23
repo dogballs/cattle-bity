@@ -1,7 +1,12 @@
 import { GameObject, SceneRouter } from '../core';
 import * as config from '../config';
 
-import { EditorEnemyScene, EditorMapScene, EditorMenuScene } from './editor';
+import {
+  EditorEnemyScene,
+  EditorHintScene,
+  EditorMapScene,
+  EditorMenuScene,
+} from './editor';
 import {
   LevelHintScene,
   LevelLoadScene,
@@ -31,6 +36,7 @@ export class GameSceneRouter extends SceneRouter {
     super();
 
     this.register(GameSceneType.EditorEnemy, EditorEnemyScene);
+    this.register(GameSceneType.EditorHint, EditorHintScene);
     this.register(GameSceneType.EditorMap, EditorMapScene);
     this.register(GameSceneType.EditorMenu, EditorMenuScene);
     this.register(GameSceneType.MainGameOver, MainGameOverScene);

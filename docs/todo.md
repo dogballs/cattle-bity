@@ -3,8 +3,6 @@
 Game logic
 
 - movement collision between tanks
-- input context hints
-- prevent accidental page reload
 
 Maps
 
