@@ -37,6 +37,7 @@ export class MenuCursor extends GameObject {
     this.animation.update(updateArgs.deltaTime);
 
     this.updateSprite();
+    this.setNeedsPaint();
   }
 
   private updateSprite(): void {

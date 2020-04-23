@@ -56,6 +56,8 @@ export class ScoreTableCounter extends GameObject {
 
       this.currentKills += 1;
 
+      this.setNeedsPaint();
+
       if (this.currentKills > this.targetKills) {
         this.state = State.Done;
         return;

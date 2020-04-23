@@ -14,14 +14,28 @@ export abstract class RenderContext {
 
   abstract init(): void;
   abstract clear(): void;
+  abstract clearRect(x: number, y: number, width: number, height: number): void;
   abstract drawImage(
     imageSource: ImageSource,
     sourceRect: Rect,
     destinationRect: Rect,
   );
-  abstract fillRect(rect: Rect, color: string);
+  abstract fillRect(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    color: string,
+  );
   abstract getGlobalAlpha(): number;
   abstract setGlobalAlpha(alpha: number);
   abstract strokePath(positions: Vector[], color: string);
-  abstract strokeRect(rect: Rect, color: string);
+  abstract strokeRect(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    color?: string,
+    lineWidth?: number,
+  );
 }

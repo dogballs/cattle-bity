@@ -2,7 +2,7 @@ import { Rect, Timer } from '../../core';
 import { DebugLevelPowerupMenu } from '../../debug';
 import { GameUpdateArgs } from '../../game';
 import { Powerup } from '../../gameObjects';
-import { PowerupFactory, PowerupGrid } from '../../powerup';
+import { PowerupFactory, PowerupGrid, PowerupType } from '../../powerup';
 import { TerrainType } from '../../terrain';
 import * as config from '../../config';
 
@@ -37,8 +37,8 @@ export class LevelPowerupScript extends LevelScript {
         top: 125,
       });
       debugMenu.attach();
-      debugMenu.spawnRequest.addListener(() => {
-        this.spawn();
+      debugMenu.spawnRequest.addListener((type: PowerupType) => {
+        this.spawn(type);
       });
     }
   }
@@ -92,11 +92,14 @@ export class LevelPowerupScript extends LevelScript {
     this.grid.freeRect(rect);
   };
 
-  private spawn(): void {
+  private spawn(type: PowerupType = null): void {
     // Override previous powerup with newly picked up one
     this.revoke();
 
-    const powerup = PowerupFactory.createRandom();
+    const powerup =
+      type !== null
+        ? PowerupFactory.create(type)
+        : PowerupFactory.createRandom();
 
     // Block area around player tank at the moment of powerup spawn
     // so player won't accidently pick up a powerup. After spawning free it back

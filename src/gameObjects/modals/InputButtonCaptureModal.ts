@@ -4,6 +4,7 @@ import * as config from '../../config';
 
 export class InputButtonCaptureModal extends GameObject {
   public painter = new RectPainter(config.COLOR_BACKDROP);
+  public zIndex = config.MODAL_Z_INDEX;
   private container = new GameObject(512, 256);
   private text = new SpriteText('PRESS ANY KEY', { color: config.COLOR_WHITE });
 

@@ -49,6 +49,10 @@ export class WebglRenderContext extends RenderContext {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
   }
 
+  public clearRect(): void {
+    return undefined;
+  }
+
   public init(): void {
     this.gl = this.canvas.getContext('webgl');
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);

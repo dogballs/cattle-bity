@@ -1,13 +1,13 @@
 import { Subject } from '../../core';
 import { LevelWorld } from '../../level';
-import { PowerupGrid } from '../../powerup';
+import { PowerupGrid, PowerupType } from '../../powerup';
 import * as config from '../../config';
 
 import { DebugGrid } from '../DebugGrid';
 import { DebugMenu, DebugMenuOptions } from '../DebugMenu';
 
 export class DebugLevelPowerupMenu extends DebugMenu {
-  public spawnRequest = new Subject();
+  public spawnRequest = new Subject<PowerupType>();
   private levelWorld: LevelWorld;
   private powerupGrid: PowerupGrid;
   private debugGrid: DebugGrid;
@@ -32,6 +32,7 @@ export class DebugLevelPowerupMenu extends DebugMenu {
     this.appendButton('Hide grid', this.handleGridHide);
     this.appendButton('Update grid', this.handleGridUpdate);
     this.appendButton('Spawn', this.handleSpawn);
+    this.appendButton('Spawn: freeze', this.handleSpawnFreeze);
   }
 
   public showGrid(): void {
@@ -62,5 +63,9 @@ export class DebugLevelPowerupMenu extends DebugMenu {
 
   private handleSpawn = (): void => {
     this.spawnRequest.notify(null);
+  };
+
+  private handleSpawnFreeze = (): void => {
+    this.spawnRequest.notify(PowerupType.Freeze);
   };
 }

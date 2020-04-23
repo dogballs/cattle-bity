@@ -34,6 +34,8 @@ export class LevelGameOverScript extends LevelScript {
   protected update(updateArgs: GameUpdateArgs): void {
     const { deltaTime } = updateArgs;
 
+    this.notice.dirtyPaintBox();
+
     this.notice.position.y -= SLIDE_SPEED * deltaTime;
     if (this.notice.position.y <= TARGET_POSITION_Y) {
       this.notice.position.y = TARGET_POSITION_Y;

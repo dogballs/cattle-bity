@@ -1,4 +1,4 @@
-import { GameObject, Subject } from '../../../core';
+import { GameObject, RectPainter, Subject } from '../../../core';
 import { GameUpdateArgs } from '../../../game';
 import { MenuInputContext } from '../../../input';
 import * as config from '../../../config';
@@ -33,7 +33,7 @@ export class SelectorMenuItem<T> extends MenuItem {
   private options: SelectorMenuItemOptions;
   private leftArrow = new SpriteText('←', { color: config.COLOR_WHITE });
   private rightArrow = new SpriteText('→', { color: config.COLOR_WHITE });
-  private container = new GameObject();
+  private container: GameObject;
   private selectedIndex = 0;
   private items: SpriteText[] = [];
 
@@ -83,6 +83,11 @@ export class SelectorMenuItem<T> extends MenuItem {
   }
 
   protected setup(): void {
+    this.container = new GameObject(this.options.containerWidth, ITEM_HEIGHT);
+    this.container.painter = new RectPainter(config.COLOR_BLACK);
+    this.container.position.setX(ARROW_WIDTH + ARROW_OFFSET);
+    this.add(this.container);
+
     this.choices.forEach((choice) => {
       const item = new SpriteText(choice.text, {
         color: config.COLOR_WHITE,
@@ -95,10 +100,6 @@ export class SelectorMenuItem<T> extends MenuItem {
     });
 
     this.add(this.leftArrow);
-
-    this.container.position.setX(ARROW_WIDTH + ARROW_OFFSET);
-    this.container.size.set(this.options.containerWidth, ITEM_HEIGHT);
-    this.add(this.container);
 
     this.rightArrow.position.setX(
       ARROW_WIDTH + ARROW_OFFSET + this.options.containerWidth + ARROW_OFFSET,
@@ -143,12 +144,15 @@ export class SelectorMenuItem<T> extends MenuItem {
       this.selectedIndex = nextIndex;
     }
 
-    this.container.children.forEach((item, index) => {
-      if (this.selectedIndex === index) {
-        item.setVisible(true);
-      } else {
-        item.setVisible(false);
-      }
-    });
+    if (this.hasBeenSetup()) {
+      this.container.dirtyPaintBox();
+      this.container.children.forEach((item, index) => {
+        if (this.selectedIndex === index) {
+          item.setVisible(true);
+        } else {
+          item.setVisible(false);
+        }
+      });
+    }
   }
 }

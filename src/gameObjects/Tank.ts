@@ -110,6 +110,8 @@ export class Tank extends GameObject {
       return;
     }
 
+    this.dirtyPaintBox();
+
     this.behavior.update(this, updateArgs);
 
     this.lastFireTimer.update(deltaTime);

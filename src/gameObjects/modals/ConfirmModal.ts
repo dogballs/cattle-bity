@@ -22,6 +22,7 @@ export class ConfirmModal extends GameObject {
   public painter = new RectPainter(config.COLOR_BACKDROP);
   public accepted = new Subject();
   public declined = new Subject();
+  public zIndex = config.MODAL_Z_INDEX;
   private options: ConfirmModalOptions;
   private container: GameObject;
   private text: SpriteText;
@@ -69,6 +70,7 @@ export class ConfirmModal extends GameObject {
     const menuItems = [this.acceptItem, this.declineItem];
 
     this.menu = new Menu();
+    this.menu.setZIndex(this.zIndex + 1);
     this.menu.position.set(16, 128);
     this.menu.setItems(menuItems);
     this.container.add(this.menu);

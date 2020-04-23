@@ -49,6 +49,7 @@ export class SpriteText extends GameObject {
     this.size.copyFrom(this.text.getSize());
 
     this.painter.text = this.text;
+    this.setNeedsPaint();
   }
 
   public setColor(color: string): void {
@@ -70,6 +71,7 @@ export class SpriteText extends GameObject {
   }
 
   public setText(text: string): void {
+    this.dirtyPaintBox();
     this.text.setText(text);
     this.size.copyFrom(this.text.getSize());
     this.updateMatrix();

@@ -53,10 +53,13 @@ export class Bullet extends GameObject {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
+    this.dirtyPaintBox();
+
     this.translateY(this.speed * updateArgs.deltaTime);
     this.updateMatrix();
 
     this.collider.update();
+    this.setNeedsPaint();
   }
 
   protected collide(collision: Collision): void {

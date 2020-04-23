@@ -30,11 +30,13 @@ export class Explosion extends GameObject {
 
   protected update(updateArgs: GameUpdateArgs): void {
     if (this.animation.isComplete()) {
+      this.dirtyPaintBox();
       this.removeSelf();
       this.completed.notify(null);
       return;
     }
     this.animation.update(updateArgs.deltaTime);
     this.painter.sprite = this.animation.getCurrentFrame();
+    this.setNeedsPaint();
   }
 }

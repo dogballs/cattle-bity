@@ -128,10 +128,10 @@ export class EditorEnemyScene extends Scene<EditorLocationParams> {
     this.title.setText(this.getTitleText());
 
     this.prevItem.setText(this.getPrevText());
-    this.prevItem.focusable = this.hasPrevPage();
+    this.prevItem.setFocusable(this.hasPrevPage());
 
     this.nextItem.setText(this.getNextText());
-    this.nextItem.focusable = this.hasNextPage();
+    this.nextItem.setFocusable(this.hasNextPage());
 
     const pageRange = this.getPageRange(this.pageIndex);
 
@@ -226,6 +226,7 @@ export class EditorEnemyScene extends Scene<EditorLocationParams> {
 
   private handleSelectorUnfocused = (): void => {
     this.preview.setVisible(false);
+    this.preview.dirtyPaintBox();
   };
 
   private handleNextSelected = (): void => {

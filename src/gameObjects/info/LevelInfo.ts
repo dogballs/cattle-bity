@@ -1,10 +1,12 @@
 import { GameObject } from '../../core';
+import * as config from '../../config';
 
 import { LevelEnemyCounter } from './LevelEnemyCounter';
 import { LevelLivesCounter } from './LevelLivesCounter';
 import { LevelNumberCounter } from './LevelNumberCounter';
 
 export class LevelInfo extends GameObject {
+  public zIndex = config.LEVEL_INFO_Z_INDEX;
   private enemyCounter = new LevelEnemyCounter();
   private livesCounter = new LevelLivesCounter();
   private levelNumberCounter = new LevelNumberCounter();

@@ -1,17 +1,14 @@
 export class Node {
-  public children: this[];
-  public parent: this;
-
-  constructor() {
-    this.children = [];
-    this.parent = null;
-  }
+  public children: this[] = [];
+  public parent: this = null;
+  public removedChildren: this[] = [];
+  public isRemoved = false;
 
   // TODO: figure out input type for a child
   public add(...childrenToAdd): this {
     for (const childToAdd of childrenToAdd) {
       if (childToAdd.parent !== null) {
-        childToAdd.parent.remove(childToAdd);
+        childToAdd.parent.remove(childToAdd, false);
       }
 
       childToAdd.parent = this;
@@ -32,16 +29,22 @@ export class Node {
     return this;
   }
 
-  public remove(childToRemove): this {
+  public remove(childToRemove, addToRemoved = true): boolean {
     const index = this.children.indexOf(childToRemove);
 
     if (index === -1) {
-      return this;
+      return false;
+    }
+
+    if (addToRemoved) {
+      childToRemove.isRemoved = true;
+
+      this.removedChildren.push(childToRemove);
     }
 
     this.children.splice(index, 1);
 
-    return this;
+    return true;
   }
 
   public removeSelf(): this {
@@ -58,6 +61,10 @@ export class Node {
     this.children = [];
 
     return this;
+  }
+
+  public cleanupRemoved(): void {
+    this.removedChildren = [];
   }
 
   public traverse(callback: (node: this) => void): this {

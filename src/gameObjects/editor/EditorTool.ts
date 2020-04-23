@@ -27,6 +27,7 @@ const HOLD_THROTTLE_OPTIONS: InputHoldThrottleOptions = {
 export class EditorTool extends GameObject {
   public collider = new BoxCollider(this, true);
   public painter = new RectPainter(null, config.COLOR_RED);
+  public zIndex = config.EDITOR_TOOL_Z_INDEX;
   public draw = new Subject();
   public erase = new Subject();
   private brushes: EditorBrush[] = [];
@@ -77,6 +78,8 @@ export class EditorTool extends GameObject {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
+    this.dirtyPaintBox();
+
     this.updatePosition(updateArgs);
     this.updateBlinking(updateArgs);
 

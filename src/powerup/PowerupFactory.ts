@@ -14,6 +14,11 @@ const AVAILABLE_TYPES = [
 ];
 
 export class PowerupFactory {
+  public static create(type: PowerupType): Powerup {
+    const powerup = new Powerup(type);
+    return powerup;
+  }
+
   public static createRandom(): Powerup {
     const type = RandomUtils.arrayElement(AVAILABLE_TYPES);
     const powerup = new Powerup(type);

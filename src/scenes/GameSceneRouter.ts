@@ -51,6 +51,8 @@ export class GameSceneRouter extends SceneRouter {
   protected createRoot(): GameObject {
     const root = new GameObject();
     root.size.set(config.CANVAS_WIDTH, config.CANVAS_HEIGHT);
+    root.updateMatrix();
+    // root.setNeedsClear();
     return root;
   }
 }

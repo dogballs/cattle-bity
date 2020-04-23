@@ -32,6 +32,9 @@ export class State<T> {
   public not(value): boolean {
     return this.value !== value;
   }
+  public hasChanged(): boolean {
+    return this.value !== this.previousValue;
+  }
 
   public hasChangedTo(toValue: T): boolean {
     return this.value !== this.previousValue && this.value === toValue;

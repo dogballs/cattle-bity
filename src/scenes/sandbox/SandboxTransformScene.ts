@@ -29,10 +29,13 @@ export class SandboxTransformScene extends Scene {
   protected update(updateArgs: GameUpdateArgs): void {
     const { input } = updateArgs;
 
-    if (input.isDown(InputControl.Select)) {
-      this.angle += 90;
-      this.child.rotate(this.angle);
-      this.child.updateMatrix();
+    if (input.isDown(InputControl.PrimaryAction)) {
+      this.parent.dirtyPaintBox();
+      this.parent.position.addX(100);
+      this.parent.updateMatrix();
+      // this.angle += 90;
+      // this.child.rotate(this.angle);
+      // this.child.updateMatrix();
     }
 
     this.root.traverseDescedants((child) => {

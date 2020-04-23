@@ -5,12 +5,21 @@ export abstract class MenuItem extends GameObject {
   public focused = new Subject();
   public unfocused = new Subject();
   public selected = new Subject();
-  public focusable = true;
+  protected focusable = true;
   public isFocused = false;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public updateFocused(updateArgs?: GameUpdateArgs): void {
     // Virtual
+  }
+
+  public setFocusable(focusable: boolean): void {
+    this.focusable = focusable;
+    this.setNeedsPaint();
+  }
+
+  public isFocusable(): boolean {
+    return this.focusable;
   }
 
   public focus(): void {

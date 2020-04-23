@@ -31,6 +31,7 @@ export class Points extends GameObject {
   }
 
   private handleTimer = (): void => {
+    this.dirtyPaintBox();
     this.removeSelf();
   };
 

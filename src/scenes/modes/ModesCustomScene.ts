@@ -38,7 +38,7 @@ export class ModesCustomScene extends Scene {
 
     this.playItem = new TextMenuItem('PLAY');
     this.playItem.selected.addListener(this.handlePlaySelected);
-    this.playItem.focusable = false;
+    this.playItem.setFocusable(false);
 
     this.backItem = new TextMenuItem('BACK');
     this.backItem.selected.addListener(this.handleBackSelected);
@@ -60,7 +60,7 @@ export class ModesCustomScene extends Scene {
   }
 
   private updateMenu(): void {
-    this.playItem.focusable = this.canPlay();
+    this.playItem.setFocusable(this.canPlay());
   }
 
   private canPlay(): boolean {

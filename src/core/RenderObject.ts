@@ -1,7 +1,7 @@
+import { BoundingBox } from './BoundingBox';
 import { Painter } from './Painter';
 import { Transform } from './Transform';
 
-// TODO: transform should be a component
 export class RenderObject extends Transform {
   // TODO: circular reference
   public painter: Painter = null;
@@ -18,17 +18,37 @@ export class RenderObject extends Transform {
   // Computed, don't change
   protected worldVisible: boolean = null;
 
+  protected prevDirtyBox: BoundingBox = null;
+
+  protected needsPaint = true;
+
+  public canRender(): boolean {
+    if (this.painter === null) {
+      return false;
+    }
+    if (this.getWorldVisible() === false) {
+      return false;
+    }
+    return true;
+  }
+
+  // Visibility
+
   public setVisible(visible: boolean): void {
     this.visible = visible;
 
-    this.updateWorldVisible();
+    this.updateWorldVisible(true);
   }
 
   public getWorldVisible(): boolean {
     return this.worldVisible;
   }
 
-  protected updateWorldVisible(): void {
+  protected updateWorldVisible(updateParents = false): void {
+    if (this.parent !== null && updateParents === true) {
+      this.parent.updateWorldVisible(true);
+    }
+
     if (this.parent === null) {
       this.worldVisible = this.visible ?? true;
     } else {
@@ -40,17 +60,23 @@ export class RenderObject extends Transform {
     }
   }
 
+  // Z-index
+
   public setZIndex(zIndex: number): void {
     this.zIndex = zIndex;
 
-    this.updateWorldZIndex();
+    this.updateWorldZIndex(true);
   }
 
   public getWorldZIndex(): number {
     return this.worldZIndex;
   }
 
-  protected updateWorldZIndex(): void {
+  protected updateWorldZIndex(updateParents = false): void {
+    if (this.parent !== null && updateParents === true) {
+      this.parent.updateWorldZIndex(true);
+    }
+
     if (this.parent === null) {
       this.worldZIndex = this.zIndex ?? 0;
     } else {
@@ -60,5 +86,42 @@ export class RenderObject extends Transform {
     for (const child of this.children) {
       child.updateWorldZIndex();
     }
+  }
+
+  // Dirty box
+
+  public dirtyPaintBox(): void {
+    this.prevDirtyBox = this.getWorldBoundingBox().clone();
+    this.needsPaint = true;
+
+    for (const child of this.children) {
+      child.dirtyPaintBox();
+    }
+  }
+
+  public getPrevDirtyBox(): BoundingBox {
+    return this.prevDirtyBox;
+  }
+
+  public resetPrevDirtyBox(): void {
+    this.prevDirtyBox = null;
+  }
+
+  // Paint flag
+
+  public setNeedsPaint(): void {
+    this.needsPaint = true;
+
+    for (const child of this.children) {
+      child.setNeedsPaint();
+    }
+  }
+
+  public doesNeedPaint(): boolean {
+    return this.needsPaint;
+  }
+
+  public resetNeedsPaint(): void {
+    this.needsPaint = false;
   }
 }

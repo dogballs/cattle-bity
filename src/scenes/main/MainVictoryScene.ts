@@ -64,6 +64,8 @@ export class MainVictoryScene extends Scene {
 
     collisionSystem.update();
     collisionSystem.collide();
+
+    this.root.setNeedsPaint();
   }
 
   private handleStopped = (): void => {

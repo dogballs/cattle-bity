@@ -32,7 +32,7 @@ export class LevelPlayerScript extends LevelScript {
 
     if (config.IS_DEV) {
       const debugMenu = new DebugLevelPlayerMenu({
-        top: 250,
+        top: 270,
       });
       debugMenu.attach();
       debugMenu.upgradeRequest.addListener(() => {

@@ -104,8 +104,9 @@ export class Menu extends GameObject {
     this.focusedIndex = index;
     this.showCursor();
 
+    this.cursor.dirtyPaintBox();
     this.cursor.position.setY(this.cursor.size.height * this.focusedIndex);
-    this.cursor.updateMatrix();
+    this.cursor.updateMatrix(true);
 
     this.focused.notify(this.focusedIndex);
 
@@ -148,7 +149,7 @@ export class Menu extends GameObject {
         prevIndex = this.items.length - 1;
       }
       prevItem = this.items[prevIndex];
-    } while (prevItem.focusable === false);
+    } while (prevItem.isFocusable() === false);
 
     return prevIndex;
   }
@@ -167,12 +168,12 @@ export class Menu extends GameObject {
         nextIndex = 0;
       }
       nextItem = this.items[nextIndex];
-    } while (nextItem.focusable === false);
+    } while (nextItem.isFocusable() === false);
 
     return nextIndex;
   }
 
   private hasFocusableItems(): boolean {
-    return this.items.some((item) => item.focusable);
+    return this.items.some((item) => item.isFocusable());
   }
 }

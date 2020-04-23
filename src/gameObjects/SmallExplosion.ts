@@ -34,6 +34,7 @@ export class SmallExplosion extends GameObject {
 
   protected update(updateArgs: GameUpdateArgs): void {
     if (this.animation.isComplete()) {
+      this.dirtyPaintBox();
       this.removeSelf();
       this.done.notify(null);
       return;
@@ -41,5 +42,6 @@ export class SmallExplosion extends GameObject {
 
     this.animation.update(updateArgs.deltaTime);
     this.painter.sprite = this.animation.getCurrentFrame();
+    this.setNeedsPaint();
   }
 }

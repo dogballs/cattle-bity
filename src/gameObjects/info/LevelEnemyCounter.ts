@@ -19,6 +19,7 @@ export class LevelEnemyCounter extends GameObject {
 
     this.removeAllChildren();
     this.addItems(nextCount);
+    this.dirtyPaintBox();
   }
 
   protected setup(): void {

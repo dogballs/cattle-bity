@@ -72,19 +72,19 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
 
     this.saveItem = new TextMenuItem('SAVE');
     this.saveItem.selected.addListener(this.handleSaveSelected);
-    this.saveItem.focusable = false;
+    this.saveItem.setFocusable(false);
 
     this.playtestItem = new TextMenuItem('PLAYTEST');
     this.playtestItem.selected.addListener(this.handlePlaytestSelected);
-    this.playtestItem.focusable = false;
+    this.playtestItem.setFocusable(false);
 
     this.mapItem = new TextMenuItem('EDIT → MAP');
     this.mapItem.selected.addListener(this.handleMapSelected);
-    this.mapItem.focusable = false;
+    this.mapItem.setFocusable(false);
 
     this.enemyItem = new TextMenuItem('EDIT → ENEMIES');
     this.enemyItem.selected.addListener(this.handleEnemySelected);
-    this.enemyItem.focusable = false;
+    this.enemyItem.setFocusable(false);
 
     this.exitItem = new TextMenuItem('MAIN MENU');
     this.exitItem.selected.addListener(this.handleRequestedConfirmation);
@@ -122,6 +122,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
       message: 'CHANGES WILL BE LOST.\nARE YOU SURE?',
     });
     this.confirmModal.size.copyFrom(this.root.size);
+    this.confirmModal.updateMatrix();
     this.confirmModal.setVisible(false);
     this.confirmModal.accepted.addListener(this.handleConfirmAccepted);
     this.confirmModal.declined.addListener(this.handleConfirmDeclined);
@@ -158,10 +159,10 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
   private updateMenu(): void {
     this.title.setText(this.getTitleText());
 
-    this.saveItem.focusable = this.isLoaded();
-    this.mapItem.focusable = this.isLoaded();
-    this.enemyItem.focusable = this.isLoaded();
-    this.playtestItem.focusable = this.isLoaded();
+    this.saveItem.setFocusable(this.isLoaded());
+    this.mapItem.setFocusable(this.isLoaded());
+    this.enemyItem.setFocusable(this.isLoaded());
+    this.playtestItem.setFocusable(this.isLoaded());
   }
 
   private createLocationParams(): EditorLocationParams {
@@ -275,20 +276,21 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
     this.confirmModal.resetSelection();
     this.confirmModal.setVisible(false);
     this.menuState = MenuState.Navigation;
+    this.root.setNeedsPaint();
   }
 
   private handleConfirmAccepted = (): void => {
     if (this.newItem.isFocused) {
       this.handleNewSelected();
+      this.hideConfirmation();
     }
     if (this.loadItem.isFocused) {
       this.handleLoadSelected();
+      this.hideConfirmation();
     }
     if (this.exitItem.isFocused) {
       this.handleExitSelected();
     }
-
-    this.hideConfirmation();
   };
 
   private handleConfirmDeclined = (): void => {

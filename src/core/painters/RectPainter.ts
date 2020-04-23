@@ -6,6 +6,7 @@ import { RenderObject } from '../RenderObject';
 export class RectPainter extends Painter {
   public fillColor: string = null;
   public strokeColor: string = null;
+  public lineWidth = 1;
 
   constructor(fillColor: string = null, strokeColor: string = null) {
     super();
@@ -18,26 +19,20 @@ export class RectPainter extends Painter {
     const box = renderObject.getWorldBoundingBox();
     const rect = box.toRect();
 
-    // const points = renderObject.getWorldPoints();
-    // if (points.length === 0) {
-    //   return;
-    // }
-
-    // const [firstPoint, ...restPoints] = points;
-
-    // context.beginPath();
-    // context.moveTo(firstPoint.x, firstPoint.y);
-    // for (const point of restPoints) {
-    //   context.lineTo(point.x, point.y);
-    // }
-    // context.closePath();
+    // Originally canvas draws border outside the rectangle.
+    // Recalculate coordinates of the border to be inside rect - it will
+    // simplify clearing rect during rendering.
+    const x = rect.x + this.lineWidth;
+    const y = rect.y + this.lineWidth;
+    const width = rect.width - this.lineWidth * 2;
+    const height = rect.height - this.lineWidth * 2;
 
     if (this.fillColor !== null) {
-      context.fillRect(rect, this.fillColor);
+      context.fillRect(rect.x, rect.y, rect.width, rect.height, this.fillColor);
     }
 
     if (this.strokeColor !== null) {
-      context.strokeRect(rect, this.strokeColor);
+      context.strokeRect(x, y, width, height, this.strokeColor, this.lineWidth);
     }
   }
 }

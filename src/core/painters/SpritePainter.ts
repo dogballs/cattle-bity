@@ -7,14 +7,15 @@ import { RenderObject } from '../RenderObject';
 import { SpriteAlignment } from '../SpriteAlignment';
 
 export class SpritePainter extends Painter {
-  public alignment: SpriteAlignment = SpriteAlignment.MiddleCenter;
+  public alignment: SpriteAlignment;
   public sprite: Sprite = null;
   public opacity = 1;
 
-  constructor(sprite: Sprite = null) {
+  constructor(sprite: Sprite = null, alignment = SpriteAlignment.MiddleCenter) {
     super();
 
     this.sprite = sprite;
+    this.alignment = alignment;
   }
 
   public paint(context: RenderContext, renderObject: RenderObject): void {

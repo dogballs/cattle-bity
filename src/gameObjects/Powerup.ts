@@ -29,6 +29,7 @@ export class Powerup extends GameObject {
   }
 
   public destroy(): void {
+    this.dirtyPaintBox();
     this.removeSelf();
     this.collider.unregister();
   }
@@ -50,6 +51,7 @@ export class Powerup extends GameObject {
 
     this.animation.update(updateArgs.deltaTime);
     this.painter.sprite = this.animation.getCurrentFrame();
+    this.setNeedsPaint();
   }
 
   protected collide(collision: Collision): void {

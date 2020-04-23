@@ -3,7 +3,6 @@ import { Collider, Collision } from './collision';
 import { RenderObject } from './RenderObject';
 
 export class GameObject extends RenderObject {
-  // TODO: These two must go
   public collider: Collider = null;
   public ignorePause = false;
   public tags: string[] = [];
@@ -16,8 +15,8 @@ export class GameObject extends RenderObject {
       this.needsSetup = false;
       this.setup(...args);
       this.updateMatrix();
-      this.updateWorldVisible();
-      this.updateWorldZIndex();
+      this.updateWorldVisible(true);
+      this.updateWorldZIndex(true);
     }
 
     this.update(...args);
@@ -30,6 +29,10 @@ export class GameObject extends RenderObject {
     }
 
     this.collide(collision);
+  }
+
+  protected hasBeenSetup(): boolean {
+    return !this.needsSetup;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
