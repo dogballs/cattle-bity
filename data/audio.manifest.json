@@ -5,6 +5,7 @@
   "hit.enemy": { "file": "data/audio/hit-enemy.mp3" },
   "hit.steel": { "file": "data/audio/hit-steel.mp3" },
   "hit.brick": { "file": "data/audio/hit-brick.mp3" },
+  "ice": { "file": "data/audio/ice.mp3" },
   "level-intro": { "file": "data/audio/level-intro.mp3" },
   "life": { "file": "data/audio/life.mp3" },
   "tank.idle": { "file": "data/audio/tank-idle.mp3" },

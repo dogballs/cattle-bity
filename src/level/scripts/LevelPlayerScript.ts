@@ -115,6 +115,10 @@ export class LevelPlayerScript extends LevelScript {
       this.session.primaryPlayer.setTankTier(event.tier);
     });
 
+    tank.slided.addListener(() => {
+      this.eventBus.playerSlided.notify(null);
+    });
+
     this.session.primaryPlayer.setLevelSpawned();
 
     this.tank = tank;

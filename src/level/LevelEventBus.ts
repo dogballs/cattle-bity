@@ -34,6 +34,7 @@ export class LevelEventBus {
 
   public playerDied = new Subject<LevelPlayerDiedEvent>();
   public playerFired = new Subject();
+  public playerSlided = new Subject();
   public playerSpawnCompleted = new Subject<LevelPlayerSpawnCompletedEvent>();
   public playerSpawnRequested = new Subject<LevelPlayerSpawnRequestedEvent>();
 

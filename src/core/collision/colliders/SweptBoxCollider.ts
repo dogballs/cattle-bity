@@ -6,12 +6,14 @@ import { Collider } from '../Collider';
 export class SweptBoxCollider extends Collider {
   private prevBox: BoundingBox;
   private currentBox: BoundingBox;
+  private sumBox: BoundingBox;
 
   public init(): void {
     const box = this.object.getWorldBoundingBox();
 
     this.prevBox = box.clone();
     this.currentBox = box.clone();
+    this.sumBox = this.prevBox.clone().unionWith(this.currentBox);
   }
 
   public update(): void {
@@ -19,10 +21,11 @@ export class SweptBoxCollider extends Collider {
 
     this.prevBox = this.currentBox;
     this.currentBox = box.clone();
+    this.sumBox = this.prevBox.clone().unionWith(this.currentBox);
   }
 
   public getBox(): BoundingBox {
-    return this.prevBox.unionWith(this.currentBox);
+    return this.sumBox;
   }
 
   public getCurrentBox(): BoundingBox {

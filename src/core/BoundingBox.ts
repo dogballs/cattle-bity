@@ -51,7 +51,7 @@ export class BoundingBox {
     return intersectionBox;
   }
 
-  public unionWith(...others: BoundingBox[]): BoundingBox {
+  public unionWith(...others: BoundingBox[]): this {
     const boxes = [this, ...others];
 
     let minX = null;
@@ -74,12 +74,10 @@ export class BoundingBox {
       }
     }
 
-    const min = new Vector(minX, minY);
-    const max = new Vector(maxX, maxY);
+    this.min.set(minX, minY);
+    this.max.set(maxX, maxY);
 
-    const box = new BoundingBox(min, max);
-
-    return box;
+    return this;
   }
 
   public intersectsBox(other: BoundingBox): boolean {

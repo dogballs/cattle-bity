@@ -1,5 +1,5 @@
 import { Sound } from '../../core';
-import { AudioManager, GameUpdateArgs } from '../../game';
+import { AudioManager, GameUpdateArgs, GameState } from '../../game';
 import { LevelInputContext } from '../../input';
 import { PowerupType } from '../../powerup';
 
@@ -34,6 +34,7 @@ export class LevelAudioScript extends LevelScript {
     this.eventBus.enemyDied.addListener(this.handleEnemyDied);
     this.eventBus.playerDied.addListener(this.handlePlayerDied);
     this.eventBus.playerFired.addListener(this.handlePlayerFired);
+    this.eventBus.playerSlided.addListener(this.handlePlayerSlided);
     this.eventBus.powerupSpawned.addListener(this.handlePowerupSpawned);
     this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
     this.eventBus.levelPaused.addListener(this.handleLevelPaused);
@@ -68,23 +69,28 @@ export class LevelAudioScript extends LevelScript {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { input } = updateArgs;
+    const { gameState, input } = updateArgs;
 
-    // Check if started moving
-    if (input.isHoldAny(MOVE_CONTROLS) && this.tankState !== TankState.Moving) {
-      this.tankState = TankState.Moving;
-      this.idleSound.stop();
-      this.moveSound.playLoop();
-    }
+    if (!gameState.is(GameState.Paused)) {
+      // Check if started moving
+      if (
+        input.isHoldAny(MOVE_CONTROLS) &&
+        this.tankState !== TankState.Moving
+      ) {
+        this.tankState = TankState.Moving;
+        this.idleSound.stop();
+        this.moveSound.playLoop();
+      }
 
-    // If stopped moving
-    if (
-      input.isNotHoldAll(MOVE_CONTROLS) &&
-      this.tankState !== TankState.Idle
-    ) {
-      this.tankState = TankState.Idle;
-      this.moveSound.stop();
-      this.idleSound.playLoop();
+      // If stopped moving
+      if (
+        input.isNotHoldAll(MOVE_CONTROLS) &&
+        this.tankState !== TankState.Idle
+      ) {
+        this.tankState = TankState.Idle;
+        this.moveSound.stop();
+        this.idleSound.playLoop();
+      }
     }
   }
 
@@ -104,6 +110,10 @@ export class LevelAudioScript extends LevelScript {
 
   private handlePlayerFired = (): void => {
     this.audioConttoller.play('fire');
+  };
+
+  private handlePlayerSlided = (): void => {
+    this.audioConttoller.play('ice');
   };
 
   private handlePowerupSpawned = (): void => {

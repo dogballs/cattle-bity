@@ -1,5 +1,6 @@
 import {
   Animation,
+  BoundingBox,
   Collision,
   GameObject,
   SpriteAlignment,
@@ -31,8 +32,9 @@ export enum TankState {
 }
 
 const SKIN_LAYER_DESCRIPTIONS = [{ opacity: 1 }, { opacity: 0.5 }];
-const RAPID_FIRE_DELAY = 0.04;
 const SNAP_SIZE = config.TILE_SIZE_MEDIUM;
+const RAPID_FIRE_DELAY = 0.04;
+const SKATE_DURATION = 0.5;
 
 export class Tank extends GameObject {
   public collider = new SweptBoxCollider(this, true);
@@ -47,12 +49,15 @@ export class Tank extends GameObject {
   public fired = new Subject();
   public died = new Subject<{ reason: TankDeathReason }>();
   public hit = new Subject();
+  public slided = new Subject();
   public state = TankState.Uninitialized;
   public freezeState = new State<boolean>(false);
+  public isOnIce = false;
   protected shieldTimer = new Timer();
   protected animation: Animation<TankAnimationFrame>;
   protected skinLayers: GameObject[] = [];
   private lastFireTimer = new Timer();
+  private slideTimer = new Timer();
 
   constructor(type: TankType, behavior: TankBehavior) {
     super(64, 64);
@@ -112,6 +117,28 @@ export class Tank extends GameObject {
 
     this.dirtyPaintBox();
 
+    if (this.isSliding()) {
+      if (this.isOnIce) {
+        this.slideTimer.update(deltaTime);
+        if (this.slideTimer.isDone()) {
+          // If slide timer is done, then tank becomes idle wherever it stopped
+          // and player has control of it again.
+          this.idle(false);
+        } else {
+          // If on ice and still sliding - move tank in whatever direction it
+          // is facing
+          this.move(deltaTime);
+        }
+      } else {
+        // If tank is sliding, but appears not to be on ice any more, then
+        // stop sliding.
+        this.slideTimer.stop();
+        this.idle(false);
+      }
+    }
+
+    // Behavior code is responsible for blocking movement for a tank when it
+    // is sliding
     this.behavior.update(this, updateArgs);
 
     this.lastFireTimer.update(deltaTime);
@@ -119,6 +146,10 @@ export class Tank extends GameObject {
     this.updateAnimation(deltaTime);
 
     this.collider.update();
+
+    // Reset so in case tank leaves ice, flag will be correct. #collide() is
+    // called right after and it will set the flag if tank is on ice.
+    this.isOnIce = false;
   }
 
   protected updateAnimation(deltaTime: number): void {
@@ -137,104 +168,9 @@ export class Tank extends GameObject {
   }
 
   protected collide(collision: Collision): void {
-    const blockMoveContacts = [];
-
-    for (const contact of collision.contacts) {
-      if (contact.collider.object.tags.includes(Tag.BlockMove)) {
-        blockMoveContacts.push(contact);
-      }
-    }
-
-    // Find closest wall we are colliding with. It solves "tunneling" problem
-    // if tank is going too fast it can jump over some small tiles of walls.
-    // By using swept box collider and then finding closest points of contact,
-    // we make tank interact with the first object on the way.
-    // Tank can also hit multiple block at the same time.
-    let minDistance = null;
-
-    for (const contact of blockMoveContacts) {
-      const prevBox = this.collider.getPrevBox();
-      const distance = prevBox.distanceCenterToCenter(contact.box);
-
-      if (minDistance === null || distance < minDistance) {
-        minDistance = distance;
-      }
-    }
-
-    const closestBlockMoveContacts = [];
-
-    for (const contact of blockMoveContacts) {
-      const prevBox = this.collider.getPrevBox();
-      const distance = prevBox.distanceCenterToCenter(contact.box);
-
-      if (distance === minDistance) {
-        closestBlockMoveContacts.push(contact);
-      }
-    }
-
-    // Most likely it collides with multiple brick when going front and they
-    // are positioned in one line near each other. So it will be enough to
-    // resolve just one collision of them all.
-    if (closestBlockMoveContacts.length > 0) {
-      const firstBlockMoveContact = closestBlockMoveContacts[0];
-
-      const selfWorldBox = this.collider.getCurrentBox();
-      const otherWorldBox = firstBlockMoveContact.box;
-
-      const rotation = this.getWorldRotation();
-
-      // Tied to axis. Reset opposite axis direction so only primary axis
-      // will be resolved. Otherwise it conflicts with #rotate() code which
-      // aligns tank to a grid during rotation.
-      // Snap to avoid situations when between two walls opposite each other,
-      // and tank is colliding with right wall, collider pushes tank back to
-      // left wall, and wrong resolution branch is applied. Stick tank to grid.
-      if (rotation == Rotation.Up) {
-        this.position.addY(otherWorldBox.max.y - selfWorldBox.min.y);
-        this.position.snapY(SNAP_SIZE);
-      } else if (rotation === Rotation.Down) {
-        this.position.addY(otherWorldBox.min.y - selfWorldBox.max.y);
-        this.position.snapY(SNAP_SIZE);
-      } else if (rotation === Rotation.Left) {
-        this.position.addX(otherWorldBox.max.x - selfWorldBox.min.x);
-        this.position.snapX(SNAP_SIZE);
-      } else if (rotation === Rotation.Right) {
-        this.position.addX(otherWorldBox.min.x - selfWorldBox.max.x);
-        this.position.snapX(SNAP_SIZE);
-      }
-      this.updateMatrix(true);
-
-      // Make sure to update collider
-      this.collider.update();
-    }
-
-    const bulletContacts = collision.contacts.filter((contact) => {
-      return contact.collider.object.tags.includes(Tag.Bullet);
-    });
-
-    bulletContacts.forEach((contact) => {
-      const bullet = contact.collider.object as Bullet;
-
-      // Prevent self-destruction
-      if (this.bullets.includes(bullet)) {
-        return;
-      }
-
-      // If tank has shield - swallow the bullet
-      if (this.shield !== null) {
-        bullet.nullify();
-        return;
-      }
-
-      // Enemy bullets don't affect enemy tanks
-      if (bullet.tags.includes(Tag.Enemy) && this.tags.includes(Tag.Enemy)) {
-        return;
-      }
-
-      bullet.explode();
-
-      this.receiveHit(bullet.tankDamage);
-    });
+    this.collideIce(collision);
+    this.collideWalls(collision);
+    this.collideBullets(collision);
   }
 
   public fire(): boolean {
@@ -300,9 +236,16 @@ export class Tank extends GameObject {
     this.updateMatrix(true);
   }
 
-  public idle(): void {
+  public idle(checkIce = true): void {
     if (this.state !== TankState.Idle) {
       this.state = TankState.Idle;
+    }
+
+    // Whenever player lets go of his input controls, we check if tank is on ice
+    // and if it should slide.
+    if (checkIce && this.isOnIce && !this.isSliding()) {
+      this.slided.notify(null);
+      this.slideTimer.reset(SKATE_DURATION);
     }
   }
 
@@ -359,8 +302,145 @@ export class Tank extends GameObject {
     }
   }
 
+  public isSliding(): boolean {
+    return this.slideTimer.isActive();
+  }
+
   private handleShieldTimer = (): void => {
     this.shield.removeSelf();
     this.shield = null;
   };
+
+  private collideIce(collision: Collision): void {
+    const iceTileContacts = collision.contacts.filter((contact) => {
+      return contact.collider.object.tags.includes(Tag.Ice);
+    });
+
+    if (iceTileContacts.length === 0) {
+      return;
+    }
+
+    // Check if center of tank is on ice - if so then apply the effect.
+
+    const selfBox = this.getWorldBoundingBox();
+    const selfCenter = selfBox.getCenter();
+
+    const sumBox = new BoundingBox();
+    for (const contact of iceTileContacts) {
+      sumBox.unionWith(contact.box);
+    }
+
+    const isOnIce = sumBox.containsPoint(selfCenter);
+
+    this.isOnIce = isOnIce;
+  }
+
+  private collideWalls(collision: Collision): void {
+    const blockMoveContacts = [];
+
+    for (const contact of collision.contacts) {
+      if (contact.collider.object.tags.includes(Tag.BlockMove)) {
+        blockMoveContacts.push(contact);
+      }
+    }
+
+    if (blockMoveContacts.length === 0) {
+      return;
+    }
+
+    // Find closest wall we are colliding with. It solves "tunneling" problem
+    // if tank is going too fast it can jump over some small tiles of walls.
+    // By using swept box collider and then finding closest points of contact,
+    // we make tank interact with the first object on the way.
+    // Tank can also hit multiple block at the same time.
+    let minDistance = null;
+
+    for (const contact of blockMoveContacts) {
+      const prevBox = this.collider.getPrevBox();
+      const distance = prevBox.distanceCenterToCenter(contact.box);
+
+      if (minDistance === null || distance < minDistance) {
+        minDistance = distance;
+      }
+    }
+
+    const closestBlockMoveContacts = [];
+
+    for (const contact of blockMoveContacts) {
+      const prevBox = this.collider.getPrevBox();
+      const distance = prevBox.distanceCenterToCenter(contact.box);
+
+      if (distance === minDistance) {
+        closestBlockMoveContacts.push(contact);
+      }
+    }
+
+    // Most likely it collides with multiple brick when going front and they
+    // are positioned in one line near each other. So it will be enough to
+    // resolve just one collision of them all.
+    if (closestBlockMoveContacts.length === 0) {
+      return;
+    }
+
+    const firstBlockMoveContact = closestBlockMoveContacts[0];
+
+    const selfWorldBox = this.collider.getCurrentBox();
+    const otherWorldBox = firstBlockMoveContact.box;
+
+    const rotation = this.getWorldRotation();
+
+    // Tied to axis. Reset opposite axis direction so only primary axis
+    // will be resolved. Otherwise it conflicts with #rotate() code which
+    // aligns tank to a grid during rotation.
+    // Snap to avoid situations when between two walls opposite each other,
+    // and tank is colliding with right wall, collider pushes tank back to
+    // left wall, and wrong resolution branch is applied. Stick tank to grid.
+    if (rotation == Rotation.Up) {
+      this.position.addY(otherWorldBox.max.y - selfWorldBox.min.y);
+      this.position.snapY(SNAP_SIZE);
+    } else if (rotation === Rotation.Down) {
+      this.position.addY(otherWorldBox.min.y - selfWorldBox.max.y);
+      this.position.snapY(SNAP_SIZE);
+    } else if (rotation === Rotation.Left) {
+      this.position.addX(otherWorldBox.max.x - selfWorldBox.min.x);
+      this.position.snapX(SNAP_SIZE);
+    } else if (rotation === Rotation.Right) {
+      this.position.addX(otherWorldBox.min.x - selfWorldBox.max.x);
+      this.position.snapX(SNAP_SIZE);
+    }
+    this.updateMatrix(true);
+
+    // Make sure to update collider
+    this.collider.update();
+  }
+
+  private collideBullets(collision: Collision): void {
+    const bulletContacts = collision.contacts.filter((contact) => {
+      return contact.collider.object.tags.includes(Tag.Bullet);
+    });
+
+    bulletContacts.forEach((contact) => {
+      const bullet = contact.collider.object as Bullet;
+
+      // Prevent self-destruction
+      if (this.bullets.includes(bullet)) {
+        return;
+      }
+
+      // If tank has shield - swallow the bullet
+      if (this.shield !== null) {
+        bullet.nullify();
+        return;
+      }
+
+      // Enemy bullets don't affect enemy tanks
+      if (bullet.tags.includes(Tag.Enemy) && this.tags.includes(Tag.Enemy)) {
+        return;
+      }
+
+      bullet.explode();
+
+      this.receiveHit(bullet.tankDamage);
+    });
+  }
 }

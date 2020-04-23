@@ -26,21 +26,23 @@ export class PlayerTankBehavior extends TankBehavior {
       tank.fire();
     }
 
-    if (input.isHoldLastAny(LevelInputContext.MoveUp)) {
-      tank.rotate(Rotation.Up);
-    }
-    if (input.isHoldLastAny(LevelInputContext.MoveDown)) {
-      tank.rotate(Rotation.Down);
-    }
-    if (input.isHoldLastAny(LevelInputContext.MoveLeft)) {
-      tank.rotate(Rotation.Left);
-    }
-    if (input.isHoldLastAny(LevelInputContext.MoveRight)) {
-      tank.rotate(Rotation.Right);
-    }
+    if (!tank.isSliding()) {
+      if (input.isHoldLastAny(LevelInputContext.MoveUp)) {
+        tank.rotate(Rotation.Up);
+      }
+      if (input.isHoldLastAny(LevelInputContext.MoveDown)) {
+        tank.rotate(Rotation.Down);
+      }
+      if (input.isHoldLastAny(LevelInputContext.MoveLeft)) {
+        tank.rotate(Rotation.Left);
+      }
+      if (input.isHoldLastAny(LevelInputContext.MoveRight)) {
+        tank.rotate(Rotation.Right);
+      }
 
-    if (input.isHoldAny(MOVE_CONTROLS)) {
-      tank.move(deltaTime);
+      if (input.isHoldAny(MOVE_CONTROLS)) {
+        tank.move(deltaTime);
+      }
     }
 
     if (input.isNotHoldAll(MOVE_CONTROLS) && tank.state !== TankState.Idle) {
