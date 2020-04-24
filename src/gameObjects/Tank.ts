@@ -419,6 +419,10 @@ export class Tank extends GameObject {
       return contact.collider.object.tags.includes(Tag.Bullet);
     });
 
+    if (bulletContacts.length === 0) {
+      return;
+    }
+
     bulletContacts.forEach((contact) => {
       const bullet = contact.collider.object as Bullet;
 

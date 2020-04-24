@@ -74,6 +74,7 @@ export class LevelEnemyScript extends LevelScript {
     tank.updateMatrix(); // Origin should be in before setting center
     tank.rotate(Rotation.Down);
     tank.setCenter(event.centerPosition);
+    tank.updateMatrix();
 
     if (this.freezeTimer.isActive()) {
       tank.freezeState.set(true);

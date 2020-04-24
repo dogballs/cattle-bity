@@ -15,7 +15,6 @@ Build
 Bugs
 
 - victory scene lags
-- can kill tank in random position at the moment of spawn
 
 Other
 
