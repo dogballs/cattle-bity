@@ -29,6 +29,13 @@ export class BoundingBox {
     return size;
   }
 
+  public round(): this {
+    this.min.round();
+    this.max.round();
+
+    return this;
+  }
+
   public equals(other: BoundingBox): boolean {
     return this.min.equals(other.min) && this.max.equals(other.max);
   }
@@ -37,18 +44,31 @@ export class BoundingBox {
     return this.getCenter().distanceTo(other.getCenter());
   }
 
-  public computeIntersectionBox(other: BoundingBox): BoundingBox {
+  public minkowskiSum(other: BoundingBox): this {
+    const otherWidth = other.max.x - other.min.x;
+    const otherHeight = other.max.y - other.min.y;
+
+    const minX = this.min.x - otherWidth / 2;
+    const maxX = this.max.x + otherWidth / 2;
+    const minY = this.min.y - otherHeight / 2;
+    const maxY = this.max.y + otherHeight / 2;
+
+    this.min.set(minX, minY);
+    this.max.set(maxX, maxY);
+
+    return this;
+  }
+
+  public intersectWith(other: BoundingBox): this {
     const minX = Math.max(this.min.x, other.min.x);
     const maxX = Math.min(this.max.x, other.max.x);
     const minY = Math.max(this.min.y, other.min.y);
     const maxY = Math.min(this.max.y, other.max.y);
 
-    const min = new Vector(minX, minY);
-    const max = new Vector(maxX, maxY);
+    this.min.set(minX, minY);
+    this.max.set(maxX, maxY);
 
-    const intersectionBox = new BoundingBox(min, max);
-
-    return intersectionBox;
+    return this;
   }
 
   public unionWith(...others: BoundingBox[]): this {

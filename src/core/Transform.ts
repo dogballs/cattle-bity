@@ -311,7 +311,7 @@ export class Transform extends Node {
    *
    * All combined into a single transform matrix
    *
-   *   TM = P * R * (-P) * O* T
+   *   TM = P * R * (-P) * O * T
    *
    * which can be applied to a vector V to transform it:
    *

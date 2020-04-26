@@ -72,7 +72,7 @@ export class Powerup extends GameObject {
       // Calculate minimum intersection area in order for powerup to get
       // picked up.
 
-      const intersectionBox = selfBox.computeIntersectionBox(tankBox);
+      const intersectionBox = selfBox.clone().intersectWith(tankBox);
       const intersectionRect = intersectionBox.toRect();
 
       if (

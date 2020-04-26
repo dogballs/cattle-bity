@@ -20,6 +20,14 @@
           "y": 192
         }
       ]
+    },
+    "player": {
+      "locations": [
+        {
+          "x": 256,
+          "y": 0
+        }
+      ]
     }
   },
   "terrain": {
@@ -273,6 +281,90 @@
         "type": "brick",
         "x": 192,
         "y": 256,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 64,
+        "y": 192,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 64,
+        "y": 128,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 64,
+        "y": 64,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 64,
+        "y": 0,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 256,
+        "y": 0,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 256,
+        "y": 64,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 256,
+        "y": 128,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 256,
+        "y": 192,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 128,
+        "y": 192,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 128,
+        "y": 128,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 128,
+        "y": 64,
+        "width": 64,
+        "height": 64
+      },
+      {
+        "type": "brick",
+        "x": 128,
+        "y": 0,
         "width": 64,
         "height": 64
       }

@@ -2,6 +2,8 @@ import {
   Animation,
   BoundingBox,
   Collision,
+  CollisionContact,
+  CollisionSystem,
   GameObject,
   SpriteAlignment,
   SpritePainter,
@@ -9,6 +11,7 @@ import {
   Subject,
   SweptBoxCollider,
   Timer,
+  Vector,
 } from '../core';
 import { GameState, GameUpdateArgs, Rotation, Tag } from '../game';
 import {
@@ -31,15 +34,27 @@ export enum TankState {
   Moving,
 }
 
+enum SpawnCollisionState {
+  WaitUpdate,
+  WaitCollide,
+  NotColliding,
+  Resolved,
+}
+
+enum TankCollisionResolution {
+  Unknown,
+  Self,
+  Both,
+}
+
 const SKIN_LAYER_DESCRIPTIONS = [{ opacity: 1 }, { opacity: 0.5 }];
 const SNAP_SIZE = config.TILE_SIZE_MEDIUM;
 const RAPID_FIRE_DELAY = 0.04;
 const SKATE_DURATION = 0.5;
 
 export class Tank extends GameObject {
-  public collider = new SweptBoxCollider(this, true);
+  public collider: SweptBoxCollider = new SweptBoxCollider(this, true);
   public tags = [Tag.Tank];
-  public zIndex = config.PLAYER_TANK_Z_INDEX;
   public type: TankType;
   public behavior: TankBehavior;
   public attributes: TankAttributes;
@@ -58,6 +73,12 @@ export class Tank extends GameObject {
   protected skinLayers: GameObject[] = [];
   private lastFireTimer = new Timer();
   private slideTimer = new Timer();
+  private spawnCollisionState = new State<SpawnCollisionState>(
+    SpawnCollisionState.WaitUpdate,
+  );
+  private tankCollisionResolution: TankCollisionResolution =
+    TankCollisionResolution.Unknown;
+  private collisionSystem: CollisionSystem;
 
   constructor(type: TankType, behavior: TankBehavior) {
     super(64, 64);
@@ -74,6 +95,8 @@ export class Tank extends GameObject {
 
   protected setup(updateArgs: GameUpdateArgs): void {
     const { collisionSystem } = updateArgs;
+
+    this.collisionSystem = collisionSystem;
 
     collisionSystem.register(this.collider);
 
@@ -96,6 +119,19 @@ export class Tank extends GameObject {
 
   protected update(updateArgs: GameUpdateArgs): void {
     const { deltaTime, gameState } = updateArgs;
+
+    if (this.spawnCollisionState.is(SpawnCollisionState.WaitCollide)) {
+      // Collide has not been called on prev frame means tank is not colliding
+      // with anything
+      this.enablePostSpawnCollision();
+    } else if (this.spawnCollisionState.is(SpawnCollisionState.WaitUpdate)) {
+      // If collision actually exists, #collide() will be called right after
+      // this first update and we will know the state of collision.
+      // If it won't be called, this state will stay hanging and we will receive
+      // it here on the next #update() call. That means that tank is not
+      // colliding with anything and we should make it collidable.
+      this.spawnCollisionState.set(SpawnCollisionState.WaitCollide);
+    }
 
     this.shieldTimer.update(deltaTime);
 
@@ -150,6 +186,8 @@ export class Tank extends GameObject {
     // Reset so in case tank leaves ice, flag will be correct. #collide() is
     // called right after and it will set the flag if tank is on ice.
     this.isOnIce = false;
+
+    this.tankCollisionResolution = TankCollisionResolution.Unknown;
   }
 
   protected updateAnimation(deltaTime: number): void {
@@ -169,7 +207,9 @@ export class Tank extends GameObject {
 
   protected collide(collision: Collision): void {
     this.collideIce(collision);
+    this.collideSpawnedTanks(collision);
     this.collideWalls(collision);
+    this.collideTanks(collision);
     this.collideBullets(collision);
   }
 
@@ -335,16 +375,38 @@ export class Tank extends GameObject {
     this.isOnIce = isOnIce;
   }
 
+  // Try to solve the issue when some alive tank is
+  // moving on top of a spawn and at the same time new tank has been spawned.
+  // Not to toss the tanks around we simply don't enable collisions for
+  // a newly spawned tank until these both tanks move away from each other.
+  private collideSpawnedTanks(collision: Collision): void {
+    if (this.spawnCollisionState.is(SpawnCollisionState.WaitCollide)) {
+      const tankContacts = collision.contacts.filter((contact) => {
+        return contact.collider.object.tags.includes(Tag.Tank);
+      });
+
+      if (tankContacts.length > 0) {
+        // Live one more cycle and check collisions on next frame
+        this.spawnCollisionState.set(SpawnCollisionState.WaitUpdate);
+      } else {
+        // Collide has been called but there is no collision with other tanks.
+        this.enablePostSpawnCollision();
+      }
+    }
+  }
+
   private collideWalls(collision: Collision): void {
-    const blockMoveContacts = [];
+    const wallContacts = [];
 
     for (const contact of collision.contacts) {
-      if (contact.collider.object.tags.includes(Tag.BlockMove)) {
-        blockMoveContacts.push(contact);
+      const { tags } = contact.collider.object;
+
+      if (tags.includes(Tag.BlockMove) && !tags.includes(Tag.Tank)) {
+        wallContacts.push(contact);
       }
     }
 
-    if (blockMoveContacts.length === 0) {
+    if (wallContacts.length === 0) {
       return;
     }
 
@@ -353,65 +415,291 @@ export class Tank extends GameObject {
     // By using swept box collider and then finding closest points of contact,
     // we make tank interact with the first object on the way.
     // Tank can also hit multiple block at the same time.
-    let minDistance = null;
 
-    for (const contact of blockMoveContacts) {
-      const prevBox = this.collider.getPrevBox();
-      const distance = prevBox.distanceCenterToCenter(contact.box);
+    const closestWallContacts = this.getClosestContacts(
+      wallContacts,
+      this.collider.getPrevBox(),
+    );
 
-      if (minDistance === null || distance < minDistance) {
-        minDistance = distance;
-      }
-    }
-
-    const closestBlockMoveContacts = [];
-
-    for (const contact of blockMoveContacts) {
-      const prevBox = this.collider.getPrevBox();
-      const distance = prevBox.distanceCenterToCenter(contact.box);
-
-      if (distance === minDistance) {
-        closestBlockMoveContacts.push(contact);
-      }
+    if (closestWallContacts.length === 0) {
+      return;
     }
 
     // Most likely it collides with multiple brick when going front and they
     // are positioned in one line near each other. So it will be enough to
     // resolve just one collision of them all.
-    if (closestBlockMoveContacts.length === 0) {
+    const firstWallContact = closestWallContacts[0];
+    const otherCurrentBox = firstWallContact.collider.getCurrentBox();
+
+    this.resolveMinkowski(otherCurrentBox, true);
+  }
+
+  private resolveMinkowski(otherBox: BoundingBox, shouldSnap = false): void {
+    const selfCurrentBox = this.collider.getCurrentBox();
+    const selfPrevBox = this.collider.getPrevBox();
+    const selfPrevCenter = selfPrevBox.getCenter();
+
+    // Calculate Minksowski sum of collidable boxes.
+    const minkowskiBox = otherBox.clone().minkowskiSum(selfCurrentBox);
+
+    // Resulting box has diagonals. Next we are going to reposition those
+    // diagonals to the start of coordinate system. By computing cross product
+    // between those diagonals and a center of previous bounding box of
+    // collided object we will be able to identify which side of bounding box
+    // is collided. Thanks to this we will know what side to resolve collision
+    // with without relying on direction or rotation, which might not provide
+    // the correct result in different situations
+    const minkowskiRect = minkowskiBox.toRect();
+    const minkowskiCenter = minkowskiBox.getCenter();
+
+    // Move previous center position according to how diagonals are moved.
+    // It is important to use previous position, because current position
+    // might intersect from the other side and give the opposite info.
+    // We want to know from which direction collision came from.
+    const localPrev = new Vector(
+      selfPrevCenter.x - minkowskiCenter.x,
+      selfPrevCenter.y - minkowskiCenter.y,
+    );
+
+    // We will check on which side of diagonals the center is
+
+    // Bottom-left to bottom-right diagonal
+    //    |  /
+    //    | /
+    // ___|/_____
+    //    |(0,0)
+    //    |
+    const blTrLocalDiag = new Vector(
+      minkowskiRect.width / 2,
+      minkowskiRect.height / 2,
+    );
+
+    // Top-left to bottom-right diagonal
+    //    |
+    // ___|(0,0)___
+    //    |\
+    //    | \
+    //    |  \
+    const tlBrLocalDiag = new Vector(
+      minkowskiRect.width / 2,
+      -minkowskiRect.height / 2,
+    );
+
+    const blTrCrossProduct = localPrev.cross(blTrLocalDiag);
+    const tlBrCrossProduct = localPrev.cross(tlBrLocalDiag);
+
+    const isTop = blTrCrossProduct < 0 && tlBrCrossProduct < 0;
+    const isBottom = blTrCrossProduct > 0 && tlBrCrossProduct > 0;
+    const isLeft = blTrCrossProduct > 0 && tlBrCrossProduct < 0;
+    const isRight = blTrCrossProduct < 0 && tlBrCrossProduct > 0;
+
+    if (isTop) {
+      this.position.subY(selfCurrentBox.min.y - otherBox.max.y);
+      if (shouldSnap) {
+        this.position.snapY(SNAP_SIZE);
+      }
+    } else if (isBottom) {
+      this.position.subY(selfCurrentBox.max.y - otherBox.min.y);
+      if (shouldSnap) {
+        this.position.snapY(SNAP_SIZE);
+      }
+    } else if (isLeft) {
+      this.position.subX(selfCurrentBox.min.x - otherBox.max.x);
+      if (shouldSnap) {
+        this.position.snapX(SNAP_SIZE);
+      }
+    } else if (isRight) {
+      this.position.subX(selfCurrentBox.max.x - otherBox.min.x);
+      if (shouldSnap) {
+        this.position.snapX(SNAP_SIZE);
+      }
+    }
+
+    this.updateMatrix(true);
+
+    this.collider.update();
+  }
+
+  private collideTanks(collision: Collision): void {
+    if (!this.tags.includes(Tag.BlockMove)) {
       return;
     }
 
-    const firstBlockMoveContact = closestBlockMoveContacts[0];
+    const tankContacts = [];
+    const wallContacts = [];
 
-    const selfWorldBox = this.collider.getCurrentBox();
-    const otherWorldBox = firstBlockMoveContact.box;
+    for (const contact of collision.contacts) {
+      const { tags } = contact.collider.object;
 
-    const rotation = this.getWorldRotation();
-
-    // Tied to axis. Reset opposite axis direction so only primary axis
-    // will be resolved. Otherwise it conflicts with #rotate() code which
-    // aligns tank to a grid during rotation.
-    // Snap to avoid situations when between two walls opposite each other,
-    // and tank is colliding with right wall, collider pushes tank back to
-    // left wall, and wrong resolution branch is applied. Stick tank to grid.
-    if (rotation == Rotation.Up) {
-      this.position.addY(otherWorldBox.max.y - selfWorldBox.min.y);
-      this.position.snapY(SNAP_SIZE);
-    } else if (rotation === Rotation.Down) {
-      this.position.addY(otherWorldBox.min.y - selfWorldBox.max.y);
-      this.position.snapY(SNAP_SIZE);
-    } else if (rotation === Rotation.Left) {
-      this.position.addX(otherWorldBox.max.x - selfWorldBox.min.x);
-      this.position.snapX(SNAP_SIZE);
-    } else if (rotation === Rotation.Right) {
-      this.position.addX(otherWorldBox.min.x - selfWorldBox.max.x);
-      this.position.snapX(SNAP_SIZE);
+      if (tags.includes(Tag.BlockMove) && tags.includes(Tag.Tank)) {
+        tankContacts.push(contact);
+      }
+      if (tags.includes(Tag.BlockMove) && !tags.includes(Tag.Tank)) {
+        wallContacts.push(contact);
+      }
     }
-    this.updateMatrix(true);
 
-    // Make sure to update collider
-    this.collider.update();
+    if (tankContacts.length === 0) {
+      return;
+    }
+
+    const closestTankContacts = this.getClosestContacts(
+      tankContacts,
+      this.collider.getPrevBox(),
+    );
+
+    const firstTankContact = closestTankContacts[0];
+
+    const otherCollider = firstTankContact.collider as SweptBoxCollider;
+    const other = otherCollider.object as Tank;
+
+    if (other.tankCollisionResolution === TankCollisionResolution.Self) {
+      // Other tank has already resolved the collision, skip for current tank
+      return;
+    }
+
+    // First we check which tanks are moving. It is easier if only one of them
+    // is moving, because we only need to resolve his collision.
+    const selfCurrentBox = this.collider.getCurrentBox();
+    const selfPrevBox = this.collider.getPrevBox();
+    const isSelfMoving = !selfCurrentBox.equals(selfPrevBox);
+
+    const otherPrevBox = otherCollider.getPrevBox();
+    const otherCurrentBox = otherCollider.getCurrentBox();
+    const isOtherMoving = !otherCurrentBox.equals(otherPrevBox);
+
+    if (!isOtherMoving && !isSelfMoving) {
+      // Both still. It might happen when one tank goes on spawn of another
+      // tank and stand there. Both should do nothing until they get of each
+      // others way.
+      return;
+    }
+
+    if (isOtherMoving && !isSelfMoving) {
+      // Let other resolve because it is moving
+      return;
+    }
+
+    if (!isOtherMoving && isSelfMoving) {
+      // We are going to resolve because we are moving
+      this.resolveMinkowski(otherPrevBox);
+      this.tankCollisionResolution = TankCollisionResolution.Self;
+      return;
+    }
+
+    // Below we handle if both tanks are moving
+
+    // First tank rolled-back his movement, current tank should align to it.
+    if (other.tankCollisionResolution === TankCollisionResolution.Both) {
+      this.resolveMinkowski(otherCurrentBox);
+      return;
+    }
+
+    const hasWallCollision = wallContacts.length > 0;
+
+    // Find which direction tank is moving, then find direction of collision
+    // from the tank's perspective.
+
+    const selfDirection = this.collider.getDirection().normalize();
+    const otherDirection = otherCollider.getDirection().normalize();
+
+    const selfCurrentCenter = selfCurrentBox.getCenter();
+    const otherCurrentCenter = otherCurrentBox.getCenter();
+
+    const selfCollisionDirection = otherCurrentCenter
+      .clone()
+      .sub(selfCurrentCenter)
+      .normalize();
+    const otherCollisionDirection = selfCurrentCenter
+      .clone()
+      .sub(otherCurrentCenter)
+      .normalize();
+
+    // Dot product of tank's direction and collision direction from his
+    // perspective lets us know if tank is moving towards collision. If that
+    // is the case, we consider him as an initiator of the collision and it
+    // will be responsible for resolving the collision.
+    // If both of them are moving towards collision, then we compare dot
+    // product value to check who participates in collision more.
+    // If they move towards each other, dot products will be equal and tanks
+    // should both resolve the collision. It is important that they resolve
+    // it in respect to each other - one should rollback is movement, the other
+    // one will account for that rollback and position himself according to
+    // first tank bounding box. This will hold tanks in place if they continue
+    // moving towards each other.
+
+    const selfDot = selfDirection.dot(selfCollisionDirection);
+    const otherDot = otherDirection.dot(otherCollisionDirection);
+
+    let isSelfInitiator = selfDot > 0;
+    let isOtherInitiator = otherDot > 0;
+
+    if (selfDot > 0 && otherDot > 0) {
+      if (selfDot === otherDot) {
+        isSelfInitiator = true;
+        isOtherInitiator = true;
+      } else {
+        isSelfInitiator = selfDot > otherDot;
+        isOtherInitiator = otherDot > selfDot;
+      }
+    }
+
+    // In case current tank has other collision with walls, let him be, and
+    // resolve collsion ourselves
+    if (hasWallCollision) {
+      isSelfInitiator = false;
+      isOtherInitiator = true;
+    }
+
+    if (isSelfInitiator && !isOtherInitiator) {
+      this.resolveMinkowski(otherPrevBox);
+      this.tankCollisionResolution = TankCollisionResolution.Self;
+      return;
+    }
+
+    if (!isSelfInitiator && isOtherInitiator) {
+      // We go where we were going, other one will resolve the collision
+      return;
+    }
+
+    if (isSelfInitiator && isOtherInitiator) {
+      // Both should resolve because they are moving towards each other.
+      // One should rollback his movement completely, and the other one
+      // should use former tank box to align itself. As a result if they
+      // both move at each other at full speed, they will be kept in place.
+      this.resolveByRollback(this.collider.getDirection());
+      this.tankCollisionResolution = TankCollisionResolution.Both;
+      return;
+    }
+
+    // In case neither is an initiator, we check who has more collsiions with
+    // other objects.
+
+    const otherCollision = this.collisionSystem.getCollisionByCollider(
+      other.collider,
+    );
+
+    const selfContactsExceptOther = collision.contacts.filter((contact) => {
+      return contact.collider !== other.collider;
+    });
+
+    const otherContactsExceptSelf = otherCollision.contacts.filter(
+      (contact) => {
+        return contact.collider !== this.collider;
+      },
+    );
+
+    if (
+      otherContactsExceptSelf.length > 0 &&
+      selfContactsExceptOther.length === 0
+    ) {
+      this.resolveMinkowski(otherPrevBox);
+      this.tankCollisionResolution = TankCollisionResolution.Self;
+      return;
+    }
+
+    // For the rest of the situations, we just let them be. During testing
+    // this seemed to work fine.
   }
 
   private collideBullets(collision: Collision): void {
@@ -446,5 +734,141 @@ export class Tank extends GameObject {
 
       this.receiveHit(bullet.tankDamage);
     });
+  }
+
+  private resolveByRollback(direction: Vector): void {
+    this.position.sub(direction);
+    this.updateMatrix(true);
+
+    this.collider.update();
+  }
+
+  private getClosestContacts(
+    contacts: CollisionContact[],
+    selfBox: BoundingBox,
+  ): CollisionContact[] {
+    let minDistance = null;
+
+    for (const contact of contacts) {
+      const prevBox = selfBox;
+      const distance = prevBox.distanceCenterToCenter(contact.box);
+
+      if (minDistance === null || distance < minDistance) {
+        minDistance = distance;
+      }
+    }
+
+    const closestContacts = [];
+
+    for (const contact of contacts) {
+      const prevBox = selfBox;
+      const distance = prevBox.distanceCenterToCenter(contact.box);
+
+      if (distance === minDistance) {
+        closestContacts.push(contact);
+      }
+    }
+
+    return closestContacts;
+  }
+
+  private enablePostSpawnCollision(): void {
+    this.spawnCollisionState.set(SpawnCollisionState.Resolved);
+    this.tags.push(Tag.BlockMove);
+  }
+
+  private getDirection(): Vector {
+    if (this.rotation === Rotation.Up) {
+      return new Vector(0, -1);
+    }
+    if (this.rotation === Rotation.Down) {
+      return new Vector(0, 1);
+    }
+    if (this.rotation === Rotation.Left) {
+      return new Vector(-1, 0);
+    }
+    if (this.rotation === Rotation.Right) {
+      return new Vector(1, 0);
+    }
+  }
+
+  /**
+   * @deprecated Use resolveMinkowski, left for history reference
+   */
+  private resolveBasedOnDirection(
+    selfCurrentBox: BoundingBox,
+    otherBox: BoundingBox,
+    shouldSnap = false,
+  ): void {
+    const direction = this.collider.getDirection().normalize();
+
+    if (direction.y < 0) {
+      this.position.subY(Math.max(0, selfCurrentBox.min.y - otherBox.max.y));
+      if (shouldSnap) {
+        this.position.snapY(SNAP_SIZE);
+      }
+    } else if (direction.y > 0) {
+      this.position.subY(Math.max(0, selfCurrentBox.max.y - otherBox.min.y));
+      if (shouldSnap) {
+        this.position.snapY(SNAP_SIZE);
+      }
+    } else if (direction.x < 0) {
+      this.position.subX(Math.max(0, selfCurrentBox.min.x - otherBox.max.x));
+      if (shouldSnap) {
+        this.position.snapX(SNAP_SIZE);
+      }
+    } else if (direction.x > 0) {
+      this.position.subX(Math.max(0, selfCurrentBox.max.x - otherBox.min.x));
+      if (shouldSnap) {
+        this.position.snapX(SNAP_SIZE);
+      }
+    }
+
+    this.updateMatrix(true);
+
+    this.collider.update();
+  }
+
+  /**
+   * @deprecated Use resolveMinkowski, left for history reference
+   */
+  private resolveBasedOnRotation(
+    selfBox: BoundingBox,
+    otherBox: BoundingBox,
+    shouldSnap = false,
+  ): void {
+    const rotation = this.getWorldRotation();
+
+    // Tied to axis. Reset opposite axis direction so only primary axis
+    // will be resolved. Otherwise it conflicts with #rotate() code which
+    // aligns tank to a grid during rotation.
+    // Snap to avoid situations when between two walls opposite each other,
+    // and tank is colliding with right wall, collider pushes tank back to
+    // left wall, and wrong resolution branch is applied. Stick tank to grid.
+    if (rotation == Rotation.Up) {
+      this.position.addY(otherBox.max.y - selfBox.min.y);
+      if (shouldSnap) {
+        this.position.snapY(SNAP_SIZE);
+      }
+    } else if (rotation === Rotation.Down) {
+      this.position.addY(otherBox.min.y - selfBox.max.y);
+      if (shouldSnap) {
+        this.position.snapY(SNAP_SIZE);
+      }
+    } else if (rotation === Rotation.Left) {
+      this.position.addX(otherBox.max.x - selfBox.min.x);
+      if (shouldSnap) {
+        this.position.snapX(SNAP_SIZE);
+      }
+    } else if (rotation === Rotation.Right) {
+      this.position.addX(otherBox.min.x - selfBox.max.x);
+      if (shouldSnap) {
+        this.position.snapX(SNAP_SIZE);
+      }
+    }
+    this.updateMatrix(true);
+
+    // Make sure to update collider
+    this.collider.update();
   }
 }

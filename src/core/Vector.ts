@@ -146,6 +146,14 @@ export class Vector {
     return this;
   }
 
+  public dot(v: Vector): number {
+    return this.x * v.x + this.y * v.y;
+  }
+
+  public cross(v: Vector): number {
+    return this.x * v.y - this.y * v.x;
+  }
+
   public equals(v: Vector): boolean {
     return this.x === v.x && this.y === v.y;
   }

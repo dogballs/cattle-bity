@@ -75,6 +75,16 @@ export class CollisionSystem {
     }
   }
 
+  public getCollisionByCollider(collider: Collider): Collision {
+    for (const collision of this.collisions) {
+      if (collision.collider === collider) {
+        return collision;
+      }
+    }
+
+    return null;
+  }
+
   public collide(): void {
     this.collisions.forEach((collision) => {
       collision.collider.object.invokeCollide(collision);

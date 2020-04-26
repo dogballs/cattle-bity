@@ -2,6 +2,7 @@
   "list": [
     { "file": "data/maps/original/01.json" },
     { "file": "data/maps/original/02.json" },
-    { "file": "data/maps/test/enemy-tanks.json" }
+    { "file": "data/maps/test/enemy-tanks.json" },
+    { "file": "data/maps/test/tank-collision.json" }
   ]
 }

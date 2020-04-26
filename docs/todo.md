@@ -15,6 +15,8 @@ Build
 Bugs
 
 - victory scene lags
+- add bullet delay on first player tank tiers
+- tank has sprite border when rotation = right
 
 Other
 
