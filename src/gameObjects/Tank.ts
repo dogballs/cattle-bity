@@ -41,6 +41,12 @@ enum SpawnCollisionState {
   Resolved,
 }
 
+enum PlayerCollisionState {
+  NotColliding,
+  Colliding,
+  WaitCollide,
+}
+
 enum TankCollisionResolution {
   Unknown,
   Self,
@@ -71,14 +77,18 @@ export class Tank extends GameObject {
   protected shieldTimer = new Timer();
   protected animation: Animation<TankAnimationFrame>;
   protected skinLayers: GameObject[] = [];
-  private lastFireTimer = new Timer();
-  private slideTimer = new Timer();
-  private spawnCollisionState = new State<SpawnCollisionState>(
+  protected lastFireTimer = new Timer();
+  protected slideTimer = new Timer();
+  protected spawnCollisionState = new State<SpawnCollisionState>(
     SpawnCollisionState.WaitUpdate,
   );
-  private tankCollisionResolution: TankCollisionResolution =
+  protected playerCollisionState = new State<PlayerCollisionState>(
+    PlayerCollisionState.NotColliding,
+  );
+  protected tankCollisionResolution: TankCollisionResolution =
     TankCollisionResolution.Unknown;
-  private collisionSystem: CollisionSystem;
+  protected isCollisionAbusedByPlayer = false;
+  protected collisionSystem: CollisionSystem;
 
   constructor(type: TankType, behavior: TankBehavior) {
     super(64, 64);
@@ -131,6 +141,17 @@ export class Tank extends GameObject {
       // it here on the next #update() call. That means that tank is not
       // colliding with anything and we should make it collidable.
       this.spawnCollisionState.set(SpawnCollisionState.WaitCollide);
+    }
+
+    if (this.playerCollisionState.is(PlayerCollisionState.WaitCollide)) {
+      // Collide has not been called on prev frame means tank is not colliding
+      // with player
+      this.playerCollisionState.set(PlayerCollisionState.NotColliding);
+    } else if (this.playerCollisionState.is(PlayerCollisionState.Colliding)) {
+      // If tanks were previously colliding. From here we wait for next
+      // #collide() call, where it either goes back to colliding or not
+      //  colliding.
+      this.playerCollisionState.set(PlayerCollisionState.WaitCollide);
     }
 
     this.shieldTimer.update(deltaTime);
@@ -346,12 +367,12 @@ export class Tank extends GameObject {
     return this.slideTimer.isActive();
   }
 
-  private handleShieldTimer = (): void => {
+  protected handleShieldTimer = (): void => {
     this.shield.removeSelf();
     this.shield = null;
   };
 
-  private collideIce(collision: Collision): void {
+  protected collideIce(collision: Collision): void {
     const iceTileContacts = collision.contacts.filter((contact) => {
       return contact.collider.object.tags.includes(Tag.Ice);
     });
@@ -379,7 +400,7 @@ export class Tank extends GameObject {
   // moving on top of a spawn and at the same time new tank has been spawned.
   // Not to toss the tanks around we simply don't enable collisions for
   // a newly spawned tank until these both tanks move away from each other.
-  private collideSpawnedTanks(collision: Collision): void {
+  protected collideSpawnedTanks(collision: Collision): void {
     if (this.spawnCollisionState.is(SpawnCollisionState.WaitCollide)) {
       const tankContacts = collision.contacts.filter((contact) => {
         return contact.collider.object.tags.includes(Tag.Tank);
@@ -395,7 +416,7 @@ export class Tank extends GameObject {
     }
   }
 
-  private collideWalls(collision: Collision): void {
+  protected collideWalls(collision: Collision): void {
     const wallContacts = [];
 
     for (const contact of collision.contacts) {
@@ -434,7 +455,7 @@ export class Tank extends GameObject {
     this.resolveMinkowski(otherCurrentBox, true);
   }
 
-  private resolveMinkowski(otherBox: BoundingBox, shouldSnap = false): void {
+  protected resolveMinkowski(otherBox: BoundingBox, shouldSnap = false): void {
     const selfCurrentBox = this.collider.getCurrentBox();
     const selfPrevBox = this.collider.getPrevBox();
     const selfPrevCenter = selfPrevBox.getCenter();
@@ -520,12 +541,13 @@ export class Tank extends GameObject {
     this.collider.update();
   }
 
-  private collideTanks(collision: Collision): void {
+  protected collideTanks(collision: Collision): void {
     if (!this.tags.includes(Tag.BlockMove)) {
       return;
     }
 
     const tankContacts = [];
+    const playerTankContacts = [];
     const wallContacts = [];
 
     for (const contact of collision.contacts) {
@@ -536,6 +558,17 @@ export class Tank extends GameObject {
       }
       if (tags.includes(Tag.BlockMove) && !tags.includes(Tag.Tank)) {
         wallContacts.push(contact);
+      }
+      if (tags.includes(Tag.Tank) && tags.includes(Tag.Player)) {
+        playerTankContacts.push(contact);
+      }
+    }
+
+    if (this.playerCollisionState.is(PlayerCollisionState.WaitCollide)) {
+      if (playerTankContacts.length > 0) {
+        this.playerCollisionState.set(PlayerCollisionState.Colliding);
+      } else {
+        this.playerCollisionState.set(PlayerCollisionState.NotColliding);
       }
     }
 
@@ -580,14 +613,93 @@ export class Tank extends GameObject {
       return;
     }
 
+    const selfDirection = this.collider.getDirection().normalize();
+    const otherDirection = otherCollider.getDirection().normalize();
+
     if (!isOtherMoving && isSelfMoving) {
       // We are going to resolve because we are moving
+
+      // There is a special case when enemy tank is moving and player tank
+      // is standing in the way but it can not be hit with a bullet. Player
+      // could abuse this to block enemy tanks from moving. To workaround it
+      // we check if enemy tank is moving directly on grid and it collides
+      // with player. If at the moment of collision the intersecrion area is
+      // not enough for bullet to hit, then we disable collision at all and
+      // enemy tank will move "through" player tank.
+      if (this.tags.includes(Tag.Enemy) && other.tags.includes(Tag.Player)) {
+        // If enemy is already colliding with player - skip it right away
+        if (this.playerCollisionState.is(PlayerCollisionState.Colliding)) {
+          return;
+        }
+
+        const roundedPosition = this.position.clone().round();
+        const isMovingOnGridHorizontally =
+          (selfDirection.x === 1 || selfDirection.x === -1) &&
+          roundedPosition.y % config.TILE_SIZE_MEDIUM === 0;
+        const isMovingOnGridVertically =
+          (selfDirection.y === 1 || selfDirection.y === -1) &&
+          roundedPosition.x % config.TILE_SIZE_MEDIUM === 0;
+
+        const intersectionBox = selfCurrentBox
+          .clone()
+          .intersectWith(otherCurrentBox);
+        const intersectionRect = intersectionBox.toRect();
+
+        const thresholdWidth = (this.size.width - config.BULLET_WIDTH) / 2;
+        const thresholdHeight = (this.size.height - config.BULLET_WIDTH) / 2;
+
+        // Don't resolve and remember that player tank was in contact with
+        // current tank so we can resolve collision later when they continue
+        // moving
+
+        if (
+          isMovingOnGridVertically &&
+          intersectionRect.width <= thresholdWidth
+        ) {
+          this.playerCollisionState.set(PlayerCollisionState.Colliding);
+          return;
+        }
+
+        // Don't resolve
+        if (
+          isMovingOnGridHorizontally &&
+          intersectionRect.height <= thresholdHeight
+        ) {
+          this.playerCollisionState.set(PlayerCollisionState.Colliding);
+          return;
+        }
+      }
+
       this.resolveMinkowski(otherPrevBox);
       this.tankCollisionResolution = TankCollisionResolution.Self;
       return;
     }
 
     // Below we handle if both tanks are moving
+
+    // If player tank is colliding with enemy who decided to temporarily
+    // ignore collsion with player. We also check if enemy is waiting because
+    // we don't know which tank's #collide() is called first
+    if (this.tags.includes(Tag.Player) && other.tags.includes(Tag.Enemy)) {
+      if (
+        other.playerCollisionState.is(PlayerCollisionState.Colliding) ||
+        other.playerCollisionState.is(PlayerCollisionState.WaitCollide)
+      ) {
+        return;
+      }
+    }
+
+    // If enemy tank who decided to temporarily ignore collsion with player
+    // is colliding with player. We also check if enemy is waiting because
+    // we don't know which tank's #collide() is called first.
+    if (this.tags.includes(Tag.Enemy) && other.tags.includes(Tag.Player)) {
+      if (
+        this.playerCollisionState.is(PlayerCollisionState.Colliding) ||
+        other.playerCollisionState.is(PlayerCollisionState.WaitCollide)
+      ) {
+        return;
+      }
+    }
 
     // First tank rolled-back his movement, current tank should align to it.
     if (other.tankCollisionResolution === TankCollisionResolution.Both) {
@@ -599,9 +711,6 @@ export class Tank extends GameObject {
 
     // Find which direction tank is moving, then find direction of collision
     // from the tank's perspective.
-
-    const selfDirection = this.collider.getDirection().normalize();
-    const otherDirection = otherCollider.getDirection().normalize();
 
     const selfCurrentCenter = selfCurrentBox.getCenter();
     const otherCurrentCenter = otherCurrentBox.getCenter();
@@ -702,7 +811,7 @@ export class Tank extends GameObject {
     // this seemed to work fine.
   }
 
-  private collideBullets(collision: Collision): void {
+  protected collideBullets(collision: Collision): void {
     const bulletContacts = collision.contacts.filter((contact) => {
       return contact.collider.object.tags.includes(Tag.Bullet);
     });
@@ -736,14 +845,14 @@ export class Tank extends GameObject {
     });
   }
 
-  private resolveByRollback(direction: Vector): void {
+  protected resolveByRollback(direction: Vector): void {
     this.position.sub(direction);
     this.updateMatrix(true);
 
     this.collider.update();
   }
 
-  private getClosestContacts(
+  protected getClosestContacts(
     contacts: CollisionContact[],
     selfBox: BoundingBox,
   ): CollisionContact[] {
@@ -772,12 +881,12 @@ export class Tank extends GameObject {
     return closestContacts;
   }
 
-  private enablePostSpawnCollision(): void {
+  protected enablePostSpawnCollision(): void {
     this.spawnCollisionState.set(SpawnCollisionState.Resolved);
     this.tags.push(Tag.BlockMove);
   }
 
-  private getDirection(): Vector {
+  protected getDirection(): Vector {
     if (this.rotation === Rotation.Up) {
       return new Vector(0, -1);
     }
@@ -795,7 +904,7 @@ export class Tank extends GameObject {
   /**
    * @deprecated Use resolveMinkowski, left for history reference
    */
-  private resolveBasedOnDirection(
+  protected resolveBasedOnDirection(
     selfCurrentBox: BoundingBox,
     otherBox: BoundingBox,
     shouldSnap = false,
@@ -832,7 +941,7 @@ export class Tank extends GameObject {
   /**
    * @deprecated Use resolveMinkowski, left for history reference
    */
-  private resolveBasedOnRotation(
+  protected resolveBasedOnRotation(
     selfBox: BoundingBox,
     otherBox: BoundingBox,
     shouldSnap = false,

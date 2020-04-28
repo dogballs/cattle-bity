@@ -21,3 +21,4 @@ Bugs
 Other
 
 - AI smart: random dont rotate to current rotation
+- describe folder structure

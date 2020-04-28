@@ -26,7 +26,7 @@ export class Bullet extends GameObject {
   private hitSteelSound: Sound;
 
   constructor(speed: number, tankDamage: number, wallDamage: number) {
-    super(12, 16);
+    super(config.BULLET_WIDTH, 16);
 
     this.speed = speed;
     this.tankDamage = tankDamage;
@@ -63,9 +63,31 @@ export class Bullet extends GameObject {
   }
 
   protected collide(collision: Collision): void {
-    const { contacts } = collision;
+    this.collideBullets(collision);
+    this.collideWalls(collision);
+  }
 
-    const bulletContacts = contacts.filter((contact) => {
+  public nullify(): void {
+    this.removeSelf();
+
+    this.collider.unregister();
+
+    this.died.notify(null);
+  }
+
+  public explode(): void {
+    const explosion = new SmallExplosion();
+    explosion.updateMatrix();
+    explosion.setCenter(this.getCenter());
+    this.replaceSelf(explosion);
+
+    this.collider.unregister();
+
+    this.died.notify(null);
+  }
+
+  private collideBullets(collision: Collision): void {
+    const bulletContacts = collision.contacts.filter((contact) => {
       return contact.collider.object.tags.includes(Tag.Bullet);
     });
 
@@ -86,10 +108,16 @@ export class Bullet extends GameObject {
       this.nullify();
       bullet.nullify();
     });
+  }
 
-    const wallContacts = contacts.filter((contact) => {
+  private collideWalls(collision: Collision): void {
+    const wallContacts = collision.contacts.filter((contact) => {
       return contact.collider.object.tags.includes(Tag.Wall);
     });
+
+    if (wallContacts.length === 0) {
+      return;
+    }
 
     // Find closest wall we are colliding with. It solves the "tunneling"
     // problem when bullet is going too fast it can jump over some walls.
@@ -189,25 +217,6 @@ export class Bullet extends GameObject {
 
       this.explode();
     }
-  }
-
-  public nullify(): void {
-    this.removeSelf();
-
-    this.collider.unregister();
-
-    this.died.notify(null);
-  }
-
-  public explode(): void {
-    const explosion = new SmallExplosion();
-    explosion.updateMatrix();
-    explosion.setCenter(this.getCenter());
-    this.replaceSelf(explosion);
-
-    this.collider.unregister();
-
-    this.died.notify(null);
   }
 
   private getRotationString(rotation: Rotation): string {

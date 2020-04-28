@@ -19,6 +19,7 @@ Project is not commercial and was created for learning purposes only.
 - Level editor
   - Save to JSON
   - Load from JSON to continue editing
+- Keyboard and gamepad support
 - Settings
   - Customize keybindings
   - Mute audio

@@ -52,6 +52,8 @@ export const JUNGLE_TILE_SIZE = TILE_SIZE_MEDIUM;
 export const WATER_TILE_SIZE = TILE_SIZE_MEDIUM;
 export const ICE_TILE_SIZE = TILE_SIZE_MEDIUM;
 
+export const BULLET_WIDTH = 12;
+
 export const PLAYER_FIRST_SPAWN_DELAY = 0;
 export const PLAYER_SPAWN_DELAY = 0;
 export const ENEMY_FIRST_SPAWN_DELAY = 0.16;
