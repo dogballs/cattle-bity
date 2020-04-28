@@ -1,0 +1,25 @@
+### Folder structure
+
+- `data` - game assets like graphics, audio, fonts, manifests and configuration files
+- `public` - HTML page
+- `src`
+  - `core` - general classes which don't have any game-specific related code and potentially can be used to create another game
+  - `debug` - debug tools like menus and visual helpers
+  - `game` - game-specific general classes used to implement current game
+  - `gameObjects` - all game objects used in the game
+  - `input` - game-specific input handling logic
+    - `bindings` - Default bindings for all input types i.e. what buttons are used to perform certain action
+    - `contexts` - List of actions available for different areas of the game (menus, level, editor, etc)
+    - `presenters` - Displayed names of device buttons
+  - `level` - level is a combination of all gameplay elements when playing the levels, including map, player and enemy tanks, ui and audio
+    - `events` - event objects sent between level scripts
+    - `scripts` - level gameplay split into separate script each responsible for it's own part
+  - `map` - map is a collection of positioned tiles; tools for loading map from different sources and parsing map config file
+  - `points` - classes for dealing with points calculation
+  - `powerup` - classes for spawning powerups
+  - `scenes` - entire game is split into scenes like menus, levels, infomational scenes (scoreboard, game over, etc); scenes are connected and one can transition to another based on conditions
+  - `tank` - tank classification, skins, AI, attributes
+  - `terrain` - describes and creates terrain tiles
+  - `types` - extra TypeScript type definitions
+- `test` - unit test setup and helpers
+- `webpack` - build configuration
