@@ -13,7 +13,7 @@ Project is not commercial and was created for learning purposes only.
 ## Features
 
 - Single player mode
-  - Original 25 maps
+  - Original 35 maps
 - Modes
   - Custom maps - load your own maps created in editor
 - Level editor
@@ -27,7 +27,7 @@ Project is not commercial and was created for learning purposes only.
 ## Possible improvements
 
 - 2 player mode
-- Original 25+ levels
+- Original 35+ levels
 - Demo level with AI when main menu is idle
 - Extended level editing
   - Customize player and enemy spawn positions
