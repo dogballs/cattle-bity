@@ -55,7 +55,6 @@ enum TankCollisionResolution {
 
 const SKIN_LAYER_DESCRIPTIONS = [{ opacity: 1 }, { opacity: 0.5 }];
 const SNAP_SIZE = config.TILE_SIZE_MEDIUM;
-const RAPID_FIRE_DELAY = 0.04;
 const SKATE_DURATION = 0.5;
 
 export class Tank extends GameObject {
@@ -283,7 +282,7 @@ export class Tank extends GameObject {
 
     this.fired.notify(null);
 
-    this.lastFireTimer.reset(RAPID_FIRE_DELAY);
+    this.lastFireTimer.reset(this.attributes.bulletRapidFireDelay);
 
     return true;
   }

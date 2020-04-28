@@ -5,6 +5,7 @@ import { TankType } from './TankType';
 
 export interface TankAttributes {
   bulletMaxCount: number;
+  bulletRapidFireDelay: number;
   bulletSpeed: number;
   bulletTankDamage: number;
   bulletWallDamage: number;
@@ -24,6 +25,11 @@ interface TankAttributesListItem {
 
 interface TankAttributesConfig {
   list: TankAttributesListItem[];
+}
+
+enum BulletRapidFireDelay {
+  Slow = 0.16,
+  Fast = 0.04,
 }
 
 enum BulletSpeed {
@@ -47,6 +53,7 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
+        bulletRapidFireDelay: BulletRapidFireDelay.Slow,
         bulletSpeed: BulletSpeed.Slow,
         bulletTankDamage: 1,
         bulletWallDamage: TankBulletWallDamage.Low,
@@ -61,6 +68,7 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
+        bulletRapidFireDelay: BulletRapidFireDelay.Slow,
         bulletSpeed: BulletSpeed.Fast,
         bulletTankDamage: 1,
         bulletWallDamage: TankBulletWallDamage.Low,
@@ -75,6 +83,7 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 2,
+        bulletRapidFireDelay: BulletRapidFireDelay.Fast,
         bulletSpeed: BulletSpeed.Fast,
         bulletTankDamage: 1,
         bulletWallDamage: TankBulletWallDamage.Low,
@@ -89,6 +98,7 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 2,
+        bulletRapidFireDelay: BulletRapidFireDelay.Fast,
         bulletSpeed: BulletSpeed.Fast,
         bulletTankDamage: 1,
         bulletWallDamage: TankBulletWallDamage.High,
@@ -104,6 +114,7 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
+        bulletRapidFireDelay: BulletRapidFireDelay.Slow,
         bulletSpeed: BulletSpeed.Slow,
         bulletTankDamage: 1,
         bulletWallDamage: TankBulletWallDamage.Low,
@@ -118,6 +129,7 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
+        bulletRapidFireDelay: BulletRapidFireDelay.Slow,
         bulletSpeed: BulletSpeed.Slow,
         bulletTankDamage: 1,
         bulletWallDamage: TankBulletWallDamage.Low,
@@ -132,6 +144,7 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
+        bulletRapidFireDelay: BulletRapidFireDelay.Slow,
         bulletSpeed: BulletSpeed.Fast,
         bulletTankDamage: 1,
         bulletWallDamage: TankBulletWallDamage.Low,
@@ -146,6 +159,7 @@ const config: TankAttributesConfig = {
       },
       attributes: {
         bulletMaxCount: 1,
+        bulletRapidFireDelay: BulletRapidFireDelay.Slow,
         bulletSpeed: BulletSpeed.Slow,
         bulletTankDamage: 1,
         bulletWallDamage: TankBulletWallDamage.Low,
