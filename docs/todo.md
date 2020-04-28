@@ -15,7 +15,6 @@ Build
 Bugs
 
 - victory scene lags
-- tank has sprite border when rotation = right
 
 Other
 
