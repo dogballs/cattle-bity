@@ -303,7 +303,12 @@ export class Tank extends GameObject {
 
     // Whenever player lets go of his input controls, we check if tank is on ice
     // and if it should slide.
-    if (checkIce && this.isOnIce && !this.isSliding()) {
+    if (
+      checkIce &&
+      this.tags.includes(Tag.Player) &&
+      this.isOnIce &&
+      !this.isSliding()
+    ) {
       this.slided.notify(null);
       this.slideTimer.reset(SKATE_DURATION);
     }
@@ -372,6 +377,11 @@ export class Tank extends GameObject {
   };
 
   protected collideIce(collision: Collision): void {
+    // Only player can slip on ice
+    if (this.tags.includes(Tag.Enemy)) {
+      return;
+    }
+
     const iceTileContacts = collision.contacts.filter((contact) => {
       return contact.collider.object.tags.includes(Tag.Ice);
     });
