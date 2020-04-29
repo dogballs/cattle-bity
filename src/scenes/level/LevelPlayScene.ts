@@ -262,10 +262,20 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
     // Restore input
     this.inputManager.listen();
 
+    if (this.session.isPlaytest()) {
+      this.navigator.replace(GameSceneType.EditorMenu);
+      return;
+    }
+
     this.navigator.replace(GameSceneType.LevelScore);
   };
 
   private handleLevelWinCompleted = (): void => {
+    if (this.session.isPlaytest()) {
+      this.navigator.replace(GameSceneType.EditorMenu);
+      return;
+    }
+
     this.navigator.replace(GameSceneType.LevelScore);
   };
 }

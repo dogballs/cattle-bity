@@ -46,8 +46,8 @@ export class SessionPlayer {
     this.resetLevelFirstSpawn();
   }
 
+  // Sum of all previous levels and current level
   public getTotalPoints(): number {
-    // Sum of all previous levels and current level
     return this.totalPoints + this.levelPointsRecord.getTotalPoints();
   }
 

@@ -1,6 +1,6 @@
 import { RectPainter, Scene, Timer } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
-import { LevelTitle, ScoreTable } from '../../gameObjects';
+import { LevelTitle, ScoreTable, SpriteText } from '../../gameObjects';
 import * as config from '../../config';
 
 import { GameSceneType } from '../GameSceneType';
@@ -15,6 +15,8 @@ enum State {
 
 export class LevelScoreScene extends Scene {
   private session: Session;
+  private highscoreTitle: SpriteText;
+  private highscorePoints: SpriteText;
   private levelTitle: LevelTitle;
   private scoreTable: ScoreTable;
   private postTimer = new Timer();
@@ -24,6 +26,19 @@ export class LevelScoreScene extends Scene {
     this.session = session;
 
     this.root.painter = new RectPainter(config.COLOR_BLACK);
+
+    this.highscoreTitle = new SpriteText('HI-SCORE', {
+      color: config.COLOR_RED,
+    });
+    this.highscoreTitle.position.set(256, 64);
+    this.root.add(this.highscoreTitle);
+
+    this.highscorePoints = new SpriteText(this.getCommonHighscoreText(), {
+      color: config.COLOR_YELLOW,
+    });
+    this.highscorePoints.origin.setX(1);
+    this.highscorePoints.position.set(768, 64);
+    this.root.add(this.highscorePoints);
 
     this.levelTitle = new LevelTitle(
       this.session.getLevelNumber(),
@@ -62,17 +77,19 @@ export class LevelScoreScene extends Scene {
     });
   }
 
+  private getCommonHighscoreText(): string {
+    const points = this.session.getMaxHighscore();
+    const pointsText = points.toString().padStart(6, ' ');
+
+    return pointsText;
+  }
+
   private handleDone = (): void => {
     this.state = State.Post;
     this.postTimer.reset(POST_DELAY);
   };
 
   private handlePost = (): void => {
-    if (this.session.isPlaytest()) {
-      this.navigator.replace(GameSceneType.EditorMenu);
-      return;
-    }
-
     if (this.session.isGameOver()) {
       this.navigator.replace(GameSceneType.MainGameOver);
       return;

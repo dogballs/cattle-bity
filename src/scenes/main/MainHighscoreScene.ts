@@ -14,14 +14,14 @@ export class MainHighscoreScene extends Scene {
     // Reset all previous game session data
     session.reset();
 
-    // If user did not reach highscore, simply skip this page
+    // Save player highscore for the last played game
+    gameStorage.savePrimaryPoints(totalPoints);
+
+    // If user did not reach common highscore, simply skip this page
     if (totalPoints <= highscore) {
       this.navigator.clearAndPush(GameSceneType.MainMenu);
       return;
     }
-
-    // Save highscore
-    gameStorage.savePrimaryPoints(totalPoints);
 
     this.heading = new HighscoreHeading(totalPoints);
     this.heading.origin.set(0.5, 0.5);

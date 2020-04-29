@@ -39,12 +39,13 @@ export class ScoreTable extends GameObject {
     this.record = record;
   }
 
-  protected setup(): void {
+  protected setup({ session }: GameUpdateArgs): void {
     this.playerLabel.position.set(256, 0);
     this.playerLabel.origin.setX(1);
     this.add(this.playerLabel);
 
-    this.totalPoints.setText(this.record.getTotalPoints().toString());
+    // For player total points display sum of all levels and current level
+    this.totalPoints.setText(session.primaryPlayer.getTotalPoints().toString());
     this.totalPoints.position.set(256, 64);
     this.totalPoints.origin.set(1, 0);
     this.add(this.totalPoints);
