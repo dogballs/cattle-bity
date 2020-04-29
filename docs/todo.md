@@ -6,7 +6,7 @@ Game logic
 
 Maps
 
-- Create maps 3 - 25
+-
 
 Build
 
@@ -20,5 +20,6 @@ Bugs
 Other
 
 - AI smart: random dont rotate to current rotation
+- selection screen arrows to indicate that stage is selectable
 - about scene
 - license

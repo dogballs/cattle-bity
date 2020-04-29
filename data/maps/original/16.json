@@ -3,7 +3,88 @@
   "spawn": {
     "enemy": {
       "locations": [],
-      "list": []
+      "list": [
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": true
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": true
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "a",
+          "drop": false
+        },
+        {
+          "tier": "b",
+          "drop": false
+        },
+        {
+          "tier": "b",
+          "drop": true
+        },
+        {
+          "tier": "d",
+          "drop": false
+        },
+        {
+          "tier": "d",
+          "drop": false
+        }
+      ]
     },
     "player": {
       "locations": []
