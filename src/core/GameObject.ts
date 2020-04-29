@@ -49,4 +49,12 @@ export class GameObject extends RenderObject {
   protected collide(collision: Collision): void {
     return undefined;
   }
+
+  public resetNeedsPaint(): void {
+    if (this.needsSetup === true) {
+      return;
+    }
+
+    super.resetNeedsPaint();
+  }
 }

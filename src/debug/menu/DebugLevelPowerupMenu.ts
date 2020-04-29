@@ -32,6 +32,7 @@ export class DebugLevelPowerupMenu extends DebugMenu {
     this.appendButton('Hide grid', this.handleGridHide);
     this.appendButton('Update grid', this.handleGridUpdate);
     this.appendButton('Spawn', this.handleSpawn);
+    this.appendButton('Spawn: base defence', this.handleSpawnBaseDefence);
     this.appendButton('Spawn: freeze', this.handleSpawnFreeze);
   }
 
@@ -63,6 +64,10 @@ export class DebugLevelPowerupMenu extends DebugMenu {
 
   private handleSpawn = (): void => {
     this.spawnRequest.notify(null);
+  };
+
+  private handleSpawnBaseDefence = (): void => {
+    this.spawnRequest.notify(PowerupType.BaseDefence);
   };
 
   private handleSpawnFreeze = (): void => {

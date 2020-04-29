@@ -29,6 +29,10 @@ export class BrickSuperTerrainTile extends TerrainTile {
   public destroy(): void {
     super.destroy();
     this.collider.unregister();
+
+    for (const subTile of this.subTiles) {
+      subTile.destroy();
+    }
   }
 
   protected setup({ collisionSystem }: GameUpdateArgs): void {

@@ -10,7 +10,7 @@ export class SteelTerrainTile extends TerrainTile {
   public collider = new BoxCollider(this);
   public zIndex = config.STEEL_TILE_Z_INDEX;
   public tags = [Tag.Wall, Tag.Steel, Tag.BlockMove];
-  public readonly painter = new SpritePainter();
+  public painter = new SpritePainter();
 
   constructor() {
     super(config.STEEL_TILE_SIZE, config.STEEL_TILE_SIZE);

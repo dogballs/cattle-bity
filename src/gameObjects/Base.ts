@@ -1,9 +1,10 @@
 import { Animation, GameObject, Rect, Subject, Timer } from '../core';
-import { GameUpdateArgs, Tag } from '../game';
+import { GameUpdateArgs } from '../game';
 import { TerrainFactory, TerrainType } from '../terrain';
 import * as config from '../config';
 
 import { BaseHeart } from './BaseHeart';
+import { TerrainTile } from './TerrainTile';
 
 const WALL_REGIONS = [
   new Rect(0, 0, 128, 32),
@@ -12,9 +13,10 @@ const WALL_REGIONS = [
 ];
 
 export class Base extends GameObject {
-  public readonly died = new Subject();
-  private readonly heart = new BaseHeart();
-  private readonly defenceTimer = new Timer();
+  public died = new Subject();
+  private heart = new BaseHeart();
+  private container: GameObject;
+  private defenceTimer = new Timer();
   private fadeAnimation: Animation<TerrainType>;
   private isFading = false;
   private lastFadeWallType: TerrainType = TerrainType.Steel;
@@ -25,16 +27,20 @@ export class Base extends GameObject {
 
   public activateDefence(duration: number): void {
     this.resetFading();
-    this.setWalls(TerrainType.Steel);
+    this.setTiles(TerrainType.Steel);
     this.defenceTimer.reset(duration);
   }
 
   protected setup(): void {
+    this.container = new GameObject();
+    this.container.size.copyFrom(this.size);
+    this.add(this.container);
+
     this.heart.position.set(32, 32);
     this.heart.died.addListener(this.died.notify);
     this.add(this.heart);
 
-    this.setWalls(TerrainType.Brick);
+    this.setTiles(TerrainType.Brick);
 
     this.fadeAnimation = new Animation([TerrainType.Brick, TerrainType.Steel], {
       delay: 0.25,
@@ -47,12 +53,10 @@ export class Base extends GameObject {
   protected update(updateArgs: GameUpdateArgs): void {
     this.defenceTimer.update(updateArgs.deltaTime);
 
-    // TODO: fading logic seems a bit ugly
-
     if (this.isFading) {
       if (this.fadeAnimation.isComplete()) {
         this.resetFading();
-        this.setWalls(TerrainType.Brick);
+        this.setTiles(TerrainType.Brick);
         return;
       }
 
@@ -61,7 +65,7 @@ export class Base extends GameObject {
       const fadeWallType = this.fadeAnimation.getCurrentFrame();
       if (this.lastFadeWallType !== fadeWallType) {
         this.lastFadeWallType = fadeWallType;
-        this.setWalls(fadeWallType);
+        this.setTiles(fadeWallType);
       }
     }
   }
@@ -77,20 +81,17 @@ export class Base extends GameObject {
     this.lastFadeWallType = TerrainType.Steel;
   };
 
-  private setWalls(wallType: TerrainType): void {
-    this.removeAllWalls();
+  private setTiles(type: TerrainType): void {
+    // Iterate in reverse because we are removing elements
+    for (let i = this.container.children.length - 1; i >= 0; i -= 1) {
+      const oldTile = this.container.children[i] as TerrainTile;
+      // Make sure colliders are unregistered
+      oldTile.destroy();
+    }
 
-    const walls = TerrainFactory.createMapFromRegions(wallType, WALL_REGIONS);
-    walls.forEach((wall) => {
-      this.add(wall);
-    });
-  }
-
-  private removeAllWalls(): void {
-    this.children.forEach((child) => {
-      if (child.tags.includes(Tag.Wall)) {
-        child.removeSelf();
-      }
+    const tiles = TerrainFactory.createMapFromRegions(type, WALL_REGIONS);
+    tiles.forEach((tile) => {
+      this.container.add(tile);
     });
   }
 }
