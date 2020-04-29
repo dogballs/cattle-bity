@@ -2,9 +2,9 @@ import { InputControl } from '../InputControl';
 import { InputContext } from '../InputContext';
 
 export const LevelSelectionInputContext: InputContext = {
-  Next: [InputControl.Down],
-  Prev: [InputControl.Up],
-  FastNext: [InputControl.Right],
-  FastPrev: [InputControl.Left],
+  Next: [InputControl.Right],
+  Prev: [InputControl.Left],
+  FastNext: [InputControl.Up],
+  FastPrev: [InputControl.Down],
   Select: [InputControl.Select, InputControl.PrimaryAction],
 };
