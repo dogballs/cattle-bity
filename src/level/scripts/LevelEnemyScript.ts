@@ -72,7 +72,7 @@ export class LevelEnemyScript extends LevelScript {
 
     const tank = TankFactory.createEnemy(type);
     tank.updateMatrix(); // Origin should be in before setting center
-    tank.rotate(Rotation.Right);
+    tank.rotate(Rotation.Down);
     tank.setCenter(event.centerPosition);
     tank.updateMatrix();
 

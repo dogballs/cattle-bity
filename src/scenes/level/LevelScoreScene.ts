@@ -25,9 +25,13 @@ export class LevelScoreScene extends Scene {
 
     this.root.painter = new RectPainter(config.COLOR_BLACK);
 
-    this.levelTitle = new LevelTitle(this.session.getLevelNumber(), {
-      color: config.COLOR_WHITE,
-    });
+    this.levelTitle = new LevelTitle(
+      this.session.getLevelNumber(),
+      this.session.isPlaytest(),
+      {
+        color: config.COLOR_WHITE,
+      },
+    );
     this.levelTitle.origin.set(0.5, 0);
     this.levelTitle.setCenter(this.root.getSelfCenter());
     this.levelTitle.position.setY(128);

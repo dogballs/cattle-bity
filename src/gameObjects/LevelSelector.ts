@@ -14,15 +14,17 @@ export class LevelSelector extends GameObject {
   private currentLevel = 1;
   private minLevel = 1;
   private maxLevel: number;
-  private title = new LevelTitle();
+  private isPlaytest: boolean;
+  private title: LevelTitle;
   private arrowLeft: SpriteText;
   private arrowRight: SpriteText;
   private holdThrottles: InputHoldThrottle[] = [];
 
-  constructor(maxLevel = 1) {
+  constructor(maxLevel = 1, isPlaytest = false) {
     super();
 
     this.maxLevel = maxLevel;
+    this.isPlaytest = isPlaytest;
 
     this.holdThrottles = [
       new InputHoldThrottle(LevelSelectionInputContext.Next, this.selectNext, {
@@ -45,6 +47,7 @@ export class LevelSelector extends GameObject {
   }
 
   protected setup(): void {
+    this.title = new LevelTitle(0, this.isPlaytest);
     this.title.origin.set(0.5, 0.5);
     this.title.updateMatrix();
     this.add(this.title);

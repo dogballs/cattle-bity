@@ -21,6 +21,7 @@ export class EditorHintScene extends Scene<EditorLocationParams> {
   private eraseHint: SpriteText;
   private nextBrushHint: SpriteText;
   private prevBrushHint: SpriteText;
+  private backHint: SpriteText;
   private continueHint: GameObject;
 
   protected setup({ inputManager, session }: GameUpdateArgs): void {
@@ -91,29 +92,36 @@ export class EditorHintScene extends Scene<EditorLocationParams> {
       EditorMapInputContext.Draw[0],
     );
     this.drawHint = new SpriteText(`DRAW       - ${drawDisplayCode}`);
-    this.drawHint.position.set(290, 550);
+    this.drawHint.position.set(290, 500);
     this.root.add(this.drawHint);
 
     const eraseDisplayCode = inputManager.getPresentedControlCode(
       EditorMapInputContext.Erase[0],
     );
     this.eraseHint = new SpriteText(`ERASE      - ${eraseDisplayCode}`);
-    this.eraseHint.position.set(290, 600);
+    this.eraseHint.position.set(290, 550);
     this.root.add(this.eraseHint);
 
     const nextBrushDisplayCode = inputManager.getPresentedControlCode(
       EditorMapInputContext.NextBrush[0],
     );
     this.nextBrushHint = new SpriteText(`NEXT BRUSH - ${nextBrushDisplayCode}`);
-    this.nextBrushHint.position.set(290, 650);
+    this.nextBrushHint.position.set(290, 600);
     this.root.add(this.nextBrushHint);
 
     const prevBrushDisplayCode = inputManager.getPresentedControlCode(
       EditorMapInputContext.PrevBrush[0],
     );
     this.prevBrushHint = new SpriteText(`PREV BRUSH - ${prevBrushDisplayCode}`);
-    this.prevBrushHint.position.set(290, 700);
+    this.prevBrushHint.position.set(290, 650);
     this.root.add(this.prevBrushHint);
+
+    const backDisplayCode = inputManager.getPresentedControlCode(
+      EditorMapInputContext.Menu[0],
+    );
+    this.backHint = new SpriteText(`MENU       - ${backDisplayCode}`);
+    this.backHint.position.set(290, 700);
+    this.root.add(this.backHint);
 
     const continueDisplayedCode = inputManager.getPresentedControlCode(
       EditorHintInputContext.Skip[0],

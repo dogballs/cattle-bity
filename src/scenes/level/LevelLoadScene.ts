@@ -31,7 +31,7 @@ export class LevelLoadScene extends Scene {
     );
     this.root.add(this.curtain);
 
-    this.title = new LevelTitle(levelNumber);
+    this.title = new LevelTitle(levelNumber, this.session.isPlaytest());
     this.title.setCenter(this.root.getSelfCenter());
     this.title.origin.set(0.5, 0.5);
     this.root.add(this.title);

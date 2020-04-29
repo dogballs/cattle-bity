@@ -20,7 +20,10 @@ export class LevelSelectionScene extends Scene {
     this.curtain = new Curtain(this.root.size.width, this.root.size.height);
     this.root.add(this.curtain);
 
-    this.selector = new LevelSelector(mapLoader.getItemsCount());
+    this.selector = new LevelSelector(
+      this.mapLoader.getItemsCount(),
+      this.session.isPlaytest(),
+    );
     this.selector.setCenter(this.root.getSelfCenter());
     this.selector.selected.addListener(this.handleLevelSelected);
     this.root.add(this.selector);
