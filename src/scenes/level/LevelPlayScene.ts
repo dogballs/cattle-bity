@@ -229,6 +229,7 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
   };
 
   private handleEnemyAllDied = (): void => {
+    this.pauseScript.disable();
     this.winScript.enable();
   };
 
