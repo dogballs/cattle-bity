@@ -1,4 +1,4 @@
-Any file in this project that doesn't state otherwise, and isn't listed as an exception below, is Copyright 2020 _The cattle-bity authors_, and licensed under the terms of the GNU General Public License Version 3, or (at your option) any later version ("GPL3+"). A copy of the license can be found in [docs/legal/GPLV3](docs/legal/GPLV3).
+Any file in this project that doesn't state otherwise, and isn't listed as an exception below, is Copyright 2020 _The cattle-bity authors_, and licensed under the terms of the MIT License. A copy of the license can be found in [docs/legal/MIT](docs/legal/MIT).
 
 _The cattle-bity authors_ are:
 
@@ -6,9 +6,7 @@ _The cattle-bity authors_ are:
 | ---------------- | --------- | ----------------------------------- |
 | Michael Radionov | mradionov | mradionov dawt oss à gmail dawt com |
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License Version 3 for more details.
-
-If you wish to include a file from current project in your project, make sure to include all required legal info. The easiest way to do this would probably be to include a copy of this file (`copying.md`), and to leave the file's copyright header untouched.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the MIT License for more details.
 
 All 3rd-party files **must** be included in the following list.
 

@@ -24,5 +24,6 @@ Project is not commercial and was created for learning purposes only.
 
 ## License
 
-License
-**GNU GPLv3** or later; see `copying.md` and `docs/legal/GPLv3`
+**MIT**
+
+See `LICENSE.md` and `docs/legal/MIT`
