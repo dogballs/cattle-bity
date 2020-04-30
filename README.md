@@ -1,6 +1,6 @@
-[![Build status](https://travis-ci.com/dogballs/battle-city.svg?branch=master)](https://travis-ci.com/dogballs/battle-city)
+[![Build status](https://travis-ci.com/dogballs/cattle-bity.svg?branch=master)](https://travis-ci.com/dogballs/cattle-bity)
 
-### [Play web version](https://dogballs.github.io/battle-city/)
+### [Play web version](https://dogballs.github.io/cattle-bity/)
 
 ## Description
 
