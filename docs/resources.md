@@ -11,8 +11,9 @@ Assets:
 
 - https://www.spriters-resource.com/nes/batcity/sheet/60016/
 - https://www.sounds-resource.com/nes/battlecity/sound/3710/
+- https://www.zophar.net/music/nintendo-nes-nsf/battle-city
 
-Playthrough:
+Video playthrough:
 
 - https://www.youtube.com/watch?v=MPsA5PtfdL0
 - https://www.youtube.com/watch?v=g3aTE-Cvaj4

@@ -3,7 +3,6 @@ export * from './HighscoreHeading';
 export * from './InputHint';
 export * from './LevelTitle';
 export * from './MainHeading';
-export * from './ModeDescription';
 export * from './SceneMenuTitle';
 export * from './SpriteText';
 export * from './TerrainText';

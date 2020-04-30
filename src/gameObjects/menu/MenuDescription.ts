@@ -1,9 +1,9 @@
 import { GameObject, RectPainter } from '../../core';
 import * as config from '../../config';
 
-import { SpriteText } from './SpriteText';
+import { SpriteText } from '../text';
 
-export class ModeDescription extends GameObject {
+export class MenuDescription extends GameObject {
   public painter = new RectPainter(config.COLOR_GRAY, config.COLOR_YELLOW);
   private text: SpriteText;
   private message: string;

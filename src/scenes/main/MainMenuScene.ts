@@ -24,6 +24,7 @@ export class MainMenuScene extends Scene {
   private modesItem: TextMenuItem;
   private editorItem: TextMenuItem;
   private settingsItem: TextMenuItem;
+  private aboutItem: TextMenuItem;
   private state: State = State.Ready;
   private session: Session;
   private pointsHighscoreManager: PointsHighscoreManager;
@@ -72,11 +73,15 @@ export class MainMenuScene extends Scene {
     this.settingsItem = new TextMenuItem('SETTINGS');
     this.settingsItem.selected.addListener(this.handleSettingsSelected);
 
+    this.aboutItem = new TextMenuItem('ABOUT');
+    this.aboutItem.selected.addListener(this.handleAboutSelected);
+
     const menuItems = [
       this.singlePlayerItem,
       this.modesItem,
       this.editorItem,
       this.settingsItem,
+      this.aboutItem,
     ];
 
     this.menu = new Menu();
@@ -165,5 +170,9 @@ export class MainMenuScene extends Scene {
 
   private handleSettingsSelected = (): void => {
     this.navigator.push(GameSceneType.SettingsMenu);
+  };
+
+  private handleAboutSelected = (): void => {
+    this.navigator.push(GameSceneType.MainAbout);
   };
 }

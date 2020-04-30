@@ -15,6 +15,7 @@ import {
   LevelScoreScene,
 } from './level';
 import {
+  MainAboutScene,
   MainGameOverScene,
   MainHighscoreScene,
   MainMenuScene,
@@ -40,6 +41,7 @@ export class GameSceneRouter extends SceneRouter {
     this.register(GameSceneType.EditorHint, EditorHintScene);
     this.register(GameSceneType.EditorMap, EditorMapScene);
     this.register(GameSceneType.EditorMenu, EditorMenuScene);
+    this.register(GameSceneType.MainAbout, MainAboutScene);
     this.register(GameSceneType.MainGameOver, MainGameOverScene);
     this.register(GameSceneType.MainHighscore, MainHighscoreScene);
     this.register(GameSceneType.MainMenu, MainMenuScene);

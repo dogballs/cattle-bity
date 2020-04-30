@@ -26,7 +26,7 @@ export class AiTankBehavior extends TankBehavior {
   private lastPosition = new Vector(-1, -1);
   private thinkTimer = new Timer();
   private fireTimer = new Timer();
-  private log = new Logger(AiTankBehavior.name, Logger.Level.Debug);
+  private log = new Logger(AiTankBehavior.name, Logger.Level.Info);
 
   public update(tank: Tank, updateArgs: GameUpdateArgs): void {
     if (this.fireTimer.isDone()) {

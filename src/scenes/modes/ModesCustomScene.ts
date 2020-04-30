@@ -2,7 +2,7 @@ import { FileOpener, Scene } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import {
   DividerMenuItem,
-  ModeDescription,
+  MenuDescription,
   SceneMenu,
   SceneMenuTitle,
   TextMenuItem,
@@ -13,7 +13,7 @@ import { GameSceneType } from '../GameSceneType';
 
 export class ModesCustomScene extends Scene {
   private title: SceneMenuTitle;
-  private description: ModeDescription;
+  private description: MenuDescription;
   private loadItem: TextMenuItem;
   private playItem: TextMenuItem;
   private backItem: TextMenuItem;
@@ -27,7 +27,7 @@ export class ModesCustomScene extends Scene {
     this.title = new SceneMenuTitle('MODES → CUSTOM MAPS');
     this.root.add(this.title);
 
-    this.description = new ModeDescription(
+    this.description = new MenuDescription(
       'LOAD YOUR OWN LIST OF MAPS \nFROM CONSTRUCTION JSON FILES',
     );
     this.description.position.set(16, 180);

@@ -8,6 +8,7 @@ export enum GameSceneType {
   LevelPlay,
   LevelScore,
   LevelSelection,
+  MainAbout,
   MainGameOver,
   MainHighscore,
   MainMenu,

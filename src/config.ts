@@ -145,3 +145,5 @@ export const LEVEL_TITLE_Z_INDEX = 10;
 export const MODAL_Z_INDEX = 11;
 export const DEBUG_COLLISION_RECT_Z_INDEX = 20;
 export const DEBUG_GRID_Z_INDEX = 21;
+
+export const GITHUB_URL = 'https://github.com/dogballs/battle-city';
