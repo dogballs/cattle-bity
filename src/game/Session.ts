@@ -1,5 +1,3 @@
-import * as config from '../config';
-
 import { SessionPlayer } from './SessionPlayer';
 
 enum State {
@@ -10,6 +8,7 @@ enum State {
 
 export class Session {
   public primaryPlayer = new SessionPlayer();
+  public secondaryPlayer = new SessionPlayer();
   private startLevelNumber: number;
   private endLevelNumber: number;
   private currentLevelNumber: number;
@@ -51,12 +50,25 @@ export class Session {
     this.playtest = false;
 
     this.primaryPlayer.reset();
+    this.secondaryPlayer.reset();
   }
 
   public activateNextLevel(): void {
     this.currentLevelNumber += 1;
 
     this.primaryPlayer.completeLevel();
+    this.secondaryPlayer.completeLevel();
+  }
+
+  public getMaxPoints(): number {
+    const primaryPoints = this.primaryPlayer.getTotalPoints();
+    const secondaryPoints = this.secondaryPlayer.getTotalPoints();
+
+    const points = [primaryPoints, secondaryPoints];
+
+    const maxPoints = Math.max(...points);
+
+    return maxPoints;
   }
 
   public getLevelNumber(): number {
@@ -73,18 +85,6 @@ export class Session {
 
   public isGameOver(): boolean {
     return this.state === State.GameOver;
-  }
-
-  public getMaxPoints(): number {
-    return this.primaryPlayer.getTotalPoints();
-  }
-
-  public getMaxHighscore(): number {
-    const points = this.primaryPlayer.getHighscore();
-    if (points > config.DEFAULT_HIGHSCORE) {
-      return points;
-    }
-    return config.DEFAULT_HIGHSCORE;
   }
 
   public setSeenIntro(seenIntro: boolean): void {

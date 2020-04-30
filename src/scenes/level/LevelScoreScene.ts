@@ -1,6 +1,7 @@
 import { RectPainter, Scene, Timer } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import { LevelTitle, ScoreTable, SpriteText } from '../../gameObjects';
+import { PointsHighscoreManager } from '../../points';
 import * as config from '../../config';
 
 import { GameSceneType } from '../GameSceneType';
@@ -21,8 +22,10 @@ export class LevelScoreScene extends Scene {
   private scoreTable: ScoreTable;
   private postTimer = new Timer();
   private state = State.Idle;
+  private pointsHighscoreManager: PointsHighscoreManager;
 
-  protected setup({ session }: GameUpdateArgs): void {
+  protected setup({ pointsHighscoreManager, session }: GameUpdateArgs): void {
+    this.pointsHighscoreManager = pointsHighscoreManager;
     this.session = session;
 
     this.root.painter = new RectPainter(config.COLOR_BLACK);
@@ -78,7 +81,7 @@ export class LevelScoreScene extends Scene {
   }
 
   private getCommonHighscoreText(): string {
-    const points = this.session.getMaxHighscore();
+    const points = this.pointsHighscoreManager.getOverallMaxPoints();
     const pointsText = points.toString().padStart(6, ' ');
 
     return pointsText;

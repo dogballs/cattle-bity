@@ -2,6 +2,7 @@ import { GameObject, Scene } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import { MainHeading, Menu, SpriteText, TextMenuItem } from '../../gameObjects';
 import { MenuInputContext } from '../../input';
+import { PointsHighscoreManager } from '../../points';
 import * as config from '../../config';
 
 import { GameSceneType } from '../GameSceneType';
@@ -16,7 +17,7 @@ enum State {
 export class MainMenuScene extends Scene {
   private group: GameObject;
   private heading: MainHeading;
-  private primaryHighscore: SpriteText;
+  private primaryPoints: SpriteText;
   private commonHighscore: SpriteText;
   private menu: Menu;
   private singlePlayerItem: TextMenuItem;
@@ -25,6 +26,7 @@ export class MainMenuScene extends Scene {
   private settingsItem: TextMenuItem;
   private state: State = State.Ready;
   private session: Session;
+  private pointsHighscoreManager: PointsHighscoreManager;
 
   protected setup({
     mapLoader,
@@ -32,10 +34,7 @@ export class MainMenuScene extends Scene {
     session,
   }: GameUpdateArgs): void {
     this.session = session;
-
-    // Load highscore from storage
-    const highscorePoints = pointsHighscoreManager.getPrimaryPoints();
-    this.session.primaryPlayer.setHighscore(highscorePoints);
+    this.pointsHighscoreManager = pointsHighscoreManager;
 
     // Restore source for maps to default
     mapLoader.restoreDefaultReader();
@@ -43,11 +42,11 @@ export class MainMenuScene extends Scene {
     this.group = new GameObject();
     this.group.size.copyFrom(this.root.size);
 
-    this.primaryHighscore = new SpriteText(this.getPrimaryHighscoreText(), {
+    this.primaryPoints = new SpriteText(this.getPrimaryPointsText(), {
       color: config.COLOR_WHITE,
     });
-    this.primaryHighscore.position.set(92, 64);
-    this.group.add(this.primaryHighscore);
+    this.primaryPoints.position.set(92, 64);
+    this.group.add(this.primaryPoints);
 
     this.commonHighscore = new SpriteText(this.getCommonHighscoreText(), {
       color: config.COLOR_WHITE,
@@ -132,8 +131,8 @@ export class MainMenuScene extends Scene {
     });
   }
 
-  private getPrimaryHighscoreText(): string {
-    const points = this.session.primaryPlayer.getHighscore();
+  private getPrimaryPointsText(): string {
+    const points = this.session.primaryPlayer.getLastPoints();
 
     const pointsNumberText = points > 0 ? points.toString() : '00';
     const pointsText = pointsNumberText.padStart(6, ' ');
@@ -144,7 +143,7 @@ export class MainMenuScene extends Scene {
   }
 
   private getCommonHighscoreText(): string {
-    const points = this.session.getMaxHighscore();
+    const points = this.pointsHighscoreManager.getOverallMaxPoints();
     const pointsText = points.toString().padStart(6, ' ');
 
     const text = `HI-${pointsText}`;

@@ -8,12 +8,14 @@ export class SessionPlayer {
   public lifeup = new Subject();
 
   private levelPointsRecord: PointsRecord;
+  // Total points for current session
   private totalPoints: number;
-  private highscorePoints: number;
+  // Total points from last session
+  private lastPoints: number;
   private lives: number;
   private nextLifePointThreshold: number;
   private tankTier: TankTier;
-  private levelFirstSpawn: boolean;
+  private levelFirstSpawned: boolean;
 
   constructor() {
     this.reset();
@@ -22,11 +24,11 @@ export class SessionPlayer {
   public reset(): void {
     this.levelPointsRecord = new PointsRecord();
     this.totalPoints = 0;
-    this.highscorePoints = 0;
+    this.lastPoints = 0;
     this.lives = config.PLAYER_INITIAL_LIVES;
     this.nextLifePointThreshold = config.PLAYER_EXTRA_LIVE_POINTS;
     this.tankTier = TankTier.A;
-    this.levelFirstSpawn = true;
+    this.levelFirstSpawned = true;
   }
 
   public addKillPoints(tier: TankTier): void {
@@ -51,12 +53,12 @@ export class SessionPlayer {
     return this.totalPoints + this.levelPointsRecord.getTotalPoints();
   }
 
-  public setHighscore(highscorePoints: number): void {
-    this.highscorePoints = highscorePoints;
+  public setLastPoints(lastPoints: number): void {
+    this.lastPoints = lastPoints;
   }
 
-  public getHighscore(): number {
-    return this.highscorePoints;
+  public getLastPoints(): number {
+    return this.lastPoints;
   }
 
   public getLevelPointsRecord(): PointsRecord {
@@ -84,15 +86,15 @@ export class SessionPlayer {
   }
 
   public isLevelFirstSpawn(): boolean {
-    return this.levelFirstSpawn;
+    return this.levelFirstSpawned;
   }
 
   public setLevelSpawned(): void {
-    this.levelFirstSpawn = false;
+    this.levelFirstSpawned = false;
   }
 
   public resetLevelFirstSpawn(): void {
-    this.levelFirstSpawn = true;
+    this.levelFirstSpawned = true;
   }
 
   public addLife(): void {

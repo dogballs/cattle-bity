@@ -89,6 +89,8 @@ export const PRIMARY_RECT_FONT_ID = 'primary';
 
 export const STORAGE_NAMESPACE = 'battle-city';
 export const STORAGE_KEY_POINTS_HIGHSCORE_PRIMARY = 'points.highscore.primary';
+export const STORAGE_KEY_POINTS_HIGHSCORE_SECONDARY =
+  'points.highscore.secondary';
 export const STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PRIMARY =
   'settings.input.bindings.primary';
 export const STORAGE_KEY_SETTINGS_AUDIO_MUTED = 'settings.audio-muted';
