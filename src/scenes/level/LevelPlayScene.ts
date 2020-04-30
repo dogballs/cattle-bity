@@ -220,6 +220,7 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
 
     this.session.setGameOver();
 
+    this.pauseScript.disable();
     this.playerScript.disable();
     this.gameOverScript.enable();
 
@@ -246,6 +247,7 @@ export class LevelPlayScene extends Scene<LevelLocationParams> {
   private handleBaseDied = (): void => {
     this.session.setGameOver();
 
+    this.pauseScript.disable();
     this.playerScript.disable();
     this.gameOverScript.enable();
 
