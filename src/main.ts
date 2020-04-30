@@ -34,7 +34,7 @@ import * as audioManifest from '../data/audio.manifest.json';
 import * as spriteManifest from '../data/sprite.manifest.json';
 import * as spriteFontConfig from '../data/fonts/sprite-font.json';
 import * as rectFontConfig from '../data/fonts/rect-font.json';
-import * as mapManifest from '../data/maps/test/test.manifest.json';
+import * as mapManifest from '../data/map.manifest.json';
 
 const loadingElement = document.querySelector('[data-loading]');
 
