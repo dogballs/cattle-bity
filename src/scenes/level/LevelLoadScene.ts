@@ -1,6 +1,7 @@
 import { Logger, Scene } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import { AlertModal, Curtain, LevelTitle } from '../../gameObjects';
+import { InputHintSettings } from '../../input';
 import { MapConfig, MapLoader } from '../../map';
 
 import { GameSceneType } from '../GameSceneType';
@@ -16,10 +17,16 @@ export class LevelLoadScene extends Scene {
   private alertModal: AlertModal;
   private mapLoader: MapLoader;
   private session: Session;
+  private inputHintSettings: InputHintSettings;
   private state = State.Navigation;
   private log = new Logger(LevelLoadScene.name, Logger.Level.Warn);
 
-  protected setup({ mapLoader, session }: GameUpdateArgs): void {
+  protected setup({
+    inputHintSettings,
+    mapLoader,
+    session,
+  }: GameUpdateArgs): void {
+    this.inputHintSettings = inputHintSettings;
     this.session = session;
 
     const levelNumber = this.session.getLevelNumber();
@@ -71,7 +78,7 @@ export class LevelLoadScene extends Scene {
   private handleMapLoaded = (mapConfig: MapConfig): void => {
     this.mapLoader.error.removeListener(this.handleMapLoadError);
 
-    if (this.session.showLevelHint()) {
+    if (this.inputHintSettings.shouldShowLevelHint()) {
       this.navigator.replace(GameSceneType.LevelHint, {
         mapConfig,
       });

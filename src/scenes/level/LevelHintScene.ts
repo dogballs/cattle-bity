@@ -29,11 +29,11 @@ export class LevelHintScene extends Scene<LevelLocationParams> {
   private continueHint: GameObject;
 
   protected setup({
+    inputHintSettings,
     inputManager,
-    session,
     spriteLoader,
   }: GameUpdateArgs): void {
-    session.setSeenLevelHint();
+    inputHintSettings.setSeenLevelHint();
 
     this.background = new GameObject();
     this.background.size.copyFrom(this.root.size);

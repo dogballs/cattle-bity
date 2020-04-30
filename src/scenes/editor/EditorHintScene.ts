@@ -24,8 +24,8 @@ export class EditorHintScene extends Scene<EditorLocationParams> {
   private backHint: SpriteText;
   private continueHint: GameObject;
 
-  protected setup({ inputManager, session }: GameUpdateArgs): void {
-    session.setSeenEditorHint();
+  protected setup({ inputHintSettings, inputManager }: GameUpdateArgs): void {
+    inputHintSettings.setSeenEditorHint();
 
     this.background = new GameObject();
     this.background.size.copyFrom(this.root.size);

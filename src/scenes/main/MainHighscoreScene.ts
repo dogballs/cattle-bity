@@ -7,7 +7,11 @@ import { GameSceneType } from '../GameSceneType';
 export class MainHighscoreScene extends Scene {
   private heading: HighscoreHeading;
 
-  protected setup({ audioLoader, gameStorage, session }: GameUpdateArgs): void {
+  protected setup({
+    audioLoader,
+    pointsHighscoreManager,
+    session,
+  }: GameUpdateArgs): void {
     const totalPoints = session.getMaxPoints();
     const highscore = session.getMaxHighscore();
 
@@ -15,7 +19,7 @@ export class MainHighscoreScene extends Scene {
     session.reset();
 
     // Save player highscore for the last played game
-    gameStorage.savePrimaryPoints(totalPoints);
+    pointsHighscoreManager.savePrimaryPoints(totalPoints);
 
     // If user did not reach common highscore, simply skip this page
     if (totalPoints <= highscore) {

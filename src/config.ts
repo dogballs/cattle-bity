@@ -88,11 +88,16 @@ export const PRIMARY_SPRITE_FONT_ID = 'primary';
 export const PRIMARY_RECT_FONT_ID = 'primary';
 
 export const STORAGE_NAMESPACE = 'battle-city';
-export const STORAGE_KEY_SETTINGS_AUDIO = 'audio';
-export const STORAGE_KEY_BINDINGS_PRIMARY = 'bindings-primary';
-export const STORAGE_KEY_HIGHSCORE_PRIMARY = 'highscore-primary';
-export const STORAGE_KEY_LEVEL_HINT = 'seen-level-hint';
-export const STORAGE_KEY_EDITOR_HINT = 'seen-editor-hint';
+export const STORAGE_KEY_POINTS_HIGHSCORE_PRIMARY = 'points.highscore.primary';
+export const STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PRIMARY =
+  'settings.input.bindings.primary';
+export const STORAGE_KEY_SETTINGS_AUDIO_MUTED = 'settings.audio-muted';
+export const STORAGE_KEY_SETTINGS_SEEN_LEVEL_HINT = 'settings.seen-level-hint';
+export const STORAGE_KEY_SETTINGS_SEEN_EDITOR_HINT =
+  'settings.seen-editor-hint';
+export const STORAGE_KEY_SETTINGS_SHOW_LEVEL_HINT = 'settings.show-level-hint';
+export const STORAGE_KEY_SETTINGS_SHOW_EDITOR_HINT =
+  'settings.show-editor-hint';
 
 export const PLAYER_DEFAULT_SPAWN_POSITIONS = [{ x: 256, y: 768 }];
 export const ENEMY_DEFAULT_SPAWN_POSITIONS = [

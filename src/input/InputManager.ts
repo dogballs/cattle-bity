@@ -6,6 +6,7 @@ import {
   KeyboardInputDevice,
 } from '../core';
 import { GameStorage } from '../game';
+import * as config from '../config';
 
 import { GamepadInputBinding, KeyboardInputBinding } from './bindings';
 import {
@@ -133,7 +134,8 @@ export class InputManager {
     this.variants.forEach((variant, type) => {
       const { binding } = variant;
 
-      const json = this.storage.getBindingJSON(type);
+      const key = this.getBindingStorageKey(type);
+      const json = this.storage.get(key);
 
       binding.fromJSON(json);
     });
@@ -141,10 +143,11 @@ export class InputManager {
 
   public saveBinding(type: InputDeviceType): void {
     const binding = this.getBinding(type);
-
+    const key = this.getBindingStorageKey(type);
     const json = binding.toJSON();
 
-    this.storage.saveBindingJSON(type, json);
+    this.storage.set(key, json);
+    this.storage.save();
   }
 
   public getPresentedControlCode(control: InputControl): string {
@@ -162,5 +165,11 @@ export class InputManager {
 
     this.input.setDevice(variant.device);
     this.input.setBinding(variant.binding);
+  }
+
+  private getBindingStorageKey(type: InputDeviceType): string {
+    return `${
+      config.STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PRIMARY
+    }_${type.toString()}`;
   }
 }

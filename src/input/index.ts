@@ -6,5 +6,6 @@ export * from './InputButtonCodePresenter';
 export * from './InputControl';
 export * from './InputControlPresenter';
 export * from './InputDeviceType';
+export * from './InputHintSettings';
 export * from './InputHoldThrottle';
 export * from './InputManager';

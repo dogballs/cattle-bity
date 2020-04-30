@@ -23,8 +23,9 @@ import {
   GameStorage,
   Session,
 } from './game';
-import { InputManager } from './input';
+import { InputHintSettings, InputManager } from './input';
 import { ManifestMapListReader, MapLoader } from './map';
+import { PointsHighscoreManager } from './points';
 import { GameSceneRouter, GameSceneType } from './scenes';
 
 import * as config from './config';
@@ -76,7 +77,11 @@ const mapLoader = new MapLoader(manifestMapListReader);
 const audioManager = new AudioManager(audioLoader, gameStorage);
 audioManager.loadSettings();
 
-const session = new Session(gameStorage);
+const session = new Session();
+
+const inputHintSettings = new InputHintSettings(gameStorage);
+
+const pointsHighscoreManager = new PointsHighscoreManager(gameStorage);
 
 const collisionSystem = new CollisionSystem();
 
@@ -111,9 +116,11 @@ const updateArgs: GameUpdateArgs = {
   gameStorage,
   imageLoader,
   input: inputManager.getInput(),
+  inputHintSettings,
   inputManager,
   gameState,
   mapLoader,
+  pointsHighscoreManager,
   rectFontLoader,
   session,
   spriteFontLoader,

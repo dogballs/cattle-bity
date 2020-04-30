@@ -15,6 +15,7 @@ export enum GameSceneType {
   ModesMenu,
   ModesCustom,
   SettingsAudio,
+  SettingsInterface,
   SettingsKeybinding,
   SettingsMenu,
   SandboxTransform,

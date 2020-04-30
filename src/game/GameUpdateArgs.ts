@@ -9,8 +9,9 @@ import {
   SpriteLoader,
   State,
 } from '../core';
-import { InputManager } from '../input';
+import { InputHintSettings, InputManager } from '../input';
 import { MapLoader } from '../map';
+import { PointsHighscoreManager } from '../points';
 
 import { AudioManager } from './AudioManager';
 import { GameState } from './GameState';
@@ -25,10 +26,12 @@ export interface GameUpdateArgs {
   deltaTime: number;
   imageLoader: ImageLoader;
   input: Input;
+  inputHintSettings: InputHintSettings;
   inputManager: InputManager;
   gameState: State<GameState>;
   gameStorage: GameStorage;
   mapLoader: MapLoader;
+  pointsHighscoreManager: PointsHighscoreManager;
   rectFontLoader: RectFontLoader;
   session: Session;
   spriteFontLoader: SpriteFontLoader;

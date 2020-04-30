@@ -8,6 +8,7 @@ import {
   SceneMenuTitle,
   TextMenuItem,
 } from '../../gameObjects';
+import { InputHintSettings } from '../../input';
 import {
   MapConfig,
   MapFileReader,
@@ -41,9 +42,15 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
   private menuState = MenuState.Navigation;
   private loadState = EditorLoadState.None;
   private session: Session;
+  private inputHintSettings: InputHintSettings;
   private mapLoader: MapLoader;
 
-  protected setup({ mapLoader, session }: GameUpdateArgs): void {
+  protected setup({
+    inputHintSettings,
+    mapLoader,
+    session,
+  }: GameUpdateArgs): void {
+    this.inputHintSettings = inputHintSettings;
     this.session = session;
     this.mapLoader = mapLoader;
 
@@ -244,7 +251,7 @@ export class EditorMenuScene extends Scene<EditorLocationParams> {
   };
 
   private handleMapSelected = (): void => {
-    if (this.session.showEditorHint()) {
+    if (this.inputHintSettings.shouldShowEditorHint()) {
       this.navigator.push(
         GameSceneType.EditorHint,
         this.createLocationParams(),

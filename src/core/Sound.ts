@@ -51,13 +51,8 @@ export class Sound {
     );
   }
 
-  public mute(): void {
-    this.localMuted = true;
-    this.updateElementMuted();
-  }
-
-  public unmute(): void {
-    this.localMuted = false;
+  public setMuted(isMuted: boolean): void {
+    this.localMuted = isMuted;
     this.updateElementMuted();
   }
 
@@ -65,13 +60,8 @@ export class Sound {
     return this.localMuted;
   }
 
-  public globalMute(): void {
-    this.globalMuted = true;
-    this.updateElementMuted();
-  }
-
-  public globalUnmute(): void {
-    this.globalMuted = false;
+  public setGlobalMuted(isGlobalMuted: boolean): void {
+    this.globalMuted = isGlobalMuted;
     this.updateElementMuted();
   }
 

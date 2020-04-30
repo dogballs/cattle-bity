@@ -8,6 +8,7 @@ export class SettingsMenuScene extends Scene {
   private title: SceneMenuTitle;
   private keybindingItem: TextMenuItem;
   private audioItem: TextMenuItem;
+  private interfaceItem: TextMenuItem;
   private backItem: TextMenuItem;
   private menu: SceneMenu;
 
@@ -21,10 +22,18 @@ export class SettingsMenuScene extends Scene {
     this.audioItem = new TextMenuItem('AUDIO');
     this.audioItem.selected.addListener(this.handleAudioSelected);
 
+    this.interfaceItem = new TextMenuItem('INTERFACE');
+    this.interfaceItem.selected.addListener(this.handleInterfaceSelected);
+
     this.backItem = new TextMenuItem('BACK');
     this.backItem.selected.addListener(this.handleBackSelected);
 
-    const menuItems = [this.keybindingItem, this.audioItem, this.backItem];
+    const menuItems = [
+      this.keybindingItem,
+      this.audioItem,
+      this.interfaceItem,
+      this.backItem,
+    ];
 
     this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
@@ -43,6 +52,10 @@ export class SettingsMenuScene extends Scene {
 
   private handleAudioSelected = (): void => {
     this.navigator.push(GameSceneType.SettingsAudio);
+  };
+
+  private handleInterfaceSelected = (): void => {
+    this.navigator.push(GameSceneType.SettingsInterface);
   };
 
   private handleBackSelected = (): void => {

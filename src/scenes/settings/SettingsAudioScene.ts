@@ -35,12 +35,10 @@ export class SettingsAudioScene extends Scene {
   }
 
   private handleMuteSelected = (): void => {
-    if (this.audioManager.isGlobalMuted()) {
-      this.audioManager.globalUnmute();
-    } else {
-      this.audioManager.globalMute();
-    }
+    const isGlobalMuted = this.audioManager.isGlobalMuted();
+    const nextIsGlobalMuted = !isGlobalMuted;
 
+    this.audioManager.setGlobalMuted(nextIsGlobalMuted);
     this.audioManager.saveSettings();
 
     this.muteItem.setText(this.getMuteText());

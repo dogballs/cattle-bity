@@ -1,52 +1,32 @@
 import { AudioLoader, Sound } from '../core';
 import { GameStorage } from '../game';
-
-export interface AudioManagerSettings {
-  globalMuted?: boolean;
-}
-
-const DEFAULT_SETTINGS = {
-  globalMuted: false,
-};
+import * as config from '../config';
 
 export class AudioManager {
   private audioLoader: AudioLoader;
   private storage: GameStorage;
-  private settings: AudioManagerSettings;
+  private globalMuted = false;
 
   constructor(audioLoader: AudioLoader, storage: GameStorage) {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS);
-
     this.audioLoader = audioLoader;
     this.audioLoader.loaded.addListener((sound) => {
-      if (this.settings.globalMuted) {
-        sound.globalMute();
-      }
+      sound.setGlobalMuted(this.globalMuted);
     });
 
     this.storage = storage;
   }
 
-  public globalMute(): void {
-    this.settings.globalMuted = true;
+  public setGlobalMuted(isGlobalMuted: boolean): void {
+    this.globalMuted = isGlobalMuted;
 
     const sounds = this.getLoadedSounds();
     sounds.forEach((sound) => {
-      sound.globalMute();
-    });
-  }
-
-  public globalUnmute(): void {
-    this.settings.globalMuted = false;
-
-    const sounds = this.getLoadedSounds();
-    sounds.forEach((sound) => {
-      sound.globalUnmute();
+      sound.setGlobalMuted(isGlobalMuted);
     });
   }
 
   public isGlobalMuted(): boolean {
-    return this.settings.globalMuted;
+    return this.globalMuted;
   }
 
   public play(soundId: string): void {
@@ -91,7 +71,7 @@ export class AudioManager {
     const sounds = this.getLoadedSounds();
     sounds.forEach((sound) => {
       if (!exceptSounds.includes(sound)) {
-        sound.mute();
+        sound.setMuted(true);
       }
     });
   }
@@ -99,18 +79,23 @@ export class AudioManager {
   public unmuteAll(): void {
     const sounds = this.getLoadedSounds();
     sounds.forEach((sound) => {
-      sound.unmute();
+      sound.setMuted(false);
     });
   }
 
   public loadSettings(): void {
-    const savedSettings = this.storage.getAudioSettings();
-
-    this.settings = Object.assign({}, this.settings, savedSettings);
+    this.globalMuted = this.storage.getBoolean(
+      config.STORAGE_KEY_SETTINGS_AUDIO_MUTED,
+      false,
+    );
   }
 
   public saveSettings(): void {
-    this.storage.saveAudioSettings(this.settings);
+    this.storage.setBoolean(
+      config.STORAGE_KEY_SETTINGS_AUDIO_MUTED,
+      this.globalMuted,
+    );
+    this.storage.save();
   }
 
   private getLoadedSounds(): Sound[] {
