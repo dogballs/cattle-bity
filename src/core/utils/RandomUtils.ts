@@ -9,4 +9,11 @@ export class RandomUtils {
     // TODO: use custom algorithm
     return min + Math.floor(Math.random() * (max - min));
   }
+
+  public static probability(chancePercent: number): boolean {
+    const num = this.number(1, 100);
+    const hasChance = num <= chancePercent;
+
+    return hasChance;
+  }
 }

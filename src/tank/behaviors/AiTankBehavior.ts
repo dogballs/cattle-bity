@@ -17,6 +17,7 @@ const FIRE_MIN_DELAY = 0;
 const FIRE_MAX_DELAY = 1.5;
 const STUCK_FIRE_CHANCE = 30;
 const UNSTUCK_THINK_CHANCE = 5;
+const ROTATE_TOWARDS_BASE_CHANCE = 30;
 
 const ROTATIONS = [Rotation.Up, Rotation.Down, Rotation.Left, Rotation.Right];
 
@@ -25,7 +26,7 @@ export class AiTankBehavior extends TankBehavior {
   private lastPosition = new Vector(-1, -1);
   private thinkTimer = new Timer();
   private fireTimer = new Timer();
-  private log = new Logger(AiTankBehavior.name, Logger.Level.Info);
+  private log = new Logger(AiTankBehavior.name, Logger.Level.Debug);
 
   public update(tank: Tank, updateArgs: GameUpdateArgs): void {
     if (this.fireTimer.isDone()) {
@@ -66,7 +67,7 @@ export class AiTankBehavior extends TankBehavior {
 
         // Otherwise, we pick some new random direction
         this.state = State.Moving;
-        const nextRotation = this.getRandomRotation();
+        const nextRotation = this.getNextRotation(tank);
         this.log.debug('I am done thinking. Rotating %s', nextRotation);
         tank.rotate(nextRotation);
         return;
@@ -138,10 +139,22 @@ export class AiTankBehavior extends TankBehavior {
   }
 
   private shouldFireWhenStuck(): boolean {
-    const num = RandomUtils.number(1, 100);
-    const hasChance = num <= STUCK_FIRE_CHANCE;
+    const shouldFire = RandomUtils.probability(STUCK_FIRE_CHANCE);
 
-    return hasChance;
+    return shouldFire;
+  }
+
+  private getNextRotation(tank: Tank): Rotation {
+    const shouldRotateTowardsBase = RandomUtils.probability(
+      ROTATE_TOWARDS_BASE_CHANCE,
+    );
+
+    if (shouldRotateTowardsBase) {
+      this.log.debug('I want to go towards base');
+      return this.getRotationTowardsBase(tank);
+    }
+
+    return this.getRandomRotation();
   }
 
   private getRandomRotation(): Rotation {
@@ -156,5 +169,31 @@ export class AiTankBehavior extends TankBehavior {
     rotations.splice(prevIndex, 1);
 
     return RandomUtils.arrayElement(rotations);
+  }
+
+  private getRotationTowardsBase(tank: Tank): Rotation {
+    const basePosition = new Vector(
+      config.BASE_DEFAULT_POSITION.x,
+      config.BASE_DEFAULT_POSITION.y,
+    );
+    const tankPosition = tank.position;
+
+    const direction = basePosition
+      .clone()
+      .sub(tankPosition)
+      .normalize();
+
+    const maxValue = Math.max(direction.x, direction.y);
+
+    if (Math.abs(direction.x) === Math.abs(maxValue)) {
+      if (direction.x > 0) {
+        return Rotation.Right;
+      }
+      if (direction.x < 0) {
+        return Rotation.Left;
+      }
+    }
+
+    return Rotation.Down;
   }
 }
