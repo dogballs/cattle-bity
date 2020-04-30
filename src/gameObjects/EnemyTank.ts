@@ -78,10 +78,8 @@ export class EnemyTank extends Tank {
       this.collider.update();
 
       // Tanks with drop should be blinking when paused or freezed
-      if (this.type.hasDrop) {
-        this.updateAnimation(updateArgs.deltaTime);
-        this.setNeedsPaint();
-      }
+      this.updateAnimation(updateArgs.deltaTime);
+      this.setNeedsPaint();
       return;
     }
 

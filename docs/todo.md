@@ -10,7 +10,7 @@ Maps
 
 Build
 
--
+- optimize main.js size
 
 Bugs
 
