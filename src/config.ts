@@ -87,7 +87,7 @@ export const COLOR_YELLOW = '#ffae0a';
 export const PRIMARY_SPRITE_FONT_ID = 'primary';
 export const PRIMARY_RECT_FONT_ID = 'primary';
 
-export const STORAGE_NAMESPACE = 'battle-city';
+export const STORAGE_NAMESPACE = 'cattle-bity';
 export const STORAGE_KEY_POINTS_HIGHSCORE_PRIMARY = 'points.highscore.primary';
 export const STORAGE_KEY_POINTS_HIGHSCORE_SECONDARY =
   'points.highscore.secondary';
@@ -146,4 +146,4 @@ export const MODAL_Z_INDEX = 11;
 export const DEBUG_COLLISION_RECT_Z_INDEX = 20;
 export const DEBUG_GRID_Z_INDEX = 21;
 
-export const GITHUB_URL = 'https://github.com/dogballs/battle-city';
+export const GITHUB_URL = 'https://github.com/dogballs/cattle-bity';
