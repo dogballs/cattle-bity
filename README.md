@@ -2,6 +2,8 @@
 
 ### [Play web version](https://dogballs.github.io/cattle-bity/)
 
+Note: mobile not supported
+
 ## Description
 
 Clone of Battle City by Namco (1985) written from scratch in TypeScript.
