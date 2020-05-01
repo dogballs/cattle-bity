@@ -4,6 +4,8 @@
 
 Note: mobile not supported
 
+[Screenshots](docs/screenshots.md)
+
 ## Description
 
 Clone of Battle City by Namco (1985) written from scratch in TypeScript.
