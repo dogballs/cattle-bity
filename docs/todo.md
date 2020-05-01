@@ -18,7 +18,9 @@ Bugs
 
 Other
 
-- license
+- optimization
+- tweak ai
+- playtest
 
 ## Possible improvements
 

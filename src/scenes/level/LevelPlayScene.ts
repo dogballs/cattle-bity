@@ -1,4 +1,3 @@
-import { Scene } from '../../core';
 import { DebugCollisionMenu } from '../../debug';
 import { GameUpdateArgs, GameState, Session } from '../../game';
 import { Border } from '../../gameObjects';
@@ -28,11 +27,12 @@ import {
   LevelWinScript,
 } from '../../level/scripts';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 import { LevelLocationParams } from './params';
 
-export class LevelPlayScene extends Scene<LevelLocationParams> {
+export class LevelPlayScene extends GameScene<LevelLocationParams> {
   private world: LevelWorld;
   private eventBus: LevelEventBus;
   private session: Session;

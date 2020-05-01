@@ -1,10 +1,11 @@
-import { GameObject, Scene } from '../../core';
+import { GameObject } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import { MainHeading, Menu, SpriteText, TextMenuItem } from '../../gameObjects';
 import { MenuInputContext } from '../../input';
 import { PointsHighscoreManager } from '../../points';
 import * as config from '../../config';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 const SLIDE_SPEED = 240;
@@ -14,7 +15,7 @@ enum State {
   Ready,
 }
 
-export class MainMenuScene extends Scene {
+export class MainMenuScene extends GameScene {
   private group: GameObject;
   private heading: MainHeading;
   private primaryPoints: SpriteText;
@@ -124,16 +125,12 @@ export class MainMenuScene extends Scene {
         this.menu.showCursor();
         this.session.setSeenIntro(true);
       } else {
-        this.root.traverseDescedants((child) => {
-          child.invokeUpdate(updateArgs);
-        });
+        super.update(updateArgs);
       }
       return;
     }
 
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
+    super.update(updateArgs);
   }
 
   private getPrimaryPointsText(): string {

@@ -1,15 +1,16 @@
-import { GameObject, RectPainter, Scene, TextAlignment } from '../../core';
+import { GameObject, RectPainter, TextAlignment } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import { EditorBrush, InputHint, SpriteText } from '../../gameObjects';
 import { EditorHintInputContext, EditorMapInputContext } from '../../input';
 import { TerrainType } from '../../terrain';
 import * as config from '../../config';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 import { EditorLocationParams } from './params';
 
-export class EditorHintScene extends Scene<EditorLocationParams> {
+export class EditorHintScene extends GameScene<EditorLocationParams> {
   private background: GameObject;
   private title: SpriteText;
   private brushIcon: GameObject;
@@ -139,8 +140,6 @@ export class EditorHintScene extends Scene<EditorLocationParams> {
       return;
     }
 
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
+    super.update(updateArgs);
   }
 }

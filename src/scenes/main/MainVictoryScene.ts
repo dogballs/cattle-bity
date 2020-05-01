@@ -1,14 +1,15 @@
-import { Scene, Sound } from '../../core';
+import { Sound } from '../../core';
 import { AudioManager, GameUpdateArgs } from '../../game';
 import { PlayerTank, VictoryHeading, VictoryMap } from '../../gameObjects';
 import { MenuInputContext } from '../../input';
 import { TankFactory, TankType, VictoryTankBehavior } from '../../tank';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 const VICTORY_PLAYS = 3;
 
-export class MainVictoryScene extends Scene {
+export class MainVictoryScene extends GameScene {
   private heading: VictoryHeading;
   private audioManager: AudioManager;
   private map: VictoryMap;
@@ -55,9 +56,7 @@ export class MainVictoryScene extends Scene {
       return;
     }
 
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
+    super.update(updateArgs);
 
     // Update all transforms before checking collisions
     this.root.updateWorldMatrix(false, true);

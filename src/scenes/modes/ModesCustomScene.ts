@@ -1,4 +1,4 @@
-import { FileOpener, Scene } from '../../core';
+import { FileOpener } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import {
   DividerMenuItem,
@@ -9,9 +9,10 @@ import {
 } from '../../gameObjects';
 import { FileMapListReader, MapLoader } from '../../map';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
-export class ModesCustomScene extends Scene {
+export class ModesCustomScene extends GameScene {
   private title: SceneMenuTitle;
   private description: MenuDescription;
   private loadItem: TextMenuItem;
@@ -51,12 +52,6 @@ export class ModesCustomScene extends Scene {
     this.menu.position.addY(164);
     this.menu.setItems(menuItems);
     this.root.add(this.menu);
-  }
-
-  protected update(updateArgs: GameUpdateArgs): void {
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
   }
 
   private updateMenu(): void {

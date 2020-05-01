@@ -1,5 +1,4 @@
-import { GameObject, SceneRouter } from '../core';
-import * as config from '../config';
+import { SceneRouter } from '../core';
 
 import {
   EditorEnemyScene,
@@ -30,10 +29,11 @@ import {
 } from './settings';
 import { SandboxTransformScene } from './sandbox';
 
+import { GameScene } from './GameScene';
 import { GameSceneType } from './GameSceneType';
 
 // Composition root for game scenes
-export class GameSceneRouter extends SceneRouter {
+export class GameSceneRouter extends SceneRouter<GameScene> {
   public constructor() {
     super();
 
@@ -58,12 +58,5 @@ export class GameSceneRouter extends SceneRouter {
     this.register(GameSceneType.SettingsMenu, SettingsMenuScene);
     this.register(GameSceneType.SettingsKeybinding, SettingsKeybindingScene);
     this.register(GameSceneType.SandboxTransform, SandboxTransformScene);
-  }
-
-  protected createRoot(): GameObject {
-    const root = new GameObject();
-    root.size.set(config.CANVAS_WIDTH, config.CANVAS_HEIGHT);
-    root.updateMatrix();
-    return root;
   }
 }

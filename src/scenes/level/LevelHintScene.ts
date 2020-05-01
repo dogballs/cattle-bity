@@ -1,7 +1,6 @@
 import {
   GameObject,
   RectPainter,
-  Scene,
   SpritePainter,
   TextAlignment,
 } from '../../core';
@@ -11,11 +10,12 @@ import { LevelHintInputContext, LevelPlayInputContext } from '../../input';
 import { TankColor, TankSpriteId, TankType } from '../../tank';
 import * as config from '../../config';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 import { LevelLocationParams } from './params';
 
-export class LevelHintScene extends Scene<LevelLocationParams> {
+export class LevelHintScene extends GameScene<LevelLocationParams> {
   private background: GameObject;
   private title: SpriteText;
   private tankIcon: GameObject;
@@ -139,8 +139,6 @@ export class LevelHintScene extends Scene<LevelLocationParams> {
       return;
     }
 
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
+    super.update(updateArgs);
   }
 }

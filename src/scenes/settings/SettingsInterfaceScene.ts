@@ -1,9 +1,10 @@
-import { Scene } from '../../core';
 import { AudioManager, GameUpdateArgs } from '../../game';
 import { SceneMenu, SceneMenuTitle, TextMenuItem } from '../../gameObjects';
 import { InputHintSettings } from '../../input';
 
-export class SettingsInterfaceScene extends Scene {
+import { GameScene } from '../GameScene';
+
+export class SettingsInterfaceScene extends GameScene {
   private title: SceneMenuTitle;
   private levelControlsHintItem: TextMenuItem;
   private editorControlsHintItem: TextMenuItem;
@@ -45,12 +46,6 @@ export class SettingsInterfaceScene extends Scene {
     this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
     this.root.add(this.menu);
-  }
-
-  protected update(updateArgs: GameUpdateArgs): void {
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
   }
 
   private handleLevelControlsHintSelected = (): void => {

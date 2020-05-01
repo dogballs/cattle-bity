@@ -1,13 +1,14 @@
-import { Scene, Timer } from '../../core';
+import { Timer } from '../../core';
 import { AudioManager, GameUpdateArgs } from '../../game';
 import { GameOverHeading } from '../../gameObjects';
 import { MenuInputContext } from '../../input';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 const SCENE_DURATION = 3;
 
-export class MainGameOverScene extends Scene {
+export class MainGameOverScene extends GameScene {
   private heading = new GameOverHeading();
   private timer = new Timer(SCENE_DURATION);
   private audioManager: AudioManager;
@@ -33,9 +34,7 @@ export class MainGameOverScene extends Scene {
       return;
     }
 
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
+    super.update(updateArgs);
 
     this.timer.update(updateArgs.deltaTime);
   }

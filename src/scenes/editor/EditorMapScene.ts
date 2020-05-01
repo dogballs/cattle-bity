@@ -1,4 +1,3 @@
-import { Scene } from '../../core';
 import { DebugCollisionMenu } from '../../debug';
 import { GameUpdateArgs } from '../../game';
 import { EditorBorder, EditorField, EditorMap } from '../../gameObjects';
@@ -6,11 +5,12 @@ import { EditorMapInputContext } from '../../input';
 import { MapConfig } from '../../map';
 import * as config from '../../config';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 import { EditorLocationParams } from './params';
 
-export class EditorMapScene extends Scene<EditorLocationParams> {
+export class EditorMapScene extends GameScene<EditorLocationParams> {
   private field: EditorField;
   private map: EditorMap;
   private mapConfig: MapConfig;
@@ -56,9 +56,7 @@ export class EditorMapScene extends Scene<EditorLocationParams> {
       return;
     }
 
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
+    super.update(updateArgs);
 
     // Update all transforms before checking collisions
     this.root.updateWorldMatrix(false, true);

@@ -51,6 +51,7 @@ export class GameObject extends RenderObject {
   }
 
   public resetNeedsPaint(): void {
+    // Don't reset paint status until setup
     if (this.needsSetup === true) {
       return;
     }

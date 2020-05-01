@@ -1,12 +1,12 @@
-import { Scene } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import { Curtain, InputHint, LevelSelector } from '../../gameObjects';
 import { LevelSelectionInputContext } from '../../input';
 import { MapLoader } from '../../map';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
-export class LevelSelectionScene extends Scene {
+export class LevelSelectionScene extends GameScene {
   private curtain: Curtain;
   private selector: LevelSelector;
   private continueHint: InputHint;
@@ -35,12 +35,6 @@ export class LevelSelectionScene extends Scene {
     this.root.add(this.continueHint);
 
     this.curtain.close();
-  }
-
-  protected update(updateArgs: GameUpdateArgs): void {
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
   }
 
   private handleLevelSelected = (levelNumber: number): void => {

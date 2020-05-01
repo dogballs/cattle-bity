@@ -1,10 +1,10 @@
-import { Scene } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import { HighscoreHeading } from '../../gameObjects';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
-export class MainHighscoreScene extends Scene {
+export class MainHighscoreScene extends GameScene {
   private heading: HighscoreHeading;
 
   protected setup({
@@ -50,12 +50,6 @@ export class MainHighscoreScene extends Scene {
     const highscoreSound = audioLoader.load('highscore');
     highscoreSound.ended.addListener(this.handleEnded);
     highscoreSound.play();
-  }
-
-  protected update(updateArgs: GameUpdateArgs): void {
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
   }
 
   private handleEnded = (): void => {

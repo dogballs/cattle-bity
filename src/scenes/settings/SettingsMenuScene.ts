@@ -1,10 +1,9 @@
-import { Scene } from '../../core';
-import { GameUpdateArgs } from '../../game';
 import { SceneMenu, SceneMenuTitle, TextMenuItem } from '../../gameObjects';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
-export class SettingsMenuScene extends Scene {
+export class SettingsMenuScene extends GameScene {
   private title: SceneMenuTitle;
   private keybindingItem: TextMenuItem;
   private audioItem: TextMenuItem;
@@ -38,12 +37,6 @@ export class SettingsMenuScene extends Scene {
     this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
     this.root.add(this.menu);
-  }
-
-  protected update(updateArgs: GameUpdateArgs): void {
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
   }
 
   private handleKeybindingSelected = (): void => {

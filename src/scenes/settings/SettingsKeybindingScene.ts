@@ -1,4 +1,4 @@
-import { InputBinding, InputDevice, Scene } from '../../core';
+import { InputBinding, InputDevice } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import {
   DividerMenuItem,
@@ -17,6 +17,8 @@ import {
   InputDeviceType,
 } from '../../input';
 import * as config from '../../config';
+
+import { GameScene } from '../GameScene';
 
 const DEVICE_SELECTOR_CHOICES: SelectorMenuItemChoice<InputDeviceType>[] = [
   { value: InputDeviceType.Keyboard, text: 'KEYBOARD' },
@@ -38,7 +40,7 @@ enum State {
   WaitingInput,
 }
 
-export class SettingsKeybindingScene extends Scene {
+export class SettingsKeybindingScene extends GameScene {
   private state = State.Navigation;
   private selectedDeviceType: InputDeviceType;
   private inputManager: InputManager;
@@ -124,9 +126,7 @@ export class SettingsKeybindingScene extends Scene {
       return;
     }
 
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
+    super.update(updateArgs);
   }
 
   private getSelectedBinding(): InputBinding {

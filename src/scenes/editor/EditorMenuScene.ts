@@ -1,4 +1,4 @@
-import { FileOpener, FileSaver, Scene } from '../../core';
+import { FileOpener, FileSaver } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import {
   AlertModal,
@@ -16,6 +16,7 @@ import {
   MemoryMapListReader,
 } from '../../map';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 import { EditorLoadState, EditorLocationParams } from './params';
@@ -26,7 +27,7 @@ enum MenuState {
   Confrimation,
 }
 
-export class EditorMenuScene extends Scene<EditorLocationParams> {
+export class EditorMenuScene extends GameScene<EditorLocationParams> {
   private title: SceneMenuTitle;
   private menu: SceneMenu;
   private newItem: TextMenuItem;

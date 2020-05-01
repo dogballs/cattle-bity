@@ -1,8 +1,9 @@
-import { Scene } from '../../core';
 import { AudioManager, GameUpdateArgs } from '../../game';
 import { SceneMenu, SceneMenuTitle, TextMenuItem } from '../../gameObjects';
 
-export class SettingsAudioScene extends Scene {
+import { GameScene } from '../GameScene';
+
+export class SettingsAudioScene extends GameScene {
   private title: SceneMenuTitle;
   private muteItem: TextMenuItem;
   private backItem: TextMenuItem;
@@ -26,12 +27,6 @@ export class SettingsAudioScene extends Scene {
     this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
     this.root.add(this.menu);
-  }
-
-  protected update(updateArgs: GameUpdateArgs): void {
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
   }
 
   private handleMuteSelected = (): void => {

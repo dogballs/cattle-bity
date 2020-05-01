@@ -1,27 +1,27 @@
-import { GameObject } from '../GameObject';
 import { Subject } from '../Subject';
 
-import { Scene } from './Scene';
 import { SceneNavigator, SceneParams } from './SceneNavigator';
 import { SceneType } from './SceneType';
-
-type SceneConstructor = {
-  new (navigator: SceneNavigator, root: GameObject, params: SceneParams): Scene;
-};
 
 interface SceneLocation {
   type: SceneType;
   params: SceneParams;
 }
 
-export class SceneRouter implements SceneNavigator {
+export class SceneRouter<S> implements SceneNavigator {
   public transitionStarted = new Subject();
-  private routes = new Map<SceneType, SceneConstructor>();
+  private routes = new Map<
+    SceneType,
+    { new (navigator: SceneNavigator, params: SceneParams): S }
+  >();
   private location: SceneLocation;
-  private scene: Scene = null;
+  private scene: S = null;
   private stack: SceneLocation[] = [];
 
-  public register(type: SceneType, Scene: SceneConstructor): void {
+  public register(
+    type: SceneType,
+    Scene: { new (navigator: SceneNavigator, params: SceneParams): S },
+  ): void {
     this.routes.set(type, Scene);
   }
 
@@ -31,7 +31,7 @@ export class SceneRouter implements SceneNavigator {
     this.push(type, params);
   }
 
-  public getCurrentScene(): Scene {
+  public getCurrentScene(): S {
     return this.scene;
   }
 
@@ -73,10 +73,6 @@ export class SceneRouter implements SceneNavigator {
     this.push(type, params);
   }
 
-  protected createRoot(): GameObject {
-    return new GameObject();
-  }
-
   private transition(type: SceneType, params: SceneParams = {}): SceneLocation {
     this.assertRegistered(type);
 
@@ -84,9 +80,7 @@ export class SceneRouter implements SceneNavigator {
 
     const NextSceneClass = this.routes.get(type);
 
-    const nextRoot = this.createRoot();
-
-    const nextScene = new NextSceneClass(this, nextRoot, params);
+    const nextScene = new NextSceneClass(this, params);
 
     this.scene = nextScene;
 

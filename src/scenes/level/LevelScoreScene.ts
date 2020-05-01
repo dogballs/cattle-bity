@@ -1,9 +1,10 @@
-import { RectPainter, Scene, Timer } from '../../core';
+import { RectPainter, Timer } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import { LevelTitle, ScoreTable, SpriteText } from '../../gameObjects';
 import { PointsHighscoreManager } from '../../points';
 import * as config from '../../config';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 const POST_DELAY = 3;
@@ -14,7 +15,7 @@ enum State {
   Post,
 }
 
-export class LevelScoreScene extends Scene {
+export class LevelScoreScene extends GameScene {
   private session: Session;
   private highscoreTitle: SpriteText;
   private highscorePoints: SpriteText;
@@ -75,9 +76,7 @@ export class LevelScoreScene extends Scene {
       return;
     }
 
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
+    super.update(updateArgs);
   }
 
   private getCommonHighscoreText(): string {

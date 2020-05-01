@@ -1,10 +1,9 @@
-import { Scene } from '../../core';
-import { GameUpdateArgs } from '../../game';
 import { SceneMenu, SceneMenuTitle, TextMenuItem } from '../../gameObjects';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
-export class ModesMenuScene extends Scene {
+export class ModesMenuScene extends GameScene {
   private title: SceneMenuTitle;
   private customItem: TextMenuItem;
   private backItem: TextMenuItem;
@@ -25,11 +24,6 @@ export class ModesMenuScene extends Scene {
     this.menu = new SceneMenu();
     this.menu.setItems(menuItems);
     this.root.add(this.menu);
-  }
-  protected update(updateArgs: GameUpdateArgs): void {
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
   }
 
   private handleCustomSelected = (): void => {

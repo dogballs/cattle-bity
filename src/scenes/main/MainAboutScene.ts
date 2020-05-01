@@ -1,5 +1,3 @@
-import { Scene } from '../../core';
-import { GameUpdateArgs } from '../../game';
 import {
   MenuDescription,
   SceneMenuTitle,
@@ -8,7 +6,9 @@ import {
 } from '../../gameObjects';
 import * as config from '../../config';
 
-export class MainAboutScene extends Scene {
+import { GameScene } from '../GameScene';
+
+export class MainAboutScene extends GameScene {
   private title: SceneMenuTitle;
   private description: MenuDescription;
   private menu: SceneMenu;
@@ -37,12 +37,6 @@ export class MainAboutScene extends Scene {
     this.menu.position.addY(164);
     this.menu.setItems(menuItems);
     this.root.add(this.menu);
-  }
-
-  protected update(updateArgs: GameUpdateArgs): void {
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
   }
 
   private handleGithubSelected = (): void => {

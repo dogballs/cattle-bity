@@ -1,8 +1,10 @@
-import { GameObject, SpritePainter, Scene } from '../../core';
+import { GameObject, SpritePainter } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import { InputControl } from '../../input';
 
-export class SandboxTransformScene extends Scene {
+import { GameScene } from '../GameScene';
+
+export class SandboxTransformScene extends GameScene {
   private parent: GameObject;
   private child: GameObject;
   private angle = 0;
@@ -38,8 +40,6 @@ export class SandboxTransformScene extends Scene {
       // this.child.updateMatrix();
     }
 
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
+    super.update(updateArgs);
   }
 }

@@ -1,9 +1,10 @@
-import { Logger, Scene } from '../../core';
+import { Logger } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import { AlertModal, Curtain, LevelTitle } from '../../gameObjects';
 import { InputHintSettings } from '../../input';
 import { MapConfig, MapLoader } from '../../map';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 enum State {
@@ -11,7 +12,7 @@ enum State {
   Alert,
 }
 
-export class LevelLoadScene extends Scene {
+export class LevelLoadScene extends GameScene {
   private curtain: Curtain;
   private title: LevelTitle;
   private alertModal: AlertModal;

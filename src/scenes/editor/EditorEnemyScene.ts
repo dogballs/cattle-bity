@@ -1,5 +1,3 @@
-import { Scene } from '../../core';
-import { GameUpdateArgs } from '../../game';
 import {
   DividerMenuItem,
   EditorEnemyPreview,
@@ -13,6 +11,7 @@ import { MapConfig } from '../../map';
 import { TankType } from '../../tank';
 import * as config from '../../config';
 
+import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 import { EditorLocationParams } from './params';
@@ -31,7 +30,7 @@ const ENEMY_TYPES = [
 const PER_PAGE = 5;
 const TOTAL_PAGES = config.ENEMY_MAX_TOTAL_COUNT / PER_PAGE;
 
-export class EditorEnemyScene extends Scene<EditorLocationParams> {
+export class EditorEnemyScene extends GameScene<EditorLocationParams> {
   private mapConfig: MapConfig;
   private title: SceneMenuTitle;
   private menu: SceneMenu;
@@ -108,12 +107,6 @@ export class EditorEnemyScene extends Scene<EditorLocationParams> {
     this.root.add(this.menu);
 
     this.updateMenu();
-  }
-
-  protected update(updateArgs: GameUpdateArgs): void {
-    this.root.traverseDescedants((child) => {
-      child.invokeUpdate(updateArgs);
-    });
   }
 
   private getTypeValue(typeToFind: TankType): number {
