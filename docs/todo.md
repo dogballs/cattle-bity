@@ -14,11 +14,11 @@ Build
 
 Bugs
 
--
+- when player kills enemy very close to it and rotates, player also dies
 
 Other
 
-- optimization
+- optimize player skin layers
 - tweak ai
 - playtest
 
