@@ -23,8 +23,8 @@ export class CanvasRenderContext extends RenderContext {
       sourceRect.y,
       sourceRect.width,
       sourceRect.height,
-      destinationRect.x,
-      destinationRect.y,
+      Math.round(destinationRect.x),
+      Math.round(destinationRect.y),
       destinationRect.width,
       destinationRect.height,
     );

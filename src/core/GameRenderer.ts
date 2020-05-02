@@ -198,8 +198,8 @@ export class GameRenderer {
 
   private clearBox(box: BoundingBox): void {
     this.context.clearRect(
-      box.min.x,
-      box.min.y,
+      Math.round(box.min.x),
+      Math.round(box.min.y),
       box.max.x - box.min.x,
       box.max.y - box.min.y,
     );
