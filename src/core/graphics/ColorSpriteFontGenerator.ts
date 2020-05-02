@@ -70,14 +70,12 @@ export class ColorSpriteFontGenerator {
 
     const isNewCanvas = canvas === undefined;
     if (isNewCanvas) {
+      canvas = document.createElement('canvas');
+      canvas.width = sourceRect.width;
+      canvas.height = sourceRect.height;
+
       // Keep for debug
-
-      // canvas = document.createElement('canvas');
-      // canvas.width = sourceRect.width;
-      // canvas.height = sourceRect.height;
       // document.body.appendChild(canvas);
-
-      canvas = new OffscreenCanvas(sourceRect.width, sourceRect.height);
 
       // Save canvas for following fonts
       item.canvas = canvas;

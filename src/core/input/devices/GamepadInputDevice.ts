@@ -20,6 +20,10 @@ export class GamepadInputDevice implements InputDevice {
     }
 
     const gamepads = navigator.getGamepads();
+    if (gamepads.length === 0) {
+      return;
+    }
+
     const gamepad = gamepads[0];
 
     if (gamepad === null) {
