@@ -634,5 +634,133 @@
   "tank.player.primary.d.right.2": {
     "file": "data/graphics/sprite.png",
     "rect": [460, 204, 60, 56]
+  },
+  "tank.player.secondary.a.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 532, 52, 52]
+  },
+  "tank.player.secondary.a.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 532, 52, 52]
+  },
+  "tank.player.secondary.a.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 528, 52, 52]
+  },
+  "tank.player.secondary.a.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 528, 52, 52]
+  },
+  "tank.player.secondary.a.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [136, 528, 52, 52]
+  },
+  "tank.player.secondary.a.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [204, 528, 52, 52]
+  },
+  "tank.player.secondary.a.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [392, 528, 52, 52]
+  },
+  "tank.player.secondary.a.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [460, 528, 52, 52]
+  },
+  "tank.player.secondary.b.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 588, 52, 64]
+  },
+  "tank.player.secondary.b.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 588, 52, 64]
+  },
+  "tank.player.secondary.b.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 588, 52, 64]
+  },
+  "tank.player.secondary.b.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 588, 52, 64]
+  },
+  "tank.player.secondary.b.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 592, 64, 52]
+  },
+  "tank.player.secondary.b.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 592, 64, 52]
+  },
+  "tank.player.secondary.b.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [388, 592, 64, 52]
+  },
+  "tank.player.secondary.b.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [456, 592, 64, 52]
+  },
+  "tank.player.secondary.c.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 656, 52, 60]
+  },
+  "tank.player.secondary.c.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 656, 52, 60]
+  },
+  "tank.player.secondary.c.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 660, 52, 60]
+  },
+  "tank.player.secondary.c.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 660, 52, 60]
+  },
+  "tank.player.secondary.c.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 660, 60, 52]
+  },
+  "tank.player.secondary.c.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 660, 60, 52]
+  },
+  "tank.player.secondary.c.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [392, 660, 60, 52]
+  },
+  "tank.player.secondary.c.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [460, 660, 60, 52]
+  },
+  "tank.player.secondary.d.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 724, 56, 60]
+  },
+  "tank.player.secondary.d.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 724, 56, 60]
+  },
+  "tank.player.secondary.d.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 724, 56, 60]
+  },
+  "tank.player.secondary.d.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 724, 56, 60]
+  },
+  "tank.player.secondary.d.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 728, 60, 56]
+  },
+  "tank.player.secondary.d.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 728, 60, 56]
+  },
+  "tank.player.secondary.d.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [392, 728, 60, 56]
+  },
+  "tank.player.secondary.d.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [460, 728, 60, 56]
   }
 }

@@ -9,6 +9,7 @@ import * as config from '../../config';
 import { LevelEventBus, LevelScript, LevelWorld } from '../../level';
 import {
   LevelEnemyDiedEvent,
+  LevelPlayerDiedEvent,
   LevelPowerupPickedEvent,
 } from '../../level/events';
 import {
@@ -63,7 +64,7 @@ export class LevelPlayScene extends GameScene<LevelLocationParams> {
     this.debugCollisionMenu = new DebugCollisionMenu(
       collisionSystem,
       this.root,
-      { top: 400 },
+      { top: 470 },
     );
     if (config.IS_DEV) {
       this.debugCollisionMenu.attach();
@@ -211,12 +212,15 @@ export class LevelPlayScene extends GameScene<LevelLocationParams> {
     collisionSystem.collide();
   }
 
-  private handlePlayerDied = (): void => {
-    this.session.primaryPlayer.removeLife();
+  private handlePlayerDied = (event: LevelPlayerDiedEvent): void => {
+    const playerSession = this.session.getPlayer(event.playerIndex);
+    playerSession.removeLife();
 
-    if (this.session.primaryPlayer.isAlive()) {
+    if (this.session.isAnyPlayerAlive()) {
       return;
     }
+
+    // If both players die - game is lost
 
     this.session.setGameOver();
 

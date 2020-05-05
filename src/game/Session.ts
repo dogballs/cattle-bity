@@ -9,15 +9,19 @@ enum State {
 export class Session {
   public primaryPlayer = new SessionPlayer();
   public secondaryPlayer = new SessionPlayer();
+  public players: SessionPlayer[] = [];
   private startLevelNumber: number;
   private endLevelNumber: number;
   private currentLevelNumber: number;
   private playtest: boolean;
-  private state: State;
+  private multiplayer: boolean;
   private seenIntro: boolean;
+  private state: State;
 
   constructor() {
     this.reset();
+
+    this.players.push(this.primaryPlayer, this.secondaryPlayer);
   }
 
   public start(startLevelNumber: number, endLevelNumber: number): void {
@@ -38,8 +42,20 @@ export class Session {
     this.endLevelNumber = 1;
     this.state = State.Idle;
     this.playtest = false;
+    this.multiplayer = false;
 
     this.primaryPlayer.reset();
+    this.secondaryPlayer.reset();
+  }
+
+  public getPlayer(playerIndex: number): SessionPlayer {
+    return this.players[playerIndex];
+  }
+
+  public isAnyPlayerAlive(): boolean {
+    return this.players.some((player) => {
+      return player.isAlive();
+    });
   }
 
   public resetExceptIntro(): void {
@@ -105,5 +121,13 @@ export class Session {
 
   public isPlaytest(): boolean {
     return this.playtest;
+  }
+
+  public setMultiplayer(): void {
+    this.multiplayer = true;
+  }
+
+  public isMultiplayer(): boolean {
+    return this.multiplayer;
   }
 }

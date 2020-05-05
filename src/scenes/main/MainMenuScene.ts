@@ -22,6 +22,7 @@ export class MainMenuScene extends GameScene {
   private commonHighscore: SpriteText;
   private menu: Menu;
   private singlePlayerItem: TextMenuItem;
+  private multiPlayerItem: TextMenuItem;
   private modesItem: TextMenuItem;
   private editorItem: TextMenuItem;
   private settingsItem: TextMenuItem;
@@ -65,6 +66,9 @@ export class MainMenuScene extends GameScene {
     this.singlePlayerItem = new TextMenuItem('1 PLAYER');
     this.singlePlayerItem.selected.addListener(this.handleSinglePlayerSelected);
 
+    this.multiPlayerItem = new TextMenuItem('2 PLAYERS');
+    this.multiPlayerItem.selected.addListener(this.handleMultiPlayerSelected);
+
     this.modesItem = new TextMenuItem('MODES');
     this.modesItem.selected.addListener(this.handleModesSelected);
 
@@ -79,6 +83,7 @@ export class MainMenuScene extends GameScene {
 
     const menuItems = [
       this.singlePlayerItem,
+      this.multiPlayerItem,
       this.modesItem,
       this.editorItem,
       this.settingsItem,
@@ -88,7 +93,7 @@ export class MainMenuScene extends GameScene {
     this.menu = new Menu();
     this.menu.setItems(menuItems);
     this.menu.setCenter(this.root.getSelfCenter());
-    this.menu.position.setY(512);
+    this.menu.position.setY(490);
     this.group.add(this.menu);
 
     if (!this.session.haveSeenIntro()) {
@@ -154,6 +159,11 @@ export class MainMenuScene extends GameScene {
   }
 
   private handleSinglePlayerSelected = (): void => {
+    this.navigator.replace(GameSceneType.LevelSelection);
+  };
+
+  private handleMultiPlayerSelected = (): void => {
+    this.session.setMultiplayer();
     this.navigator.replace(GameSceneType.LevelSelection);
   };
 

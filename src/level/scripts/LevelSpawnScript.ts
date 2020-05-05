@@ -42,6 +42,7 @@ export class LevelSpawnScript extends LevelScript {
       this.eventBus.playerSpawnCompleted.notify({
         type: event.type,
         centerPosition: spawn.getCenter(),
+        playerIndex: event.playerIndex,
       });
       spawn.removeSelf();
     });

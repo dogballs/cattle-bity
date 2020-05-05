@@ -4,4 +4,5 @@ import { TankType } from '../../tank';
 export interface LevelPlayerSpawnCompletedEvent {
   type: TankType;
   centerPosition: Vector;
+  playerIndex: number;
 }

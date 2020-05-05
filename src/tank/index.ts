@@ -6,6 +6,7 @@ export * from './TankAttributesFactory';
 export * from './TankBehavior';
 export * from './TankBulletWallDamage';
 export * from './TankColor';
+export * from './TankColorFactory';
 export * from './TankDeathReason';
 export * from './TankFactory';
 export * from './TankParty';

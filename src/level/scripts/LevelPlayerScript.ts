@@ -13,60 +13,84 @@ import {
 } from '../events';
 
 export class LevelPlayerScript extends LevelScript {
-  private position: Vector;
-  private timer: Timer;
+  private positions: Vector[] = [];
+  private timers: Timer[] = [];
   private playerIndex = 0;
-  private tank: PlayerTank = null;
+  private tanks: PlayerTank[] = [];
 
-  protected setup(): void {
+  protected setup({ session }: GameUpdateArgs): void {
     this.eventBus.playerSpawnCompleted.addListener(this.handleSpawnCompleted);
     this.eventBus.powerupPicked.addListener(this.handlePowerupPicked);
     this.eventBus.levelGameOverMoveBlocked.addListener(
       this.handleLevelGameOverMoveBlocked,
     );
 
-    this.position = this.mapConfig.getPlayerSpawnPosition(this.playerIndex);
+    this.positions = this.mapConfig.getPlayerSpawnPositions();
 
-    this.timer = new Timer(config.PLAYER_FIRST_SPAWN_DELAY);
-    this.timer.done.addListener(this.handleTimer);
+    // Keep only one player if not multiplayer
+    if (!session.isMultiplayer()) {
+      this.positions = this.positions.slice(0, 1);
+    }
+
+    this.positions.forEach((position, index) => {
+      const timer = new Timer(config.PLAYER_FIRST_SPAWN_DELAY);
+      timer.done.addListener(() => {
+        this.requestSpawn(index);
+      });
+      this.timers.push(timer);
+
+      // Fill in the array of tanks
+      this.tanks.push(null);
+    });
 
     if (config.IS_DEV) {
       const debugMenu = new DebugLevelPlayerMenu({
-        top: 270,
+        top: 300,
       });
       debugMenu.attach();
-      debugMenu.upgradeRequest.addListener(() => {
-        if (this.tank === null) {
+      debugMenu.upgradeRequest.addListener((playerIndex) => {
+        const tank = this.tanks[playerIndex];
+        if (tank === null) {
           return;
         }
-        this.tank.upgrade();
+        tank.upgrade();
       });
-      debugMenu.deathRequest.addListener(() => {
-        if (this.tank === null) {
+      debugMenu.deathRequest.addListener((playerIndex) => {
+        const tank = this.tanks[playerIndex];
+        if (tank === null) {
           return;
         }
-        this.tank.die();
+        tank.die();
       });
-      debugMenu.moveSpeedUpRequest.addListener((moveSpeedToAdd) => {
-        if (this.tank === null) {
+      debugMenu.moveSpeedUpRequest.addListener(({ playerIndex, speed }) => {
+        const tank = this.tanks[playerIndex];
+        if (tank === null) {
           return;
         }
-        this.tank.attributes.moveSpeed += moveSpeedToAdd;
+        tank.attributes.moveSpeed += speed;
       });
     }
   }
 
   protected update({ deltaTime }: GameUpdateArgs): void {
-    this.timer.update(deltaTime);
+    this.timers.forEach((timer) => {
+      timer.update(deltaTime);
+    });
   }
 
-  private handleTimer = (): void => {
-    const position = this.position;
+  private requestSpawn = (playerIndex: number): void => {
+    const playerSession = this.session.getPlayer(playerIndex);
+    if (!playerSession.isAlive()) {
+      return;
+    }
+
+    const position = this.positions[playerIndex];
 
     const type = TankFactory.createPlayerType();
 
     this.eventBus.playerSpawnRequested.notify({
       type,
+      playerIndex,
       position,
     });
   };
@@ -78,17 +102,21 @@ export class LevelPlayerScript extends LevelScript {
       return;
     }
 
-    const tank = TankFactory.createPlayer();
+    const { playerIndex } = event;
+
+    const tank = TankFactory.createPlayer(playerIndex);
     tank.updateMatrix();
     tank.setCenter(event.centerPosition);
     tank.updateMatrix();
     tank.activateShield(config.SHIELD_SPAWN_DURATION);
 
+    const playerSession = this.session.getPlayer(playerIndex);
+
     // Check if tank tier from previous level should be activated.
     // If tank dies - it loses all this tiers, so it applies only to first
     // spawn.
-    if (this.session.primaryPlayer.isLevelFirstSpawn()) {
-      const carryoverTier = this.session.primaryPlayer.getTankTier();
+    if (playerSession.isLevelFirstSpawn()) {
+      const carryoverTier = playerSession.getTankTier();
       tank.upgrade(carryoverTier, false);
     }
 
@@ -96,15 +124,16 @@ export class LevelPlayerScript extends LevelScript {
       this.eventBus.playerDied.notify({
         type: event.type,
         centerPosition: tank.getCenter(),
+        playerIndex,
       });
 
       tank.removeSelf();
-      this.tank = null;
-      this.world.removePlayerTank();
+      this.tanks[playerIndex] = null;
+      this.world.removePlayerTank(playerIndex);
 
-      this.timer.reset(config.PLAYER_SPAWN_DELAY);
+      this.timers[playerIndex].reset(config.PLAYER_SPAWN_DELAY);
 
-      this.session.primaryPlayer.resetTankTier();
+      playerSession.resetTankTier();
     });
 
     tank.fired.addListener(() => {
@@ -112,38 +141,42 @@ export class LevelPlayerScript extends LevelScript {
     });
 
     tank.upgraded.addListener((event) => {
-      this.session.primaryPlayer.setTankTier(event.tier);
+      playerSession.setTankTier(event.tier);
     });
 
     tank.slided.addListener(() => {
       this.eventBus.playerSlided.notify(null);
     });
 
-    this.session.primaryPlayer.setLevelSpawned();
+    playerSession.setLevelSpawned();
 
-    this.tank = tank;
+    this.tanks[playerIndex] = tank;
 
-    this.world.addPlayerTank(this.tank);
+    this.world.addPlayerTank(playerIndex, tank);
   };
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
-    const { type: powerupType } = event;
+    const { type: powerupType, playerIndex } = event;
+
+    const tank = this.tanks[playerIndex];
 
     if (powerupType === PowerupType.Shield) {
-      this.tank.activateShield(config.SHIELD_POWERUP_DURATION);
+      tank.activateShield(config.SHIELD_POWERUP_DURATION);
     }
 
     if (powerupType === PowerupType.Upgrade) {
-      this.tank.upgrade();
+      tank.upgrade();
     }
   };
 
   private handleLevelGameOverMoveBlocked = (): void => {
-    if (this.tank === null) {
-      return;
-    }
+    this.tanks.forEach((tank) => {
+      if (tank === null) {
+        return;
+      }
 
-    // Freeze the tank
-    this.tank.freezeState.set(true);
+      // Freeze the tank
+      tank.freezeState.set(true);
+    });
   };
 }
