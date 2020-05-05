@@ -1,6 +1,7 @@
 import { RectPainter, Timer } from '../../core';
 import { GameUpdateArgs, Session } from '../../game';
 import { LevelTitle, ScoreTable, SpriteText } from '../../gameObjects';
+import { LevelScoreInputContext } from '../../input';
 import { PointsHighscoreManager } from '../../points';
 import * as config from '../../config';
 
@@ -71,8 +72,21 @@ export class LevelScoreScene extends GameScene {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
+    const { deltaTime, input } = updateArgs;
+
+    if (input.isDownAny(LevelScoreInputContext.Skip)) {
+      if (this.state === State.Counting) {
+        this.scoreTable.skip();
+        return;
+      }
+      if (this.state === State.Post) {
+        this.finish();
+        return;
+      }
+    }
+
     if (this.state === State.Post) {
-      this.postTimer.update(updateArgs.deltaTime);
+      this.postTimer.update(deltaTime);
       return;
     }
 
@@ -92,6 +106,10 @@ export class LevelScoreScene extends GameScene {
   };
 
   private handlePost = (): void => {
+    this.finish();
+  };
+
+  private finish(): void {
     if (this.session.isGameOver()) {
       this.navigator.replace(GameSceneType.MainGameOver);
       return;
@@ -102,5 +120,5 @@ export class LevelScoreScene extends GameScene {
     }
     this.session.activateNextLevel();
     this.navigator.replace(GameSceneType.LevelLoad);
-  };
+  }
 }

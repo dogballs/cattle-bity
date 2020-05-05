@@ -88,9 +88,7 @@ export class ScoreTable extends GameObject {
     if (this.state === State.Transitioning) {
       if (this.transitionTimer.isDone()) {
         if (this.allCountersDone()) {
-          this.totalKills.setText(this.record.getKillTotalCount().toString());
-          this.state = State.Done;
-          this.done.notify(null);
+          this.finish();
           return;
         }
 
@@ -124,6 +122,24 @@ export class ScoreTable extends GameObject {
 
     this.state = State.Transitioning;
     this.transitionTimer.reset(TRANSITION_DELAY);
+  }
+
+  public skip(): void {
+    if (this.state === State.Done) {
+      return;
+    }
+
+    for (const counter of this.counters) {
+      counter.skip();
+    }
+
+    this.finish();
+  }
+
+  private finish(): void {
+    this.totalKills.setText(this.record.getKillTotalCount().toString());
+    this.state = State.Done;
+    this.done.notify(null);
   }
 
   private getCurrentCounter(): ScoreTableCounter {

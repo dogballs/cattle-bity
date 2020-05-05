@@ -84,6 +84,16 @@ export class ScoreTableCounter extends GameObject {
     this.timer.reset(INCREMENT_DELAY);
   }
 
+  public skip(): void {
+    if (this.state === State.Done) {
+      return;
+    }
+
+    this.currentKills = this.targetKills;
+    this.updateText();
+    this.state = State.Done;
+  }
+
   private updateText(): void {
     const points = this.currentKills * this.killCost;
 
