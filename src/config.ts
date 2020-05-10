@@ -91,10 +91,8 @@ export const STORAGE_NAMESPACE = 'cattle-bity';
 export const STORAGE_KEY_POINTS_HIGHSCORE_PRIMARY = 'points.highscore.primary';
 export const STORAGE_KEY_POINTS_HIGHSCORE_SECONDARY =
   'points.highscore.secondary';
-export const STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PRIMARY =
-  'settings.input.bindings.primary';
-export const STORAGE_KEY_SETTINGS_INPUT_BINDINGS_SECONDARY =
-  'settings.input.bindings.secondary';
+export const STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PREFIX =
+  'settings.input.bindings';
 export const STORAGE_KEY_SETTINGS_AUDIO_MUTED = 'settings.audio-muted';
 export const STORAGE_KEY_SETTINGS_SEEN_LEVEL_HINT = 'settings.seen-level-hint';
 export const STORAGE_KEY_SETTINGS_SEEN_EDITOR_HINT =

@@ -2,8 +2,8 @@ import { InputBinding, KeyboardButtonCode } from '../../core';
 
 import { InputControl } from '../InputControl';
 
-// Suggested for single-player mode
-export class PrimaryKeyboardInputBinding extends InputBinding {
+// Suggested for multi-player mode, second player, right side of the keyboard
+export class TertiaryKeyboardInputBinding extends InputBinding {
   constructor() {
     super();
 
@@ -12,9 +12,9 @@ export class PrimaryKeyboardInputBinding extends InputBinding {
     this.setDefault(InputControl.Left, KeyboardButtonCode.Left);
     this.setDefault(InputControl.Right, KeyboardButtonCode.Right);
     this.setDefault(InputControl.Select, KeyboardButtonCode.Enter);
-    this.setDefault(InputControl.PrimaryAction, KeyboardButtonCode.Z);
-    this.setDefault(InputControl.SecondaryAction, KeyboardButtonCode.X);
-    this.setDefault(InputControl.Rewind, KeyboardButtonCode.A);
-    this.setDefault(InputControl.FastForward, KeyboardButtonCode.S);
+    this.setDefault(InputControl.PrimaryAction, KeyboardButtonCode.K);
+    this.setDefault(InputControl.SecondaryAction, KeyboardButtonCode.L);
+    this.setDefault(InputControl.Rewind, KeyboardButtonCode.I);
+    this.setDefault(InputControl.FastForward, KeyboardButtonCode.O);
   }
 }

@@ -21,6 +21,7 @@ Other
 - optimize player skin layers
 - tweak ai
 - playtest
+- google analytics
 
 ## Possible improvements
 

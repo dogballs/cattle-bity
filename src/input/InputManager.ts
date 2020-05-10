@@ -13,6 +13,7 @@ import {
   PrimaryKeyboardInputBinding,
   SecondaryGamepadInputBinding,
   SecondaryKeyboardInputBinding,
+  TertiaryKeyboardInputBinding,
 } from './bindings';
 import {
   GamepadButtonCodePresenter,
@@ -45,8 +46,15 @@ export class InputManager {
     this.devices.set(InputDeviceType.Keyboard, keyboardInputDevice);
     this.devices.set(InputDeviceType.Gamepad, gamepadInputDevice);
 
+    // Three keyboards are used to cover single-player and multi-player
+    // (2 players) so if user plays alone he could have one binding, but
+    // when he plays with somebody, he could have another binding without a
+    // need to reconfigure his "alone" binding, and the second player gets
+    // the third binding. It does not relate to gamepads, because they are
+    // separate devices with their own buttons, but keyboard is shared.
     const primaryKeyboardInputBinding = new PrimaryKeyboardInputBinding();
     const secondaryKeyboardInputBinding = new SecondaryKeyboardInputBinding();
+    const tertiaryKeyboardInputBinding = new TertiaryKeyboardInputBinding();
     const primaryGamepadInputBinding = new PrimaryGamepadInputBinding();
     const secondaryGamepadInputBinding = new SecondaryGamepadInputBinding();
 
@@ -58,6 +66,10 @@ export class InputManager {
     this.variants.set(
       InputVariantType.SecondaryKeyboard(),
       new InputVariant(keyboardInputDevice, secondaryKeyboardInputBinding),
+    );
+    this.variants.set(
+      InputVariantType.TertiaryKeyboard(),
+      new InputVariant(keyboardInputDevice, tertiaryKeyboardInputBinding),
     );
     this.variants.set(
       InputVariantType.PrimaryGamepad(),
@@ -218,12 +230,9 @@ export class InputManager {
   }
 
   private getBindingStorageKey(variantType: InputVariantType): string {
-    let prefix = config.STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PRIMARY;
-    if (variantType.playerIndex === 1) {
-      prefix = config.STORAGE_KEY_SETTINGS_INPUT_BINDINGS_SECONDARY;
-    }
+    const prefix = config.STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PREFIX;
 
-    const key = `${prefix}_${variantType.deviceType.toString()}`;
+    const key = `${prefix}.${variantType.serialize()}`;
 
     return key;
   }

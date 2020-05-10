@@ -22,7 +22,10 @@ import { GameScene } from '../GameScene';
 
 const VARIANT_SELECTOR_CHOICES: SelectorMenuItemChoice<InputVariantType>[] = [
   { value: InputVariantType.PrimaryKeyboard(), text: 'KEYBOARD 1' },
+  { value: InputVariantType.SecondaryKeyboard(), text: 'KEYBOARD 2' },
+  { value: InputVariantType.TertiaryKeyboard(), text: 'KEYBOARD 3' },
   { value: InputVariantType.PrimaryGamepad(), text: 'GAMEPAD 1' },
+  { value: InputVariantType.SecondaryGamepad(), text: 'GAMEPAD 2' },
 ];
 
 const CONFIGURABLE_INPUT_CONTROLS = [
@@ -74,7 +77,7 @@ export class SettingsKeybindingScene extends GameScene {
     this.bindingItems = CONFIGURABLE_INPUT_CONTROLS.map((control) => {
       const item = new TextMenuItem('', { color: config.COLOR_WHITE });
       item.selected.addListener(() => {
-        this.openModal(control);
+        this.handleBindingSelected(control);
       });
       return item;
     });
@@ -202,6 +205,21 @@ export class SettingsKeybindingScene extends GameScene {
 
     this.inputManager.saveVariantBinding(this.selectedVariantType);
   }
+
+  private handleBindingSelected = (control: number): void => {
+    const activeVariant = this.inputManager.getActiveVariant();
+    const selectedVariant = this.inputManager.getVariant(
+      this.selectedVariantType,
+    );
+
+    // In case user wants to rebind device which is not currently active,
+    // don't allow user to do so, otherwise user will be stuck in the modal.
+    if (activeVariant.getDevice() !== selectedVariant.getDevice()) {
+      return;
+    }
+
+    this.openModal(control);
+  };
 
   private handleDeviceChanged = (
     choice: SelectorMenuItemChoice<InputVariantType>,
