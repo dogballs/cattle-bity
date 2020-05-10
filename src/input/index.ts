@@ -9,3 +9,4 @@ export * from './InputDeviceType';
 export * from './InputHintSettings';
 export * from './InputHoldThrottle';
 export * from './InputManager';
+export * from './InputVariantType';

@@ -14,15 +14,15 @@ import {
   InputControl,
   InputControlPresenter,
   InputManager,
-  InputDeviceType,
+  InputVariantType,
 } from '../../input';
 import * as config from '../../config';
 
 import { GameScene } from '../GameScene';
 
-const DEVICE_SELECTOR_CHOICES: SelectorMenuItemChoice<InputDeviceType>[] = [
-  { value: InputDeviceType.Keyboard, text: 'KEYBOARD' },
-  { value: InputDeviceType.Gamepad, text: 'GAMEPAD' },
+const VARIANT_SELECTOR_CHOICES: SelectorMenuItemChoice<InputVariantType>[] = [
+  { value: InputVariantType.PrimaryKeyboard(), text: 'KEYBOARD 1' },
+  { value: InputVariantType.PrimaryGamepad(), text: 'GAMEPAD 1' },
 ];
 
 const CONFIGURABLE_INPUT_CONTROLS = [
@@ -42,13 +42,13 @@ enum State {
 
 export class SettingsKeybindingScene extends GameScene {
   private state = State.Navigation;
-  private selectedDeviceType: InputDeviceType;
+  private selectedVariantType: InputVariantType;
   private inputManager: InputManager;
   private selectedControl: InputControl = null;
 
   private title: SceneMenuTitle;
   private modal: InputButtonCaptureModal;
-  private deviceSelectorItem: SelectorMenuItem<InputDeviceType>;
+  private deviceSelectorItem: SelectorMenuItem<InputVariantType>;
   private topDividerItem: DividerMenuItem;
   private botDividerItem: DividerMenuItem;
   private bindingItems: TextMenuItem[];
@@ -63,7 +63,9 @@ export class SettingsKeybindingScene extends GameScene {
     this.title.position.set(112, 96);
     this.root.add(this.title);
 
-    this.deviceSelectorItem = new SelectorMenuItem(DEVICE_SELECTOR_CHOICES);
+    this.deviceSelectorItem = new SelectorMenuItem(VARIANT_SELECTOR_CHOICES, {
+      containerWidth: 340,
+    });
     this.deviceSelectorItem.changed.addListener(this.handleDeviceChanged);
 
     this.topDividerItem = new DividerMenuItem({ color: config.COLOR_GRAY });
@@ -103,8 +105,8 @@ export class SettingsKeybindingScene extends GameScene {
     this.modal.setVisible(false);
     this.root.add(this.modal);
 
-    if (DEVICE_SELECTOR_CHOICES.length > 0) {
-      this.selectedDeviceType = DEVICE_SELECTOR_CHOICES[0].value;
+    if (VARIANT_SELECTOR_CHOICES.length > 0) {
+      this.selectedVariantType = VARIANT_SELECTOR_CHOICES[0].value;
       this.updateMenu();
     }
   }
@@ -130,14 +132,15 @@ export class SettingsKeybindingScene extends GameScene {
   }
 
   private getSelectedBinding(): InputBinding {
-    return this.inputManager.getBinding(this.selectedDeviceType);
+    return this.inputManager.getBinding(this.selectedVariantType);
   }
+
   private getSelectedDevice(): InputDevice {
-    return this.inputManager.getDevice(this.selectedDeviceType);
+    return this.inputManager.getDevice(this.selectedVariantType);
   }
 
   private getSelectedPresenter(): InputButtonCodePresenter {
-    return this.inputManager.getPresenter(this.selectedDeviceType);
+    return this.inputManager.getPresenter(this.selectedVariantType);
   }
 
   private openModal(control: InputControl): void {
@@ -197,20 +200,20 @@ export class SettingsKeybindingScene extends GameScene {
 
     binding.setCustom(control, newCode);
 
-    this.inputManager.saveBinding(this.selectedDeviceType);
+    this.inputManager.saveVariantBinding(this.selectedVariantType);
   }
 
   private handleDeviceChanged = (
-    choice: SelectorMenuItemChoice<InputDeviceType>,
+    choice: SelectorMenuItemChoice<InputVariantType>,
   ): void => {
-    this.selectedDeviceType = choice.value;
+    this.selectedVariantType = choice.value;
     this.updateMenu();
   };
 
   private handleResetSelected = (): void => {
     const binding = this.getSelectedBinding();
     binding.resetAllToDefault();
-    this.inputManager.saveBinding(this.selectedDeviceType);
+    this.inputManager.saveVariantBinding(this.selectedVariantType);
     this.updateMenu();
   };
 

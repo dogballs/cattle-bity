@@ -132,9 +132,11 @@ export class EditorHintScene extends GameScene<EditorLocationParams> {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { input } = updateArgs;
+    const { inputManager } = updateArgs;
 
-    if (input.isDownAny(EditorHintInputContext.Skip)) {
+    const inputVariant = inputManager.getActiveVariant();
+
+    if (inputVariant.isDownAny(EditorHintInputContext.Skip)) {
       // Forward params
       this.navigator.replace(GameSceneType.EditorMap, this.params);
       return;

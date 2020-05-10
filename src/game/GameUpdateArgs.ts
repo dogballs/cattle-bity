@@ -3,7 +3,6 @@ import {
   CollisionSystem,
   ColorSpriteFontGenerator,
   ImageLoader,
-  Input,
   RectFontLoader,
   SpriteFontLoader,
   SpriteLoader,
@@ -25,7 +24,6 @@ export interface GameUpdateArgs {
   colorSpriteFontGenerator: ColorSpriteFontGenerator;
   deltaTime: number;
   imageLoader: ImageLoader;
-  input: Input;
   inputHintSettings: InputHintSettings;
   inputManager: InputManager;
   gameState: State<GameState>;

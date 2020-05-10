@@ -1,21 +1,21 @@
 import { InputBinding } from './InputBinding';
 import { InputDevice } from './InputDevice';
-import { NullInputDevice } from './devices';
 
-export class Input {
-  private binding: InputBinding = new InputBinding();
-  private device: InputDevice = new NullInputDevice();
+export class InputVariant {
+  private device: InputDevice;
+  private binding: InputBinding;
 
-  public setDevice(device: InputDevice): this {
+  constructor(device: InputDevice, binding: InputBinding) {
     this.device = device;
-
-    return this;
+    this.binding = binding;
   }
 
-  public setBinding(binding: InputBinding): this {
-    this.binding = binding;
+  public getDevice(): InputDevice {
+    return this.device;
+  }
 
-    return this;
+  public getBinding(): InputBinding {
+    return this.binding;
   }
 
   public update(): void {

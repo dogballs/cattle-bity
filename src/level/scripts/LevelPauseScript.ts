@@ -17,9 +17,11 @@ export class LevelPauseScript extends LevelScript {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { gameState, input } = updateArgs;
+    const { gameState, inputManager } = updateArgs;
 
-    if (input.isDownAny(LevelPlayInputContext.Pause)) {
+    const inputVariant = inputManager.getActiveVariant();
+
+    if (inputVariant.isDownAny(LevelPlayInputContext.Pause)) {
       if (gameState.is(GameState.Playing)) {
         gameState.set(GameState.Paused);
         this.activate();

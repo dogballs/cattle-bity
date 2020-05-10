@@ -1,14 +1,19 @@
 import {
   GamepadInputDevice,
-  Input,
   InputBinding,
   InputDevice,
+  InputVariant,
   KeyboardInputDevice,
 } from '../core';
 import { GameStorage } from '../game';
 import * as config from '../config';
 
-import { GamepadInputBinding, KeyboardInputBinding } from './bindings';
+import {
+  PrimaryGamepadInputBinding,
+  PrimaryKeyboardInputBinding,
+  SecondaryGamepadInputBinding,
+  SecondaryKeyboardInputBinding,
+} from './bindings';
 import {
   GamepadButtonCodePresenter,
   KeyboardButtonCodePresenter,
@@ -16,134 +21,186 @@ import {
 import { InputButtonCodePresenter } from './InputButtonCodePresenter';
 import { InputControl } from './InputControl';
 import { InputDeviceType } from './InputDeviceType';
-
-interface InputVariant {
-  binding: InputBinding;
-  device: InputDevice;
-  presenter: InputButtonCodePresenter;
-}
+import { InputVariantType } from './InputVariantType';
 
 export class InputManager {
-  private input: Input;
-  private variants = new Map<InputDeviceType, InputVariant>();
-  private currentVariant: InputVariant = null;
+  private variants = new Map<InputVariantType, InputVariant>();
+  private devices = new Map<InputDeviceType, InputDevice>();
+  private presenters = new Map<InputDeviceType, InputButtonCodePresenter>();
   private storage: GameStorage;
+  // Active variant is always listening to input. Use it only for
+  // single-player interactions. It might be helpful when user for example
+  // was playing on keyboard and then started pressing buttons on gamepad -
+  // in this case active variant will swiptch from keyboard to gamepad
+  // seamlessly.
+  // For multi-player you should query player-specific variants.
+  private activeVariantType: InputVariantType = null;
 
   constructor(storage: GameStorage) {
     this.storage = storage;
 
-    this.input = new Input();
+    const keyboardInputDevice = new KeyboardInputDevice();
+    const gamepadInputDevice = new GamepadInputDevice();
+
+    this.devices.set(InputDeviceType.Keyboard, keyboardInputDevice);
+    this.devices.set(InputDeviceType.Gamepad, gamepadInputDevice);
+
+    const primaryKeyboardInputBinding = new PrimaryKeyboardInputBinding();
+    const secondaryKeyboardInputBinding = new SecondaryKeyboardInputBinding();
+    const primaryGamepadInputBinding = new PrimaryGamepadInputBinding();
+    const secondaryGamepadInputBinding = new SecondaryGamepadInputBinding();
 
     // Order by priority, first is default
-    this.variants.set(InputDeviceType.Keyboard, {
-      binding: new KeyboardInputBinding(),
-      device: new KeyboardInputDevice(),
-      presenter: new KeyboardButtonCodePresenter(),
-    });
-    this.variants.set(InputDeviceType.Gamepad, {
-      binding: new GamepadInputBinding(),
-      device: new GamepadInputDevice(),
-      presenter: new GamepadButtonCodePresenter(),
-    });
+    this.variants.set(
+      InputVariantType.PrimaryKeyboard(),
+      new InputVariant(keyboardInputDevice, primaryKeyboardInputBinding),
+    );
+    this.variants.set(
+      InputVariantType.SecondaryKeyboard(),
+      new InputVariant(keyboardInputDevice, secondaryKeyboardInputBinding),
+    );
+    this.variants.set(
+      InputVariantType.PrimaryGamepad(),
+      new InputVariant(gamepadInputDevice, primaryGamepadInputBinding),
+    );
+    this.variants.set(
+      InputVariantType.SecondaryGamepad(),
+      new InputVariant(gamepadInputDevice, secondaryGamepadInputBinding),
+    );
+
+    this.presenters.set(
+      InputDeviceType.Keyboard,
+      new KeyboardButtonCodePresenter(),
+    );
+    this.presenters.set(
+      InputDeviceType.Gamepad,
+      new GamepadButtonCodePresenter(),
+    );
 
     if (this.variants.size > 0) {
-      this.activateVariant(this.variants.values().next().value);
+      const firstVariantType = Array.from(this.variants.keys())[0];
+      this.activeVariantType = firstVariantType;
     }
   }
 
-  public getBinding(type: InputDeviceType): InputBinding {
-    if (!this.variants.has(type)) {
+  public getVariant(variantTypeToFind: InputVariantType): InputVariant {
+    let foundVariant = null;
+
+    this.variants.forEach((variant, variantType) => {
+      if (variantType.equals(variantTypeToFind)) {
+        foundVariant = variant;
+      }
+    });
+
+    return foundVariant;
+  }
+
+  public getBinding(variantType: InputVariantType): InputBinding {
+    const variant = this.getVariant(variantType);
+    if (!variant) {
       return null;
     }
 
-    const { binding } = this.variants.get(type);
+    const binding = variant.getBinding();
 
     return binding;
   }
 
-  public getDevice(type: InputDeviceType): InputDevice {
-    if (!this.variants.has(type)) {
+  public getDevice(variantType: InputVariantType): InputDevice {
+    const variant = this.getVariant(variantType);
+    if (!variant) {
       return null;
     }
 
-    const { device } = this.variants.get(type);
+    const device = variant.getDevice();
 
     return device;
   }
 
-  public getPresenter(type: InputDeviceType): InputButtonCodePresenter {
-    if (!this.variants.has(type)) {
+  public getPresenter(variantType: InputVariantType): InputButtonCodePresenter {
+    const variant = this.getVariant(variantType);
+    if (!variant) {
       return null;
     }
 
-    const { presenter } = this.variants.get(type);
+    const presenter = this.presenters.get(variantType.deviceType);
 
     return presenter;
   }
 
-  public getCurrentBinding(): InputBinding {
-    const { binding } = this.currentVariant;
+  public getActiveVariant(): InputVariant {
+    return this.getVariant(this.activeVariantType);
+  }
+
+  public getActiveBinding(): InputBinding {
+    const binding = this.getActiveVariant().getBinding();
     return binding;
   }
 
-  public getCurrentPresenter(): InputButtonCodePresenter {
-    const { presenter } = this.currentVariant;
+  public getActivePresenter(): InputButtonCodePresenter {
+    const variantType = this.activeVariantType;
+    const presenter = this.presenters.get(variantType.deviceType);
     return presenter;
-  }
-
-  public getInput(): Input {
-    return this.input;
   }
 
   public listen(): void {
     this.variants.forEach((variant) => {
-      const { device } = variant;
-
-      device.listen();
+      variant.getDevice().listen();
     });
   }
 
   public unlisten(): void {
     this.variants.forEach((variant) => {
-      const { device } = variant;
-
-      device.unlisten();
+      variant.getDevice().unlisten();
     });
   }
 
   public update(): void {
-    this.variants.forEach((variant) => {
-      const { device } = variant;
+    const activeDevice = this.getActiveVariant().getDevice();
 
-      // Check each device if it has any events. If it does and it is not a
-      // current variant - activate a new one.
+    let newActiveDevice = null;
+
+    this.devices.forEach((device) => {
       device.update();
 
+      // Check each device if it has any events. If it does and it is not an
+      // active device - activate a new one.
       const downCodes = device.getDownCodes();
       const hasActivity = downCodes.length > 0;
-      const isCurrentVariant = variant === this.currentVariant;
 
-      if (hasActivity && !isCurrentVariant) {
-        this.activateVariant(variant);
-        return;
+      const isSameDeviceActive = activeDevice === device;
+
+      if (hasActivity && !isSameDeviceActive) {
+        newActiveDevice = device;
       }
     });
+
+    if (newActiveDevice !== null) {
+      // Activate the first variant which has matching device
+      this.variants.forEach((variant, variantType) => {
+        if (variant.getDevice() === newActiveDevice) {
+          this.activeVariantType = variantType;
+          newActiveDevice = null;
+          return;
+        }
+      });
+    }
   }
 
   public loadAllBindings(): void {
-    this.variants.forEach((variant, type) => {
-      const { binding } = variant;
+    this.variants.forEach((variant, variantType) => {
+      const binding = variant.getBinding();
 
-      const key = this.getBindingStorageKey(type);
+      const key = this.getBindingStorageKey(variantType);
       const json = this.storage.get(key);
 
       binding.fromJSON(json);
     });
   }
 
-  public saveBinding(type: InputDeviceType): void {
-    const binding = this.getBinding(type);
-    const key = this.getBindingStorageKey(type);
+  public saveVariantBinding(variantType: InputVariantType): void {
+    const binding = this.getBinding(variantType);
+    const key = this.getBindingStorageKey(variantType);
     const json = binding.toJSON();
 
     this.storage.set(key, json);
@@ -151,8 +208,8 @@ export class InputManager {
   }
 
   public getPresentedControlCode(control: InputControl): string {
-    const binding = this.getCurrentBinding();
-    const presenter = this.getCurrentPresenter();
+    const binding = this.getActiveBinding();
+    const presenter = this.getActivePresenter();
 
     const code = binding.get(control);
     const displayedCode = presenter.asString(code);
@@ -160,16 +217,14 @@ export class InputManager {
     return displayedCode;
   }
 
-  private activateVariant(variant: InputVariant): void {
-    this.currentVariant = variant;
+  private getBindingStorageKey(variantType: InputVariantType): string {
+    let prefix = config.STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PRIMARY;
+    if (variantType.playerIndex === 1) {
+      prefix = config.STORAGE_KEY_SETTINGS_INPUT_BINDINGS_SECONDARY;
+    }
 
-    this.input.setDevice(variant.device);
-    this.input.setBinding(variant.binding);
-  }
+    const key = `${prefix}_${variantType.deviceType.toString()}`;
 
-  private getBindingStorageKey(type: InputDeviceType): string {
-    return `${
-      config.STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PRIMARY
-    }_${type.toString()}`;
+    return key;
   }
 }

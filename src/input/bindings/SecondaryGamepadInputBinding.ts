@@ -2,7 +2,7 @@ import { GamepadButtonCode, InputBinding } from '../../core';
 
 import { InputControl } from '../InputControl';
 
-export class GamepadInputBinding extends InputBinding {
+export class SecondaryGamepadInputBinding extends InputBinding {
   constructor() {
     super();
 

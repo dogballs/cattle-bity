@@ -2,7 +2,7 @@ import { InputBinding, KeyboardButtonCode } from '../../core';
 
 import { InputControl } from '../InputControl';
 
-export class KeyboardInputBinding extends InputBinding {
+export class SecondaryKeyboardInputBinding extends InputBinding {
   constructor() {
     super();
 

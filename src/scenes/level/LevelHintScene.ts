@@ -131,9 +131,11 @@ export class LevelHintScene extends GameScene<LevelLocationParams> {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { input } = updateArgs;
+    const { inputManager } = updateArgs;
 
-    if (input.isDownAny(LevelHintInputContext.Skip)) {
+    const inputVariant = inputManager.getActiveVariant();
+
+    if (inputVariant.isDownAny(LevelHintInputContext.Skip)) {
       // Map config is forwarded from level load scene
       this.navigator.replace(GameSceneType.LevelPlay, this.params);
       return;

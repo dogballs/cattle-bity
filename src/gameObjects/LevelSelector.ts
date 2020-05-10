@@ -70,14 +70,18 @@ export class LevelSelector extends GameObject {
     this.add(this.arrowRight);
   }
 
-  protected update({ deltaTime, input }: GameUpdateArgs): void {
-    if (input.isDownAny(LevelSelectionInputContext.Select)) {
+  protected update(updateArgs: GameUpdateArgs): void {
+    const { deltaTime, inputManager } = updateArgs;
+
+    const inputVariant = inputManager.getActiveVariant();
+
+    if (inputVariant.isDownAny(LevelSelectionInputContext.Select)) {
       this.selected.notify(this.currentLevel);
       return;
     }
 
     for (const holdThrottle of this.holdThrottles) {
-      holdThrottle.update(input, deltaTime);
+      holdThrottle.update(inputVariant, deltaTime);
     }
   }
 

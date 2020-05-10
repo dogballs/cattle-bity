@@ -115,7 +115,6 @@ const updateArgs: GameUpdateArgs = {
   deltaTime: 0,
   gameStorage,
   imageLoader,
-  input: inputManager.getInput(),
   inputHintSettings,
   inputManager,
   gameState,

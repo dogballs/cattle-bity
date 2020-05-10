@@ -27,9 +27,11 @@ export class MainGameOverScene extends GameScene {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { input } = updateArgs;
+    const { inputManager } = updateArgs;
 
-    if (input.isDownAny(MenuInputContext.Skip)) {
+    const inputVariant = inputManager.getActiveVariant();
+
+    if (inputVariant.isDownAny(MenuInputContext.Skip)) {
       this.finish();
       return;
     }

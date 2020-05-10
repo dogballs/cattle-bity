@@ -50,9 +50,11 @@ export class MainVictoryScene extends GameScene {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { collisionSystem, input } = updateArgs;
+    const { collisionSystem, inputManager } = updateArgs;
 
-    if (input.isDownAny(MenuInputContext.Skip)) {
+    const inputVariant = inputManager.getActiveVariant();
+
+    if (inputVariant.isDownAny(MenuInputContext.Skip)) {
       this.finish();
       return;
     }

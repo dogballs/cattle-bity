@@ -83,18 +83,20 @@ export class EditorTool extends GameObject {
     this.updatePosition(updateArgs);
     this.updateBlinking(updateArgs);
 
-    const { input } = updateArgs;
+    const { inputManager } = updateArgs;
 
-    if (input.isDownAny(EditorMapInputContext.Draw)) {
+    const inputVariant = inputManager.getActiveVariant();
+
+    if (inputVariant.isDownAny(EditorMapInputContext.Draw)) {
       this.draw.notify(null);
     }
-    if (input.isDownAny(EditorMapInputContext.Erase)) {
+    if (inputVariant.isDownAny(EditorMapInputContext.Erase)) {
       this.erase.notify(null);
     }
-    if (input.isDownAny(EditorMapInputContext.NextBrush)) {
+    if (inputVariant.isDownAny(EditorMapInputContext.NextBrush)) {
       this.selectNextBrush();
     }
-    if (input.isDownAny(EditorMapInputContext.PrevBrush)) {
+    if (inputVariant.isDownAny(EditorMapInputContext.PrevBrush)) {
       this.selectPrevBrush();
     }
 
@@ -112,21 +114,25 @@ export class EditorTool extends GameObject {
     }
   }
 
-  private updatePosition({ deltaTime, input }: GameUpdateArgs): void {
+  private updatePosition(updateArgs: GameUpdateArgs): void {
+    const { deltaTime, inputManager } = updateArgs;
+
+    const inputVariant = inputManager.getActiveVariant();
+
     this.velocity.set(0, 0);
 
-    if (input.isDownAny(EditorMapInputContext.MoveUp)) {
+    if (inputVariant.isDownAny(EditorMapInputContext.MoveUp)) {
       this.moveUp();
-    } else if (input.isDownAny(EditorMapInputContext.MoveDown)) {
+    } else if (inputVariant.isDownAny(EditorMapInputContext.MoveDown)) {
       this.moveDown();
-    } else if (input.isDownAny(EditorMapInputContext.MoveLeft)) {
+    } else if (inputVariant.isDownAny(EditorMapInputContext.MoveLeft)) {
       this.moveLeft();
-    } else if (input.isDownAny(EditorMapInputContext.MoveRight)) {
+    } else if (inputVariant.isDownAny(EditorMapInputContext.MoveRight)) {
       this.moveRight();
     }
 
     for (const holdThrottle of this.holdThrottles) {
-      holdThrottle.update(input, deltaTime);
+      holdThrottle.update(inputVariant, deltaTime);
     }
 
     if (this.velocity.x !== 0 || this.velocity.y !== 0) {

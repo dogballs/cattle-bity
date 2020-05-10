@@ -69,12 +69,14 @@ export class LevelAudioScript extends LevelScript {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { gameState, input } = updateArgs;
+    const { gameState, inputManager } = updateArgs;
+
+    const inputVariant = inputManager.getActiveVariant();
 
     if (!gameState.is(GameState.Paused)) {
       // Check if started moving
       if (
-        input.isHoldAny(MOVE_CONTROLS) &&
+        inputVariant.isHoldAny(MOVE_CONTROLS) &&
         this.tankState !== TankState.Moving
       ) {
         this.tankState = TankState.Moving;
@@ -84,7 +86,7 @@ export class LevelAudioScript extends LevelScript {
 
       // If stopped moving
       if (
-        input.isNotHoldAll(MOVE_CONTROLS) &&
+        inputVariant.isNotHoldAll(MOVE_CONTROLS) &&
         this.tankState !== TankState.Idle
       ) {
         this.tankState = TankState.Idle;
