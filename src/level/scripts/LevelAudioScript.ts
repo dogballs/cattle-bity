@@ -13,14 +13,14 @@ const MOVE_CONTROLS = [
   ...LevelPlayInputContext.MoveRight,
 ];
 
-enum TankState {
+enum MoveState {
   Idle,
   Moving,
 }
 
 export class LevelAudioScript extends LevelScript {
   private audioConttoller: AudioManager;
-  private tankState = TankState.Idle;
+  private moveState = MoveState.Idle;
 
   private moveSound: Sound;
   private idleSound: Sound;
@@ -69,27 +69,43 @@ export class LevelAudioScript extends LevelScript {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { gameState, inputManager } = updateArgs;
+    const { gameState, inputManager, session } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const activeVariant = inputManager.getActiveVariant();
+
+    // By default check single-player active input
+    let inputVariants = [activeVariant];
+
+    if (session.isMultiplayer()) {
+      const playerSessions = session.getPlayers();
+
+      // Get input variants for all players
+      inputVariants = playerSessions.map((playerSession) => {
+        const inputVariantType = playerSession.getInputVariantType();
+        const inputVariant = inputManager.getVariant(inputVariantType);
+        return inputVariant;
+      });
+    }
+
+    const anybodyMoving = inputVariants.some((inputVariant) => {
+      return inputVariant.isHoldAny(MOVE_CONTROLS);
+    });
+
+    const everybodyIdle = inputVariants.every((inputVariant) => {
+      return inputVariant.isNotHoldAll(MOVE_CONTROLS);
+    });
 
     if (!gameState.is(GameState.Paused)) {
       // Check if started moving
-      if (
-        inputVariant.isHoldAny(MOVE_CONTROLS) &&
-        this.tankState !== TankState.Moving
-      ) {
-        this.tankState = TankState.Moving;
+      if (anybodyMoving && this.moveState !== MoveState.Moving) {
+        this.moveState = MoveState.Moving;
         this.idleSound.stop();
         this.moveSound.playLoop();
       }
 
       // If stopped moving
-      if (
-        inputVariant.isNotHoldAll(MOVE_CONTROLS) &&
-        this.tankState !== TankState.Idle
-      ) {
-        this.tankState = TankState.Idle;
+      if (everybodyIdle && this.moveState !== MoveState.Idle) {
+        this.moveState = MoveState.Idle;
         this.moveSound.stop();
         this.idleSound.playLoop();
       }

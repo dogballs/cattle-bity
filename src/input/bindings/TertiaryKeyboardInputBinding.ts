@@ -2,7 +2,8 @@ import { InputBinding, KeyboardButtonCode } from '../../core';
 
 import { InputControl } from '../InputControl';
 
-// Suggested for multi-player mode, second player, right side of the keyboard
+// Suggested for multi-player mode, second player, right side of the keyboard,
+// because secondary tank spawns on the right side of base
 export class TertiaryKeyboardInputBinding extends InputBinding {
   constructor() {
     super();
