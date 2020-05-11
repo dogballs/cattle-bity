@@ -2,7 +2,7 @@ import { SceneRouter } from '../core';
 
 import {
   EditorEnemyScene,
-  EditorHintScene,
+  EditorInputScene,
   EditorMapScene,
   EditorMenuScene,
 } from './editor';
@@ -39,7 +39,7 @@ export class GameSceneRouter extends SceneRouter<GameScene> {
     super();
 
     this.register(GameSceneType.EditorEnemy, EditorEnemyScene);
-    this.register(GameSceneType.EditorHint, EditorHintScene);
+    this.register(GameSceneType.EditorInput, EditorInputScene);
     this.register(GameSceneType.EditorMap, EditorMapScene);
     this.register(GameSceneType.EditorMenu, EditorMenuScene);
     this.register(GameSceneType.MainAbout, MainAboutScene);

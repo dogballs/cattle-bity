@@ -11,6 +11,7 @@ export * from './Border';
 export * from './BorderWall';
 export * from './Bullet';
 export * from './Curtain';
+export * from './EditorInputHint';
 export * from './EnemyTank';
 export * from './Explosion';
 export * from './Field';

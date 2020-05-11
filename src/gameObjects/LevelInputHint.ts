@@ -1,10 +1,4 @@
-import {
-  GameObject,
-  RectPainter,
-  SpriteLoader,
-  SpritePainter,
-  TextAlignment,
-} from '../core';
+import { GameObject, RectPainter, SpritePainter, TextAlignment } from '../core';
 import { GameUpdateArgs, Rotation } from '../game';
 import {
   InputManager,
@@ -20,7 +14,6 @@ export class LevelInputHint extends GameObject {
   public zIndex = 0;
   private variantType: InputVariantType;
   private inputManager: InputManager;
-  private spriteLoader: SpriteLoader;
   private tankIcon: GameObject;
   private moveUpHint: SpriteText;
   private moveDownHint: SpriteText;
@@ -45,7 +38,6 @@ export class LevelInputHint extends GameObject {
     const { inputManager, spriteLoader } = updateArgs;
 
     this.inputManager = inputManager;
-    this.spriteLoader = spriteLoader;
 
     this.painter = new RectPainter(config.COLOR_GRAY_LIGHT);
 
@@ -59,9 +51,7 @@ export class LevelInputHint extends GameObject {
     this.tankIcon.origin.setX(0.5);
     this.tankIcon.setCenterX(this.getSelfCenter().x);
     this.tankIcon.position.setY(106);
-    this.tankIcon.painter = new SpritePainter(
-      this.spriteLoader.load(tankSpriteId),
-    );
+    this.tankIcon.painter = new SpritePainter(spriteLoader.load(tankSpriteId));
     this.add(this.tankIcon);
 
     this.moveUpHint = new SpriteText('', {
