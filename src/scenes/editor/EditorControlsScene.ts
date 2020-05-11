@@ -1,7 +1,7 @@
 import { GameObject, RectPainter } from '../../core';
 import { GameUpdateArgs } from '../../game';
 import { EditorInputHint, SceneInputHint, SpriteText } from '../../gameObjects';
-import { EditorHintInputContext } from '../../input';
+import { EditorControlsInputContext } from '../../input';
 import * as config from '../../config';
 
 import { GameScene } from '../GameScene';
@@ -9,7 +9,7 @@ import { GameSceneType } from '../GameSceneType';
 
 import { EditorLocationParams } from './params';
 
-export class EditorInputScene extends GameScene<EditorLocationParams> {
+export class EditorControlsScene extends GameScene<EditorLocationParams> {
   private background: GameObject;
   private title: SpriteText;
   private editorHint: EditorInputHint;
@@ -39,7 +39,7 @@ export class EditorInputScene extends GameScene<EditorLocationParams> {
 
     const continueDisplayedCode = inputManager.getDisplayedControlCode(
       activeVariantType,
-      EditorHintInputContext.Skip[0],
+      EditorControlsInputContext.Skip[0],
     );
     this.continueHint = new SceneInputHint(
       `${continueDisplayedCode} TO CONTINUE`,
@@ -52,7 +52,7 @@ export class EditorInputScene extends GameScene<EditorLocationParams> {
 
     const inputVariant = inputManager.getActiveVariant();
 
-    if (inputVariant.isDownAny(EditorHintInputContext.Skip)) {
+    if (inputVariant.isDownAny(EditorControlsInputContext.Skip)) {
       // Forward params
       this.navigator.replace(GameSceneType.EditorMap, this.params);
       return;

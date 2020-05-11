@@ -1,4 +1,5 @@
 import { Subject } from '../core';
+import { InputVariantType } from '../input';
 import { PointsRecord } from '../points';
 import { PowerupType } from '../powerup';
 import { TankTier } from '../tank';
@@ -16,6 +17,8 @@ export class SessionPlayer {
   private nextLifePointThreshold: number;
   private tankTier: TankTier;
   private levelFirstSpawned: boolean;
+  // Should be used for multiplayer only
+  private inputVariantType: InputVariantType;
 
   constructor() {
     this.reset();
@@ -29,6 +32,7 @@ export class SessionPlayer {
     this.nextLifePointThreshold = config.PLAYER_EXTRA_LIVE_POINTS;
     this.tankTier = TankTier.A;
     this.levelFirstSpawned = true;
+    this.inputVariantType = null;
   }
 
   public addKillPoints(tier: TankTier): void {
@@ -105,6 +109,14 @@ export class SessionPlayer {
 
   public removeLife(): void {
     this.lives -= 1;
+  }
+
+  public setInputVariantType(inputVariantType: InputVariantType): void {
+    this.inputVariantType = inputVariantType;
+  }
+
+  public getInputVariantType(): InputVariantType {
+    return this.inputVariantType;
   }
 
   private checkLifeup(): void {

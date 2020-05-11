@@ -1,5 +1,5 @@
 import { GameUpdateArgs, Rotation } from '../../game';
-import { Tank, TankState } from '../../gameObjects';
+import { PlayerTank, TankState } from '../../gameObjects';
 import { LevelPlayInputContext } from '../../input';
 
 import { TankBehavior } from '../TankBehavior';
@@ -12,10 +12,19 @@ const MOVE_CONTROLS = [
 ];
 
 export class PlayerTankBehavior extends TankBehavior {
-  public update(tank: Tank, updateArgs: GameUpdateArgs): void {
-    const { deltaTime, inputManager } = updateArgs;
+  public update(tank: PlayerTank, updateArgs: GameUpdateArgs): void {
+    const { deltaTime, inputManager, session } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const { playerIndex } = tank;
+
+    let inputVariant = inputManager.getActiveVariant();
+
+    // If multiplayer - use user-specific input variant based on player index
+    if (session.isMultiplayer()) {
+      const playerSession = session.getPlayer(playerIndex);
+      const playerInputVariantType = playerSession.getInputVariantType();
+      inputVariant = inputManager.getVariant(playerInputVariantType);
+    }
 
     // WARNING: order is important. Make sure to keep fire updates before
     // movement updates. Fire places bullet based on tank position.

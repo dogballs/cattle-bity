@@ -7,6 +7,8 @@ import { MapConfig, MapLoader } from '../../map';
 import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
+import { LevelControlsLocationParams } from './params';
+
 enum State {
   Navigation,
   Alert,
@@ -79,15 +81,29 @@ export class LevelLoadScene extends GameScene {
   private handleMapLoaded = (mapConfig: MapConfig): void => {
     this.mapLoader.error.removeListener(this.handleMapLoadError);
 
-    if (this.inputHintSettings.shouldShowLevelHint()) {
-      this.navigator.replace(GameSceneType.LevelInput, {
+    if (this.session.isMultiplayer()) {
+      const params: LevelControlsLocationParams = {
+        canSelectVariant: true,
         mapConfig,
-      });
-    } else {
-      this.navigator.replace(GameSceneType.LevelPlay, {
-        mapConfig,
-      });
+        playerIndex: 0,
+      };
+      this.navigator.replace(GameSceneType.LevelControls, params);
+      return;
     }
+
+    if (this.inputHintSettings.shouldShowLevelHint()) {
+      const params: LevelControlsLocationParams = {
+        canSelectVariant: false,
+        mapConfig,
+        playerIndex: 0,
+      };
+      this.navigator.replace(GameSceneType.LevelControls, params);
+      return;
+    }
+
+    this.navigator.replace(GameSceneType.LevelPlay, {
+      mapConfig,
+    });
   };
 
   private handleMapLoadError = (err): void => {

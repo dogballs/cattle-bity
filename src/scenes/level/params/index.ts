@@ -1,1 +1,2 @@
-export * from './LevelLocationParams';
+export * from './LevelControlsLocationParams';
+export * from './LevelPlayLocationParams';

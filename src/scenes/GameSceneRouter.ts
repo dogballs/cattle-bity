@@ -2,12 +2,12 @@ import { SceneRouter } from '../core';
 
 import {
   EditorEnemyScene,
-  EditorInputScene,
+  EditorControlsScene,
   EditorMapScene,
   EditorMenuScene,
 } from './editor';
 import {
-  LevelInputScene,
+  LevelControlsScene,
   LevelLoadScene,
   LevelSelectionScene,
   LevelPlayScene,
@@ -39,7 +39,7 @@ export class GameSceneRouter extends SceneRouter<GameScene> {
     super();
 
     this.register(GameSceneType.EditorEnemy, EditorEnemyScene);
-    this.register(GameSceneType.EditorInput, EditorInputScene);
+    this.register(GameSceneType.EditorControls, EditorControlsScene);
     this.register(GameSceneType.EditorMap, EditorMapScene);
     this.register(GameSceneType.EditorMenu, EditorMenuScene);
     this.register(GameSceneType.MainAbout, MainAboutScene);
@@ -49,7 +49,7 @@ export class GameSceneRouter extends SceneRouter<GameScene> {
     this.register(GameSceneType.MainVictory, MainVictoryScene);
     this.register(GameSceneType.ModesMenu, ModesMenuScene);
     this.register(GameSceneType.ModesCustom, ModesCustomScene);
-    this.register(GameSceneType.LevelInput, LevelInputScene);
+    this.register(GameSceneType.LevelControls, LevelControlsScene);
     this.register(GameSceneType.LevelLoad, LevelLoadScene);
     this.register(GameSceneType.LevelSelection, LevelSelectionScene);
     this.register(GameSceneType.LevelScore, LevelScoreScene);

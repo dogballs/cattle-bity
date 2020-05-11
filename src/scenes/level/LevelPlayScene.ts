@@ -31,9 +31,9 @@ import {
 import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
-import { LevelLocationParams } from './params';
+import { LevelPlayLocationParams } from './params';
 
-export class LevelPlayScene extends GameScene<LevelLocationParams> {
+export class LevelPlayScene extends GameScene<LevelPlayLocationParams> {
   private world: LevelWorld;
   private eventBus: LevelEventBus;
   private session: Session;

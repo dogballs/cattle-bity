@@ -52,6 +52,10 @@ export class Session {
     return this.players[playerIndex];
   }
 
+  public getPlayers(): SessionPlayer[] {
+    return this.players;
+  }
+
   public isAnyPlayerAlive(): boolean {
     return this.players.some((player) => {
       return player.isAlive();

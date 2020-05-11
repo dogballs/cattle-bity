@@ -254,7 +254,7 @@ export class EditorMenuScene extends GameScene<EditorLocationParams> {
   private handleMapSelected = (): void => {
     if (this.inputHintSettings.shouldShowEditorHint()) {
       this.navigator.push(
-        GameSceneType.EditorInput,
+        GameSceneType.EditorControls,
         this.createLocationParams(),
       );
     } else {
