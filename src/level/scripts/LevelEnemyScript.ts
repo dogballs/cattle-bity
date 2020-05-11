@@ -42,7 +42,7 @@ export class LevelEnemyScript extends LevelScript {
 
   private handleSpawnTimer = (): void => {
     // Happens after max enemies spawn
-    if (this.aliveTanks.length >= config.ENEMY_MAX_ALIVE_COUNT) {
+    if (this.aliveTanks.length >= this.getMaxAliveCount()) {
       this.spawnTimer.stop();
       return;
     }
@@ -183,4 +183,11 @@ export class LevelEnemyScript extends LevelScript {
       });
     }
   };
+
+  private getMaxAliveCount(): number {
+    if (this.session.isMultiplayer()) {
+      return config.ENEMY_MAX_ALIVE_COUNT_MULTIPLAYER;
+    }
+    return config.ENEMY_MAX_ALIVE_COUNT;
+  }
 }

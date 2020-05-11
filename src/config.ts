@@ -61,6 +61,7 @@ export const ENEMY_SPAWN_DELAY = 3;
 
 export const ENEMY_MAX_TOTAL_COUNT = 20;
 export const ENEMY_MAX_ALIVE_COUNT = 4;
+export const ENEMY_MAX_ALIVE_COUNT_MULTIPLAYER = 6;
 
 export const POWERUP_DURATION = 30;
 export const SHIELD_SPAWN_DURATION = 3.5;
