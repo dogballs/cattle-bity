@@ -1,5 +1,5 @@
 import { GameUpdateArgs, Session } from '../../game';
-import { Curtain, InputHint, LevelSelector } from '../../gameObjects';
+import { Curtain, SceneInputHint, LevelSelector } from '../../gameObjects';
 import { LevelSelectionInputContext } from '../../input';
 import { MapLoader } from '../../map';
 
@@ -9,7 +9,7 @@ import { GameSceneType } from '../GameSceneType';
 export class LevelSelectionScene extends GameScene {
   private curtain: Curtain;
   private selector: LevelSelector;
-  private continueHint: InputHint;
+  private continueHint: SceneInputHint;
   private session: Session;
   private mapLoader: MapLoader;
 
@@ -28,10 +28,11 @@ export class LevelSelectionScene extends GameScene {
     this.selector.selected.addListener(this.handleLevelSelected);
     this.root.add(this.selector);
 
-    const continueDisplayCode = inputManager.getPresentedControlCode(
+    const continueDisplayCode = inputManager.getDisplayedControlCode(
+      inputManager.getActiveVariantType(),
       LevelSelectionInputContext.Select[0],
     );
-    this.continueHint = new InputHint(`${continueDisplayCode} TO SELECT`);
+    this.continueHint = new SceneInputHint(`${continueDisplayCode} TO SELECT`);
     this.root.add(this.continueHint);
 
     this.curtain.close();

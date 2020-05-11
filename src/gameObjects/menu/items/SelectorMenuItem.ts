@@ -1,4 +1,4 @@
-import { GameObject, RectPainter, Subject } from '../../../core';
+import { GameObject, Subject } from '../../../core';
 import { GameUpdateArgs } from '../../../game';
 import { MenuInputContext } from '../../../input';
 import * as config from '../../../config';
@@ -18,21 +18,25 @@ export interface SelectorMenuItemChoice<T> {
 }
 
 export interface SelectorMenuItemOptions {
+  backgroundColor?: string;
+  color?: string;
   containerWidth?: number;
   itemOriginX?: number;
 }
 
 const DEFAULT_OPTIONS = {
+  color: config.COLOR_WHITE,
   containerWidth: 256,
   itemOriginX: 0.5,
 };
 
 export class SelectorMenuItem<T> extends MenuItem {
   public changed = new Subject<SelectorMenuItemChoice<T>>();
+  public zIndex = 0;
   private choices: SelectorMenuItemChoice<T>[] = [];
   private options: SelectorMenuItemOptions;
-  private leftArrow = new SpriteText('←', { color: config.COLOR_WHITE });
-  private rightArrow = new SpriteText('→', { color: config.COLOR_WHITE });
+  private leftArrow: SpriteText;
+  private rightArrow: SpriteText;
   private container: GameObject;
   private selectedIndex = 0;
   private items: SpriteText[] = [];
@@ -86,27 +90,34 @@ export class SelectorMenuItem<T> extends MenuItem {
 
   protected setup(): void {
     this.container = new GameObject(this.options.containerWidth, ITEM_HEIGHT);
-    this.container.painter = new RectPainter(config.COLOR_BLACK);
     this.container.position.setX(ARROW_WIDTH + ARROW_OFFSET);
     this.add(this.container);
 
     this.choices.forEach((choice) => {
       const item = new SpriteText(choice.text, {
-        color: config.COLOR_WHITE,
+        color: this.options.color,
       });
       item.origin.setX(this.options.itemOriginX);
       item.position.setX(
         this.options.containerWidth * this.options.itemOriginX,
       );
+      item.setZIndex(this.zIndex + 1);
       this.container.add(item);
     });
 
+    this.leftArrow = new SpriteText('←', { color: this.options.color });
     this.add(this.leftArrow);
 
+    this.rightArrow = new SpriteText('→', { color: this.options.color });
     this.rightArrow.position.setX(
       ARROW_WIDTH + ARROW_OFFSET + this.options.containerWidth + ARROW_OFFSET,
     );
     this.add(this.rightArrow);
+
+    this.size.set(
+      this.options.containerWidth + (ARROW_WIDTH + ARROW_OFFSET) * 2,
+      28,
+    );
 
     this.selectChoice();
   }

@@ -6,7 +6,7 @@ import { SpriteText } from './SpriteText';
 
 const BLINK_DELAY = 0.4;
 
-export class InputHint extends SpriteText {
+export class SceneInputHint extends SpriteText {
   public zIndex = config.LEVEL_TITLE_Z_INDEX;
   private blinkTimer = new Timer();
 

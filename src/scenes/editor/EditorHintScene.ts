@@ -1,6 +1,6 @@
 import { GameObject, RectPainter, TextAlignment } from '../../core';
 import { GameUpdateArgs } from '../../game';
-import { EditorBrush, InputHint, SpriteText } from '../../gameObjects';
+import { EditorBrush, SceneInputHint, SpriteText } from '../../gameObjects';
 import { EditorHintInputContext, EditorMapInputContext } from '../../input';
 import { TerrainType } from '../../terrain';
 import * as config from '../../config';
@@ -28,6 +28,8 @@ export class EditorHintScene extends GameScene<EditorLocationParams> {
   protected setup({ inputHintSettings, inputManager }: GameUpdateArgs): void {
     inputHintSettings.setSeenEditorHint();
 
+    const activeVariantType = inputManager.getActiveVariantType();
+
     this.background = new GameObject();
     this.background.size.copyFrom(this.root.size);
     this.background.painter = new RectPainter(config.COLOR_GRAY);
@@ -47,7 +49,8 @@ export class EditorHintScene extends GameScene<EditorLocationParams> {
     this.brushIcon.position.setY(302);
     this.root.add(this.brushIcon);
 
-    const moveUpDisplayCode = inputManager.getPresentedControlCode(
+    const moveUpDisplayCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorMapInputContext.MoveUp[0],
     );
     this.moveUpHint = new SpriteText(`${moveUpDisplayCode}\n↑`, {
@@ -58,7 +61,8 @@ export class EditorHintScene extends GameScene<EditorLocationParams> {
     this.moveUpHint.position.setY(216);
     this.root.add(this.moveUpHint);
 
-    const moveDownDisplayCode = inputManager.getPresentedControlCode(
+    const moveDownDisplayCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorMapInputContext.MoveDown[0],
     );
     this.moveDownHint = new SpriteText(`↓\n${moveDownDisplayCode}`, {
@@ -69,7 +73,8 @@ export class EditorHintScene extends GameScene<EditorLocationParams> {
     this.moveDownHint.position.setY(400);
     this.root.add(this.moveDownHint);
 
-    const moveLeftDisplayCode = inputManager.getPresentedControlCode(
+    const moveLeftDisplayCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorMapInputContext.MoveLeft[0],
     );
     this.moveLeftHint = new SpriteText(`${moveLeftDisplayCode} ←`, {
@@ -79,7 +84,8 @@ export class EditorHintScene extends GameScene<EditorLocationParams> {
     this.moveLeftHint.position.set(460, 305);
     this.root.add(this.moveLeftHint);
 
-    const moveRightDisplayCode = inputManager.getPresentedControlCode(
+    const moveRightDisplayCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorMapInputContext.MoveRight[0],
     );
     this.moveRightHint = new SpriteText(`→ ${moveRightDisplayCode}`, {
@@ -89,45 +95,53 @@ export class EditorHintScene extends GameScene<EditorLocationParams> {
     this.moveRightHint.position.set(560, 305);
     this.root.add(this.moveRightHint);
 
-    const drawDisplayCode = inputManager.getPresentedControlCode(
+    const drawDisplayCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorMapInputContext.Draw[0],
     );
     this.drawHint = new SpriteText(`DRAW       - ${drawDisplayCode}`);
     this.drawHint.position.set(290, 500);
     this.root.add(this.drawHint);
 
-    const eraseDisplayCode = inputManager.getPresentedControlCode(
+    const eraseDisplayCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorMapInputContext.Erase[0],
     );
     this.eraseHint = new SpriteText(`ERASE      - ${eraseDisplayCode}`);
     this.eraseHint.position.set(290, 550);
     this.root.add(this.eraseHint);
 
-    const nextBrushDisplayCode = inputManager.getPresentedControlCode(
+    const nextBrushDisplayCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorMapInputContext.NextBrush[0],
     );
     this.nextBrushHint = new SpriteText(`NEXT BRUSH - ${nextBrushDisplayCode}`);
     this.nextBrushHint.position.set(290, 600);
     this.root.add(this.nextBrushHint);
 
-    const prevBrushDisplayCode = inputManager.getPresentedControlCode(
+    const prevBrushDisplayCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorMapInputContext.PrevBrush[0],
     );
     this.prevBrushHint = new SpriteText(`PREV BRUSH - ${prevBrushDisplayCode}`);
     this.prevBrushHint.position.set(290, 650);
     this.root.add(this.prevBrushHint);
 
-    const backDisplayCode = inputManager.getPresentedControlCode(
+    const backDisplayCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorMapInputContext.Menu[0],
     );
     this.backHint = new SpriteText(`MENU       - ${backDisplayCode}`);
     this.backHint.position.set(290, 700);
     this.root.add(this.backHint);
 
-    const continueDisplayedCode = inputManager.getPresentedControlCode(
+    const continueDisplayedCode = inputManager.getDisplayedControlCode(
+      activeVariantType,
       EditorHintInputContext.Skip[0],
     );
-    this.continueHint = new InputHint(`${continueDisplayedCode} TO CONTINUE`);
+    this.continueHint = new SceneInputHint(
+      `${continueDisplayedCode} TO CONTINUE`,
+    );
     this.root.add(this.continueHint);
   }
 

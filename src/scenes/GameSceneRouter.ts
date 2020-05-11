@@ -7,7 +7,7 @@ import {
   EditorMenuScene,
 } from './editor';
 import {
-  LevelHintScene,
+  LevelInputScene,
   LevelLoadScene,
   LevelSelectionScene,
   LevelPlayScene,
@@ -23,6 +23,7 @@ import {
 import { ModesCustomScene, ModesMenuScene } from './modes';
 import {
   SettingsAudioScene,
+  SettingsDevicesScene,
   SettingsInterfaceScene,
   SettingsKeybindingScene,
   SettingsMenuScene,
@@ -48,12 +49,13 @@ export class GameSceneRouter extends SceneRouter<GameScene> {
     this.register(GameSceneType.MainVictory, MainVictoryScene);
     this.register(GameSceneType.ModesMenu, ModesMenuScene);
     this.register(GameSceneType.ModesCustom, ModesCustomScene);
-    this.register(GameSceneType.LevelHint, LevelHintScene);
+    this.register(GameSceneType.LevelInput, LevelInputScene);
     this.register(GameSceneType.LevelLoad, LevelLoadScene);
     this.register(GameSceneType.LevelSelection, LevelSelectionScene);
     this.register(GameSceneType.LevelScore, LevelScoreScene);
     this.register(GameSceneType.LevelPlay, LevelPlayScene);
     this.register(GameSceneType.SettingsAudio, SettingsAudioScene);
+    this.register(GameSceneType.SettingsDevices, SettingsDevicesScene);
     this.register(GameSceneType.SettingsInterface, SettingsInterfaceScene);
     this.register(GameSceneType.SettingsMenu, SettingsMenuScene);
     this.register(GameSceneType.SettingsKeybinding, SettingsKeybindingScene);

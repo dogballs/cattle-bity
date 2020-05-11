@@ -72,6 +72,10 @@ export class RenderObject extends Transform {
     this.updateWorldZIndex(true);
   }
 
+  public getZIndex(): number {
+    return this.zIndex;
+  }
+
   public getWorldZIndex(): number {
     return this.worldZIndex;
   }

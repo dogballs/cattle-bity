@@ -80,7 +80,7 @@ export class LevelLoadScene extends GameScene {
     this.mapLoader.error.removeListener(this.handleMapLoadError);
 
     if (this.inputHintSettings.shouldShowLevelHint()) {
-      this.navigator.replace(GameSceneType.LevelHint, {
+      this.navigator.replace(GameSceneType.LevelInput, {
         mapConfig,
       });
     } else {

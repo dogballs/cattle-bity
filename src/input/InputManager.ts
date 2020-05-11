@@ -144,6 +144,10 @@ export class InputManager {
     return this.getVariant(this.activeVariantType);
   }
 
+  public getActiveVariantType(): InputVariantType {
+    return this.activeVariantType;
+  }
+
   public getActiveBinding(): InputBinding {
     const binding = this.getActiveVariant().getBinding();
     return binding;
@@ -219,9 +223,12 @@ export class InputManager {
     this.storage.save();
   }
 
-  public getPresentedControlCode(control: InputControl): string {
-    const binding = this.getActiveBinding();
-    const presenter = this.getActivePresenter();
+  public getDisplayedControlCode(
+    variantType: InputVariantType,
+    control: InputControl,
+  ): string {
+    const binding = this.getBinding(variantType);
+    const presenter = this.getPresenter(variantType);
 
     const code = binding.get(control);
     const displayedCode = presenter.asString(code);

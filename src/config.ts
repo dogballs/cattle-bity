@@ -79,6 +79,7 @@ export const DEFAULT_HIGHSCORE = 20000;
 
 export const COLOR_BACKDROP = 'rgba(0,0,0,0.7)';
 export const COLOR_GRAY = '#636363';
+export const COLOR_GRAY_LIGHT = '#737373';
 export const COLOR_BLACK = '#000';
 export const COLOR_WHITE = '#fff';
 export const COLOR_RED = '#d74000';
