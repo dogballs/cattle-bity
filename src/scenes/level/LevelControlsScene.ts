@@ -24,8 +24,7 @@ const VARIANT_SELECTOR_CHOICES: SelectorMenuItemChoice<InputVariantType>[] = [
 ];
 
 // For multiplayer suggest primary player - keyboard #2, and for secondary
-// player - keyboard #3.
-// Will be queried by player index
+// player - keyboard #3. Will be queried by player index.
 const DEFAULT_CHOICE_VALUES = [
   VARIANT_SELECTOR_CHOICES[1].value,
   VARIANT_SELECTOR_CHOICES[2].value,
@@ -53,6 +52,24 @@ export class LevelControlsScene extends GameScene<LevelControlsLocationParams> {
       defaultVariantType = DEFAULT_CHOICE_VALUES[this.params.playerIndex];
     }
 
+    let choices = VARIANT_SELECTOR_CHOICES.slice();
+
+    // For secondary player - remove the item primary player has picked
+    if (this.params.canSelectVariant && this.params.playerIndex === 1) {
+      const primaryPlayer = this.session.primaryPlayer;
+      const primaryPlayerVariantType = primaryPlayer.getInputVariantType();
+
+      choices = choices.filter((choice) => {
+        return !choice.value.equals(primaryPlayerVariantType);
+      });
+
+      // Adjust default value in case primary player has picked secondary's
+      // player default variant type; pick the oppositing variant
+      if (defaultVariantType.equals(primaryPlayerVariantType)) {
+        defaultVariantType = DEFAULT_CHOICE_VALUES[0];
+      }
+    }
+
     this.background = new GameObject();
     this.background.size.copyFrom(this.root.size);
     this.background.painter = new RectPainter(config.COLOR_GRAY);
@@ -72,7 +89,7 @@ export class LevelControlsScene extends GameScene<LevelControlsLocationParams> {
     this.title.position.setY(64);
     this.root.add(this.title);
 
-    this.selector = new SelectorMenuItem(VARIANT_SELECTOR_CHOICES, {
+    this.selector = new SelectorMenuItem(choices, {
       color: config.COLOR_WHITE,
       containerWidth: 340,
     });
