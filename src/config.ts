@@ -77,6 +77,7 @@ export const LEVEL_START_DELAY = 2;
 export const PLAYER_INITIAL_LIVES = 3;
 export const PLAYER_EXTRA_LIVE_POINTS = 20000;
 export const DEFAULT_HIGHSCORE = 20000;
+export const BONUS_POINTS = 1000;
 
 export const COLOR_BACKDROP = 'rgba(0,0,0,0.7)';
 export const COLOR_GRAY = '#636363';

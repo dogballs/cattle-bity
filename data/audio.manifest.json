@@ -16,5 +16,6 @@
   "explosion.player": { "file": "data/audio/player-explosion.mp3" },
   "explosion.enemy": { "file": "data/audio/enemy-explosion.mp3" },
   "score": { "file": "data/audio/score.mp3" },
+  "score.bonus": { "file": "data/audio/score-bonus.mp3" },
   "victory": { "file": "data/audio/victory.mp3" }
 }

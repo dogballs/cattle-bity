@@ -141,7 +141,7 @@ export class MainMenuScene extends GameScene {
   }
 
   private getPrimaryPointsText(): string {
-    const points = this.session.primaryPlayer.getLastPoints();
+    const points = this.session.primaryPlayer.getLastGamePoints();
 
     const pointsNumberText = points > 0 ? points.toString() : '00';
     const pointsText = pointsNumberText.padStart(6, ' ');

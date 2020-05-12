@@ -30,10 +30,10 @@ export class ScoreTable extends GameObject {
     color: config.COLOR_RED,
   });
   private underline = new ScoreTableUnderline();
-  private primaryTotalPoints = new SpriteText('', {
+  private primaryGamePoints = new SpriteText('', {
     color: config.COLOR_YELLOW,
   });
-  private secondaryTotalPoints = new SpriteText('', {
+  private secondaryGamePoints = new SpriteText('', {
     color: config.COLOR_YELLOW,
   });
   private totalLabel = new SpriteText('TOTAL', { color: config.COLOR_WHITE });
@@ -64,20 +64,20 @@ export class ScoreTable extends GameObject {
     }
 
     // For player total points display sum of all levels and current level
-    this.primaryTotalPoints.setText(
-      this.session.primaryPlayer.getTotalPoints().toString(),
+    this.primaryGamePoints.setText(
+      this.session.primaryPlayer.getGamePoints().toString(),
     );
-    this.primaryTotalPoints.position.set(256, 64);
-    this.primaryTotalPoints.origin.set(1, 0);
-    this.add(this.primaryTotalPoints);
+    this.primaryGamePoints.position.set(256, 64);
+    this.primaryGamePoints.origin.set(1, 0);
+    this.add(this.primaryGamePoints);
 
     if (this.session.isMultiplayer()) {
-      this.secondaryTotalPoints.setText(
-        this.session.secondaryPlayer.getTotalPoints().toString(),
+      this.secondaryGamePoints.setText(
+        this.session.secondaryPlayer.getGamePoints().toString(),
       );
-      this.secondaryTotalPoints.position.set(836, 64);
-      this.secondaryTotalPoints.origin.set(1, 0);
-      this.add(this.secondaryTotalPoints);
+      this.secondaryGamePoints.position.set(836, 64);
+      this.secondaryGamePoints.origin.set(1, 0);
+      this.add(this.secondaryGamePoints);
     }
 
     TIERS.forEach((tier, tierIndex) => {

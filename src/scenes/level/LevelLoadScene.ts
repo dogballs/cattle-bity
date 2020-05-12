@@ -137,7 +137,7 @@ export class LevelLoadScene extends GameScene {
     // be the only level. Check if user has any points to identify if user
     // has played at all.
     if (this.session.isLastLevel()) {
-      const hasPlayed = this.session.getMaxPoints() > 0;
+      const hasPlayed = this.session.getMaxGamePoints() > 0;
       // If user has played and all levels ended, then he has won the game.
       // Otherwise return him to main menu.
       if (hasPlayed) {

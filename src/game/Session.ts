@@ -42,7 +42,7 @@ export class Session {
     this.endLevelNumber = 1;
     this.state = State.Idle;
     this.playtest = false;
-    this.multiplayer = false;
+    this.multiplayer = true;
 
     this.primaryPlayer.reset();
     this.secondaryPlayer.reset();
@@ -84,15 +84,36 @@ export class Session {
     this.secondaryPlayer.completeLevel();
   }
 
-  public getMaxPoints(): number {
-    const primaryPoints = this.primaryPlayer.getTotalPoints();
-    const secondaryPoints = this.secondaryPlayer.getTotalPoints();
+  public getMaxLevelPoints(): number {
+    let maxPoints = 0;
 
-    const points = [primaryPoints, secondaryPoints];
-
-    const maxPoints = Math.max(...points);
+    for (const player of this.players) {
+      const points = player.getLevelPoints();
+      if (points > maxPoints) {
+        maxPoints = points;
+      }
+    }
 
     return maxPoints;
+  }
+
+  public getMaxGamePoints(): number {
+    let maxPoints = 0;
+
+    for (const player of this.players) {
+      const points = player.getGamePoints();
+      if (points > maxPoints) {
+        maxPoints = points;
+      }
+    }
+
+    return maxPoints;
+  }
+
+  public anybodyHasBonusPoints(): boolean {
+    return this.players.some((player) => {
+      return player.hasBonusPoints();
+    });
   }
 
   public getLevelNumber(): number {
