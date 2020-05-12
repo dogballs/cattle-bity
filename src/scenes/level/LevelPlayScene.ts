@@ -22,6 +22,7 @@ import {
   LevelInfoScript,
   LevelIntroScript,
   LevelPauseScript,
+  LevelPlayerOverScript,
   LevelPlayerScript,
   LevelPointsScript,
   LevelPowerupScript,
@@ -52,6 +53,7 @@ export class LevelPlayScene extends GameScene<LevelPlayLocationParams> {
   private gameOverScript: LevelGameOverScript;
   private infoScript: LevelInfoScript;
   private introScript: LevelIntroScript;
+  private playerOverScript: LevelPlayerOverScript;
   private playerScript: LevelPlayerScript;
   private pointsScript: LevelPointsScript;
   private powerupScript: LevelPowerupScript;
@@ -112,6 +114,7 @@ export class LevelPlayScene extends GameScene<LevelPlayLocationParams> {
     this.infoScript = new LevelInfoScript();
     this.introScript = new LevelIntroScript();
     this.pauseScript = new LevelPauseScript();
+    this.playerOverScript = new LevelPlayerOverScript();
     this.playerScript = new LevelPlayerScript();
     this.pointsScript = new LevelPointsScript();
     this.powerupScript = new LevelPowerupScript();
@@ -127,6 +130,7 @@ export class LevelPlayScene extends GameScene<LevelPlayLocationParams> {
       this.infoScript,
       this.introScript,
       this.pauseScript,
+      this.playerOverScript,
       this.playerScript,
       this.pointsScript,
       this.powerupScript,
@@ -155,6 +159,7 @@ export class LevelPlayScene extends GameScene<LevelPlayLocationParams> {
         this.infoScript,
         this.enemyScript,
         this.spawnScript,
+        this.playerOverScript,
         this.playerScript,
         this.pointsScript,
         this.powerupScript,
@@ -218,6 +223,13 @@ export class LevelPlayScene extends GameScene<LevelPlayLocationParams> {
     playerSession.removeLife();
 
     if (this.session.isAnyPlayerAlive()) {
+      // If other player is alive, but current player is dead - show
+      // notification for dead player that his game is over. Only the first
+      // player who dies gets this notification.
+      if (!playerSession.isAlive()) {
+        this.playerOverScript.setPlayerIndex(event.partyIndex);
+        this.playerOverScript.enable();
+      }
       return;
     }
 

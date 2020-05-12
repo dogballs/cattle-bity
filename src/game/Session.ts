@@ -57,6 +57,10 @@ export class Session {
   }
 
   public isAnyPlayerAlive(): boolean {
+    if (!this.multiplayer) {
+      return this.primaryPlayer.isAlive();
+    }
+
     return this.players.some((player) => {
       return player.isAlive();
     });

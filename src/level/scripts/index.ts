@@ -6,6 +6,7 @@ export * from './LevelGameOverScript';
 export * from './LevelInfoScript';
 export * from './LevelIntroScript';
 export * from './LevelPauseScript';
+export * from './LevelPlayerOverScript';
 export * from './LevelPlayerScript';
 export * from './LevelPointsScript';
 export * from './LevelPowerupScript';
