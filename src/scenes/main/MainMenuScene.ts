@@ -19,6 +19,7 @@ export class MainMenuScene extends GameScene {
   private group: GameObject;
   private heading: MainHeading;
   private primaryPoints: SpriteText;
+  private secondaryPoints: SpriteText;
   private commonHighscore: SpriteText;
   private menu: Menu;
   private singlePlayerItem: TextMenuItem;
@@ -50,6 +51,14 @@ export class MainMenuScene extends GameScene {
     });
     this.primaryPoints.position.set(92, 64);
     this.group.add(this.primaryPoints);
+
+    this.secondaryPoints = new SpriteText(this.getSecondaryPointsText(), {
+      color: config.COLOR_WHITE,
+    });
+    this.secondaryPoints.position.set(704, 64);
+    if (session.secondaryPlayer.wasInLastGame()) {
+      this.group.add(this.secondaryPoints);
+    }
 
     this.commonHighscore = new SpriteText(this.getCommonHighscoreText(), {
       color: config.COLOR_WHITE,
@@ -141,12 +150,23 @@ export class MainMenuScene extends GameScene {
   }
 
   private getPrimaryPointsText(): string {
-    const points = this.session.primaryPlayer.getLastGamePoints();
+    const points = this.session.primaryPlayer.getLastGamePoints() || 0;
 
     const pointsNumberText = points > 0 ? points.toString() : '00';
     const pointsText = pointsNumberText.padStart(6, ' ');
 
     const text = `Ⅰ-${pointsText}`;
+
+    return text;
+  }
+
+  private getSecondaryPointsText(): string {
+    const points = this.session.secondaryPlayer.getLastGamePoints() || 0;
+
+    const pointsNumberText = points > 0 ? points.toString() : '00';
+    const pointsText = pointsNumberText.padStart(6, ' ');
+
+    const text = `Ⅱ-${pointsText}`;
 
     return text;
   }

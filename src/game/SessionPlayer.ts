@@ -27,7 +27,7 @@ export class SessionPlayer {
   public reset(): void {
     this.levelPointsRecord = new PointsRecord();
     this.gamePoints = 0;
-    this.lastGamePoints = 0;
+    this.lastGamePoints = null;
     this.lives = config.PLAYER_INITIAL_LIVES;
     this.nextLifePointThreshold = config.PLAYER_EXTRA_LIVE_POINTS;
     this.tankTier = TankTier.A;
@@ -72,6 +72,10 @@ export class SessionPlayer {
 
   public getLastGamePoints(): number {
     return this.lastGamePoints;
+  }
+
+  public wasInLastGame(): boolean {
+    return this.lastGamePoints !== null;
   }
 
   public hasBonusPoints(): boolean {

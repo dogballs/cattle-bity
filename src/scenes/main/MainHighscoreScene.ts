@@ -25,12 +25,16 @@ export class MainHighscoreScene extends GameScene {
     const secondaryHighscore = pointsHighscoreManager.getSecondaryPoints();
     const maxHighscore = pointsHighscoreManager.getOverallMaxPoints();
 
+    const wasMultiplayer = session.isMultiplayer();
+
     // Reset all previous game session data
     session.reset();
 
     // Keep last game points
     session.primaryPlayer.setLastGamePoints(primaryGamePoints);
-    session.secondaryPlayer.setLastGamePoints(secondaryGamePoints);
+    if (wasMultiplayer) {
+      session.secondaryPlayer.setLastGamePoints(secondaryGamePoints);
+    }
 
     // Save player highscore
     if (primaryGamePoints > primaryHighscore) {

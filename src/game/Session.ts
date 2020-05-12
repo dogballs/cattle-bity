@@ -42,7 +42,7 @@ export class Session {
     this.endLevelNumber = 1;
     this.state = State.Idle;
     this.playtest = false;
-    this.multiplayer = true;
+    this.multiplayer = false;
 
     this.primaryPlayer.reset();
     this.secondaryPlayer.reset();
