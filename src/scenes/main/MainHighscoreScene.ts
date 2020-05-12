@@ -1,17 +1,22 @@
-import { GameUpdateArgs } from '../../game';
+import { AudioManager, GameUpdateArgs } from '../../game';
 import { HighscoreHeading } from '../../gameObjects';
+import { MenuInputContext } from '../../input';
 
 import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
 export class MainHighscoreScene extends GameScene {
   private heading: HighscoreHeading;
+  private audioManager: AudioManager;
 
   protected setup({
+    audioManager,
     audioLoader,
     pointsHighscoreManager,
     session,
   }: GameUpdateArgs): void {
+    this.audioManager = audioManager;
+
     const primaryGamePoints = session.primaryPlayer.getGamePoints();
     const secondaryGamePoints = session.secondaryPlayer.getGamePoints();
     const maxGamePoints = Math.max(primaryGamePoints, secondaryGamePoints);
@@ -23,7 +28,7 @@ export class MainHighscoreScene extends GameScene {
     // Reset all previous game session data
     session.reset();
 
-    // Keep last points
+    // Keep last game points
     session.primaryPlayer.setLastGamePoints(primaryGamePoints);
     session.secondaryPlayer.setLastGamePoints(secondaryGamePoints);
 
@@ -48,11 +53,29 @@ export class MainHighscoreScene extends GameScene {
     this.root.add(this.heading);
 
     const highscoreSound = audioLoader.load('highscore');
-    highscoreSound.ended.addListener(this.handleEnded);
+    highscoreSound.ended.addListener(this.handleAudioEnded);
     highscoreSound.play();
   }
 
-  private handleEnded = (): void => {
-    this.navigator.clearAndPush(GameSceneType.MainMenu);
+  protected update(updateArgs: GameUpdateArgs): void {
+    const { inputManager } = updateArgs;
+
+    const inputVariant = inputManager.getActiveVariant();
+
+    if (inputVariant.isDownAny(MenuInputContext.Skip)) {
+      this.finish();
+      return;
+    }
+
+    super.update(updateArgs);
+  }
+
+  private handleAudioEnded = (): void => {
+    this.finish();
   };
+
+  private finish(): void {
+    this.audioManager.stopAll();
+    this.navigator.clearAndPush(GameSceneType.MainMenu);
+  }
 }
