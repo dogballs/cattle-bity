@@ -4,5 +4,5 @@ import { TankType } from '../../tank';
 export interface LevelPlayerDiedEvent {
   type: TankType;
   centerPosition: Vector;
-  playerIndex: number;
+  partyIndex: number;
 }

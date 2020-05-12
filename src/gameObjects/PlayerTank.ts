@@ -2,7 +2,6 @@ import { Subject } from '../core';
 import { GameUpdateArgs, Tag } from '../game';
 import {
   TankAttributesFactory,
-  TankBehavior,
   TankColor,
   TankColorFactory,
   TankSkinAnimation,
@@ -16,22 +15,15 @@ import { Tank } from './Tank';
 export class PlayerTank extends Tank {
   public upgraded = new Subject<{ tier: TankTier }>();
   public tags = [Tag.Tank, Tag.Player];
-  public playerIndex = -1;
   public zIndex = config.PLAYER_TANK_Z_INDEX;
   private tierSkinAnimations = new Map<TankTier, TankSkinAnimation>();
   private colors: TankColor[] = [];
 
-  constructor(type: TankType, behavior: TankBehavior, playerIndex: number) {
-    super(type, behavior);
-
-    this.playerIndex = playerIndex;
-
-    // Player only has one color
-    this.colors.push(TankColorFactory.createPlayerColor(playerIndex));
-  }
-
   protected setup(updateArgs: GameUpdateArgs): void {
     const { spriteLoader } = updateArgs;
+
+    // Player only has one color
+    this.colors.push(TankColorFactory.createPlayerColor(this.partyIndex));
 
     this.tierSkinAnimations.set(
       TankTier.A,

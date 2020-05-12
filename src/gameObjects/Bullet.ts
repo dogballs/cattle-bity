@@ -17,6 +17,7 @@ export class Bullet extends GameObject {
   public collider = new SweptBoxCollider(this, true);
   public painter = new SpritePainter();
   public zIndex = config.BULLET_Z_INDEX;
+  public ownerPartyIndex: number;
   public tankDamage: number;
   public wallDamage: number;
   public speed: number;
@@ -25,9 +26,15 @@ export class Bullet extends GameObject {
   private hitBrickSound: Sound;
   private hitSteelSound: Sound;
 
-  constructor(speed: number, tankDamage: number, wallDamage: number) {
+  constructor(
+    ownerPartyIndex: number,
+    speed: number,
+    tankDamage: number,
+    wallDamage: number,
+  ) {
     super(config.BULLET_WIDTH, 16);
 
+    this.ownerPartyIndex = ownerPartyIndex;
     this.speed = speed;
     this.tankDamage = tankDamage;
     this.wallDamage = wallDamage;

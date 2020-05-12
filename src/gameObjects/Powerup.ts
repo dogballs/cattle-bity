@@ -20,7 +20,7 @@ export class Powerup extends GameObject {
   public collider = new BoxCollider(this, true);
   public painter = new SpritePainter();
   public ignorePause = true;
-  public picked = new Subject<{ playerIndex: number }>();
+  public picked = new Subject<{ partyIndex: number }>();
   public type: PowerupType;
   private animation: Animation<Sprite>;
 
@@ -82,10 +82,10 @@ export class Powerup extends GameObject {
         intersectionRect.height > PICKUP_MIN_INTERSECTION_SIZE
       ) {
         const tank = firstPlayerTankContact.collider.object as PlayerTank;
-        const { playerIndex } = tank;
+        const { partyIndex } = tank;
 
         this.destroy();
-        this.picked.notify({ playerIndex });
+        this.picked.notify({ partyIndex });
       }
     }
   }

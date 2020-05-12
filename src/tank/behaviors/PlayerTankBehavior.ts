@@ -15,13 +15,11 @@ export class PlayerTankBehavior extends TankBehavior {
   public update(tank: PlayerTank, updateArgs: GameUpdateArgs): void {
     const { deltaTime, inputManager, session } = updateArgs;
 
-    const { playerIndex } = tank;
-
     let inputVariant = inputManager.getActiveVariant();
 
     // If multiplayer - use user-specific input variant based on player index
     if (session.isMultiplayer()) {
-      const playerSession = session.getPlayer(playerIndex);
+      const playerSession = session.getPlayer(tank.partyIndex);
       const playerInputVariantType = playerSession.getInputVariantType();
       inputVariant = inputManager.getVariant(playerInputVariantType);
     }

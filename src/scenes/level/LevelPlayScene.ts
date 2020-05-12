@@ -3,6 +3,7 @@ import { GameUpdateArgs, GameState, Session } from '../../game';
 import { Border } from '../../gameObjects';
 import { InputManager } from '../../input';
 import { PowerupType } from '../../powerup';
+import { TankDeathReason } from '../../tank';
 import { TerrainFactory } from '../../terrain';
 import * as config from '../../config';
 
@@ -213,7 +214,7 @@ export class LevelPlayScene extends GameScene<LevelPlayLocationParams> {
   }
 
   private handlePlayerDied = (event: LevelPlayerDiedEvent): void => {
-    const playerSession = this.session.getPlayer(event.playerIndex);
+    const playerSession = this.session.getPlayer(event.partyIndex);
     playerSession.removeLife();
 
     if (this.session.isAnyPlayerAlive()) {
@@ -228,7 +229,7 @@ export class LevelPlayScene extends GameScene<LevelPlayLocationParams> {
     this.playerScript.disable();
     this.gameOverScript.enable();
 
-    // Player can lose even after level is won
+    // Game can be lost even after level is won if the base is killed
     this.winScript.disable();
   };
 
@@ -238,14 +239,23 @@ export class LevelPlayScene extends GameScene<LevelPlayLocationParams> {
   };
 
   private handleEnemyDied = (event: LevelEnemyDiedEvent): void => {
-    this.session.primaryPlayer.addKillPoints(event.type.tier);
+    // Only kills are awarded
+    if (event.reason === TankDeathReason.WipeoutPowerup) {
+      return;
+    }
+
+    const playerSession = this.session.getPlayer(event.hitterPartyIndex);
+
+    playerSession.addKillPoints(event.type.tier);
   };
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
-    this.session.primaryPlayer.addPowerupPoints(event.type);
+    const playerSession = this.session.getPlayer(event.partyIndex);
+
+    playerSession.addPowerupPoints(event.type);
 
     if (event.type === PowerupType.Life) {
-      this.session.primaryPlayer.addLife();
+      playerSession.addLife();
     }
   };
 

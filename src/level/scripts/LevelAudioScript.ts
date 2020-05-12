@@ -44,7 +44,9 @@ export class LevelAudioScript extends LevelScript {
     );
     this.eventBus.levelWinCompleted.addListener(this.handleLevelWinCompleted);
 
-    this.session.primaryPlayer.lifeup.addListener(this.handleSessionLifeup);
+    this.session.getPlayers().forEach((playerSession) => {
+      playerSession.lifeup.addListener(this.handlePlayerLifeup);
+    });
 
     this.moveSound = audioLoader.load('tank.move');
     this.idleSound = audioLoader.load('tank.idle');
@@ -147,7 +149,7 @@ export class LevelAudioScript extends LevelScript {
     this.audioConttoller.play('powerup.pickup');
   };
 
-  private handleSessionLifeup = (): void => {
+  private handlePlayerLifeup = (): void => {
     this.audioConttoller.play('life');
   };
 

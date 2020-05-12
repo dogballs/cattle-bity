@@ -127,29 +127,29 @@ export class LevelPowerupScript extends LevelScript {
     if (position === null) {
       // Check which player rect is available
       // If primary player tank is missing, use second tank
-      let playerIndex = 0;
+      let partyIndex = 0;
       if (playerTankRects[0] === null) {
-        playerIndex = 1;
+        partyIndex = 1;
       }
 
       // In case second is missing - use default spot
-      const directRect = playerTankRects[playerIndex] ?? this.createBaseRect();
+      const directRect = playerTankRects[partyIndex] ?? this.createBaseRect();
 
       this.eventBus.powerupPicked.notify({
         type: powerup.type,
         centerPosition: directRect.getCenter(),
-        playerIndex,
+        partyIndex,
       });
       return;
     }
 
     powerup.position.copyFrom(position);
 
-    powerup.picked.addListener(({ playerIndex }) => {
+    powerup.picked.addListener(({ partyIndex }) => {
       this.eventBus.powerupPicked.notify({
         type: powerup.type,
         centerPosition: powerup.getCenter(),
-        playerIndex,
+        partyIndex,
       });
     });
 

@@ -13,15 +13,20 @@ import { SpriteText } from '../text';
 
 export class ScoreTableTierIcon extends GameObject {
   private tier: TankTier;
+  private showRight: boolean;
   private leftIcon = new SpriteText('←', {
+    color: config.COLOR_WHITE,
+  });
+  private rightIcon = new SpriteText('→', {
     color: config.COLOR_WHITE,
   });
   private tank = new GameObject(64, 64);
 
-  constructor(tier: TankTier) {
+  constructor(tier: TankTier, showRight = false) {
     super(128, 64);
 
     this.tier = tier;
+    this.showRight = showRight;
   }
 
   protected setup({ spriteLoader }: GameUpdateArgs): void {
@@ -38,5 +43,10 @@ export class ScoreTableTierIcon extends GameObject {
 
     this.leftIcon.position.setY(16);
     this.add(this.leftIcon);
+
+    if (this.showRight) {
+      this.rightIcon.position.set(100, 16);
+      this.add(this.rightIcon);
+    }
   }
 }

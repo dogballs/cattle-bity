@@ -3,6 +3,6 @@ import { TankType } from '../../tank';
 
 export interface LevelPlayerSpawnRequestedEvent {
   type: TankType;
-  playerIndex: number;
+  partyIndex: number;
   position: Vector;
 }

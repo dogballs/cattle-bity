@@ -4,5 +4,5 @@ import { PowerupType } from '../../powerup';
 export interface LevelPowerupPickedEvent {
   type: PowerupType;
   centerPosition: Vector;
-  playerIndex: number;
+  partyIndex: number;
 }

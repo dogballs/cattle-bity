@@ -15,7 +15,6 @@ import {
 export class LevelPlayerScript extends LevelScript {
   private positions: Vector[] = [];
   private timers: Timer[] = [];
-  private playerIndex = 0;
   private tanks: PlayerTank[] = [];
 
   protected setup({ session }: GameUpdateArgs): void {
@@ -48,22 +47,22 @@ export class LevelPlayerScript extends LevelScript {
         top: 300,
       });
       debugMenu.attach();
-      debugMenu.upgradeRequest.addListener((playerIndex) => {
-        const tank = this.tanks[playerIndex];
+      debugMenu.upgradeRequest.addListener((partyIndex) => {
+        const tank = this.tanks[partyIndex];
         if (tank === null) {
           return;
         }
         tank.upgrade();
       });
-      debugMenu.deathRequest.addListener((playerIndex) => {
-        const tank = this.tanks[playerIndex];
+      debugMenu.deathRequest.addListener((partyIndex) => {
+        const tank = this.tanks[partyIndex];
         if (tank === null) {
           return;
         }
         tank.die();
       });
-      debugMenu.moveSpeedUpRequest.addListener(({ playerIndex, speed }) => {
-        const tank = this.tanks[playerIndex];
+      debugMenu.moveSpeedUpRequest.addListener(({ partyIndex, speed }) => {
+        const tank = this.tanks[partyIndex];
         if (tank === null) {
           return;
         }
@@ -78,19 +77,19 @@ export class LevelPlayerScript extends LevelScript {
     });
   }
 
-  private requestSpawn = (playerIndex: number): void => {
-    const playerSession = this.session.getPlayer(playerIndex);
+  private requestSpawn = (partyIndex: number): void => {
+    const playerSession = this.session.getPlayer(partyIndex);
     if (!playerSession.isAlive()) {
       return;
     }
 
-    const position = this.positions[playerIndex];
+    const position = this.positions[partyIndex];
 
     const type = TankFactory.createPlayerType();
 
     this.eventBus.playerSpawnRequested.notify({
       type,
-      playerIndex,
+      partyIndex,
       position,
     });
   };
@@ -102,15 +101,15 @@ export class LevelPlayerScript extends LevelScript {
       return;
     }
 
-    const { playerIndex } = event;
+    const { partyIndex } = event;
 
-    const tank = TankFactory.createPlayer(playerIndex);
+    const tank = TankFactory.createPlayer(partyIndex);
     tank.updateMatrix();
     tank.setCenter(event.centerPosition);
     tank.updateMatrix();
     tank.activateShield(config.SHIELD_SPAWN_DURATION);
 
-    const playerSession = this.session.getPlayer(playerIndex);
+    const playerSession = this.session.getPlayer(partyIndex);
 
     // Check if tank tier from previous level should be activated.
     // If tank dies - it loses all this tiers, so it applies only to first
@@ -124,14 +123,14 @@ export class LevelPlayerScript extends LevelScript {
       this.eventBus.playerDied.notify({
         type: event.type,
         centerPosition: tank.getCenter(),
-        playerIndex,
+        partyIndex,
       });
 
       tank.removeSelf();
-      this.tanks[playerIndex] = null;
-      this.world.removePlayerTank(playerIndex);
+      this.tanks[partyIndex] = null;
+      this.world.removePlayerTank(partyIndex);
 
-      this.timers[playerIndex].reset(config.PLAYER_SPAWN_DELAY);
+      this.timers[partyIndex].reset(config.PLAYER_SPAWN_DELAY);
 
       playerSession.resetTankTier();
     });
@@ -150,15 +149,15 @@ export class LevelPlayerScript extends LevelScript {
 
     playerSession.setLevelSpawned();
 
-    this.tanks[playerIndex] = tank;
+    this.tanks[partyIndex] = tank;
 
-    this.world.addPlayerTank(playerIndex, tank);
+    this.world.addPlayerTank(partyIndex, tank);
   };
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
-    const { type: powerupType, playerIndex } = event;
+    const { type: powerupType, partyIndex } = event;
 
-    const tank = this.tanks[playerIndex];
+    const tank = this.tanks[partyIndex];
 
     if (powerupType === PowerupType.Shield) {
       tank.activateShield(config.SHIELD_POWERUP_DURATION);

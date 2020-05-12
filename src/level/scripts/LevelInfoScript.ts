@@ -32,9 +32,10 @@ export class LevelInfoScript extends LevelScript {
   }
 
   private handlePlayerDied = (event: LevelPlayerDiedEvent): void => {
-    const playerSession = this.session.getPlayer(event.playerIndex);
+    const playerIndex = event.partyIndex;
+    const playerSession = this.session.getPlayer(playerIndex);
 
-    this.info.setLivesCount(event.playerIndex, playerSession.getLivesCount());
+    this.info.setLivesCount(playerIndex, playerSession.getLivesCount());
   };
 
   private handleEnemySpawnRequested = (

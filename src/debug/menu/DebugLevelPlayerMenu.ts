@@ -6,7 +6,7 @@ export class DebugLevelPlayerMenu extends DebugMenu {
   public deathRequest = new Subject<number>();
   public upgradeRequest = new Subject<number>();
   public moveSpeedUpRequest = new Subject<{
-    playerIndex: number;
+    partyIndex: number;
     speed: number;
   }>();
 
@@ -21,15 +21,15 @@ export class DebugLevelPlayerMenu extends DebugMenu {
     this.appendButton('#2 Speed +500', () => this.requestMoveSpeedUp(1));
   }
 
-  private requestDeath = (playerIndex: number): void => {
-    this.deathRequest.notify(playerIndex);
+  private requestDeath = (partyIndex: number): void => {
+    this.deathRequest.notify(partyIndex);
   };
 
-  private requestMoveSpeedUp = (playerIndex: number): void => {
-    this.moveSpeedUpRequest.notify({ playerIndex, speed: 500 });
+  private requestMoveSpeedUp = (partyIndex: number): void => {
+    this.moveSpeedUpRequest.notify({ partyIndex, speed: 500 });
   };
 
-  private requestUpgrade = (playerIndex: number): void => {
-    this.upgradeRequest.notify(playerIndex);
+  private requestUpgrade = (partyIndex: number): void => {
+    this.upgradeRequest.notify(partyIndex);
   };
 }

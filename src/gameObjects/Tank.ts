@@ -60,6 +60,8 @@ const SKATE_DURATION = 0.5;
 export class Tank extends GameObject {
   public collider: SweptBoxCollider = new SweptBoxCollider(this, true);
   public tags = [Tag.Tank];
+  // Tank index within it's party: players (0-1), enemies (0-19).
+  public partyIndex = -1;
   public type: TankType;
   public behavior: TankBehavior;
   public attributes: TankAttributes;
@@ -67,7 +69,10 @@ export class Tank extends GameObject {
   public bullets: Bullet[] = [];
   public shield: Shield = null;
   public fired = new Subject();
-  public died = new Subject<{ reason: TankDeathReason }>();
+  public died = new Subject<{
+    hitterPartyIndex: number;
+    reason: TankDeathReason;
+  }>();
   public hit = new Subject();
   public slided = new Subject();
   public state = TankState.Uninitialized;
@@ -89,13 +94,14 @@ export class Tank extends GameObject {
   protected isCollisionAbusedByPlayer = false;
   protected collisionSystem: CollisionSystem;
 
-  constructor(type: TankType, behavior: TankBehavior) {
+  constructor(type: TankType, behavior: TankBehavior, partyIndex: number) {
     super(64, 64);
 
     this.pivot.set(0.5, 0.5);
 
     this.type = type;
     this.behavior = behavior;
+    this.partyIndex = partyIndex;
 
     this.attributes = TankAttributesFactory.create(this.type);
 
@@ -244,6 +250,7 @@ export class Tank extends GameObject {
     }
 
     const bullet = new Bullet(
+      this.partyIndex,
       this.attributes.bulletSpeed,
       this.attributes.bulletTankDamage,
       this.attributes.bulletWallDamage,
@@ -332,8 +339,15 @@ export class Tank extends GameObject {
     return this;
   }
 
-  public die(reason: TankDeathReason = TankDeathReason.Bullet): void {
-    this.died.notify({ reason });
+  public die(
+    reason: TankDeathReason = TankDeathReason.Bullet,
+    hitterPartyIndex = null,
+  ): void {
+    const event = {
+      hitterPartyIndex,
+      reason,
+    };
+    this.died.notify(event);
     this.collider.unregister();
   }
 
@@ -357,13 +371,13 @@ export class Tank extends GameObject {
     return this.attributes.health > 0;
   }
 
-  protected receiveHit(damage: number): void {
+  protected receiveHit(damage: number, hitterPartyIndex: number): void {
     this.attributes.health = Math.max(0, this.attributes.health - damage);
 
     this.hit.notify(null);
 
     if (!this.isAlive()) {
-      this.die();
+      this.die(TankDeathReason.Bullet, hitterPartyIndex);
     }
   }
 
@@ -850,7 +864,7 @@ export class Tank extends GameObject {
 
       bullet.explode();
 
-      this.receiveHit(bullet.tankDamage);
+      this.receiveHit(bullet.tankDamage, bullet.ownerPartyIndex);
     });
   }
 

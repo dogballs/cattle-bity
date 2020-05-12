@@ -6,11 +6,11 @@ import { TankType } from './TankType';
 
 export class TankFactory {
   public static createPlayer(
-    playerIndex: number,
+    partyIndex: number,
     type: TankType = TankType.PlayerA(),
     behavior: TankBehavior = new PlayerTankBehavior(),
   ): PlayerTank {
-    return new PlayerTank(type, behavior, playerIndex);
+    return new PlayerTank(type, behavior, partyIndex);
   }
 
   public static createPlayerType(): TankType {
@@ -18,9 +18,10 @@ export class TankFactory {
   }
 
   public static createEnemy(
+    partyIndex: number,
     type: TankType = TankType.EnemyA(),
     behavior: TankBehavior = new AiTankBehavior(),
   ): EnemyTank {
-    return new EnemyTank(type, behavior);
+    return new EnemyTank(type, behavior, partyIndex);
   }
 }
