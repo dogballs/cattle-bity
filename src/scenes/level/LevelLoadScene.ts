@@ -82,13 +82,20 @@ export class LevelLoadScene extends GameScene {
     this.mapLoader.error.removeListener(this.handleMapLoadError);
 
     if (this.session.isMultiplayer()) {
-      const params: LevelControlsLocationParams = {
-        canSelectVariant: true,
-        mapConfig,
-        playerIndex: 0,
-      };
-      this.navigator.replace(GameSceneType.LevelControls, params);
-      return;
+      // Check if players already selected they variants. It happens before
+      // first level.
+      const primaryInputVariantType = this.session.primaryPlayer.getInputVariantType();
+      const needSelectVariant = primaryInputVariantType === null;
+
+      if (needSelectVariant) {
+        const params: LevelControlsLocationParams = {
+          canSelectVariant: true,
+          mapConfig,
+          playerIndex: 0,
+        };
+        this.navigator.replace(GameSceneType.LevelControls, params);
+        return;
+      }
     }
 
     if (this.inputHintSettings.shouldShowLevelHint()) {
