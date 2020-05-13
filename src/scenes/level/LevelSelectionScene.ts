@@ -29,7 +29,7 @@ export class LevelSelectionScene extends GameScene {
     this.root.add(this.selector);
 
     const continueDisplayCode = inputManager.getDisplayedControlCode(
-      inputManager.getActiveVariantType(),
+      inputManager.getActiveBindingType(),
       LevelSelectionInputContext.Select[0],
     );
     this.continueHint = new SceneInputHint(`${continueDisplayCode} TO SELECT`);

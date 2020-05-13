@@ -31,9 +31,9 @@ export class SandboxTransformScene extends GameScene {
   protected update(updateArgs: GameUpdateArgs): void {
     const { inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
-    if (inputVariant.isDown(InputControl.PrimaryAction)) {
+    if (inputMethod.isDown(InputControl.PrimaryAction)) {
       this.parent.dirtyPaintBox();
       this.parent.position.addX(100);
       this.parent.updateMatrix();

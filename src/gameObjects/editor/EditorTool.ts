@@ -85,18 +85,18 @@ export class EditorTool extends GameObject {
 
     const { inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
-    if (inputVariant.isDownAny(EditorMapInputContext.Draw)) {
+    if (inputMethod.isDownAny(EditorMapInputContext.Draw)) {
       this.draw.notify(null);
     }
-    if (inputVariant.isDownAny(EditorMapInputContext.Erase)) {
+    if (inputMethod.isDownAny(EditorMapInputContext.Erase)) {
       this.erase.notify(null);
     }
-    if (inputVariant.isDownAny(EditorMapInputContext.NextBrush)) {
+    if (inputMethod.isDownAny(EditorMapInputContext.NextBrush)) {
       this.selectNextBrush();
     }
-    if (inputVariant.isDownAny(EditorMapInputContext.PrevBrush)) {
+    if (inputMethod.isDownAny(EditorMapInputContext.PrevBrush)) {
       this.selectPrevBrush();
     }
 
@@ -117,22 +117,22 @@ export class EditorTool extends GameObject {
   private updatePosition(updateArgs: GameUpdateArgs): void {
     const { deltaTime, inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
     this.velocity.set(0, 0);
 
-    if (inputVariant.isDownAny(EditorMapInputContext.MoveUp)) {
+    if (inputMethod.isDownAny(EditorMapInputContext.MoveUp)) {
       this.moveUp();
-    } else if (inputVariant.isDownAny(EditorMapInputContext.MoveDown)) {
+    } else if (inputMethod.isDownAny(EditorMapInputContext.MoveDown)) {
       this.moveDown();
-    } else if (inputVariant.isDownAny(EditorMapInputContext.MoveLeft)) {
+    } else if (inputMethod.isDownAny(EditorMapInputContext.MoveLeft)) {
       this.moveLeft();
-    } else if (inputVariant.isDownAny(EditorMapInputContext.MoveRight)) {
+    } else if (inputMethod.isDownAny(EditorMapInputContext.MoveRight)) {
       this.moveRight();
     }
 
     for (const holdThrottle of this.holdThrottles) {
-      holdThrottle.update(inputVariant, deltaTime);
+      holdThrottle.update(inputMethod, deltaTime);
     }
 
     if (this.velocity.x !== 0 || this.velocity.y !== 0) {

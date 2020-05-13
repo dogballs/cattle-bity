@@ -73,15 +73,15 @@ export class LevelSelector extends GameObject {
   protected update(updateArgs: GameUpdateArgs): void {
     const { deltaTime, inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
-    if (inputVariant.isDownAny(LevelSelectionInputContext.Select)) {
+    if (inputMethod.isDownAny(LevelSelectionInputContext.Select)) {
       this.selected.notify(this.currentLevel);
       return;
     }
 
     for (const holdThrottle of this.holdThrottles) {
-      holdThrottle.update(inputVariant, deltaTime);
+      holdThrottle.update(inputMethod, deltaTime);
     }
   }
 

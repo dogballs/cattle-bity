@@ -1,7 +1,7 @@
 import { InputBinding } from './InputBinding';
 import { InputDevice } from './InputDevice';
 
-export class InputVariant {
+export class InputMethod {
   private device: InputDevice;
   private binding: InputBinding;
 

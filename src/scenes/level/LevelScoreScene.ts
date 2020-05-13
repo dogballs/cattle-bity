@@ -109,9 +109,9 @@ export class LevelScoreScene extends GameScene {
   protected update(updateArgs: GameUpdateArgs): void {
     const { deltaTime, inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
-    if (inputVariant.isDownAny(LevelScoreInputContext.Skip)) {
+    if (inputMethod.isDownAny(LevelScoreInputContext.Skip)) {
       if (this.state === State.Counting) {
         this.scoreTable.skip();
         this.showBonus();

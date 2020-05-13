@@ -7,6 +7,10 @@ export class KeyboardInputDevice implements InputDevice {
   private holdCodes: number[] = [];
   private upCodes: number[] = [];
 
+  public isConnected(): boolean {
+    return true;
+  }
+
   public listen(): void {
     document.addEventListener('keydown', this.handleWindowKeyDown);
     document.addEventListener('keyup', this.handleWindowKeyUp);

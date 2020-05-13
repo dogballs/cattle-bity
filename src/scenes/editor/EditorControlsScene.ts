@@ -18,7 +18,7 @@ export class EditorControlsScene extends GameScene<EditorLocationParams> {
   protected setup({ inputHintSettings, inputManager }: GameUpdateArgs): void {
     inputHintSettings.setSeenEditorHint();
 
-    const activeVariantType = inputManager.getActiveVariantType();
+    const activeBindingType = inputManager.getActiveBindingType();
 
     this.background = new GameObject();
     this.background.size.copyFrom(this.root.size);
@@ -33,12 +33,12 @@ export class EditorControlsScene extends GameScene<EditorLocationParams> {
     this.title.position.setY(64);
     this.root.add(this.title);
 
-    this.editorHint = new EditorInputHint(activeVariantType);
+    this.editorHint = new EditorInputHint(activeBindingType);
     this.editorHint.position.setY(200);
     this.root.add(this.editorHint);
 
     const continueDisplayedCode = inputManager.getDisplayedControlCode(
-      activeVariantType,
+      activeBindingType,
       EditorControlsInputContext.Skip[0],
     );
     this.continueHint = new SceneInputHint(
@@ -50,9 +50,9 @@ export class EditorControlsScene extends GameScene<EditorLocationParams> {
   protected update(updateArgs: GameUpdateArgs): void {
     const { inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
-    if (inputVariant.isDownAny(EditorControlsInputContext.Skip)) {
+    if (inputMethod.isDownAny(EditorControlsInputContext.Skip)) {
       // Forward params
       this.navigator.replace(GameSceneType.EditorMap, this.params);
       return;

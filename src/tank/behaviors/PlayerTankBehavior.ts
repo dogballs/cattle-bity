@@ -15,13 +15,13 @@ export class PlayerTankBehavior extends TankBehavior {
   public update(tank: PlayerTank, updateArgs: GameUpdateArgs): void {
     const { deltaTime, inputManager, session } = updateArgs;
 
-    let inputVariant = inputManager.getActiveVariant();
+    let inputMethod = inputManager.getActiveMethod();
 
     // If multiplayer - use user-specific input variant based on player index
     if (session.isMultiplayer()) {
       const playerSession = session.getPlayer(tank.partyIndex);
-      const playerInputVariantType = playerSession.getInputVariantType();
-      inputVariant = inputManager.getVariant(playerInputVariantType);
+      const playerInputVariant = playerSession.getInputVariant();
+      inputMethod = inputManager.getMethodByVariant(playerInputVariant);
     }
 
     // WARNING: order is important. Make sure to keep fire updates before
@@ -30,34 +30,34 @@ export class PlayerTankBehavior extends TankBehavior {
     // collision resolution algorithm after update phase. This order issue
     // can be fixed by adding some post-collide callback and place fire code
     // in there.
-    if (inputVariant.isDownAny(LevelPlayInputContext.Fire)) {
+    if (inputMethod.isDownAny(LevelPlayInputContext.Fire)) {
       tank.fire();
     }
-    if (inputVariant.isHoldAny(LevelPlayInputContext.RapidFire)) {
+    if (inputMethod.isHoldAny(LevelPlayInputContext.RapidFire)) {
       tank.fire();
     }
 
     if (!tank.isSliding()) {
-      if (inputVariant.isHoldLastAny(LevelPlayInputContext.MoveUp)) {
+      if (inputMethod.isHoldLastAny(LevelPlayInputContext.MoveUp)) {
         tank.rotate(Rotation.Up);
       }
-      if (inputVariant.isHoldLastAny(LevelPlayInputContext.MoveDown)) {
+      if (inputMethod.isHoldLastAny(LevelPlayInputContext.MoveDown)) {
         tank.rotate(Rotation.Down);
       }
-      if (inputVariant.isHoldLastAny(LevelPlayInputContext.MoveLeft)) {
+      if (inputMethod.isHoldLastAny(LevelPlayInputContext.MoveLeft)) {
         tank.rotate(Rotation.Left);
       }
-      if (inputVariant.isHoldLastAny(LevelPlayInputContext.MoveRight)) {
+      if (inputMethod.isHoldLastAny(LevelPlayInputContext.MoveRight)) {
         tank.rotate(Rotation.Right);
       }
 
-      if (inputVariant.isHoldAny(MOVE_CONTROLS)) {
+      if (inputMethod.isHoldAny(MOVE_CONTROLS)) {
         tank.move(deltaTime);
       }
     }
 
     if (
-      inputVariant.isNotHoldAll(MOVE_CONTROLS) &&
+      inputMethod.isNotHoldAll(MOVE_CONTROLS) &&
       tank.state !== TankState.Idle
     ) {
       tank.idle();

@@ -19,7 +19,7 @@ enum MoveState {
 }
 
 export class LevelAudioScript extends LevelScript {
-  private audioConttoller: AudioManager;
+  private audioManager: AudioManager;
   private moveState = MoveState.Idle;
 
   private moveSound: Sound;
@@ -28,7 +28,7 @@ export class LevelAudioScript extends LevelScript {
   private playerExplosionSound: Sound;
 
   protected setup({ audioManager, audioLoader }: GameUpdateArgs): void {
-    this.audioConttoller = audioManager;
+    this.audioManager = audioManager;
 
     this.eventBus.baseDied.addListener(this.handleBaseDied);
     this.eventBus.enemyDied.addListener(this.handleEnemyDied);
@@ -57,11 +57,11 @@ export class LevelAudioScript extends LevelScript {
     // intro finishes.
     const introSound = audioLoader.load('level-intro');
     introSound.ended.addListener(() => {
-      this.audioConttoller.unmuteAll();
+      this.audioManager.unmuteAll();
     });
     introSound.play();
 
-    this.audioConttoller.muteAllExcept(
+    this.audioManager.muteAllExcept(
       introSound,
       this.pauseSound,
       this.playerExplosionSound,
@@ -73,28 +73,28 @@ export class LevelAudioScript extends LevelScript {
   protected update(updateArgs: GameUpdateArgs): void {
     const { gameState, inputManager, session } = updateArgs;
 
-    const activeVariant = inputManager.getActiveVariant();
+    const activeMethod = inputManager.getActiveMethod();
 
     // By default check single-player active input
-    let inputVariants = [activeVariant];
+    let inputMethods = [activeMethod];
 
     if (session.isMultiplayer()) {
       const playerSessions = session.getPlayers();
 
       // Get input variants for all players
-      inputVariants = playerSessions.map((playerSession) => {
-        const inputVariantType = playerSession.getInputVariantType();
-        const inputVariant = inputManager.getVariant(inputVariantType);
-        return inputVariant;
+      inputMethods = playerSessions.map((playerSession) => {
+        const playerVariant = playerSession.getInputVariant();
+        const playerMethod = inputManager.getMethodByVariant(playerVariant);
+        return playerMethod;
       });
     }
 
-    const anybodyMoving = inputVariants.some((inputVariant) => {
-      return inputVariant.isHoldAny(MOVE_CONTROLS);
+    const anybodyMoving = inputMethods.some((inputMethod) => {
+      return inputMethod.isHoldAny(MOVE_CONTROLS);
     });
 
-    const everybodyIdle = inputVariants.every((inputVariant) => {
-      return inputVariant.isNotHoldAll(MOVE_CONTROLS);
+    const everybodyIdle = inputMethods.every((inputMethod) => {
+      return inputMethod.isNotHoldAll(MOVE_CONTROLS);
     });
 
     if (!gameState.is(GameState.Paused)) {
@@ -121,7 +121,7 @@ export class LevelAudioScript extends LevelScript {
   private handleEnemyDied = (): void => {
     // TODO: wipeout powerup explodes multiple enemies, should trigger
     // single audio
-    this.audioConttoller.play('explosion.enemy');
+    this.audioManager.play('explosion.enemy');
   };
 
   private handlePlayerDied = (): void => {
@@ -129,15 +129,15 @@ export class LevelAudioScript extends LevelScript {
   };
 
   private handlePlayerFired = (): void => {
-    this.audioConttoller.play('fire');
+    this.audioManager.play('fire');
   };
 
   private handlePlayerSlided = (): void => {
-    this.audioConttoller.play('ice');
+    this.audioManager.play('ice');
   };
 
   private handlePowerupSpawned = (): void => {
-    this.audioConttoller.play('powerup.spawn');
+    this.audioManager.play('powerup.spawn');
   };
 
   private handlePowerupPicked = (event: LevelPowerupPickedEvent): void => {
@@ -146,20 +146,20 @@ export class LevelAudioScript extends LevelScript {
       return;
     }
 
-    this.audioConttoller.play('powerup.pickup');
+    this.audioManager.play('powerup.pickup');
   };
 
   private handlePlayerLifeup = (): void => {
-    this.audioConttoller.play('life');
+    this.audioManager.play('life');
   };
 
   private handleLevelPaused = (): void => {
-    this.audioConttoller.pauseAll();
+    this.audioManager.pauseAll();
     this.pauseSound.play();
   };
 
   private levelUnpaused = (): void => {
-    this.audioConttoller.resumeAll();
+    this.audioManager.resumeAll();
   };
 
   private handleLevelGameOverMoveBlocked = (): void => {
@@ -168,6 +168,6 @@ export class LevelAudioScript extends LevelScript {
   };
 
   private handleLevelWinCompleted = (): void => {
-    this.audioConttoller.stopAll();
+    this.audioManager.stopAll();
   };
 }

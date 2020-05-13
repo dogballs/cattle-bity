@@ -1,8 +1,8 @@
 import { GameObject, RectPainter, SpritePainter, TextAlignment } from '../core';
 import { GameUpdateArgs, Rotation } from '../game';
 import {
+  InputBindingType,
   InputManager,
-  InputVariantType,
   LevelPlayInputContext,
 } from '../input';
 import { TankColor, TankSpriteId, TankType } from '../tank';
@@ -12,7 +12,7 @@ import { SpriteText } from './text';
 
 export class LevelInputHint extends GameObject {
   public zIndex = 0;
-  private variantType: InputVariantType;
+  private bindingType: InputBindingType;
   private inputManager: InputManager;
   private tankIcon: GameObject;
   private moveUpHint: SpriteText;
@@ -23,14 +23,14 @@ export class LevelInputHint extends GameObject {
   private rapidFireHint: SpriteText;
   private pauseHint: SpriteText;
 
-  constructor(variantType: InputVariantType) {
+  constructor(bindingType: InputBindingType) {
     super(config.CANVAS_WIDTH, 510);
 
-    this.variantType = variantType;
+    this.bindingType = bindingType;
   }
 
-  public setVariantType(variantType: InputVariantType): void {
-    this.variantType = variantType;
+  public setBindingType(bindingType: InputBindingType): void {
+    this.bindingType = bindingType;
     this.updateText();
   }
 
@@ -107,43 +107,43 @@ export class LevelInputHint extends GameObject {
 
   private updateText(): void {
     const moveUpDisplayCode = this.inputManager.getDisplayedControlCode(
-      this.variantType,
+      this.bindingType,
       LevelPlayInputContext.MoveUp[0],
     );
     this.moveUpHint.setText(`${moveUpDisplayCode}\n↑`);
 
     const moveDownDisplayCode = this.inputManager.getDisplayedControlCode(
-      this.variantType,
+      this.bindingType,
       LevelPlayInputContext.MoveDown[0],
     );
     this.moveDownHint.setText(`↓\n${moveDownDisplayCode}`);
 
     const moveLeftDisplayCode = this.inputManager.getDisplayedControlCode(
-      this.variantType,
+      this.bindingType,
       LevelPlayInputContext.MoveLeft[0],
     );
     this.moveLeftHint.setText(`${moveLeftDisplayCode} ←`);
 
     const moveRightDisplayCode = this.inputManager.getDisplayedControlCode(
-      this.variantType,
+      this.bindingType,
       LevelPlayInputContext.MoveRight[0],
     );
     this.moveRightHint.setText(`→ ${moveRightDisplayCode}`);
 
     const fireDisplayCode = this.inputManager.getDisplayedControlCode(
-      this.variantType,
+      this.bindingType,
       LevelPlayInputContext.Fire[0],
     );
     this.fireHint.setText(`FIRE       - ${fireDisplayCode}`);
 
     const rapidFireDisplayCode = this.inputManager.getDisplayedControlCode(
-      this.variantType,
+      this.bindingType,
       LevelPlayInputContext.RapidFire[0],
     );
     this.rapidFireHint.setText(`RAPID FIRE - ${rapidFireDisplayCode}`);
 
     const pauseDisplayCode = this.inputManager.getDisplayedControlCode(
-      this.variantType,
+      this.bindingType,
       LevelPlayInputContext.Pause[0],
     );
     this.pauseHint.setText(`PAUSE      - ${pauseDisplayCode}`);

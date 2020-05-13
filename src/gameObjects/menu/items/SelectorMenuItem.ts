@@ -75,14 +75,14 @@ export class SelectorMenuItem<T> extends MenuItem {
   public updateFocused(updateArgs: GameUpdateArgs): void {
     const { inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
-    if (inputVariant.isDownAny(MenuInputContext.HorizontalNext)) {
+    if (inputMethod.isDownAny(MenuInputContext.HorizontalNext)) {
       this.selectNext();
       this.emitChange();
     }
 
-    if (inputVariant.isDownAny(MenuInputContext.HorizontalPrev)) {
+    if (inputMethod.isDownAny(MenuInputContext.HorizontalPrev)) {
       this.selectPrev();
       this.emitChange();
     }

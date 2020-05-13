@@ -7,7 +7,11 @@ import {
   SelectorMenuItemChoice,
   SpriteText,
 } from '../../gameObjects';
-import { InputVariantType, LevelControlsInputContext } from '../../input';
+import {
+  InputDeviceType,
+  InputVariant,
+  LevelControlsInputContext,
+} from '../../input';
 import * as config from '../../config';
 
 import { GameScene } from '../GameScene';
@@ -15,25 +19,10 @@ import { GameSceneType } from '../GameSceneType';
 
 import { LevelControlsLocationParams, LevelPlayLocationParams } from './params';
 
-const VARIANT_SELECTOR_CHOICES: SelectorMenuItemChoice<InputVariantType>[] = [
-  { value: InputVariantType.PrimaryKeyboard(), text: 'KEYBOARD 1' },
-  { value: InputVariantType.SecondaryKeyboard(), text: 'KEYBOARD 2' },
-  { value: InputVariantType.TertiaryKeyboard(), text: 'KEYBOARD 3' },
-  { value: InputVariantType.PrimaryGamepad(), text: 'GAMEPAD 1' },
-  { value: InputVariantType.SecondaryGamepad(), text: 'GAMEPAD 2' },
-];
-
-// For multiplayer suggest primary player - keyboard #2, and for secondary
-// player - keyboard #3. Will be queried by player index.
-const DEFAULT_CHOICE_VALUES = [
-  VARIANT_SELECTOR_CHOICES[1].value,
-  VARIANT_SELECTOR_CHOICES[2].value,
-];
-
 export class LevelControlsScene extends GameScene<LevelControlsLocationParams> {
   private background: GameObject;
   private title: SpriteText;
-  private selector: SelectorMenuItem<InputVariantType>;
+  private selector: SelectorMenuItem<InputVariant>;
   private levelHint: LevelInputHint;
   private continueHint: GameObject;
   private session: Session;
@@ -47,26 +36,92 @@ export class LevelControlsScene extends GameScene<LevelControlsLocationParams> {
 
     inputHintSettings.setSeenLevelHint();
 
-    let defaultVariantType = inputManager.getActiveVariantType();
-    if (this.params.canSelectVariant) {
-      defaultVariantType = DEFAULT_CHOICE_VALUES[this.params.playerIndex];
+    // Keyboard is always available
+    let variantChoices: SelectorMenuItemChoice<InputVariant>[] = [
+      { value: InputVariant.PrimaryKeyboard0, text: 'KEYBOARD - BINDING 1' },
+      {
+        value: InputVariant.SecondaryKeyboard0,
+        text: 'KEYBOARD - BINDING 2',
+      },
+      { value: InputVariant.TertiaryKeyboard0, text: 'KEYBOARD - BINDING 3' },
+    ];
+
+    const gamepadDevice0 = inputManager.getDevice(InputDeviceType.Gamepad, 0);
+    if (gamepadDevice0.isConnected()) {
+      variantChoices.push({
+        value: InputVariant.PrimaryGamepad0,
+        text: 'GAMEPAD 1 - BINDING 1',
+      });
+      variantChoices.push({
+        value: InputVariant.SecondaryGamepad0,
+        text: 'GAMEPAD 1 - BINDING 2',
+      });
     }
 
-    let choices = VARIANT_SELECTOR_CHOICES.slice();
+    const gamepadDevice1 = inputManager.getDevice(InputDeviceType.Gamepad, 1);
+    if (gamepadDevice1.isConnected()) {
+      variantChoices.push({
+        value: InputVariant.PrimaryGamepad1,
+        text: 'GAMEPAD 2 - BINDING 1',
+      });
+      variantChoices.push({
+        value: InputVariant.SecondaryGamepad1,
+        text: 'GAMEPAD 2 - BINDING 2',
+      });
+    }
+
+    // By default it is single-player and we pick active device and binding.
+    let defaultVariant = new InputVariant(
+      inputManager.getActiveBindingType(),
+      0,
+    );
+
+    // If player can actually select from his options.
+    // For multiplayer suggest primary player - keyboard #2, and for secondary
+    // player - keyboard #3. Will be queried by player index.
+    if (this.params.canSelectVariant) {
+      if (this.session.isMultiplayer()) {
+        if (this.params.playerIndex === 0) {
+          defaultVariant = InputVariant.SecondaryKeyboard0;
+        } else {
+          defaultVariant = InputVariant.TertiaryKeyboard0;
+        }
+      } else {
+        defaultVariant = InputVariant.PrimaryKeyboard0;
+      }
+    }
 
     // For secondary player - remove the item primary player has picked
     if (this.params.canSelectVariant && this.params.playerIndex === 1) {
-      const primaryPlayer = this.session.primaryPlayer;
-      const primaryPlayerVariantType = primaryPlayer.getInputVariantType();
+      const primaryPlayerVariant = this.session.primaryPlayer.getInputVariant();
 
-      choices = choices.filter((choice) => {
-        return !choice.value.equals(primaryPlayerVariantType);
+      variantChoices = variantChoices.filter((choice) => {
+        const choiceVariant = choice.value;
+
+        // If primary player has picked gamepad - remove all variants using
+        // same gamepad device for secondary player
+        const primaryDeviceType = primaryPlayerVariant.bindingType.deviceType;
+        const choiceDeviceType = choiceVariant.bindingType.deviceType;
+        const isSameGamepadDevice =
+          primaryDeviceType === InputDeviceType.Gamepad &&
+          choiceDeviceType === InputDeviceType.Gamepad &&
+          primaryPlayerVariant.deviceIndex === choiceVariant.deviceIndex;
+        if (isSameGamepadDevice) {
+          return false;
+        }
+
+        const isSameVariant = choiceVariant === primaryPlayerVariant;
+        if (isSameVariant) {
+          return false;
+        }
+
+        return true;
       });
 
       // Adjust default value in case primary player has picked secondary's
       // player default variant type; pick the oppositing variant
-      if (defaultVariantType.equals(primaryPlayerVariantType)) {
-        defaultVariantType = DEFAULT_CHOICE_VALUES[0];
+      if (defaultVariant === primaryPlayerVariant) {
+        defaultVariant = InputVariant.SecondaryKeyboard0;
       }
     }
 
@@ -89,9 +144,9 @@ export class LevelControlsScene extends GameScene<LevelControlsLocationParams> {
     this.title.position.setY(64);
     this.root.add(this.title);
 
-    this.selector = new SelectorMenuItem(choices, {
+    this.selector = new SelectorMenuItem(variantChoices, {
       color: config.COLOR_WHITE,
-      containerWidth: 340,
+      containerWidth: 700,
     });
     this.selector.origin.set(0.5, 0.5);
     this.selector.setCenterX(this.root.getSelfCenter().x);
@@ -99,16 +154,16 @@ export class LevelControlsScene extends GameScene<LevelControlsLocationParams> {
     this.selector.changed.addListener(this.handleSelectorChanged);
 
     if (this.params.canSelectVariant) {
-      this.selector.setValue(defaultVariantType);
+      this.selector.setValue(defaultVariant);
       this.root.add(this.selector);
     }
 
-    this.levelHint = new LevelInputHint(defaultVariantType);
+    this.levelHint = new LevelInputHint(defaultVariant.bindingType);
     this.levelHint.position.setY(200);
     this.root.add(this.levelHint);
 
     const continueDisplayedCode = inputManager.getDisplayedControlCode(
-      inputManager.getActiveVariantType(),
+      inputManager.getActiveBindingType(),
       LevelControlsInputContext.Continue[0],
     );
     const actionWord = this.params.canSelectVariant ? 'SELECT' : 'CONTINUE';
@@ -121,9 +176,9 @@ export class LevelControlsScene extends GameScene<LevelControlsLocationParams> {
   protected update(updateArgs: GameUpdateArgs): void {
     const { inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
-    if (inputVariant.isDownAny(LevelControlsInputContext.Continue)) {
+    if (inputMethod.isDownAny(LevelControlsInputContext.Continue)) {
       this.finish();
       return;
     }
@@ -137,19 +192,19 @@ export class LevelControlsScene extends GameScene<LevelControlsLocationParams> {
   }
 
   private handleSelectorChanged = (
-    choice: SelectorMenuItemChoice<InputVariantType>,
+    choice: SelectorMenuItemChoice<InputVariant>,
   ): void => {
-    const selectedInputVariantType = choice.value;
-    this.levelHint.setVariantType(selectedInputVariantType);
+    const selectedInputVariant = choice.value;
+    this.levelHint.setBindingType(selectedInputVariant.bindingType);
   };
 
   private finish(): void {
     if (this.params.canSelectVariant) {
       // Once player is done selecting, set his input variant
-      const selectedInputVariantType = this.selector.getValue();
+      const selectedInputVariant = this.selector.getValue();
 
       const playerSession = this.session.getPlayer(this.params.playerIndex);
-      playerSession.setInputVariantType(selectedInputVariantType);
+      playerSession.setInputVariant(selectedInputVariant);
 
       // If player is not alone - configure next player
       if (this.session.isMultiplayer() && this.params.playerIndex === 0) {

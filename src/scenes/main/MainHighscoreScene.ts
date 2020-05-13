@@ -64,9 +64,9 @@ export class MainHighscoreScene extends GameScene {
   protected update(updateArgs: GameUpdateArgs): void {
     const { inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
-    if (inputVariant.isDownAny(MenuInputContext.Skip)) {
+    if (inputMethod.isDownAny(MenuInputContext.Skip)) {
       this.finish();
       return;
     }

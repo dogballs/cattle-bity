@@ -19,24 +19,24 @@ export class LevelPauseScript extends LevelScript {
   protected update(updateArgs: GameUpdateArgs): void {
     const { gameState, inputManager, session } = updateArgs;
 
-    const activeVariant = inputManager.getActiveVariant();
+    const activeMethod = inputManager.getActiveMethod();
 
     // By default check single-player active input
-    let inputVariants = [activeVariant];
+    let inputMethods = [activeMethod];
 
     if (session.isMultiplayer()) {
       const playerSessions = session.getPlayers();
 
       // Get input variants for all players
-      inputVariants = playerSessions.map((playerSession) => {
-        const inputVariantType = playerSession.getInputVariantType();
-        const inputVariant = inputManager.getVariant(inputVariantType);
-        return inputVariant;
+      inputMethods = playerSessions.map((playerSession) => {
+        const playerVariant = playerSession.getInputVariant();
+        const playerMethod = inputManager.getMethodByVariant(playerVariant);
+        return playerMethod;
       });
     }
 
-    const anybodyPaused = inputVariants.some((inputVariant) => {
-      return inputVariant.isDownAny(LevelPlayInputContext.Pause);
+    const anybodyPaused = inputMethods.some((inputMethod) => {
+      return inputMethod.isDownAny(LevelPlayInputContext.Pause);
     });
 
     if (anybodyPaused) {

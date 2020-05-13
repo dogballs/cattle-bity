@@ -117,7 +117,7 @@ export class MainMenuScene extends GameScene {
   protected update(updateArgs: GameUpdateArgs): void {
     const { deltaTime, inputManager } = updateArgs;
 
-    const inputVariant = inputManager.getActiveVariant();
+    const inputMethod = inputManager.getActiveMethod();
 
     if (this.state === State.Sliding) {
       let nextPosition = this.group.position.y - SLIDE_SPEED * deltaTime;
@@ -125,7 +125,7 @@ export class MainMenuScene extends GameScene {
         nextPosition = 0;
       }
 
-      const isSkipped = inputVariant.isDownAny(MenuInputContext.Skip);
+      const isSkipped = inputMethod.isDownAny(MenuInputContext.Skip);
       if (isSkipped) {
         nextPosition = 0;
       }
