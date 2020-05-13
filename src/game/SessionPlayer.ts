@@ -1,4 +1,5 @@
 import { Subject } from '../core';
+import { InputVariant } from '../input';
 import { PointsRecord } from '../points';
 import { PowerupType } from '../powerup';
 import { TankTier } from '../tank';
@@ -9,13 +10,15 @@ export class SessionPlayer {
 
   private levelPointsRecord: PointsRecord;
   // Total points for current session
-  private totalPoints: number;
+  private gamePoints: number;
   // Total points from last session
-  private lastPoints: number;
+  private lastGamePoints: number;
   private lives: number;
   private nextLifePointThreshold: number;
   private tankTier: TankTier;
   private levelFirstSpawned: boolean;
+  // Should be used for multiplayer only
+  private inputVariant: InputVariant;
 
   constructor() {
     this.reset();
@@ -23,12 +26,13 @@ export class SessionPlayer {
 
   public reset(): void {
     this.levelPointsRecord = new PointsRecord();
-    this.totalPoints = 0;
-    this.lastPoints = 0;
+    this.gamePoints = 0;
+    this.lastGamePoints = null;
     this.lives = config.PLAYER_INITIAL_LIVES;
     this.nextLifePointThreshold = config.PLAYER_EXTRA_LIVE_POINTS;
     this.tankTier = TankTier.A;
     this.levelFirstSpawned = true;
+    this.inputVariant = null;
   }
 
   public addKillPoints(tier: TankTier): void {
@@ -41,24 +45,41 @@ export class SessionPlayer {
     this.checkLifeup();
   }
 
+  public addBonusPoints(): void {
+    this.levelPointsRecord.addBonus();
+    this.checkLifeup();
+  }
+
   public completeLevel(): void {
-    this.totalPoints += this.levelPointsRecord.getTotalPoints();
+    this.gamePoints += this.getLevelPoints();
     this.levelPointsRecord.reset();
 
     this.resetLevelFirstSpawn();
   }
 
   // Sum of all previous levels and current level
-  public getTotalPoints(): number {
-    return this.totalPoints + this.levelPointsRecord.getTotalPoints();
+  public getGamePoints(): number {
+    return this.gamePoints + this.getLevelPoints();
   }
 
-  public setLastPoints(lastPoints: number): void {
-    this.lastPoints = lastPoints;
+  public getLevelPoints(): number {
+    return this.levelPointsRecord.getTotalPoints();
   }
 
-  public getLastPoints(): number {
-    return this.lastPoints;
+  public setLastGamePoints(lastGamePoints: number): void {
+    this.lastGamePoints = lastGamePoints;
+  }
+
+  public getLastGamePoints(): number {
+    return this.lastGamePoints;
+  }
+
+  public wasInLastGame(): boolean {
+    return this.lastGamePoints !== null;
+  }
+
+  public hasBonusPoints(): boolean {
+    return this.levelPointsRecord.hasBonus();
   }
 
   public getLevelPointsRecord(): PointsRecord {
@@ -107,8 +128,16 @@ export class SessionPlayer {
     this.lives -= 1;
   }
 
+  public setInputVariant(inputVariant: InputVariant): void {
+    this.inputVariant = inputVariant;
+  }
+
+  public getInputVariant(): InputVariant {
+    return this.inputVariant;
+  }
+
   private checkLifeup(): void {
-    if (this.getTotalPoints() >= this.nextLifePointThreshold) {
+    if (this.getGamePoints() >= this.nextLifePointThreshold) {
       this.nextLifePointThreshold += config.PLAYER_EXTRA_LIVE_POINTS;
       this.addLife();
     }

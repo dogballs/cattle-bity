@@ -1,4 +1,4 @@
-export * from './LevelHintScene';
+export * from './LevelControlsScene';
 export * from './LevelLoadScene';
 export * from './LevelPlayScene';
 export * from './LevelScoreScene';

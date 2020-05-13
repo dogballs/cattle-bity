@@ -12,6 +12,7 @@ enum State {
 const INCREMENT_DELAY = 0.135;
 
 export class ScoreTableCounter extends GameObject {
+  private showAtRight: boolean;
   private pointsLabel = new SpriteText('PTS', { color: config.COLOR_WHITE });
   private pointsText = new SpriteText('', { color: config.COLOR_WHITE });
   private killsText = new SpriteText('', { color: config.COLOR_WHITE });
@@ -23,24 +24,34 @@ export class ScoreTableCounter extends GameObject {
   private targetKills = 0;
   private killCost = 0;
 
-  constructor(targetKills: number, killCost: number) {
+  constructor(targetKills: number, killCost: number, showAtRight = false) {
     super(344, 28);
 
     this.targetKills = targetKills;
     this.killCost = killCost;
+    this.showAtRight = showAtRight;
   }
 
   protected setup({ audioLoader }: GameUpdateArgs): void {
     this.incrementSound = audioLoader.load('score');
 
     this.pointsLabel.position.setX(160);
+    if (this.showAtRight) {
+      this.pointsLabel.position.setX(252);
+    }
     this.add(this.pointsLabel);
 
-    this.pointsText.position.setX(124);
     this.pointsText.origin.setX(1);
+    this.pointsText.position.setX(124);
+    if (this.showAtRight) {
+      this.pointsText.position.setX(216);
+    }
     this.add(this.pointsText);
 
     this.killsText.position.setX(this.size.width);
+    if (this.showAtRight) {
+      this.killsText.position.setX(54);
+    }
     this.killsText.origin.setX(1);
     this.add(this.killsText);
   }

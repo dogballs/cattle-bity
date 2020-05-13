@@ -1,4 +1,5 @@
 export interface InputDevice {
+  isConnected(): boolean;
   listen(): void;
   unlisten(): void;
   update(): void;

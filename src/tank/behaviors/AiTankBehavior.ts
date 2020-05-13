@@ -18,6 +18,7 @@ const FIRE_MAX_DELAY = 1.5;
 const STUCK_FIRE_CHANCE = 30;
 const UNSTUCK_THINK_CHANCE = 5;
 const ROTATE_TOWARDS_BASE_CHANCE = 30;
+const ROTATE_UP_CHANCE = 10;
 
 const ROTATIONS = [Rotation.Up, Rotation.Down, Rotation.Left, Rotation.Right];
 
@@ -154,7 +155,14 @@ export class AiTankBehavior extends TankBehavior {
       return this.getRotationTowardsBase(tank);
     }
 
-    return this.getRandomRotation();
+    // Enemy should rotate up less, because base it at the bottom
+    const shouldRotateUp = RandomUtils.probability(ROTATE_UP_CHANCE);
+    if (shouldRotateUp) {
+      this.log.debug('I want to go up');
+      return Rotation.Up;
+    }
+
+    return this.getRandomRotationExcept(Rotation.Up);
   }
 
   private getRandomRotation(): Rotation {

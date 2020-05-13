@@ -61,12 +61,16 @@ export const ENEMY_SPAWN_DELAY = 3;
 
 export const ENEMY_MAX_TOTAL_COUNT = 20;
 export const ENEMY_MAX_ALIVE_COUNT = 4;
+export const ENEMY_MAX_ALIVE_COUNT_MULTIPLAYER = 6;
 
 export const POWERUP_DURATION = 30;
 export const SHIELD_SPAWN_DURATION = 3.5;
 export const SHIELD_POWERUP_DURATION = 10;
 export const BASE_DEFENCE_POWERUP_DURATION = 17;
 export const FREEZE_POWERUP_DURATION = 10;
+
+export const FRIENDLY_FIRE_STUN_DURATION = 5;
+export const ICE_SLIDE_DURATION = 0.5;
 
 export const POINTS_POWERUP_DURATION = 0.8;
 export const POINTS_ENEMY_TANK_DURATION = 0.16;
@@ -76,9 +80,11 @@ export const LEVEL_START_DELAY = 2;
 export const PLAYER_INITIAL_LIVES = 3;
 export const PLAYER_EXTRA_LIVE_POINTS = 20000;
 export const DEFAULT_HIGHSCORE = 20000;
+export const BONUS_POINTS = 1000;
 
 export const COLOR_BACKDROP = 'rgba(0,0,0,0.7)';
 export const COLOR_GRAY = '#636363';
+export const COLOR_GRAY_LIGHT = '#737373';
 export const COLOR_BLACK = '#000';
 export const COLOR_WHITE = '#fff';
 export const COLOR_RED = '#d74000';
@@ -91,8 +97,8 @@ export const STORAGE_NAMESPACE = 'cattle-bity';
 export const STORAGE_KEY_POINTS_HIGHSCORE_PRIMARY = 'points.highscore.primary';
 export const STORAGE_KEY_POINTS_HIGHSCORE_SECONDARY =
   'points.highscore.secondary';
-export const STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PRIMARY =
-  'settings.input.bindings.primary';
+export const STORAGE_KEY_SETTINGS_INPUT_BINDINGS_PREFIX =
+  'settings.input.bindings';
 export const STORAGE_KEY_SETTINGS_AUDIO_MUTED = 'settings.audio-muted';
 export const STORAGE_KEY_SETTINGS_SEEN_LEVEL_HINT = 'settings.seen-level-hint';
 export const STORAGE_KEY_SETTINGS_SEEN_EDITOR_HINT =
@@ -101,7 +107,10 @@ export const STORAGE_KEY_SETTINGS_SHOW_LEVEL_HINT = 'settings.show-level-hint';
 export const STORAGE_KEY_SETTINGS_SHOW_EDITOR_HINT =
   'settings.show-editor-hint';
 
-export const PLAYER_DEFAULT_SPAWN_POSITIONS = [{ x: 256, y: 768 }];
+export const PLAYER_DEFAULT_SPAWN_POSITIONS = [
+  { x: 256, y: 768 },
+  { x: 512, y: 768 },
+];
 export const ENEMY_DEFAULT_SPAWN_POSITIONS = [
   { x: 384, y: 0 },
   { x: 768, y: 0 },

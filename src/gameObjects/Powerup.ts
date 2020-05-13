@@ -11,6 +11,8 @@ import { GameUpdateArgs, Tag } from '../game';
 import { PowerupType } from '../powerup';
 import * as config from '../config';
 
+import { PlayerTank } from './PlayerTank';
+
 const PICKUP_MIN_INTERSECTION_SIZE = 16;
 
 export class Powerup extends GameObject {
@@ -18,7 +20,7 @@ export class Powerup extends GameObject {
   public collider = new BoxCollider(this, true);
   public painter = new SpritePainter();
   public ignorePause = true;
-  public picked = new Subject();
+  public picked = new Subject<{ partyIndex: number }>();
   public type: PowerupType;
   private animation: Animation<Sprite>;
 
@@ -79,8 +81,11 @@ export class Powerup extends GameObject {
         intersectionRect.width > PICKUP_MIN_INTERSECTION_SIZE &&
         intersectionRect.height > PICKUP_MIN_INTERSECTION_SIZE
       ) {
+        const tank = firstPlayerTankContact.collider.object as PlayerTank;
+        const { partyIndex } = tank;
+
         this.destroy();
-        this.picked.notify(null);
+        this.picked.notify({ partyIndex });
       }
     }
   }

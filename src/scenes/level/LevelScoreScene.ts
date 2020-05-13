@@ -1,6 +1,11 @@
 import { RectPainter, Timer } from '../../core';
-import { GameUpdateArgs, Session } from '../../game';
-import { LevelTitle, ScoreTable, SpriteText } from '../../gameObjects';
+import { AudioManager, GameUpdateArgs, Session } from '../../game';
+import {
+  LevelTitle,
+  ScoreBonus,
+  ScoreTable,
+  SpriteText,
+} from '../../gameObjects';
 import { LevelScoreInputContext } from '../../input';
 import { PointsHighscoreManager } from '../../points';
 import * as config from '../../config';
@@ -8,27 +13,52 @@ import * as config from '../../config';
 import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
+const BONUS_DELAY = 0.5;
 const POST_DELAY = 3;
 
 enum State {
   Idle,
   Counting,
+  Bonus,
   Post,
 }
 
 export class LevelScoreScene extends GameScene {
   private session: Session;
+  private audioManager: AudioManager;
   private highscoreTitle: SpriteText;
   private highscorePoints: SpriteText;
   private levelTitle: LevelTitle;
   private scoreTable: ScoreTable;
+  private primaryBonus: ScoreBonus;
+  private secondaryBonus: ScoreBonus;
+  private bonusTimer = new Timer();
   private postTimer = new Timer();
   private state = State.Idle;
   private pointsHighscoreManager: PointsHighscoreManager;
 
-  protected setup({ pointsHighscoreManager, session }: GameUpdateArgs): void {
+  protected setup({
+    audioManager,
+    pointsHighscoreManager,
+    session,
+  }: GameUpdateArgs): void {
+    this.audioManager = audioManager;
     this.pointsHighscoreManager = pointsHighscoreManager;
     this.session = session;
+
+    // Find players who got most points during this level. It can be both.
+    // Bonus points are awarded to balance highscore with single-player
+    if (this.session.isMultiplayer()) {
+      const maxLevelPoints = this.session.getMaxLevelPoints();
+
+      this.session.getPlayers().forEach((playerSession) => {
+        const levelPoints = playerSession.getLevelPoints();
+
+        if (levelPoints > 0 && levelPoints === maxLevelPoints) {
+          playerSession.addBonusPoints();
+        }
+      });
+    }
 
     this.root.painter = new RectPainter(config.COLOR_BLACK);
 
@@ -57,14 +87,19 @@ export class LevelScoreScene extends GameScene {
     this.levelTitle.position.setY(128);
     this.root.add(this.levelTitle);
 
-    const pointsRecord = this.session.primaryPlayer.getLevelPointsRecord();
-
-    this.scoreTable = new ScoreTable(pointsRecord);
+    this.scoreTable = new ScoreTable();
     this.scoreTable.updateMatrix();
     this.scoreTable.setCenter(this.root.getSelfCenter());
-    this.scoreTable.done.addListener(this.handleDone);
+    this.scoreTable.done.addListener(this.handleScoreTableDone);
     this.root.add(this.scoreTable);
 
+    this.primaryBonus = new ScoreBonus();
+    this.primaryBonus.position.set(96, 754);
+
+    this.secondaryBonus = new ScoreBonus();
+    this.secondaryBonus.position.set(712, 754);
+
+    this.bonusTimer.done.addListener(this.handleBonus);
     this.postTimer.done.addListener(this.handlePost);
 
     this.state = State.Counting;
@@ -72,11 +107,18 @@ export class LevelScoreScene extends GameScene {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { deltaTime, input } = updateArgs;
+    const { deltaTime, inputManager } = updateArgs;
 
-    if (input.isDownAny(LevelScoreInputContext.Skip)) {
+    const inputMethod = inputManager.getActiveMethod();
+
+    if (inputMethod.isDownAny(LevelScoreInputContext.Skip)) {
       if (this.state === State.Counting) {
         this.scoreTable.skip();
+        this.showBonus();
+        return;
+      }
+      if (this.state === State.Bonus) {
+        this.showBonus();
         return;
       }
       if (this.state === State.Post) {
@@ -85,9 +127,12 @@ export class LevelScoreScene extends GameScene {
       }
     }
 
+    if (this.state === State.Bonus) {
+      this.bonusTimer.update(deltaTime);
+    }
+
     if (this.state === State.Post) {
       this.postTimer.update(deltaTime);
-      return;
     }
 
     super.update(updateArgs);
@@ -100,7 +145,34 @@ export class LevelScoreScene extends GameScene {
     return pointsText;
   }
 
-  private handleDone = (): void => {
+  private showBonus(): void {
+    this.bonusTimer.stop();
+
+    this.audioManager.play('score.bonus');
+
+    if (this.session.primaryPlayer.hasBonusPoints()) {
+      this.root.add(this.primaryBonus);
+    }
+
+    if (this.session.secondaryPlayer.hasBonusPoints()) {
+      this.root.add(this.secondaryBonus);
+    }
+  }
+
+  private handleScoreTableDone = (): void => {
+    if (this.session.anybodyHasBonusPoints()) {
+      this.state = State.Bonus;
+      this.bonusTimer.reset(BONUS_DELAY);
+      return;
+    }
+
+    this.state = State.Post;
+    this.postTimer.reset(POST_DELAY);
+  };
+
+  private handleBonus = (): void => {
+    this.showBonus();
+
     this.state = State.Post;
     this.postTimer.reset(POST_DELAY);
   };

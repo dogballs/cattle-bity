@@ -1,10 +1,25 @@
 import { InputDevice } from '../InputDevice';
 
 export class GamepadInputDevice implements InputDevice {
+  private deviceIndex: number;
   private isListening = false;
   private downCodes: number[] = [];
   private holdCodes: number[] = [];
   private upCodes: number[] = [];
+
+  constructor(deviceIndex: number) {
+    this.deviceIndex = deviceIndex;
+  }
+
+  public isConnected(): boolean {
+    const gamepad = this.getGamepad();
+
+    if (gamepad === null) {
+      return false;
+    }
+
+    return true;
+  }
 
   public listen(): void {
     this.isListening = true;
@@ -19,13 +34,7 @@ export class GamepadInputDevice implements InputDevice {
       return;
     }
 
-    const gamepads = navigator.getGamepads();
-    if (gamepads.length === 0) {
-      return;
-    }
-
-    const gamepad = gamepads[0];
-
+    const gamepad = this.getGamepad();
     if (gamepad === null) {
       return;
     }
@@ -90,5 +99,25 @@ export class GamepadInputDevice implements InputDevice {
 
   public getUpCodes(): number[] {
     return this.upCodes;
+  }
+
+  private getGamepad(): Gamepad {
+    const gamepads = navigator.getGamepads();
+
+    // Firefox will have empty array
+    if (gamepads.length === 0) {
+      return null;
+    }
+
+    const gamepad = gamepads[this.deviceIndex];
+
+    // Chrome will have filled array of 4 elements with null values
+    // Value will be null after device is connected or page is reloaded,
+    // until user has pressed any button.
+    if (gamepad === null) {
+      return null;
+    }
+
+    return gamepad;
   }
 }

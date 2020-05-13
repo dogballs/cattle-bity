@@ -1,7 +1,7 @@
 import { BoxCollider, GameObject } from '../../core';
 import { GameUpdateArgs, Rotation, Tag } from '../../game';
 import { Base } from '../../gameObjects';
-import { TankColor, TankType } from '../../tank';
+import { TankColor, TankColorFactory, TankType } from '../../tank';
 import * as config from '../../config';
 
 import { EditorTankDummy } from './EditorTankDummy';
@@ -24,8 +24,11 @@ export class EditorField extends GameObject {
     collisionSystem.register(this.base.collider);
     this.add(this.base);
 
-    config.PLAYER_DEFAULT_SPAWN_POSITIONS.forEach((location) => {
-      const dummy = new EditorTankDummy(TankType.PlayerA(), TankColor.Primary);
+    config.PLAYER_DEFAULT_SPAWN_POSITIONS.forEach((location, index) => {
+      const dummy = new EditorTankDummy(
+        TankType.PlayerA(),
+        TankColorFactory.createPlayerColor(index),
+      );
       dummy.position.set(location.x, location.y);
       this.add(dummy);
     });

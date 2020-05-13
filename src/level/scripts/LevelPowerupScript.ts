@@ -104,15 +104,20 @@ export class LevelPowerupScript extends LevelScript {
     // Block area around player tank at the moment of powerup spawn
     // so player won't accidently pick up a powerup. After spawning free it back
     // because player tank is in constant movement.
-    const playerTankRect = this.createPlayerTankRect();
-    if (playerTankRect !== null) {
+    const playerTankRects = this.createPlayerTankRects();
+    if (playerTankRects.length > 0) {
       this.grid.backup();
-      this.grid.blockRect(playerTankRect);
+      playerTankRects.forEach((playerTankRect) => {
+        if (playerTankRect === null) {
+          return;
+        }
+        this.grid.blockRect(playerTankRect);
+      });
     }
 
     const position = this.grid.getRandomPosition();
 
-    if (playerTankRect !== null) {
+    if (playerTankRects.length > 0) {
       this.grid.restore();
     }
 
@@ -120,21 +125,31 @@ export class LevelPowerupScript extends LevelScript {
     // Spawn it on top of player tank, if available. Otherwise, on top of base.
     // Specify appropriate center position to display points for picking it up.
     if (position === null) {
-      const directRect = playerTankRect ?? this.createBaseRect();
+      // Check which player rect is available
+      // If primary player tank is missing, use second tank
+      let partyIndex = 0;
+      if (playerTankRects[0] === null) {
+        partyIndex = 1;
+      }
+
+      // In case second is missing - use default spot
+      const directRect = playerTankRects[partyIndex] ?? this.createBaseRect();
 
       this.eventBus.powerupPicked.notify({
         type: powerup.type,
         centerPosition: directRect.getCenter(),
+        partyIndex,
       });
       return;
     }
 
     powerup.position.copyFrom(position);
 
-    powerup.picked.addListener(() => {
+    powerup.picked.addListener(({ partyIndex }) => {
       this.eventBus.powerupPicked.notify({
         type: powerup.type,
         centerPosition: powerup.getCenter(),
+        partyIndex,
       });
     });
 
@@ -170,31 +185,40 @@ export class LevelPowerupScript extends LevelScript {
     );
   }
 
-  private createPlayerTankRect(): Rect {
-    const playerTank = this.world.getPlayerTank();
-    if (playerTank === null) {
-      return null;
-    }
+  private createPlayerTankRects(): Rect[] {
+    const rects = [];
 
-    // Create a margin around player tank, so player won't accidently pick
-    // powerup up.
-    const margin = config.TILE_SIZE_LARGE;
+    const playerTanks = this.world.getPlayerTanks();
+    playerTanks.forEach((playerTank) => {
+      if (playerTank === null) {
+        rects.push(null);
+        return;
+      }
 
-    return new Rect(
-      playerTank.position.x - margin,
-      playerTank.position.y - margin,
-      playerTank.size.width + margin * 2,
-      playerTank.size.height + margin * 2,
-    );
+      // Create a margin around player tank, so player won't accidently pick
+      // powerup up.
+      const margin = config.TILE_SIZE_LARGE;
+
+      const rect = new Rect(
+        playerTank.position.x - margin,
+        playerTank.position.y - margin,
+        playerTank.size.width + margin * 2,
+        playerTank.size.height + margin * 2,
+      );
+
+      rects.push(rect);
+    });
+
+    return rects;
   }
 
   private blockGridDefaults(): void {
     this.grid.blockRect(this.createBaseRect());
 
-    const playerSpawnPosition = this.mapConfig.getPlayerSpawnPosition(0);
-    this.grid.blockRect(
-      new Rect(playerSpawnPosition.x, playerSpawnPosition.y, 64, 64),
-    );
+    const playerSpawnPositions = this.mapConfig.getPlayerSpawnPositions();
+    playerSpawnPositions.forEach((position) => {
+      this.grid.blockRect(new Rect(position.x, position.y, 64, 64));
+    });
 
     const enemySpawnPositions = this.mapConfig.getEnemySpawnPositions();
     enemySpawnPositions.forEach((position) => {

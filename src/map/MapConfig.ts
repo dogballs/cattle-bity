@@ -76,19 +76,21 @@ export class MapConfig {
     return this.dto.terrain.regions;
   }
 
-  public getPlayerSpawnPosition(playerIndex: number): Vector {
+  public getPlayerSpawnPositions(): Vector[] {
     const dtoLocations = this.dto.spawn.player.locations;
 
-    let location = config.PLAYER_DEFAULT_SPAWN_POSITIONS[playerIndex];
+    let locations = config.PLAYER_DEFAULT_SPAWN_POSITIONS;
 
     // Allow overriding spawn location in map config
-    if (dtoLocations[playerIndex] !== undefined) {
-      location = dtoLocations[playerIndex];
+    if (dtoLocations.length > 0) {
+      locations = dtoLocations;
     }
 
-    const position = new Vector(location.x, location.y);
+    const positions = locations.map((location) => {
+      return new Vector(location.x, location.y);
+    });
 
-    return position;
+    return positions;
   }
 
   public getEnemySpawnPositions(): Vector[] {

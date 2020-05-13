@@ -86,8 +86,8 @@ export class EnemyTank extends Tank {
     super.update(updateArgs);
   }
 
-  protected receiveHit(damage: number): void {
-    super.receiveHit(damage);
+  protected receiveHit(damage: number, hitterPartyIndex: number): void {
+    super.receiveHit(damage, hitterPartyIndex);
 
     if (!this.isAlive()) {
       return;

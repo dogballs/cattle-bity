@@ -13,7 +13,7 @@ export class LevelPointsScript extends LevelScript {
   }
 
   private handleEnemyExploded = (event: LevelEnemyExplodedEvent): void => {
-    // Only player kills are awarded
+    // Only kills are awarded
     if (event.reason === TankDeathReason.WipeoutPowerup) {
       return;
     }

@@ -19,9 +19,11 @@ export class MainMenuScene extends GameScene {
   private group: GameObject;
   private heading: MainHeading;
   private primaryPoints: SpriteText;
+  private secondaryPoints: SpriteText;
   private commonHighscore: SpriteText;
   private menu: Menu;
   private singlePlayerItem: TextMenuItem;
+  private multiPlayerItem: TextMenuItem;
   private modesItem: TextMenuItem;
   private editorItem: TextMenuItem;
   private settingsItem: TextMenuItem;
@@ -50,6 +52,14 @@ export class MainMenuScene extends GameScene {
     this.primaryPoints.position.set(92, 64);
     this.group.add(this.primaryPoints);
 
+    this.secondaryPoints = new SpriteText(this.getSecondaryPointsText(), {
+      color: config.COLOR_WHITE,
+    });
+    this.secondaryPoints.position.set(704, 64);
+    if (session.secondaryPlayer.wasInLastGame()) {
+      this.group.add(this.secondaryPoints);
+    }
+
     this.commonHighscore = new SpriteText(this.getCommonHighscoreText(), {
       color: config.COLOR_WHITE,
     });
@@ -65,6 +75,9 @@ export class MainMenuScene extends GameScene {
     this.singlePlayerItem = new TextMenuItem('1 PLAYER');
     this.singlePlayerItem.selected.addListener(this.handleSinglePlayerSelected);
 
+    this.multiPlayerItem = new TextMenuItem('2 PLAYERS');
+    this.multiPlayerItem.selected.addListener(this.handleMultiPlayerSelected);
+
     this.modesItem = new TextMenuItem('MODES');
     this.modesItem.selected.addListener(this.handleModesSelected);
 
@@ -79,6 +92,7 @@ export class MainMenuScene extends GameScene {
 
     const menuItems = [
       this.singlePlayerItem,
+      this.multiPlayerItem,
       this.modesItem,
       this.editorItem,
       this.settingsItem,
@@ -88,7 +102,7 @@ export class MainMenuScene extends GameScene {
     this.menu = new Menu();
     this.menu.setItems(menuItems);
     this.menu.setCenter(this.root.getSelfCenter());
-    this.menu.position.setY(512);
+    this.menu.position.setY(490);
     this.group.add(this.menu);
 
     if (!this.session.haveSeenIntro()) {
@@ -101,7 +115,9 @@ export class MainMenuScene extends GameScene {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { deltaTime, input } = updateArgs;
+    const { deltaTime, inputManager } = updateArgs;
+
+    const inputMethod = inputManager.getActiveMethod();
 
     if (this.state === State.Sliding) {
       let nextPosition = this.group.position.y - SLIDE_SPEED * deltaTime;
@@ -109,7 +125,7 @@ export class MainMenuScene extends GameScene {
         nextPosition = 0;
       }
 
-      const isSkipped = input.isDownAny(MenuInputContext.Skip);
+      const isSkipped = inputMethod.isDownAny(MenuInputContext.Skip);
       if (isSkipped) {
         nextPosition = 0;
       }
@@ -134,12 +150,23 @@ export class MainMenuScene extends GameScene {
   }
 
   private getPrimaryPointsText(): string {
-    const points = this.session.primaryPlayer.getLastPoints();
+    const points = this.session.primaryPlayer.getLastGamePoints() || 0;
 
     const pointsNumberText = points > 0 ? points.toString() : '00';
     const pointsText = pointsNumberText.padStart(6, ' ');
 
     const text = `Ⅰ-${pointsText}`;
+
+    return text;
+  }
+
+  private getSecondaryPointsText(): string {
+    const points = this.session.secondaryPlayer.getLastGamePoints() || 0;
+
+    const pointsNumberText = points > 0 ? points.toString() : '00';
+    const pointsText = pointsNumberText.padStart(6, ' ');
+
+    const text = `Ⅱ-${pointsText}`;
 
     return text;
   }
@@ -154,6 +181,11 @@ export class MainMenuScene extends GameScene {
   }
 
   private handleSinglePlayerSelected = (): void => {
+    this.navigator.replace(GameSceneType.LevelSelection);
+  };
+
+  private handleMultiPlayerSelected = (): void => {
+    this.session.setMultiplayer();
     this.navigator.replace(GameSceneType.LevelSelection);
   };
 

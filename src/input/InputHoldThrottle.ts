@@ -1,4 +1,4 @@
-import { Input, Timer } from '../core';
+import { InputMethod, Timer } from '../core';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type InputHoldThrottleCb = () => any;
@@ -30,12 +30,15 @@ export class InputHoldThrottle {
     this.timer = new Timer(options.activationDelay);
   }
 
-  public update(input: Input, deltaTime: number): void {
-    if (input.isDownAny(this.controls) || input.isUpAny(this.controls)) {
+  public update(inputMethod: InputMethod, deltaTime: number): void {
+    if (
+      inputMethod.isDownAny(this.controls) ||
+      inputMethod.isUpAny(this.controls)
+    ) {
       this.timer.reset(this.options.activationDelay);
     }
 
-    if (input.isHoldAny(this.controls)) {
+    if (inputMethod.isHoldAny(this.controls)) {
       if (this.timer.isDone()) {
         this.callback();
         this.timer.reset(this.options.delay);

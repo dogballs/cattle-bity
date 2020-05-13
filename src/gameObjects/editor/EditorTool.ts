@@ -83,18 +83,20 @@ export class EditorTool extends GameObject {
     this.updatePosition(updateArgs);
     this.updateBlinking(updateArgs);
 
-    const { input } = updateArgs;
+    const { inputManager } = updateArgs;
 
-    if (input.isDownAny(EditorMapInputContext.Draw)) {
+    const inputMethod = inputManager.getActiveMethod();
+
+    if (inputMethod.isDownAny(EditorMapInputContext.Draw)) {
       this.draw.notify(null);
     }
-    if (input.isDownAny(EditorMapInputContext.Erase)) {
+    if (inputMethod.isDownAny(EditorMapInputContext.Erase)) {
       this.erase.notify(null);
     }
-    if (input.isDownAny(EditorMapInputContext.NextBrush)) {
+    if (inputMethod.isDownAny(EditorMapInputContext.NextBrush)) {
       this.selectNextBrush();
     }
-    if (input.isDownAny(EditorMapInputContext.PrevBrush)) {
+    if (inputMethod.isDownAny(EditorMapInputContext.PrevBrush)) {
       this.selectPrevBrush();
     }
 
@@ -112,21 +114,25 @@ export class EditorTool extends GameObject {
     }
   }
 
-  private updatePosition({ deltaTime, input }: GameUpdateArgs): void {
+  private updatePosition(updateArgs: GameUpdateArgs): void {
+    const { deltaTime, inputManager } = updateArgs;
+
+    const inputMethod = inputManager.getActiveMethod();
+
     this.velocity.set(0, 0);
 
-    if (input.isDownAny(EditorMapInputContext.MoveUp)) {
+    if (inputMethod.isDownAny(EditorMapInputContext.MoveUp)) {
       this.moveUp();
-    } else if (input.isDownAny(EditorMapInputContext.MoveDown)) {
+    } else if (inputMethod.isDownAny(EditorMapInputContext.MoveDown)) {
       this.moveDown();
-    } else if (input.isDownAny(EditorMapInputContext.MoveLeft)) {
+    } else if (inputMethod.isDownAny(EditorMapInputContext.MoveLeft)) {
       this.moveLeft();
-    } else if (input.isDownAny(EditorMapInputContext.MoveRight)) {
+    } else if (inputMethod.isDownAny(EditorMapInputContext.MoveRight)) {
       this.moveRight();
     }
 
     for (const holdThrottle of this.holdThrottles) {
-      holdThrottle.update(input, deltaTime);
+      holdThrottle.update(inputMethod, deltaTime);
     }
 
     if (this.velocity.x !== 0 || this.velocity.y !== 0) {

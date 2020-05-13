@@ -2,7 +2,8 @@ import { InputBinding, KeyboardButtonCode } from '../../core';
 
 import { InputControl } from '../InputControl';
 
-export class KeyboardInputBinding extends InputBinding {
+// Suggested for single-player mode
+export class PrimaryKeyboardInputBinding extends InputBinding {
   constructor() {
     super();
 

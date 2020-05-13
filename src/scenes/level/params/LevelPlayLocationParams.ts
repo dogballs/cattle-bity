@@ -1,6 +1,6 @@
 import { SceneParams } from '../../../core';
 import { MapConfig } from '../../../map';
 
-export interface LevelLocationParams extends SceneParams {
+export interface LevelPlayLocationParams extends SceneParams {
   mapConfig: MapConfig;
 }

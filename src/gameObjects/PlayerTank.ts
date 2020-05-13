@@ -1,11 +1,12 @@
 import { Subject } from '../core';
 import { GameUpdateArgs, Tag } from '../game';
 import {
-  TankSkinAnimation,
+  TankAttributesFactory,
   TankColor,
+  TankColorFactory,
+  TankSkinAnimation,
   TankTier,
   TankType,
-  TankAttributesFactory,
 } from '../tank';
 import * as config from '../config';
 
@@ -16,10 +17,13 @@ export class PlayerTank extends Tank {
   public tags = [Tag.Tank, Tag.Player];
   public zIndex = config.PLAYER_TANK_Z_INDEX;
   private tierSkinAnimations = new Map<TankTier, TankSkinAnimation>();
-  private colors: TankColor[] = [TankColor.Primary];
+  private colors: TankColor[] = [];
 
   protected setup(updateArgs: GameUpdateArgs): void {
     const { spriteLoader } = updateArgs;
+
+    // Player only has one color
+    this.colors.push(TankColorFactory.createPlayerColor(this.partyIndex));
 
     this.tierSkinAnimations.set(
       TankTier.A,

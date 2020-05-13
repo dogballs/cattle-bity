@@ -149,6 +149,10 @@ export class GameRenderer {
   }
 
   private renderObject(renderObject: RenderObject): void {
+    if (this.options.debug) {
+      this.renderDebugBox(renderObject.getWorldBoundingBox());
+    }
+
     if (!renderObject.canRender()) {
       return;
     }
@@ -159,10 +163,6 @@ export class GameRenderer {
 
     renderObject.painter.paint(this.context, renderObject);
     renderObject.resetNeedsPaint();
-
-    if (this.options.debug) {
-      this.renderDebugBox(renderObject.getWorldBoundingBox());
-    }
   }
 
   private findIntersectionBoxes(

@@ -4,7 +4,7 @@ import { Field, PlayerTank } from '../gameObjects';
 export class LevelWorld {
   public sceneRoot: GameObject;
   public field: Field;
-  private playerTank: PlayerTank = null;
+  private playerTanks: PlayerTank[] = [];
 
   constructor(sceneRoot: GameObject) {
     this.sceneRoot = sceneRoot;
@@ -12,20 +12,24 @@ export class LevelWorld {
     this.field = new Field();
   }
 
-  public addPlayerTank(playerTank: PlayerTank): void {
-    this.playerTank = playerTank;
+  public addPlayerTank(playerIndex: number, playerTank: PlayerTank): void {
+    this.playerTanks[playerIndex] = playerTank;
     this.field.add(playerTank);
   }
 
-  public removePlayerTank(): void {
-    if (this.playerTank === null) {
+  public removePlayerTank(playerIndex: number): void {
+    const playerTank = this.playerTanks[playerIndex];
+
+    if (playerTank === null || playerTank === undefined) {
       return;
     }
-    this.playerTank.removeSelf();
-    this.playerTank = null;
+
+    playerTank.removeSelf();
+
+    this.playerTanks[playerIndex] = null;
   }
 
-  public getPlayerTank(): PlayerTank {
-    return this.playerTank;
+  public getPlayerTanks(): PlayerTank[] {
+    return this.playerTanks;
   }
 }

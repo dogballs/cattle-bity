@@ -7,6 +7,8 @@ import { MapConfig, MapLoader } from '../../map';
 import { GameScene } from '../GameScene';
 import { GameSceneType } from '../GameSceneType';
 
+import { LevelControlsLocationParams } from './params';
+
 enum State {
   Navigation,
   Alert,
@@ -79,15 +81,36 @@ export class LevelLoadScene extends GameScene {
   private handleMapLoaded = (mapConfig: MapConfig): void => {
     this.mapLoader.error.removeListener(this.handleMapLoadError);
 
-    if (this.inputHintSettings.shouldShowLevelHint()) {
-      this.navigator.replace(GameSceneType.LevelHint, {
-        mapConfig,
-      });
-    } else {
-      this.navigator.replace(GameSceneType.LevelPlay, {
-        mapConfig,
-      });
+    if (this.session.isMultiplayer()) {
+      // Check if players already selected their variants.
+      // It happens before first level.
+      const primaryInputVariant = this.session.primaryPlayer.getInputVariant();
+      const needSelectVariant = primaryInputVariant === null;
+
+      if (needSelectVariant) {
+        const params: LevelControlsLocationParams = {
+          canSelectVariant: true,
+          mapConfig,
+          playerIndex: 0,
+        };
+        this.navigator.replace(GameSceneType.LevelControls, params);
+        return;
+      }
     }
+
+    if (this.inputHintSettings.shouldShowLevelHint()) {
+      const params: LevelControlsLocationParams = {
+        canSelectVariant: false,
+        mapConfig,
+        playerIndex: 0,
+      };
+      this.navigator.replace(GameSceneType.LevelControls, params);
+      return;
+    }
+
+    this.navigator.replace(GameSceneType.LevelPlay, {
+      mapConfig,
+    });
   };
 
   private handleMapLoadError = (err): void => {
@@ -121,7 +144,7 @@ export class LevelLoadScene extends GameScene {
     // be the only level. Check if user has any points to identify if user
     // has played at all.
     if (this.session.isLastLevel()) {
-      const hasPlayed = this.session.getMaxPoints() > 0;
+      const hasPlayed = this.session.getMaxGamePoints() > 0;
       // If user has played and all levels ended, then he has won the game.
       // Otherwise return him to main menu.
       if (hasPlayed) {

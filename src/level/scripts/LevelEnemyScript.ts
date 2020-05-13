@@ -42,7 +42,7 @@ export class LevelEnemyScript extends LevelScript {
 
   private handleSpawnTimer = (): void => {
     // Happens after max enemies spawn
-    if (this.aliveTanks.length >= config.ENEMY_MAX_ALIVE_COUNT) {
+    if (this.aliveTanks.length >= this.getMaxAliveCount()) {
       this.spawnTimer.stop();
       return;
     }
@@ -70,7 +70,7 @@ export class LevelEnemyScript extends LevelScript {
       return;
     }
 
-    const tank = TankFactory.createEnemy(type);
+    const tank = TankFactory.createEnemy(event.partyIndex, type);
     tank.updateMatrix(); // Origin should be in before setting center
     tank.rotate(Rotation.Down);
     tank.setCenter(event.centerPosition);
@@ -91,6 +91,7 @@ export class LevelEnemyScript extends LevelScript {
         type: tank.type,
         centerPosition: tank.getCenter(),
         reason: deathEvent.reason,
+        hitterPartyIndex: deathEvent.hitterPartyIndex,
       });
 
       tank.removeSelf();
@@ -122,6 +123,8 @@ export class LevelEnemyScript extends LevelScript {
     const type = this.list[this.listIndex];
     const position = this.positions[this.positionIndex];
 
+    const partyIndex = this.listIndex;
+
     // Go to next tank
     this.listIndex += 1;
 
@@ -136,6 +139,7 @@ export class LevelEnemyScript extends LevelScript {
     this.eventBus.enemySpawnRequested.notify({
       type,
       position,
+      partyIndex,
       unspawnedCount,
     });
   }
@@ -183,4 +187,11 @@ export class LevelEnemyScript extends LevelScript {
       });
     }
   };
+
+  private getMaxAliveCount(): number {
+    if (this.session.isMultiplayer()) {
+      return config.ENEMY_MAX_ALIVE_COUNT_MULTIPLAYER;
+    }
+    return config.ENEMY_MAX_ALIVE_COUNT;
+  }
 }

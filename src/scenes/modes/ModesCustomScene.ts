@@ -1,5 +1,5 @@
 import { FileOpener } from '../../core';
-import { GameUpdateArgs } from '../../game';
+import { GameUpdateArgs, Session } from '../../game';
 import {
   DividerMenuItem,
   MenuDescription,
@@ -16,14 +16,17 @@ export class ModesCustomScene extends GameScene {
   private title: SceneMenuTitle;
   private description: MenuDescription;
   private loadItem: TextMenuItem;
-  private playItem: TextMenuItem;
+  private singlePlayerItem: TextMenuItem;
+  private multiPlayerItem: TextMenuItem;
   private backItem: TextMenuItem;
   private menu: SceneMenu;
   private mapLoader: MapLoader;
+  private session: Session;
   private fileMapListReader: FileMapListReader = null;
 
-  protected setup({ mapLoader }: GameUpdateArgs): void {
+  protected setup({ mapLoader, session }: GameUpdateArgs): void {
     this.mapLoader = mapLoader;
+    this.session = session;
 
     this.title = new SceneMenuTitle('MODES → CUSTOM MAPS');
     this.root.add(this.title);
@@ -37,16 +40,26 @@ export class ModesCustomScene extends GameScene {
     this.loadItem = new TextMenuItem('LOAD');
     this.loadItem.selected.addListener(this.handleLoadSelected);
 
-    this.playItem = new TextMenuItem('PLAY');
-    this.playItem.selected.addListener(this.handlePlaySelected);
-    this.playItem.setFocusable(false);
+    this.singlePlayerItem = new TextMenuItem('PLAY - 1 PLAYER');
+    this.singlePlayerItem.selected.addListener(this.handleSinglePlayerSelected);
+    this.singlePlayerItem.setFocusable(false);
+
+    this.multiPlayerItem = new TextMenuItem('PLAY - 2 PLAYERS');
+    this.multiPlayerItem.selected.addListener(this.handleMultiPlayerSelected);
+    this.multiPlayerItem.setFocusable(false);
 
     this.backItem = new TextMenuItem('BACK');
     this.backItem.selected.addListener(this.handleBackSelected);
 
     const divider = new DividerMenuItem();
 
-    const menuItems = [this.loadItem, this.playItem, divider, this.backItem];
+    const menuItems = [
+      this.loadItem,
+      this.singlePlayerItem,
+      this.multiPlayerItem,
+      divider,
+      this.backItem,
+    ];
 
     this.menu = new SceneMenu();
     this.menu.position.addY(164);
@@ -55,7 +68,8 @@ export class ModesCustomScene extends GameScene {
   }
 
   private updateMenu(): void {
-    this.playItem.setFocusable(this.canPlay());
+    this.singlePlayerItem.setFocusable(this.canPlay());
+    this.multiPlayerItem.setFocusable(this.canPlay());
   }
 
   private canPlay(): boolean {
@@ -71,7 +85,13 @@ export class ModesCustomScene extends GameScene {
     fileOpener.openDialog();
   };
 
-  private handlePlaySelected = (): void => {
+  private handleSinglePlayerSelected = (): void => {
+    this.mapLoader.setListReader(this.fileMapListReader);
+    this.navigator.replace(GameSceneType.LevelSelection);
+  };
+
+  private handleMultiPlayerSelected = (): void => {
+    this.session.setMultiplayer();
     this.mapLoader.setListReader(this.fileMapListReader);
     this.navigator.replace(GameSceneType.LevelSelection);
   };

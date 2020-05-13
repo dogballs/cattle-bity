@@ -49,9 +49,11 @@ export class EditorMapScene extends GameScene<EditorLocationParams> {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { collisionSystem, input } = updateArgs;
+    const { collisionSystem, inputManager } = updateArgs;
 
-    if (input.isDownAny(EditorMapInputContext.Menu)) {
+    const inputMethod = inputManager.getActiveMethod();
+
+    if (inputMethod.isDownAny(EditorMapInputContext.Menu)) {
       this.navigator.replace(GameSceneType.EditorMenu, this.params);
       return;
     }

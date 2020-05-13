@@ -9,15 +9,19 @@ enum State {
 export class Session {
   public primaryPlayer = new SessionPlayer();
   public secondaryPlayer = new SessionPlayer();
+  public players: SessionPlayer[] = [];
   private startLevelNumber: number;
   private endLevelNumber: number;
   private currentLevelNumber: number;
   private playtest: boolean;
-  private state: State;
+  private multiplayer: boolean;
   private seenIntro: boolean;
+  private state: State;
 
   constructor() {
     this.reset();
+
+    this.players.push(this.primaryPlayer, this.secondaryPlayer);
   }
 
   public start(startLevelNumber: number, endLevelNumber: number): void {
@@ -38,8 +42,28 @@ export class Session {
     this.endLevelNumber = 1;
     this.state = State.Idle;
     this.playtest = false;
+    this.multiplayer = false;
 
     this.primaryPlayer.reset();
+    this.secondaryPlayer.reset();
+  }
+
+  public getPlayer(playerIndex: number): SessionPlayer {
+    return this.players[playerIndex];
+  }
+
+  public getPlayers(): SessionPlayer[] {
+    return this.players;
+  }
+
+  public isAnyPlayerAlive(): boolean {
+    if (!this.multiplayer) {
+      return this.primaryPlayer.isAlive();
+    }
+
+    return this.players.some((player) => {
+      return player.isAlive();
+    });
   }
 
   public resetExceptIntro(): void {
@@ -60,15 +84,36 @@ export class Session {
     this.secondaryPlayer.completeLevel();
   }
 
-  public getMaxPoints(): number {
-    const primaryPoints = this.primaryPlayer.getTotalPoints();
-    const secondaryPoints = this.secondaryPlayer.getTotalPoints();
+  public getMaxLevelPoints(): number {
+    let maxPoints = 0;
 
-    const points = [primaryPoints, secondaryPoints];
-
-    const maxPoints = Math.max(...points);
+    for (const player of this.players) {
+      const points = player.getLevelPoints();
+      if (points > maxPoints) {
+        maxPoints = points;
+      }
+    }
 
     return maxPoints;
+  }
+
+  public getMaxGamePoints(): number {
+    let maxPoints = 0;
+
+    for (const player of this.players) {
+      const points = player.getGamePoints();
+      if (points > maxPoints) {
+        maxPoints = points;
+      }
+    }
+
+    return maxPoints;
+  }
+
+  public anybodyHasBonusPoints(): boolean {
+    return this.players.some((player) => {
+      return player.hasBonusPoints();
+    });
   }
 
   public getLevelNumber(): number {
@@ -105,5 +150,13 @@ export class Session {
 
   public isPlaytest(): boolean {
     return this.playtest;
+  }
+
+  public setMultiplayer(): void {
+    this.multiplayer = true;
+  }
+
+  public isMultiplayer(): boolean {
+    return this.multiplayer;
   }
 }

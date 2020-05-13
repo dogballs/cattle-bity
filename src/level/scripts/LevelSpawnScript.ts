@@ -26,6 +26,7 @@ export class LevelSpawnScript extends LevelScript {
       this.eventBus.enemySpawnCompleted.notify({
         type: event.type,
         centerPosition: spawn.getCenter(),
+        partyIndex: event.partyIndex,
       });
       spawn.removeSelf();
     });
@@ -42,6 +43,7 @@ export class LevelSpawnScript extends LevelScript {
       this.eventBus.playerSpawnCompleted.notify({
         type: event.type,
         centerPosition: spawn.getCenter(),
+        partyIndex: event.partyIndex,
       });
       spawn.removeSelf();
     });

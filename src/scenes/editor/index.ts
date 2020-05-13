@@ -1,4 +1,4 @@
 export * from './EditorEnemyScene';
-export * from './EditorHintScene';
+export * from './EditorControlsScene';
 export * from './EditorMapScene';
 export * from './EditorMenuScene';

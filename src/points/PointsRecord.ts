@@ -1,5 +1,6 @@
 import { PowerupType } from '../powerup';
 import { TankTier } from '../tank';
+import * as config from '../config';
 
 const TANK_POINTS_MAP = {
   [TankTier.A]: 100,
@@ -13,6 +14,7 @@ const POWERUP_POINTS = 500;
 export class PointsRecord {
   private kills: TankTier[] = [];
   private powerups: PowerupType[] = [];
+  private bonus = false;
 
   public addKill(tier: TankTier): this {
     this.kills.push(tier);
@@ -24,6 +26,16 @@ export class PointsRecord {
     this.powerups.push(type);
 
     return this;
+  }
+
+  public addBonus(): this {
+    this.bonus = true;
+
+    return this;
+  }
+
+  public hasBonus(): boolean {
+    return this.bonus === true;
   }
 
   public getTierKillCost(tier: TankTier): number {
@@ -74,11 +86,19 @@ export class PointsRecord {
     return total;
   }
 
+  public getBonusTotalPoints(): number {
+    if (this.bonus) {
+      return config.BONUS_POINTS;
+    }
+    return 0;
+  }
+
   public getTotalPoints(): number {
     const killTotal = this.getKillTotalPoints();
     const powerupTotal = this.getPowerupTotalPoints();
+    const bonusTotal = this.getBonusTotalPoints();
 
-    const total = killTotal + powerupTotal;
+    const total = killTotal + powerupTotal + bonusTotal;
 
     return total;
   }
@@ -86,5 +106,6 @@ export class PointsRecord {
   public reset(): void {
     this.kills = [];
     this.powerups = [];
+    this.bonus = false;
   }
 }

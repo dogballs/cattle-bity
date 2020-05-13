@@ -68,17 +68,19 @@ export class Menu extends GameObject {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { input } = updateArgs;
+    const { inputManager } = updateArgs;
 
-    if (input.isDownAny(MenuInputContext.VerticalPrev)) {
+    const inputMethod = inputManager.getActiveMethod();
+
+    if (inputMethod.isDownAny(MenuInputContext.VerticalPrev)) {
       this.focusPrev();
     }
 
-    if (input.isDownAny(MenuInputContext.VerticalNext)) {
+    if (inputMethod.isDownAny(MenuInputContext.VerticalNext)) {
       this.focusNext();
     }
 
-    if (input.isDownAny(MenuInputContext.Select)) {
+    if (inputMethod.isDownAny(MenuInputContext.Select)) {
       this.notifyItemSelected();
     }
 

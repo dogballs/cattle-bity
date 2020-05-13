@@ -34,6 +34,7 @@ export class DebugLevelPowerupMenu extends DebugMenu {
     this.appendButton('Spawn', this.handleSpawn);
     this.appendButton('Spawn: base defence', this.handleSpawnBaseDefence);
     this.appendButton('Spawn: freeze', this.handleSpawnFreeze);
+    this.appendButton('Spawn: wipeout', this.handleSpawnWipeout);
   }
 
   public showGrid(): void {
@@ -72,5 +73,9 @@ export class DebugLevelPowerupMenu extends DebugMenu {
 
   private handleSpawnFreeze = (): void => {
     this.spawnRequest.notify(PowerupType.Freeze);
+  };
+
+  private handleSpawnWipeout = (): void => {
+    this.spawnRequest.notify(PowerupType.Wipeout);
   };
 }

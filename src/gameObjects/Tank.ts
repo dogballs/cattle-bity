@@ -55,11 +55,14 @@ enum TankCollisionResolution {
 
 const SKIN_LAYER_DESCRIPTIONS = [{ opacity: 1 }, { opacity: 0.5 }];
 const SNAP_SIZE = config.TILE_SIZE_MEDIUM;
-const SKATE_DURATION = 0.5;
+
+const STUN_BLINK_DELAY = 0.1;
 
 export class Tank extends GameObject {
   public collider: SweptBoxCollider = new SweptBoxCollider(this, true);
   public tags = [Tag.Tank];
+  // Tank index within it's party: players (0-1), enemies (0-19).
+  public partyIndex = -1;
   public type: TankType;
   public behavior: TankBehavior;
   public attributes: TankAttributes;
@@ -67,7 +70,10 @@ export class Tank extends GameObject {
   public bullets: Bullet[] = [];
   public shield: Shield = null;
   public fired = new Subject();
-  public died = new Subject<{ reason: TankDeathReason }>();
+  public died = new Subject<{
+    hitterPartyIndex: number;
+    reason: TankDeathReason;
+  }>();
   public hit = new Subject();
   public slided = new Subject();
   public state = TankState.Uninitialized;
@@ -78,6 +84,8 @@ export class Tank extends GameObject {
   protected skinLayers: GameObject[] = [];
   protected lastFireTimer = new Timer();
   protected slideTimer = new Timer();
+  protected stunTimer = new Timer();
+  protected stunBlinkTimer = new Timer();
   protected spawnCollisionState = new State<SpawnCollisionState>(
     SpawnCollisionState.WaitUpdate,
   );
@@ -89,17 +97,19 @@ export class Tank extends GameObject {
   protected isCollisionAbusedByPlayer = false;
   protected collisionSystem: CollisionSystem;
 
-  constructor(type: TankType, behavior: TankBehavior) {
+  constructor(type: TankType, behavior: TankBehavior, partyIndex: number) {
     super(64, 64);
 
     this.pivot.set(0.5, 0.5);
 
     this.type = type;
     this.behavior = behavior;
+    this.partyIndex = partyIndex;
 
     this.attributes = TankAttributesFactory.create(this.type);
 
     this.shieldTimer.done.addListener(this.handleShieldTimer);
+    this.stunTimer.done.addListener(this.handleStunTimer);
   }
 
   protected setup(updateArgs: GameUpdateArgs): void {
@@ -193,6 +203,15 @@ export class Tank extends GameObject {
       }
     }
 
+    if (this.isStunned()) {
+      if (this.stunBlinkTimer.isDone()) {
+        this.stunBlinkTimer.reset(STUN_BLINK_DELAY);
+        this.setVisible(!this.getVisible());
+      }
+      this.stunBlinkTimer.update(deltaTime);
+      this.stunTimer.update(deltaTime);
+    }
+
     // Behavior code is responsible for blocking movement for a tank when it
     // is sliding
     this.behavior.update(this, updateArgs);
@@ -244,6 +263,7 @@ export class Tank extends GameObject {
     }
 
     const bullet = new Bullet(
+      this.partyIndex,
       this.attributes.bulletSpeed,
       this.attributes.bulletTankDamage,
       this.attributes.bulletWallDamage,
@@ -310,7 +330,7 @@ export class Tank extends GameObject {
       !this.isSliding()
     ) {
       this.slided.notify(null);
-      this.slideTimer.reset(SKATE_DURATION);
+      this.slideTimer.reset(config.ICE_SLIDE_DURATION);
     }
   }
 
@@ -332,8 +352,15 @@ export class Tank extends GameObject {
     return this;
   }
 
-  public die(reason: TankDeathReason = TankDeathReason.Bullet): void {
-    this.died.notify({ reason });
+  public die(
+    reason: TankDeathReason = TankDeathReason.Bullet,
+    hitterPartyIndex = null,
+  ): void {
+    const event = {
+      hitterPartyIndex,
+      reason,
+    };
+    this.died.notify(event);
     this.collider.unregister();
   }
 
@@ -357,19 +384,28 @@ export class Tank extends GameObject {
     return this.attributes.health > 0;
   }
 
-  protected receiveHit(damage: number): void {
+  protected receiveHit(damage: number, hitterPartyIndex: number): void {
     this.attributes.health = Math.max(0, this.attributes.health - damage);
 
     this.hit.notify(null);
 
     if (!this.isAlive()) {
-      this.die();
+      this.die(TankDeathReason.Bullet, hitterPartyIndex);
     }
   }
 
   public isSliding(): boolean {
     return this.slideTimer.isActive();
   }
+
+  public isStunned(): boolean {
+    return this.stunTimer.isActive();
+  }
+
+  protected handleStunTimer = (): void => {
+    this.stunBlinkTimer.stop();
+    this.setVisible(true);
+  };
 
   protected handleShieldTimer = (): void => {
     this.shield.removeSelf();
@@ -850,7 +886,22 @@ export class Tank extends GameObject {
 
       bullet.explode();
 
-      this.receiveHit(bullet.tankDamage);
+      // When friendly-fire - stun the tank which was hit so he can't move
+      // but can still fire
+      if (bullet.tags.includes(Tag.Player) && this.tags.includes(Tag.Player)) {
+        // If already stunned - ignore
+        if (this.isStunned()) {
+          return;
+        }
+
+        this.stunTimer.reset(config.FRIENDLY_FIRE_STUN_DURATION);
+        this.stunBlinkTimer.reset(STUN_BLINK_DELAY);
+        this.setVisible(false);
+        this.idle();
+        return;
+      }
+
+      this.receiveHit(bullet.tankDamage, bullet.ownerPartyIndex);
     });
   }
 

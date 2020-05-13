@@ -17,7 +17,6 @@ export class SettingsMenuScene extends GameScene {
 
     this.keybindingItem = new TextMenuItem('KEY BINDINGS');
     this.keybindingItem.selected.addListener(this.handleKeybindingSelected);
-
     this.audioItem = new TextMenuItem('AUDIO');
     this.audioItem.selected.addListener(this.handleAudioSelected);
 

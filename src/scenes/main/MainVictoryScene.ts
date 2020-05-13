@@ -38,7 +38,8 @@ export class MainVictoryScene extends GameScene {
     this.behavior = new VictoryTankBehavior();
     this.behavior.stopped.addListener(this.handleStopped);
 
-    this.tank = TankFactory.createPlayer(TankType.PlayerA(), this.behavior);
+    // TODO: maybe add two tanks if multiplayer?
+    this.tank = TankFactory.createPlayer(0, TankType.PlayerA(), this.behavior);
     this.tank.updateMatrix();
     this.tank.setCenterX(this.root.getSelfCenter().x);
     this.tank.position.setY(this.root.size.height + 300);
@@ -49,9 +50,11 @@ export class MainVictoryScene extends GameScene {
   }
 
   protected update(updateArgs: GameUpdateArgs): void {
-    const { collisionSystem, input } = updateArgs;
+    const { collisionSystem, inputManager } = updateArgs;
 
-    if (input.isDownAny(MenuInputContext.Skip)) {
+    const inputMethod = inputManager.getActiveMethod();
+
+    if (inputMethod.isDownAny(MenuInputContext.Skip)) {
       this.finish();
       return;
     }
