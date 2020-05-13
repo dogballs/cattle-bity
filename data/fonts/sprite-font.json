@@ -1,0 +1,12 @@
+{
+  "file": "data/fonts/sprite-font.png",
+  "characterSet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-ⅠⅡ←→[]?()/+.↑↓!",
+  "characterWidth": 28,
+  "characterHeight": 28,
+  "rowCount": 6,
+  "columnCount": 10,
+  "horizontalSpacing": 4,
+  "verticalSpacing": 4,
+  "offsetX": 0,
+  "offsetY": 0
+}

@@ -1,0 +1,21 @@
+html {
+  display: flex;
+  height: 100%;
+}
+
+body {
+  align-items: stretch;
+  background: #000;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  margin: 0;
+}
+
+.loading {
+  align-items: center;
+  display: flex;
+  color: #fff;
+  font-family: Lucida Console, Courier, monospace;
+  font-size: 32px;
+}

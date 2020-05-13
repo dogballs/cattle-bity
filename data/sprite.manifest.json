@@ -1,0 +1,766 @@
+{
+  "bullet.down": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1384, 408, 12, 16]
+  },
+  "bullet.left": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1348, 408, 16, 12]
+  },
+  "bullet.right": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1412, 408, 16, 12]
+  },
+  "bullet.up": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1320, 408, 12, 16]
+  },
+  "explosion.small.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1064, 520, 44, 44]
+  },
+  "explosion.small.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1120, 516, 60, 60]
+  },
+  "explosion.small.3": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1180, 512, 64, 64]
+  },
+  "explosion.large.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1244, 516, 124, 116]
+  },
+  "explosion.large.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1364, 512, 136, 128]
+  },
+  "powerup.helmet": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1052, 448, 64, 60]
+  },
+  "powerup.clock": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1116, 448, 64, 60]
+  },
+  "powerup.shovel": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1180, 448, 64, 60]
+  },
+  "powerup.star": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1244, 448, 64, 60]
+  },
+  "powerup.grenade": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1308, 448, 64, 60]
+  },
+  "powerup.tank": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1372, 448, 64, 60]
+  },
+  "powerup.gun": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1436, 448, 64, 60]
+  },
+  "points.100": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1184, 656, 56, 28]
+  },
+  "points.200": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1248, 656, 56, 28]
+  },
+  "points.300": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1312, 656, 56, 28]
+  },
+  "points.400": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1376, 656, 56, 28]
+  },
+  "points.500": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1440, 656, 56, 28]
+  },
+  "ui.enemy": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1308, 768, 32, 32]
+  },
+  "ui.player": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1536, 576, 28, 32]
+  },
+  "ui.pause": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1184, 704, 156, 28]
+  },
+  "ui.gameOver": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1184, 736, 124, 60]
+  },
+  "flag": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1532, 736, 64, 60]
+  },
+  "shield.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1052, 576, 64, 64]
+  },
+  "shield.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1116, 576, 64, 64]
+  },
+  "base.heart.alive": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1244, 128, 64, 64]
+  },
+  "base.heart.dead": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1308, 128, 64, 64]
+  },
+  "spawn.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1064, 396, 36, 36]
+  },
+  "spawn.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1124, 392, 44, 44]
+  },
+  "spawn.3": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1184, 388, 52, 52]
+  },
+  "spawn.4": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1244, 384, 60, 60]
+  },
+  "terrain.brick.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1052, 0, 16, 16]
+  },
+  "terrain.brick.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1068, 0, 16, 16]
+  },
+  "terrain.steel": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1052, 64, 32, 32]
+  },
+  "terrain.jungle": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1116, 128, 32, 32]
+  },
+  "terrain.water.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1052, 192, 32, 32]
+  },
+  "terrain.water.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1116, 192, 32, 32]
+  },
+  "terrain.ice": {
+    "file": "data/graphics/sprite.png",
+    "rect": [1180, 128, 32, 32]
+  },
+  "terrain.menu-brick.1": {
+    "file": "data/graphics/menu-brick.png",
+    "rect": [0, 0, 16, 16]
+  },
+  "terrain.menu-brick.2": {
+    "file": "data/graphics/menu-brick.png",
+    "rect": [16, 0, 16, 16]
+  },
+  "terrain.inverse-brick.1": {
+    "file": "data/graphics/inverse-brick.png",
+    "rect": [0, 0, 16, 16]
+  },
+  "terrain.inverse-brick.2": {
+    "file": "data/graphics/inverse-brick.png",
+    "rect": [16, 0, 16, 16]
+  },
+  "terrain.blue-brick.1": {
+    "file": "data/graphics/blue-brick.png",
+    "rect": [0, 0, 16, 16]
+  },
+  "terrain.blue-brick.2": {
+    "file": "data/graphics/blue-brick.png",
+    "rect": [16, 0, 16, 16]
+  },
+  "tank.enemy.default.a.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [524, 264, 52, 60]
+  },
+  "tank.enemy.default.a.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [588, 264, 52, 60]
+  },
+  "tank.enemy.default.a.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [780, 264, 52, 60]
+  },
+  "tank.enemy.default.a.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [844, 264, 52, 60]
+  },
+  "tank.enemy.default.a.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [648, 272, 60, 52]
+  },
+  "tank.enemy.default.a.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [712, 272, 60, 52]
+  },
+  "tank.enemy.default.a.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [908, 268, 60, 52]
+  },
+  "tank.enemy.default.a.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [972, 268, 60, 52]
+  },
+  "tank.enemy.default.b.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [524, 328, 52, 60]
+  },
+  "tank.enemy.default.b.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [588, 328, 52, 60]
+  },
+  "tank.enemy.default.b.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [780, 332, 52, 60]
+  },
+  "tank.enemy.default.b.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [844, 332, 52, 60]
+  },
+  "tank.enemy.default.b.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [648, 336, 60, 52]
+  },
+  "tank.enemy.default.b.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [712, 336, 60, 52]
+  },
+  "tank.enemy.default.b.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [908, 332, 60, 52]
+  },
+  "tank.enemy.default.b.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [972, 332, 60, 52]
+  },
+  "tank.enemy.default.c.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [524, 396, 52, 60]
+  },
+  "tank.enemy.default.c.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [588, 396, 52, 60]
+  },
+  "tank.enemy.default.c.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [776, 396, 52, 60]
+  },
+  "tank.enemy.default.c.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [840, 396, 52, 60]
+  },
+  "tank.enemy.default.c.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [648, 404, 60, 52]
+  },
+  "tank.enemy.default.c.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [712, 404, 60, 52]
+  },
+  "tank.enemy.default.c.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [908, 400, 60, 52]
+  },
+  "tank.enemy.default.c.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [972, 400, 60, 52]
+  },
+  "tank.enemy.default.d.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [524, 460, 52, 60]
+  },
+  "tank.enemy.default.d.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [588, 460, 52, 60]
+  },
+  "tank.enemy.default.d.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [780, 460, 52, 60]
+  },
+  "tank.enemy.default.d.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [844, 460, 52, 60]
+  },
+  "tank.enemy.default.d.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [648, 464, 60, 52]
+  },
+  "tank.enemy.default.d.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [712, 464, 60, 52]
+  },
+  "tank.enemy.default.d.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [904, 464, 60, 52]
+  },
+  "tank.enemy.default.d.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [968, 464, 60, 52]
+  },
+  "tank.enemy.danger.a.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [524, 788, 52, 60]
+  },
+  "tank.enemy.danger.a.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [588, 788, 52, 60]
+  },
+  "tank.enemy.danger.a.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [780, 788, 52, 60]
+  },
+  "tank.enemy.danger.a.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [844, 788, 52, 60]
+  },
+  "tank.enemy.danger.a.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [648, 796, 60, 52]
+  },
+  "tank.enemy.danger.a.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [712, 796, 60, 52]
+  },
+  "tank.enemy.danger.a.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [908, 792, 60, 52]
+  },
+  "tank.enemy.danger.a.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [972, 792, 60, 52]
+  },
+  "tank.enemy.danger.b.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [524, 852, 52, 60]
+  },
+  "tank.enemy.danger.b.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [588, 852, 52, 60]
+  },
+  "tank.enemy.danger.b.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [780, 856, 52, 60]
+  },
+  "tank.enemy.danger.b.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [844, 856, 52, 60]
+  },
+  "tank.enemy.danger.b.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [648, 860, 60, 52]
+  },
+  "tank.enemy.danger.b.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [712, 860, 60, 52]
+  },
+  "tank.enemy.danger.b.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [908, 856, 60, 52]
+  },
+  "tank.enemy.danger.b.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [972, 856, 60, 52]
+  },
+  "tank.enemy.danger.c.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [524, 920, 52, 60]
+  },
+  "tank.enemy.danger.c.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [588, 920, 52, 60]
+  },
+  "tank.enemy.danger.c.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [776, 920, 52, 60]
+  },
+  "tank.enemy.danger.c.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [840, 920, 52, 60]
+  },
+  "tank.enemy.danger.c.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [648, 928, 60, 52]
+  },
+  "tank.enemy.danger.c.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [712, 928, 60, 52]
+  },
+  "tank.enemy.danger.c.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [908, 924, 60, 52]
+  },
+  "tank.enemy.danger.c.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [972, 924, 60, 52]
+  },
+  "tank.enemy.danger.d.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [524, 984, 52, 60]
+  },
+  "tank.enemy.danger.d.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [588, 984, 52, 60]
+  },
+  "tank.enemy.danger.d.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [780, 984, 52, 60]
+  },
+  "tank.enemy.danger.d.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [844, 984, 52, 60]
+  },
+  "tank.enemy.danger.d.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [648, 988, 60, 52]
+  },
+  "tank.enemy.danger.d.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [712, 988, 60, 52]
+  },
+  "tank.enemy.danger.d.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [904, 988, 60, 52]
+  },
+  "tank.enemy.danger.d.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [968, 988, 60, 52]
+  },
+  "tank.enemy.primary.d.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 460, 52, 60]
+  },
+  "tank.enemy.primary.d.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 460, 52, 60]
+  },
+  "tank.enemy.primary.d.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 460, 52, 60]
+  },
+  "tank.enemy.primary.d.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 460, 52, 60]
+  },
+  "tank.enemy.primary.d.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 464, 60, 52]
+  },
+  "tank.enemy.primary.d.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 464, 60, 52]
+  },
+  "tank.enemy.primary.d.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [388, 464, 60, 52]
+  },
+  "tank.enemy.primary.d.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [456, 464, 60, 52]
+  },
+  "tank.enemy.secondary.d.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 984, 52, 60]
+  },
+  "tank.enemy.secondary.d.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 984, 52, 60]
+  },
+  "tank.enemy.secondary.d.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 984, 52, 60]
+  },
+  "tank.enemy.secondary.d.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 984, 52, 60]
+  },
+  "tank.enemy.secondary.d.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 988, 60, 52]
+  },
+  "tank.enemy.secondary.d.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 988, 60, 52]
+  },
+  "tank.enemy.secondary.d.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [388, 988, 60, 52]
+  },
+  "tank.enemy.secondary.d.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [456, 988, 60, 52]
+  },
+  "tank.player.primary.a.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 8, 52, 52]
+  },
+  "tank.player.primary.a.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 8, 52, 52]
+  },
+  "tank.player.primary.a.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 4, 52, 52]
+  },
+  "tank.player.primary.a.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 4, 52, 52]
+  },
+  "tank.player.primary.a.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [136, 4, 52, 52]
+  },
+  "tank.player.primary.a.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [204, 4, 52, 52]
+  },
+  "tank.player.primary.a.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [392, 4, 52, 52]
+  },
+  "tank.player.primary.a.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [460, 4, 52, 52]
+  },
+  "tank.player.primary.b.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 64, 52, 64]
+  },
+  "tank.player.primary.b.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 64, 52, 64]
+  },
+  "tank.player.primary.b.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 64, 52, 64]
+  },
+  "tank.player.primary.b.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 64, 52, 64]
+  },
+  "tank.player.primary.b.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 68, 64, 52]
+  },
+  "tank.player.primary.b.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 68, 64, 52]
+  },
+  "tank.player.primary.b.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [388, 68, 64, 52]
+  },
+  "tank.player.primary.b.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [456, 68, 64, 52]
+  },
+  "tank.player.primary.c.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 132, 52, 60]
+  },
+  "tank.player.primary.c.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 132, 52, 60]
+  },
+  "tank.player.primary.c.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 136, 52, 60]
+  },
+  "tank.player.primary.c.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 136, 52, 60]
+  },
+  "tank.player.primary.c.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 136, 60, 52]
+  },
+  "tank.player.primary.c.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 136, 60, 52]
+  },
+  "tank.player.primary.c.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [392, 136, 60, 52]
+  },
+  "tank.player.primary.c.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [460, 136, 60, 52]
+  },
+  "tank.player.primary.d.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 200, 56, 60]
+  },
+  "tank.player.primary.d.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 200, 56, 60]
+  },
+  "tank.player.primary.d.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 200, 56, 60]
+  },
+  "tank.player.primary.d.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 200, 56, 60]
+  },
+  "tank.player.primary.d.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 204, 60, 56]
+  },
+  "tank.player.primary.d.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 204, 60, 56]
+  },
+  "tank.player.primary.d.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [392, 204, 60, 56]
+  },
+  "tank.player.primary.d.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [460, 204, 60, 56]
+  },
+  "tank.player.secondary.a.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 532, 52, 52]
+  },
+  "tank.player.secondary.a.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 532, 52, 52]
+  },
+  "tank.player.secondary.a.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 528, 52, 52]
+  },
+  "tank.player.secondary.a.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 528, 52, 52]
+  },
+  "tank.player.secondary.a.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [136, 528, 52, 52]
+  },
+  "tank.player.secondary.a.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [204, 528, 52, 52]
+  },
+  "tank.player.secondary.a.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [392, 528, 52, 52]
+  },
+  "tank.player.secondary.a.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [460, 528, 52, 52]
+  },
+  "tank.player.secondary.b.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 588, 52, 64]
+  },
+  "tank.player.secondary.b.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 588, 52, 64]
+  },
+  "tank.player.secondary.b.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 588, 52, 64]
+  },
+  "tank.player.secondary.b.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 588, 52, 64]
+  },
+  "tank.player.secondary.b.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 592, 64, 52]
+  },
+  "tank.player.secondary.b.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 592, 64, 52]
+  },
+  "tank.player.secondary.b.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [388, 592, 64, 52]
+  },
+  "tank.player.secondary.b.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [456, 592, 64, 52]
+  },
+  "tank.player.secondary.c.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 656, 52, 60]
+  },
+  "tank.player.secondary.c.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 656, 52, 60]
+  },
+  "tank.player.secondary.c.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 660, 52, 60]
+  },
+  "tank.player.secondary.c.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 660, 52, 60]
+  },
+  "tank.player.secondary.c.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 660, 60, 52]
+  },
+  "tank.player.secondary.c.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 660, 60, 52]
+  },
+  "tank.player.secondary.c.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [392, 660, 60, 52]
+  },
+  "tank.player.secondary.c.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [460, 660, 60, 52]
+  },
+  "tank.player.secondary.d.up.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [4, 724, 56, 60]
+  },
+  "tank.player.secondary.d.up.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [68, 724, 56, 60]
+  },
+  "tank.player.secondary.d.down.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [264, 724, 56, 60]
+  },
+  "tank.player.secondary.d.down.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [328, 724, 56, 60]
+  },
+  "tank.player.secondary.d.left.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [128, 728, 60, 56]
+  },
+  "tank.player.secondary.d.left.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [196, 728, 60, 56]
+  },
+  "tank.player.secondary.d.right.1": {
+    "file": "data/graphics/sprite.png",
+    "rect": [392, 728, 60, 56]
+  },
+  "tank.player.secondary.d.right.2": {
+    "file": "data/graphics/sprite.png",
+    "rect": [460, 728, 60, 56]
+  }
+}
