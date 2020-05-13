@@ -25,7 +25,6 @@ Other
 
 ## Possible improvements
 
-- 2 player mode
 - Original 35+ levels
 - Demo level with AI when main menu is idle
 - Extended level editing

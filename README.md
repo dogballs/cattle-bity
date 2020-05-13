@@ -15,12 +15,13 @@ Project is not commercial and was created for learning purposes only.
 ## Features
 
 - Single player mode
-  - Original 35 maps
-- Modes
-  - Custom maps - load your own maps created in editor
+- Multi player mode (2 players on one PC)
+- Original 35 maps
 - Level editor
   - Save to JSON
   - Load from JSON to continue editing
+- Modes
+  - Custom maps - load your own maps created in editor
 - Keyboard and gamepad support
 - Settings
   - Customize keybindings
