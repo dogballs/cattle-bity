@@ -37,7 +37,7 @@ export class PlayerTankBehavior extends TankBehavior {
       tank.fire();
     }
 
-    if (!tank.isSliding()) {
+    if (!tank.isSliding() && !tank.isStunned()) {
       if (inputMethod.isHoldLastAny(LevelPlayInputContext.MoveUp)) {
         tank.rotate(Rotation.Up);
       }

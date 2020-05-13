@@ -55,7 +55,8 @@ enum TankCollisionResolution {
 
 const SKIN_LAYER_DESCRIPTIONS = [{ opacity: 1 }, { opacity: 0.5 }];
 const SNAP_SIZE = config.TILE_SIZE_MEDIUM;
-const SKATE_DURATION = 0.5;
+
+const STUN_BLINK_DELAY = 0.1;
 
 export class Tank extends GameObject {
   public collider: SweptBoxCollider = new SweptBoxCollider(this, true);
@@ -83,6 +84,8 @@ export class Tank extends GameObject {
   protected skinLayers: GameObject[] = [];
   protected lastFireTimer = new Timer();
   protected slideTimer = new Timer();
+  protected stunTimer = new Timer();
+  protected stunBlinkTimer = new Timer();
   protected spawnCollisionState = new State<SpawnCollisionState>(
     SpawnCollisionState.WaitUpdate,
   );
@@ -106,6 +109,7 @@ export class Tank extends GameObject {
     this.attributes = TankAttributesFactory.create(this.type);
 
     this.shieldTimer.done.addListener(this.handleShieldTimer);
+    this.stunTimer.done.addListener(this.handleStunTimer);
   }
 
   protected setup(updateArgs: GameUpdateArgs): void {
@@ -197,6 +201,15 @@ export class Tank extends GameObject {
         this.slideTimer.stop();
         this.idle(false);
       }
+    }
+
+    if (this.isStunned()) {
+      if (this.stunBlinkTimer.isDone()) {
+        this.stunBlinkTimer.reset(STUN_BLINK_DELAY);
+        this.setVisible(!this.getVisible());
+      }
+      this.stunBlinkTimer.update(deltaTime);
+      this.stunTimer.update(deltaTime);
     }
 
     // Behavior code is responsible for blocking movement for a tank when it
@@ -317,7 +330,7 @@ export class Tank extends GameObject {
       !this.isSliding()
     ) {
       this.slided.notify(null);
-      this.slideTimer.reset(SKATE_DURATION);
+      this.slideTimer.reset(config.ICE_SLIDE_DURATION);
     }
   }
 
@@ -384,6 +397,15 @@ export class Tank extends GameObject {
   public isSliding(): boolean {
     return this.slideTimer.isActive();
   }
+
+  public isStunned(): boolean {
+    return this.stunTimer.isActive();
+  }
+
+  protected handleStunTimer = (): void => {
+    this.stunBlinkTimer.stop();
+    this.setVisible(true);
+  };
 
   protected handleShieldTimer = (): void => {
     this.shield.removeSelf();
@@ -863,6 +885,21 @@ export class Tank extends GameObject {
       }
 
       bullet.explode();
+
+      // When friendly-fire - stun the tank which was hit so he can't move
+      // but can still fire
+      if (bullet.tags.includes(Tag.Player) && this.tags.includes(Tag.Player)) {
+        // If already stunned - ignore
+        if (this.isStunned()) {
+          return;
+        }
+
+        this.stunTimer.reset(config.FRIENDLY_FIRE_STUN_DURATION);
+        this.stunBlinkTimer.reset(STUN_BLINK_DELAY);
+        this.setVisible(false);
+        this.idle();
+        return;
+      }
 
       this.receiveHit(bullet.tankDamage, bullet.ownerPartyIndex);
     });
