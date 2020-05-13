@@ -36,5 +36,6 @@ export class WaterTerrainTile extends TerrainTile {
 
     this.animation.update(updateArgs.deltaTime);
     this.painter.sprite = this.animation.getCurrentFrame();
+    this.setNeedsPaint();
   }
 }
